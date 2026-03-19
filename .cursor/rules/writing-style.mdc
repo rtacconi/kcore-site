@@ -1,0 +1,33 @@
+---
+description: Writing and code style - no AI tells
+alwaysApply: true
+---
+
+# Writing and code style
+
+This is the public website repo. Everything here is visible to the world.
+
+## Code comments (HTML/CSS/JS)
+
+- No narrating what the code does. If a div has class "hero", don't comment `<!-- Hero section -->`.
+- Only comment on non-obvious things: browser hacks, z-index stacking decisions, animation quirks.
+- Don't add `// Initialize the app` or `// Set up event listeners` type comments.
+
+## Copy and content
+
+- Write like a person, not a brochure.
+- Don't use marketing buzzwords: "modern", "robust", "seamless", "leverage", "streamline", "cutting-edge", "best-in-class", "next-generation", "enterprise-grade".
+- Be specific about what kcore does rather than using vague superlatives.
+- Short sentences. Say what it is, what it does, why someone would use it.
+
+## Commit messages
+
+- Lowercase, no period at the end.
+- Short and direct: "fix nav links on mobile", "update hero copy", "add docs page".
+- No `Type: Description` format.
+
+## General
+
+- Don't over-structure things.
+- If something is obvious, don't explain it.
+- Read it back: would a real person write this? If it sounds like a chatbot, rewrite it.
