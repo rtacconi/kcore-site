@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore hypervisor blog - updates, architecture notes, and release announcements">
+    <title>Blog - kcore hypervisor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .blog-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .blog-hero h1 {
+            margin-bottom: 1rem;
+        }
+
+        .blog-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .blog-section {
+            padding: 4rem 0;
+        }
+
+        .blog-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .blog-post {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-post h2 {
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .blog-post h2 a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .blog-post h2 a:hover {
+            color: var(--accent-primary);
+        }
+
+        .blog-date {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .blog-post p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .blog-empty {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .blog-empty p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="blog-hero">
+        <div class="container">
+            <h1>Blog</h1>
+            <p>Updates, architecture notes, and release announcements.</p>
+        </div>
+    </section>
+
+    <!-- Posts -->
+    <section class="blog-section">
+        <div class="container">
+            <div class="blog-list">
+                <div class="blog-post">
+                    <h2>kcore goes public</h2>
+                    <span class="blog-date">19 March 2026</span>
+                    <p>
+                        We've split the old monorepo and published the docs and website as
+                        separate public repos. The product docs are now at
+                        <a href="https://github.com/rtacconi/kcore" style="color: var(--accent-primary);">github.com/rtacconi/kcore</a>
+                        and the site deploys to
+                        <a href="https://kcorehypervisor.com" style="color: var(--accent-primary);">kcorehypervisor.com</a>
+                        via GitHub Pages. The core codebase stays private for now as we work
+                        towards the first public release.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
