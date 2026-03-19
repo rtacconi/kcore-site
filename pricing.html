@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore pricing - free to try, enterprise plans for clustering and advanced features">
+    <title>Pricing - kcore hypervisor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .pricing-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .pricing-hero h1 {
+            margin-bottom: 1rem;
+        }
+
+        .pricing-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .pricing-section {
+            padding: 4rem 0;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent-primary);
+            position: relative;
+        }
+
+        .pricing-card.featured::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+
+        .pricing-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .pricing-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li .check {
+            color: var(--success);
+            flex-shrink: 0;
+        }
+
+        .pricing-features li .cross {
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+
+        .pricing-features li.disabled {
+            color: var(--text-tertiary);
+        }
+
+        .pricing-cta {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .pricing-cta-primary {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .pricing-cta-primary:hover {
+            opacity: 0.9;
+        }
+
+        .pricing-cta-secondary {
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+        }
+
+        .pricing-cta-secondary:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .pricing-faq {
+            max-width: 700px;
+            margin: 4rem auto 0;
+        }
+
+        .pricing-faq h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-primary);
+            padding: 1.5rem 0;
+        }
+
+        .faq-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="features.html">Features</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="index.html#get-started" class="btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="pricing-hero">
+        <div class="container">
+            <h1>Pricing</h1>
+            <p>
+                Free to download and run on a single node.
+                Enterprise features available for production clusters.
+            </p>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pricing-section">
+        <div class="container">
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Community</div>
+                    <div class="pricing-price">Free</div>
+                    <p class="pricing-desc">
+                        Everything you need to run kcore on a single node.
+                        No time limits, no usage caps.
+                    </p>
+                    <ul class="pricing-features">
+                        <li><span class="check">&#10003;</span> Single-node deployment</li>
+                        <li><span class="check">&#10003;</span> VM lifecycle management</li>
+                        <li><span class="check">&#10003;</span> Terraform provider</li>
+                        <li><span class="check">&#10003;</span> kctl CLI</li>
+                        <li><span class="check">&#10003;</span> gRPC API</li>
+                        <li><span class="check">&#10003;</span> MCP server for AI agents</li>
+                        <li><span class="check">&#10003;</span> Local storage (dir, LVM, ZFS)</li>
+                        <li><span class="check">&#10003;</span> Atomic OS updates & rollback</li>
+                        <li class="disabled"><span class="cross">&#10007;</span> Multi-node clustering</li>
+                        <li class="disabled"><span class="cross">&#10007;</span> High availability</li>
+                        <li class="disabled"><span class="cross">&#10007;</span> Live VM migration</li>
+                        <li class="disabled"><span class="cross">&#10007;</span> Priority support</li>
+                    </ul>
+                    <a href="https://github.com/rtacconi/kcore/releases" class="pricing-cta pricing-cta-secondary">Download</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-label">Production</div>
+                    <div class="pricing-name">Enterprise</div>
+                    <div class="pricing-price">Contact us</div>
+                    <p class="pricing-desc">
+                        Multi-node clustering, high availability, and support
+                        for production workloads.
+                    </p>
+                    <ul class="pricing-features">
+                        <li><span class="check">&#10003;</span> Everything in Community</li>
+                        <li><span class="check">&#10003;</span> Multi-node clustering</li>
+                        <li><span class="check">&#10003;</span> High availability & failover</li>
+                        <li><span class="check">&#10003;</span> Live VM migration</li>
+                        <li><span class="check">&#10003;</span> Distributed storage</li>
+                        <li><span class="check">&#10003;</span> Network overlay (OVN)</li>
+                        <li><span class="check">&#10003;</span> Role-based access control</li>
+                        <li><span class="check">&#10003;</span> Audit logging</li>
+                        <li><span class="check">&#10003;</span> Priority support</li>
+                        <li><span class="check">&#10003;</span> Custom integrations</li>
+                    </ul>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Enterprise" class="pricing-cta pricing-cta-primary">Get in touch</a>
+                </div>
+            </div>
+
+            <div class="pricing-faq">
+                <h2>Questions</h2>
+                <div class="faq-item">
+                    <h3>Can I use the free version in production?</h3>
+                    <p>
+                        Yes. The Community edition is the full kcore hypervisor running on a single node.
+                        There are no artificial limits on the number of VMs or resources you can use.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3>What counts as clustering?</h3>
+                    <p>
+                        Running multiple kcore nodes managed by a single controller with
+                        automatic scheduling, failover, and live migration between nodes.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is kcore open source?</h3>
+                    <p>
+                        The core hypervisor is open source on
+                        <a href="https://github.com/rtacconi/kcore" style="color: var(--accent-primary);">GitHub</a>.
+                        Enterprise clustering and advanced features are available under a commercial licence.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p>Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="docs.html">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

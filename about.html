@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About Tacconi Consulting Ltd - the company behind kcore hypervisor">
+    <title>About - kcore hypervisor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .about-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .about-hero h1 {
+            margin-bottom: 1rem;
+        }
+
+        .about-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .about-section {
+            padding: 4rem 0;
+        }
+
+        .about-section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-content h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            padding: 2rem;
+        }
+
+        .service-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        .who-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .who-list li {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .who-list .icon {
+            flex-shrink: 0;
+            color: var(--accent-primary);
+            font-size: 1.2rem;
+        }
+
+        .company-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .company-info p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="features.html">Features</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="docs.html">Docs</a></li>
+                <li><a href="index.html#get-started" class="btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>About</h1>
+            <p>
+                kcore is built by Tacconi Consulting Ltd, a platform engineering
+                consultancy based in England.
+            </p>
+        </div>
+    </section>
+
+    <!-- Company -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2>Tacconi Consulting Ltd</h2>
+                <p>
+                    We help teams design, build, and operate reliable platforms, and accelerate
+                    software delivery with spec-driven code generation and pragmatic AI workflows.
+                </p>
+                <p>
+                    kcore grew out of our infrastructure work. We kept running into the same problem:
+                    managing VMs on bare metal was either too manual or required buying into a
+                    heavyweight platform. So we built something that fits how we actually work &mdash;
+                    declarative, API-driven, and simple enough to run on a single node or scale
+                    across many.
+                </p>
+
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Infrastructure</h3>
+                        <p>
+                            Kubernetes (including bare metal), GitOps with Argo CD, platform
+                            engineering, and day-2 operations. Deterministic upgrades, runbooks,
+                            and operational clarity. Linux, virtualisation, AWS where it fits.
+                        </p>
+                    </div>
+                    <div class="service-card">
+                        <h3>AI Engineering</h3>
+                        <p>
+                            Spec-driven code generation &mdash; scaffolding, clients, tests, and
+                            contracts with human review and CI gates. Structured support for
+                            legacy modernisation and pragmatic AI adoption.
+                        </p>
+                    </div>
+                </div>
+
+                <h2>Who we work with</h2>
+                <ul class="who-list">
+                    <li>
+                        <span class="icon">&#8227;</span>
+                        <span>Organisations looking for pragmatic AI adoption &mdash; without hype.</span>
+                    </li>
+                    <li>
+                        <span class="icon">&#8227;</span>
+                        <span>Teams modernising legacy estates with a structured approach.</span>
+                    </li>
+                    <li>
+                        <span class="icon">&#8227;</span>
+                        <span>Regulated or on-prem environments where control and auditability matter.</span>
+                    </li>
+                    <li>
+                        <span class="icon">&#8227;</span>
+                        <span>Platform and infrastructure teams that need reliability and clear ownership.</span>
+                    </li>
+                </ul>
+
+                <h2>How we work</h2>
+                <p>
+                    Same discipline across infrastructure and software: discovery, architecture,
+                    implementation, handover. For AI-assisted work: human-in-the-loop, tests first,
+                    CI gates before merge. Automation and CI from the start; documentation and
+                    runbooks as deliverables.
+                </p>
+
+                <div class="company-info">
+                    <p><strong>Tacconi Consulting Ltd</strong></p>
+                    <p>Registered in England and Wales &mdash; Company #16750820</p>
+                    <p>
+                        <a href="mailto:team@tacconiconsulting.com" class="contact-link">team@tacconiconsulting.com</a>
+                        &nbsp;&middot;&nbsp;
+                        <a href="https://tacconiconsulting.com" class="contact-link">tacconiconsulting.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p>Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="features.html">Features</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="docs.html">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
