@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why I built kcore - Proxmox broke my automation one too many times">
+    <title>Why I Built kcore: Proxmox Broke My Automation One Too Many Times - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .post-content {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+
+        .post-content h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Post Hero -->
+    <section class="post-hero">
+        <div class="container">
+            <h1>Why I Built kcore: Proxmox Broke My Automation One Too Many Times</h1>
+            <p class="post-meta">March 2026</p>
+        </div>
+    </section>
+
+    <!-- Post Content -->
+    <article class="post-content">
+        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+
+        <p>
+            I like Proxmox. I've run it in home labs and small production setups for years.
+            It does what it says: you get a web UI, you create VMs, it works. But every time
+            I tried to automate it properly, I hit walls.
+        </p>
+
+        <h2>The API is an afterthought</h2>
+
+        <p>
+            Proxmox has a REST API, but it's a thin wrapper over the web UI. It wasn't
+            designed as a first-class interface. Half the time you end up shelling out to
+            <code>qm</code> or <code>pvesh</code> from Terraform or Ansible because the API
+            doesn't expose what you need. That's not automation, that's scripting around a GUI.
+        </p>
+
+        <p>
+            When your Terraform provider has to SSH into the host and run CLI commands to
+            get things done, something is wrong with the API.
+        </p>
+
+        <h2>The codebase is from another era</h2>
+
+        <p>
+            Proxmox is built on Perl. The management framework (<code>pve-manager</code>),
+            the API server, the cluster stack with Corosync and the custom filesystem
+            (<code>pmxcfs</code>) — it all comes from a time when Perl was a reasonable
+            choice. Try debugging a cluster split-brain through layers of Perl and Corosync.
+            It's not fun.
+        </p>
+
+        <h2>Upgrades are scary</h2>
+
+        <p>
+            Proxmox runs on Debian. Upgrading means doing an in-place upgrade on a mutable
+            system that's running your production VMs. There's no atomic rollback. If
+            something goes wrong, you're restoring from backups.
+        </p>
+
+        <p>
+            In practice, most people just don't upgrade. I've seen Proxmox clusters running
+            versions years out of date because nobody wants to risk it.
+        </p>
+
+        <h2>What kcore does differently</h2>
+
+        <p>
+            kcore runs on NixOS. The configuration is declarative — every node is built from
+            the same definition, so there's no drift. When you update, NixOS creates a new
+            system generation. If it breaks, you roll back to the previous one. That's it.
+        </p>
+
+        <p>
+            The API is the primary interface, not a bolt-on. It's gRPC with typed schemas,
+            not a REST wrapper over a web UI. The control plane is written in Go. VMs are
+            defined in YAML and applied declaratively, same as you'd manage Kubernetes
+            resources.
+        </p>
+
+        <pre><code>apiVersion: kcore.io/v1
+kind: VirtualMachine
+metadata:
+  name: web-01
+spec:
+  cpu: 4
+  memory: 8G
+  disk: 100G
+  network: default</code></pre>
+
+        <p>
+            You apply it, the controller figures out which node to put it on, the node agent
+            talks to libvirt, and the VM comes up. No clicking through a web UI, no
+            copy-pasting shell commands.
+        </p>
+
+        <h2>What kcore doesn't do (yet)</h2>
+
+        <p>
+            kcore is alpha. There's a lot it doesn't have that Proxmox does:
+        </p>
+
+        <ul>
+            <li>No HA clustering yet (it's on the roadmap)</li>
+            <li>No live migration</li>
+            <li>No web dashboard</li>
+            <li>No storage replication out of the box</li>
+        </ul>
+
+        <p>
+            If you need those things today, use Proxmox. It's battle-tested and it works.
+        </p>
+
+        <p>
+            But if you're tired of fighting Proxmox's API, you want declarative
+            infrastructure, and you're comfortable with alpha software, take a look at kcore.
+            The goal is a hypervisor that works the way modern infrastructure tools work:
+            API-first, declarative, reproducible.
+        </p>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
