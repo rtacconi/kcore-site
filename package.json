@@ -1,7 +1,7 @@
 {
   "name": "kcore-site",
   "version": "1.0.0",
-  "description": "Marketing website for kcore.systems - AI-powered virtualization platform",
+  "description": "Website for kcore hypervisor",
   "scripts": {
     "dev": "python3 -m http.server 8000",
     "serve": "python3 -m http.server 8000",
