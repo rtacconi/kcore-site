@@ -29,12 +29,12 @@
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title">
-                    Declarative Virtualization<br>
-                    <span class="gradient-text">for Edge & Datacenters</span>
+                    Run VMs like containers.<br>
+                    <span class="gradient-text">On your own hardware.</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Deploy, manage, and scale virtual infrastructure with atomic updates 
-                    and built-in automation. Infrastructure as code, on bare metal.
+                    kcore is a NixOS-based hypervisor that treats VMs as declarative resources.
+                    Define them in Terraform, manage them with a CLI, roll back when things break.
                 </p>
                 <div class="hero-buttons">
                     <a href="#get-started" class="btn btn-primary">Get Started</a>
@@ -60,8 +60,8 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2>Built for Modern Infrastructure</h2>
-                <p>Everything you need to manage virtualized workloads at scale</p>
+                <h2>What you get</h2>
+                <p>The things we actually built, not a wishlist</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -73,7 +73,7 @@
                         </svg>
                     </div>
                     <h3>Atomic Updates & Rollback</h3>
-                    <p>Deploy with confidence. Every system update is atomic with instant rollback capabilities. No more broken deployments.</p>
+                    <p>NixOS under the hood means every system change is atomic. If an update breaks something, roll back in seconds. The host OS is immutable.</p>
                 </div>
 
                 <div class="feature-card">
@@ -85,7 +85,7 @@
                         </svg>
                     </div>
                     <h3>Declarative Infrastructure</h3>
-                    <p>Define your entire infrastructure as code. Version control your VMs, networks, and storage with Terraform integration.</p>
+                    <p>VMs are defined in Terraform or YAML. Commit your infra to git, review it in a PR, apply it like any other config change.</p>
                 </div>
 
                 <div class="feature-card">
@@ -97,8 +97,8 @@
                             <path d="M9 15c1.5 1 3.5 1 5 0"></path>
                         </svg>
                     </div>
-                    <h3>AI-Powered Agent</h3>
-                    <p>Natural language to infrastructure. Our MCP server lets AI agents talk directly to the management API to generate and deploy code.</p>
+                    <h3>MCP Server for AI Agents</h3>
+                    <p>kcore exposes an MCP server so AI coding agents (Cursor, Claude, etc.) can query and manage your VMs directly through the API.</p>
                 </div>
 
                 <div class="feature-card">
@@ -108,8 +108,8 @@
                             <polyline points="8 6 2 12 8 18"></polyline>
                         </svg>
                     </div>
-                    <h3>Built-in Automation</h3>
-                    <p>Automate everything from provisioning to scaling. Intelligent orchestration that learns from your workload patterns.</p>
+                    <h3>gRPC API</h3>
+                    <p>Everything goes through a gRPC API. The CLI, the Terraform provider, and the MCP server all use the same interface. Build your own tooling on top.</p>
                 </div>
 
                 <div class="feature-card">
@@ -120,8 +120,8 @@
                             <polyline points="2 12 12 17 22 12"></polyline>
                         </svg>
                     </div>
-                    <h3>Terraform Native</h3>
-                    <p>First-class Terraform provider. Manage kcore resources alongside your existing infrastructure with familiar tooling.</p>
+                    <h3>Terraform Provider</h3>
+                    <p>A proper Terraform provider, not a wrapper around shell scripts. Plan, apply, and destroy VMs alongside the rest of your stack.</p>
                 </div>
 
                 <div class="feature-card">
@@ -131,8 +131,8 @@
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                     </div>
-                    <h3>Instant Provisioning</h3>
-                    <p>Deploy VMs in seconds, not minutes. Optimized image management and intelligent resource allocation for maximum speed.</p>
+                    <h3>Fast Provisioning</h3>
+                    <p>VMs boot in seconds. No waiting around for cloud-init to finish or image downloads to complete. Local storage, local speed.</p>
                 </div>
             </div>
         </div>
@@ -143,38 +143,38 @@
         <div class="container">
             <div class="platform-content">
                 <div class="platform-text">
-                    <h2>A Platform Built for Reliability</h2>
+                    <h2>How it works</h2>
                     <p class="section-lead">
-                        kcore combines the best of modern virtualization with battle-tested 
-                        infrastructure principles.
+                        A controller manages state, node agents run VMs via libvirt,
+                        and you talk to it all through a single CLI.
                     </p>
                     <ul class="feature-list">
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
                                 <strong>Immutable OS</strong>
-                                <p>Base system never changes. Updates are atomic, rollbacks are instant.</p>
+                                <p>Built on NixOS. The host filesystem is read-only. Updates swap the entire system atomically.</p>
                             </div>
                         </li>
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
-                                <strong>API-First Design</strong>
-                                <p>Everything is accessible via gRPC APIs. Build custom integrations with ease.</p>
+                                <strong>API-First</strong>
+                                <p>gRPC all the way down. The CLI and Terraform provider are just API clients.</p>
                             </div>
                         </li>
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
-                                <strong>Multi-Node Orchestration</strong>
-                                <p>Deploy across multiple nodes with automatic load balancing and failover.</p>
+                                <strong>Multi-Node</strong>
+                                <p>Add nodes by booting the ISO and pointing them at the controller. They register automatically.</p>
                             </div>
                         </li>
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
-                                <strong>Storage Flexibility</strong>
-                                <p>Local directories, LVM, ZFS - use the storage backend that fits your needs.</p>
+                                <strong>Flexible Storage</strong>
+                                <p>Local directories, LVM, or ZFS. Pick what makes sense for your hardware.</p>
                             </div>
                         </li>
                     </ul>
@@ -239,7 +239,7 @@ Memory:      4096 MB
 vCPU:        4 cores
 Storage:     50 GB (local-lvm)
 Network:     192.168.122.100
-Created:     2024-11-10 14:23:45</span>
+Created:     2026-03-10 14:23:45</span>
 
 <span class="prompt">$</span> <span class="cursor">█</span></code></pre>
                         </div>
@@ -290,31 +290,31 @@ Created:     2024-11-10 14:23:45</span>
                     </div>
                 </div>
                 <div class="ai-text">
-                    <h2>Infrastructure Meets Intelligence</h2>
+                    <h2>AI agents can manage your VMs</h2>
                     <p class="section-lead">
-                        The first virtualization platform with native AI integration. 
-                        Talk to your infrastructure in natural language.
+                        kcore ships with an MCP server. Connect it to Claude, Cursor, or any 
+                        MCP-compatible agent and let it create and manage infrastructure for you.
                     </p>
                     <div class="ai-features">
                         <div class="ai-feature">
-                            <h4>MCP Server Integration</h4>
+                            <h4>MCP Server</h4>
                             <p>
-                                Built-in Model Context Protocol server lets AI agents understand 
-                                and interact with your infrastructure directly.
+                                The MCP server exposes VM lifecycle, node status, and resource 
+                                info to any compatible AI agent over a standard protocol.
                             </p>
                         </div>
                         <div class="ai-feature">
-                            <h4>Code Generation</h4>
+                            <h4>Terraform Generation</h4>
                             <p>
-                                Describe what you need in plain English. The AI generates 
-                                production-ready Terraform code and deploys it.
+                                Ask an agent to set up infrastructure and it generates real 
+                                Terraform HCL that you can review, version, and apply.
                             </p>
                         </div>
                         <div class="ai-feature">
-                            <h4>Intelligent Optimization</h4>
+                            <h4>Observability</h4>
                             <p>
-                                Machine learning analyzes your workloads and suggests 
-                                optimizations for resource allocation and cost savings.
+                                Agents can query node health, VM status, and resource usage
+                                to help you debug or plan capacity changes.
                             </p>
                         </div>
                     </div>
@@ -403,8 +403,8 @@ Created:     2024-11-10 14:23:45</span>
     <section id="get-started" class="cta">
         <div class="container">
             <div class="cta-content">
-                <h2>Ready to Transform Your Infrastructure?</h2>
-                <p>Get started with kcore in minutes. Open source and ready for production.</p>
+                <h2>Try it out</h2>
+                <p>kcore is open source. Grab the ISO, boot a spare machine, and you're running.</p>
                 <div class="cta-buttons">
                     <a href="#" class="btn btn-primary btn-large">Download kcore</a>
                     <a href="#" class="btn btn-secondary btn-large">View on GitHub</a>
@@ -453,7 +453,7 @@ Created:     2024-11-10 14:23:45</span>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 kcore hypervisor. All rights reserved.</p>
+                <p>&copy; 2026 kcore hypervisor. All rights reserved.</p>
             </div>
         </div>
     </footer>

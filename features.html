@@ -227,10 +227,10 @@
     <!-- Hero -->
     <section class="features-hero">
         <div class="container">
-            <h1>Powerful Features for Modern Infrastructure</h1>
+            <h1>What kcore does</h1>
             <p>
-                Built from the ground up for reliability, automation, and developer experience. 
-                Everything you need to run production workloads at scale.
+                An honest look at the platform. Here's what's built, what works,
+                and why we made the choices we did.
             </p>
         </div>
     </section>
@@ -262,8 +262,8 @@
                 <div class="feature-detail-text">
                     <h2>Atomic Updates & Instant Rollback</h2>
                     <p>
-                        Never worry about broken deployments again. kcore's atomic update system ensures 
-                        that every change is either fully applied or completely reverted - no half-broken states.
+                        kcore runs on NixOS, which means system updates are transactional. If something
+                        goes wrong, you boot into the previous generation. No partial states, no manual cleanup.
                     </p>
                     <ul class="feature-list-items">
                         <li>
@@ -271,25 +271,25 @@
                             <div>
                                 <strong>Immutable Base System</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    The core OS never changes. All updates are versioned and isolated.
+                                    The host OS is read-only. Configuration lives in Nix, not scattered across /etc.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong>One-Click Rollback</strong><br>
+                                <strong>Boot into Previous Generation</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    Instantly revert to any previous state with zero downtime.
+                                    Every NixOS generation is kept. Select a previous one at boot or switch remotely.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong>State Verification</strong><br>
+                                <strong>Reproducible Builds</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    Automatic health checks ensure updates are successful before committing.
+                                    The ISO is built from a flake.nix. Same inputs, same output, every time.
                                 </span>
                             </div>
                         </li>
@@ -329,36 +329,36 @@
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2>Declarative Infrastructure as Code</h2>
+                    <h2>Infrastructure as Code</h2>
                     <p>
-                        Define your entire infrastructure in code. Version control everything from VMs to networks 
-                        to storage. No more clicking through UIs or running manual commands.
+                        VMs are resources in Terraform. You write HCL, run <code>terraform apply</code>,
+                        and the provider talks to the kcore API over gRPC. Standard workflow, no special tooling.
                     </p>
                     <ul class="feature-list-items">
                         <li>
                             <span class="icon">📝</span>
                             <div>
-                                <strong>Native Terraform Provider</strong><br>
+                                <strong>Real Terraform Provider</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    First-class integration with your existing Terraform workflows.
+                                    Written in Go using the Terraform Plugin SDK. Not a shell wrapper.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">🔄</span>
                             <div>
-                                <strong>GitOps Ready</strong><br>
+                                <strong>Git-friendly</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    Commit infrastructure changes and watch them automatically deploy.
+                                    HCL and YAML are text files. Diff them, review them, track changes over time.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">📊</span>
                             <div>
-                                <strong>State Management</strong><br>
+                                <strong>Desired State</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    Automatic drift detection and reconciliation keeps reality in sync.
+                                    The controller stores desired state. Node agents reconcile. Standard controller pattern.
                                 </span>
                             </div>
                         </li>
@@ -402,36 +402,36 @@
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2>AI-Powered Automation</h2>
+                    <h2>AI Agent Integration</h2>
                     <p>
-                        The first virtualization platform with native AI integration. Describe what you want 
-                        in natural language and watch the AI generate, validate, and deploy production-ready infrastructure.
+                        kcore includes an MCP (Model Context Protocol) server. Any MCP-compatible AI agent
+                        can list nodes, create VMs, check status, and generate Terraform configs through it.
                     </p>
                     <ul class="feature-list-items">
                         <li>
                             <span class="icon">🤖</span>
                             <div>
-                                <strong>MCP Server Built-in</strong><br>
+                                <strong>MCP Server</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    Model Context Protocol lets any AI agent interact with your infrastructure.
+                                    Runs alongside the controller. Exposes tools for VM and node management over MCP.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">💡</span>
                             <div>
-                                <strong>Intelligent Code Generation</strong><br>
+                                <strong>Terraform Output</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    Converts natural language to optimized Terraform configurations.
+                                    Agents generate HCL you can read and modify. No black-box deployments.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">📈</span>
                             <div>
-                                <strong>Auto-Optimization</strong><br>
+                                <strong>Query Infrastructure</strong><br>
                                 <span style="color: var(--text-tertiary);">
-                                    ML models analyze workloads and suggest resource optimizations.
+                                    Agents can check VM status, node health, and resource usage to help you troubleshoot.
                                 </span>
                             </div>
                         </li>
@@ -532,8 +532,8 @@
     <section class="cta" style="margin-top: 0;">
         <div class="container">
             <div class="cta-content">
-                <h2>Experience the Future of Virtualization</h2>
-                <p>Get started with kcore today and transform how you manage infrastructure.</p>
+                <h2>Give it a spin</h2>
+                <p>The docs walk you through building the ISO and booting your first node.</p>
                 <div class="cta-buttons">
                     <a href="docs.html" class="btn btn-primary btn-large">Read the Docs</a>
                     <a href="index.html#get-started" class="btn btn-secondary btn-large">Get Started</a>
@@ -575,7 +575,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 kcore hypervisor. All rights reserved.</p>
+                <p>&copy; 2026 kcore hypervisor. All rights reserved.</p>
             </div>
         </div>
     </footer>
