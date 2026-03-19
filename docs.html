@@ -355,29 +355,40 @@ EOF</code></pre>
 
                 <h2 id="architecture">Architecture Overview</h2>
 
-                <p>kcore consists of three main components:</p>
+                <p>kcore consists of a controller + agent architecture with separated runtime and automation paths:</p>
 
                 <div class="docs-card">
                     <h4>Controller</h4>
                     <p>
-                        Central management server that maintains the desired state, handles scheduling, 
-                        and provides the API interface for clients and the AI agent.
+                        Central control plane that maintains desired state, schedules resources, and reconciles cluster state exposed through the Controller API.
                     </p>
                 </div>
 
                 <div class="docs-card">
-                    <h4>Node Agent</h4>
+                    <h4>Node Agent Runtime API</h4>
                     <p>
-                        Runs on each compute node, manages local VMs using libvirt, reports status 
-                        to the controller, and handles storage provisioning.
+                        Runs on each compute node and executes VM/storage lifecycle operations via libvirt and local drivers, then reports observed state back to the controller.
                     </p>
                 </div>
 
                 <div class="docs-card">
-                    <h4>CLI (kctl)</h4>
+                    <h4>Node Agent Automator API</h4>
                     <p>
-                        Command-line interface for interacting with kcore. Create, manage, and monitor 
-                        VMs and other resources with familiar kubectl-like commands.
+                        Handles host-level automation flows such as node bootstrap operations, apply-nix workflows, and installation tasks coordinated by the control plane.
+                    </p>
+                </div>
+
+                <div class="docs-card">
+                    <h4>Controller Mesh (CRDT)</h4>
+                    <p>
+                        In multi-controller deployments, controllers can exchange state using CRDT replication to converge without a single write bottleneck.
+                    </p>
+                </div>
+
+                <div class="docs-card">
+                    <h4>Networking Fabric (EVPN + VXLAN)</h4>
+                    <p>
+                        Tenant networking uses EVPN as control plane and VXLAN as data plane for scalable multi-node overlays.
                     </p>
                 </div>
 
