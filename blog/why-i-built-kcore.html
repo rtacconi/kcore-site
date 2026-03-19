@@ -112,38 +112,38 @@
     <!-- Post Hero -->
     <section class="post-hero">
         <div class="container">
-            <h1>Why I Built kcore: Proxmox Broke My Automation One Too Many Times</h1>
-            <p class="post-meta">March 2026</p>
+            <h1 data-i18n="bp.wib.title">Why I Built kcore: Proxmox Broke My Automation One Too Many Times</h1>
+            <p class="post-meta" data-i18n="bp.wib.date">March 2026</p>
         </div>
     </section>
 
     <!-- Post Content -->
     <article class="post-content">
-        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.wib.back">&larr; Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.wib.intro">
             I like Proxmox. I've run it in home labs and small production setups for years.
             It does what it says: you get a web UI, you create VMs, it works. But every time
             I tried to automate it properly, I hit walls.
         </p>
 
-        <h2>The API is an afterthought</h2>
+        <h2 data-i18n="bp.wib.h2api">The API is an afterthought</h2>
 
-        <p>
+        <p data-i18n-html="bp.wib.api1">
             Proxmox has a REST API, but it's a thin wrapper over the web UI. It wasn't
             designed as a first-class interface. Half the time you end up shelling out to
             <code>qm</code> or <code>pvesh</code> from Terraform or Ansible because the API
             doesn't expose what you need. That's not automation, that's scripting around a GUI.
         </p>
 
-        <p>
+        <p data-i18n="bp.wib.api2">
             When your Terraform provider has to SSH into the host and run CLI commands to
             get things done, something is wrong with the API.
         </p>
 
-        <h2>The codebase is from another era</h2>
+        <h2 data-i18n="bp.wib.h2code">The codebase is from another era</h2>
 
-        <p>
+        <p data-i18n-html="bp.wib.code1">
             Proxmox is built on Perl. The management framework (<code>pve-manager</code>),
             the API server, the cluster stack with Corosync and the custom filesystem
             (<code>pmxcfs</code>) — it all comes from a time when Perl was a reasonable
@@ -151,28 +151,28 @@
             It's not fun.
         </p>
 
-        <h2>Upgrades are scary</h2>
+        <h2 data-i18n="bp.wib.h2upgrades">Upgrades are scary</h2>
 
-        <p>
+        <p data-i18n="bp.wib.upgrades1">
             Proxmox runs on Debian. Upgrading means doing an in-place upgrade on a mutable
             system that's running your production VMs. There's no atomic rollback. If
             something goes wrong, you're restoring from backups.
         </p>
 
-        <p>
+        <p data-i18n="bp.wib.upgrades2">
             In practice, most people just don't upgrade. I've seen Proxmox clusters running
             versions years out of date because nobody wants to risk it.
         </p>
 
-        <h2>What kcore does differently</h2>
+        <h2 data-i18n="bp.wib.h2diff">What kcore does differently</h2>
 
-        <p>
+        <p data-i18n="bp.wib.diff1">
             kcore runs on NixOS. The configuration is declarative — every node is built from
             the same definition, so there's no drift. When you update, NixOS creates a new
             system generation. If it breaks, you roll back to the previous one. That's it.
         </p>
 
-        <p>
+        <p data-i18n="bp.wib.diff2">
             The API is the primary interface, not a bolt-on. It's gRPC with typed schemas,
             not a REST wrapper over a web UI. The control plane is written in Go. VMs are
             defined in YAML and applied declaratively, same as you'd manage Kubernetes
@@ -189,30 +189,30 @@ spec:
   disk: 100G
   network: default</code></pre>
 
-        <p>
+        <p data-i18n="bp.wib.diff3">
             You apply it, the controller figures out which node to put it on, the node agent
             talks to libvirt, and the VM comes up. No clicking through a web UI, no
             copy-pasting shell commands.
         </p>
 
-        <h2>What kcore doesn't do (yet)</h2>
+        <h2 data-i18n="bp.wib.h2yet">What kcore doesn't do (yet)</h2>
 
-        <p>
+        <p data-i18n="bp.wib.yet1">
             kcore is alpha. There's a lot it doesn't have that Proxmox does:
         </p>
 
         <ul>
-            <li>No HA clustering yet (it's on the roadmap)</li>
-            <li>No live migration</li>
-            <li>No web dashboard</li>
-            <li>No storage replication out of the box</li>
+            <li data-i18n="bp.wib.yet.ha">No HA clustering yet (it's on the roadmap)</li>
+            <li data-i18n="bp.wib.yet.mig">No live migration</li>
+            <li data-i18n="bp.wib.yet.dash">No web dashboard</li>
+            <li data-i18n="bp.wib.yet.rep">No storage replication out of the box</li>
         </ul>
 
-        <p>
+        <p data-i18n="bp.wib.yet2">
             If you need those things today, use Proxmox. It's battle-tested and it works.
         </p>
 
-        <p>
+        <p data-i18n="bp.wib.yet3">
             But if you're tired of fighting Proxmox's API, you want declarative
             infrastructure, and you're comfortable with alpha software, take a look at kcore.
             The goal is a hypervisor that works the way modern infrastructure tools work:

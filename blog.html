@@ -105,8 +105,8 @@
     <!-- Hero -->
     <section class="blog-hero">
         <div class="container">
-            <h1>Blog</h1>
-            <p>Updates, architecture notes, and release announcements.</p>
+            <h1 data-i18n="blog.title">Blog</h1>
+            <p data-i18n="blog.subtitle">Updates, architecture notes, and release announcements.</p>
         </div>
     </section>
 
@@ -115,9 +115,9 @@
         <div class="container">
             <div class="blog-list">
                 <div class="blog-post">
-                    <h2>kcore goes public</h2>
-                    <span class="blog-date">19 March 2026</span>
-                    <p>
+                    <h2 data-i18n="blog.post1.title">kcore goes public</h2>
+                    <span class="blog-date" data-i18n="blog.post1.date">19 March 2026</span>
+                    <p data-i18n-html="blog.post1.body">
                         We've split the old monorepo and published the docs and website as
                         separate public repos. The product docs are now at
                         <a href="https://github.com/rtacconi/kcore" style="color: var(--accent-primary);">github.com/rtacconi/kcore</a>
@@ -128,9 +128,9 @@
                     </p>
                 </div>
                 <div class="blog-post">
-                    <h2><a href="blog/why-i-built-kcore.html">Why I Built kcore: Proxmox Broke My Automation One Too Many Times</a></h2>
-                    <span class="blog-date">March 2026</span>
-                    <p>
+                    <h2><a href="blog/why-i-built-kcore.html" data-i18n="blog.post2.title">Why I Built kcore: Proxmox Broke My Automation One Too Many Times</a></h2>
+                    <span class="blog-date" data-i18n="blog.post2.date">March 2026</span>
+                    <p data-i18n="blog.post2.summary">
                         Proxmox does a lot of things right, but its API is an afterthought,
                         upgrades are scary, and the Perl codebase is showing its age. I built
                         kcore to get declarative, API-first infrastructure on bare metal.
