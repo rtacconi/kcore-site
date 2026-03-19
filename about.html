@@ -139,10 +139,10 @@
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="features.html">Features</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="docs.html">Docs</a></li>
-                <li><a href="index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
@@ -150,8 +150,8 @@
     <!-- Hero -->
     <section class="about-hero">
         <div class="container">
-            <h1>About</h1>
-            <p>
+            <h1 data-i18n="about.title">About</h1>
+            <p data-i18n="about.subtitle">
                 kcore is built by Tacconi Consulting Ltd, a platform engineering
                 consultancy based in England.
             </p>
@@ -162,12 +162,12 @@
     <section class="about-section">
         <div class="container">
             <div class="about-content">
-                <h2>Tacconi Consulting Ltd</h2>
-                <p>
+                <h2 data-i18n="about.company">Tacconi Consulting Ltd</h2>
+                <p data-i18n="about.desc1">
                     We help teams design, build, and operate reliable platforms, and accelerate
                     software delivery with spec-driven code generation and pragmatic AI workflows.
                 </p>
-                <p>
+                <p data-i18n-html="about.desc2">
                     kcore grew out of our infrastructure work. We kept running into the same problem:
                     managing VMs on bare metal was either too manual or required buying into a
                     heavyweight platform. So we built something that fits how we actually work &mdash;
@@ -177,16 +177,16 @@
 
                 <div class="services-grid">
                     <div class="service-card">
-                        <h3>Infrastructure</h3>
-                        <p>
+                        <h3 data-i18n="about.infra.title">Infrastructure</h3>
+                        <p data-i18n="about.infra.desc">
                             Kubernetes (including bare metal), GitOps with Argo CD, platform
                             engineering, and day-2 operations. Deterministic upgrades, runbooks,
                             and operational clarity. Linux, virtualisation, AWS where it fits.
                         </p>
                     </div>
                     <div class="service-card">
-                        <h3>AI Engineering</h3>
-                        <p>
+                        <h3 data-i18n="about.ai.title">AI Engineering</h3>
+                        <p data-i18n-html="about.ai.desc">
                             Spec-driven code generation &mdash; scaffolding, clients, tests, and
                             contracts with human review and CI gates. Structured support for
                             legacy modernisation and pragmatic AI adoption.
@@ -194,28 +194,28 @@
                     </div>
                 </div>
 
-                <h2>Who we work with</h2>
+                <h2 data-i18n="about.who">Who we work with</h2>
                 <ul class="who-list">
                     <li>
                         <span class="icon">&#8227;</span>
-                        <span>Organisations looking for pragmatic AI adoption &mdash; without hype.</span>
+                        <span data-i18n-html="about.who1">Organisations looking for pragmatic AI adoption &mdash; without hype.</span>
                     </li>
                     <li>
                         <span class="icon">&#8227;</span>
-                        <span>Teams modernising legacy estates with a structured approach.</span>
+                        <span data-i18n-html="about.who2">Teams modernising legacy estates with a structured approach.</span>
                     </li>
                     <li>
                         <span class="icon">&#8227;</span>
-                        <span>Regulated or on-prem environments where control and auditability matter.</span>
+                        <span data-i18n-html="about.who3">Regulated or on-prem environments where control and auditability matter.</span>
                     </li>
                     <li>
                         <span class="icon">&#8227;</span>
-                        <span>Platform and infrastructure teams that need reliability and clear ownership.</span>
+                        <span data-i18n-html="about.who4">Platform and infrastructure teams that need reliability and clear ownership.</span>
                     </li>
                 </ul>
 
-                <h2>How we work</h2>
-                <p>
+                <h2 data-i18n="about.how">How we work</h2>
+                <p data-i18n="about.how.desc">
                     Same discipline across infrastructure and software: discovery, architecture,
                     implementation, handover. For AI-assisted work: human-in-the-loop, tests first,
                     CI gates before merge. Automation and CI from the start; documentation and
@@ -241,28 +241,28 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>kcore</h4>
-                    <p>Declarative virtualization for edge and datacenters</p>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Product</h4>
+                    <h4 data-i18n="footer.product">Product</h4>
                     <ul>
-                        <li><a href="features.html">Features</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Resources</h4>
+                    <h4 data-i18n="footer.resources">Resources</h4>
                     <ul>
-                        <li><a href="docs.html">Documentation</a></li>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Company</h4>
+                    <h4 data-i18n="footer.company">Company</h4>
                     <ul>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
                         <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
-                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -272,6 +272,7 @@
         </div>
     </footer>
 
+    <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

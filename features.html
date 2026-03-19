@@ -216,10 +216,10 @@
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="features.html">Features</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="docs.html">Docs</a></li>
-                <li><a href="index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
@@ -227,8 +227,8 @@
     <!-- Hero -->
     <section class="features-hero">
         <div class="container">
-            <h1>What kcore does</h1>
-            <p>
+            <h1 data-i18n="fp.title">What kcore does</h1>
+            <p data-i18n="fp.subtitle">
                 An honest look at the platform. Here's what's built, what works,
                 and why we made the choices we did.
             </p>
@@ -241,15 +241,15 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-number">&lt;5s</div>
-                    <div class="stat-label">VM Provisioning Time</div>
+                    <div class="stat-label" data-i18n="fp.stat1">VM Provisioning Time</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">100%</div>
-                    <div class="stat-label">Rollback Success Rate</div>
+                    <div class="stat-label" data-i18n="fp.stat2">Rollback Success Rate</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">0</div>
-                    <div class="stat-label">Downtime Updates</div>
+                    <div class="stat-label" data-i18n="fp.stat3">Downtime Updates</div>
                 </div>
             </div>
         </div>
@@ -260,8 +260,8 @@
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2>Atomic Updates & Instant Rollback</h2>
-                    <p>
+                    <h2 data-i18n="fp.atomic.title">Atomic Updates & Instant Rollback</h2>
+                    <p data-i18n="fp.atomic.desc">
                         kcore runs on NixOS, which means system updates are transactional. If something
                         goes wrong, you boot into the previous generation. No partial states, no manual cleanup.
                     </p>
@@ -269,8 +269,8 @@
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong>Immutable Base System</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.atomic.f1.title">Immutable Base System</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.atomic.f1.desc">
                                     The host OS is read-only. Configuration lives in Nix, not scattered across /etc.
                                 </span>
                             </div>
@@ -278,8 +278,8 @@
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong>Boot into Previous Generation</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.atomic.f2.title">Boot into Previous Generation</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.atomic.f2.desc">
                                     Every NixOS generation is kept. Select a previous one at boot or switch remotely.
                                 </span>
                             </div>
@@ -287,8 +287,8 @@
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong>Reproducible Builds</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.atomic.f3.title">Reproducible Builds</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.atomic.f3.desc">
                                     The ISO is built from a flake.nix. Same inputs, same output, every time.
                                 </span>
                             </div>
@@ -329,8 +329,8 @@
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2>Infrastructure as Code</h2>
-                    <p>
+                    <h2 data-i18n="fp.iac.title">Infrastructure as Code</h2>
+                    <p data-i18n-html="fp.iac.desc">
                         VMs are resources in Terraform. You write HCL, run <code>terraform apply</code>,
                         and the provider talks to the kcore API over gRPC. Standard workflow, no special tooling.
                     </p>
@@ -338,8 +338,8 @@
                         <li>
                             <span class="icon">📝</span>
                             <div>
-                                <strong>Real Terraform Provider</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.iac.f1.title">Real Terraform Provider</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.iac.f1.desc">
                                     Written in Go using the Terraform Plugin SDK. Not a shell wrapper.
                                 </span>
                             </div>
@@ -347,8 +347,8 @@
                         <li>
                             <span class="icon">🔄</span>
                             <div>
-                                <strong>Git-friendly</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.iac.f2.title">Git-friendly</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.iac.f2.desc">
                                     HCL and YAML are text files. Diff them, review them, track changes over time.
                                 </span>
                             </div>
@@ -356,8 +356,8 @@
                         <li>
                             <span class="icon">📊</span>
                             <div>
-                                <strong>Desired State</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.iac.f3.title">Desired State</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.iac.f3.desc">
                                     The controller stores desired state. Node agents reconcile. Standard controller pattern.
                                 </span>
                             </div>
@@ -402,8 +402,8 @@
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2>AI Agent Integration</h2>
-                    <p>
+                    <h2 data-i18n="fp.ai.title">AI Agent Integration</h2>
+                    <p data-i18n="fp.ai.desc">
                         kcore includes an MCP (Model Context Protocol) server. Any MCP-compatible AI agent
                         can list nodes, create VMs, check status, and generate Terraform configs through it.
                     </p>
@@ -411,8 +411,8 @@
                         <li>
                             <span class="icon">🤖</span>
                             <div>
-                                <strong>MCP Server</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.ai.f1.title">MCP Server</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.ai.f1.desc">
                                     Runs alongside the controller. Exposes tools for VM and node management over MCP.
                                 </span>
                             </div>
@@ -420,8 +420,8 @@
                         <li>
                             <span class="icon">💡</span>
                             <div>
-                                <strong>Terraform Output</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.ai.f2.title">Terraform Output</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.ai.f2.desc">
                                     Agents generate HCL you can read and modify. No black-box deployments.
                                 </span>
                             </div>
@@ -429,8 +429,8 @@
                         <li>
                             <span class="icon">📈</span>
                             <div>
-                                <strong>Query Infrastructure</strong><br>
-                                <span style="color: var(--text-tertiary);">
+                                <strong data-i18n="fp.ai.f3.title">Query Infrastructure</strong><br>
+                                <span style="color: var(--text-tertiary);" data-i18n="fp.ai.f3.desc">
                                     Agents can check VM status, node health, and resource usage to help you troubleshoot.
                                 </span>
                             </div>
@@ -464,64 +464,64 @@
     <!-- Comparison Table -->
     <section class="feature-section">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 3rem;">How kcore Compares</h2>
+            <h2 style="text-align: center; margin-bottom: 3rem;" data-i18n="fp.compare">How kcore Compares</h2>
             <table class="comparison-table">
                 <thead>
                     <tr>
-                        <th>Feature</th>
+                        <th data-i18n="fp.compare.feature">Feature</th>
                         <th>kcore</th>
-                        <th>Traditional VMs</th>
-                        <th>Container Orchestration</th>
+                        <th data-i18n="fp.compare.traditional">Traditional VMs</th>
+                        <th data-i18n="fp.compare.containers">Container Orchestration</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Atomic Updates</td>
+                        <td data-i18n="fp.compare.atomic">Atomic Updates</td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="cross-mark">✗</span></td>
                         <td><span class="check-mark">✓</span></td>
                     </tr>
                     <tr>
-                        <td>Instant Rollback</td>
+                        <td data-i18n="fp.compare.rollback">Instant Rollback</td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="cross-mark">✗</span></td>
                         <td><span class="check-mark">✓</span></td>
                     </tr>
                     <tr>
-                        <td>Infrastructure as Code</td>
+                        <td data-i18n="fp.compare.iac">Infrastructure as Code</td>
                         <td><span class="check-mark">✓</span></td>
-                        <td><span style="color: var(--warning);">Partial</span></td>
+                        <td><span style="color: var(--warning);" data-i18n="fp.compare.partial">Partial</span></td>
                         <td><span class="check-mark">✓</span></td>
                     </tr>
                     <tr>
-                        <td>AI Integration</td>
+                        <td data-i18n="fp.compare.ai">AI Integration</td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="cross-mark">✗</span></td>
                         <td><span class="cross-mark">✗</span></td>
                     </tr>
                     <tr>
-                        <td>Full OS Isolation</td>
+                        <td data-i18n="fp.compare.isolation">Full OS Isolation</td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="cross-mark">✗</span></td>
                     </tr>
                     <tr>
-                        <td>Legacy App Support</td>
+                        <td data-i18n="fp.compare.legacy">Legacy App Support</td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="check-mark">✓</span></td>
-                        <td><span style="color: var(--warning);">Limited</span></td>
+                        <td><span style="color: var(--warning);" data-i18n="fp.compare.limited">Limited</span></td>
                     </tr>
                     <tr>
-                        <td>Resource Efficiency</td>
-                        <td><span style="color: var(--success);">High</span></td>
-                        <td><span style="color: var(--warning);">Medium</span></td>
-                        <td><span style="color: var(--success);">Very High</span></td>
+                        <td data-i18n="fp.compare.efficiency">Resource Efficiency</td>
+                        <td><span style="color: var(--success);" data-i18n="fp.compare.high">High</span></td>
+                        <td><span style="color: var(--warning);" data-i18n="fp.compare.medium">Medium</span></td>
+                        <td><span style="color: var(--success);" data-i18n="fp.compare.vhigh">Very High</span></td>
                     </tr>
                     <tr>
-                        <td>Learning Curve</td>
-                        <td><span style="color: var(--success);">Low</span></td>
-                        <td><span style="color: var(--success);">Low</span></td>
-                        <td><span style="color: var(--warning);">High</span></td>
+                        <td data-i18n="fp.compare.learning">Learning Curve</td>
+                        <td><span style="color: var(--success);" data-i18n="fp.compare.low">Low</span></td>
+                        <td><span style="color: var(--success);" data-i18n="fp.compare.low">Low</span></td>
+                        <td><span style="color: var(--warning);" data-i18n="fp.compare.high">High</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -532,11 +532,11 @@
     <section class="cta" style="margin-top: 0;">
         <div class="container">
             <div class="cta-content">
-                <h2>Give it a spin</h2>
-                <p>The docs walk you through building the ISO and booting your first node.</p>
+                <h2 data-i18n="fp.cta.title">Give it a spin</h2>
+                <p data-i18n="fp.cta.desc">The docs walk you through building the ISO and booting your first node.</p>
                 <div class="cta-buttons">
-                    <a href="docs.html" class="btn btn-primary btn-large">Read the Docs</a>
-                    <a href="index.html#get-started" class="btn btn-secondary btn-large">Get Started</a>
+                    <a href="docs.html" class="btn btn-primary btn-large" data-i18n="fp.cta.docs">Read the Docs</a>
+                    <a href="index.html#get-started" class="btn btn-secondary btn-large" data-i18n="nav.getStarted">Get Started</a>
                 </div>
             </div>
         </div>
@@ -548,28 +548,28 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>kcore</h4>
-                    <p>Declarative virtualization for edge and datacenters</p>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Product</h4>
+                    <h4 data-i18n="footer.product">Product</h4>
                     <ul>
-                        <li><a href="features.html">Features</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Resources</h4>
+                    <h4 data-i18n="footer.resources">Resources</h4>
                     <ul>
-                        <li><a href="docs.html">Documentation</a></li>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Company</h4>
+                    <h4 data-i18n="footer.company">Company</h4>
                     <ul>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
                         <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
-                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -579,6 +579,7 @@
         </div>
     </footer>
 
+    <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

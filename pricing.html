@@ -194,10 +194,10 @@
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="features.html">Features</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="docs.html">Docs</a></li>
-                <li><a href="index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
@@ -205,8 +205,8 @@
     <!-- Hero -->
     <section class="pricing-hero">
         <div class="container">
-            <h1>Pricing</h1>
-            <p>
+            <h1 data-i18n="pricing.title">Pricing</h1>
+            <p data-i18n="pricing.subtitle">
                 Free to download and run on a single node.
                 Enterprise features available for production clusters.
             </p>
@@ -218,71 +218,71 @@
         <div class="container">
             <div class="pricing-grid">
                 <div class="pricing-card">
-                    <div class="pricing-name">Community</div>
-                    <div class="pricing-price">Free</div>
-                    <p class="pricing-desc">
+                    <div class="pricing-name" data-i18n="pricing.community">Community</div>
+                    <div class="pricing-price" data-i18n="pricing.free">Free</div>
+                    <p class="pricing-desc" data-i18n="pricing.community.desc">
                         Everything you need to run kcore on a single node.
                         No time limits, no usage caps.
                     </p>
                     <ul class="pricing-features">
-                        <li><span class="check">&#10003;</span> Single-node deployment</li>
-                        <li><span class="check">&#10003;</span> VM lifecycle management</li>
-                        <li><span class="check">&#10003;</span> Terraform provider</li>
-                        <li><span class="check">&#10003;</span> kctl CLI</li>
-                        <li><span class="check">&#10003;</span> gRPC API</li>
-                        <li><span class="check">&#10003;</span> MCP server for AI agents</li>
-                        <li><span class="check">&#10003;</span> Local storage (dir, LVM, ZFS)</li>
-                        <li><span class="check">&#10003;</span> Atomic OS updates & rollback</li>
-                        <li class="disabled"><span class="cross">&#10007;</span> Multi-node clustering</li>
-                        <li class="disabled"><span class="cross">&#10007;</span> High availability</li>
-                        <li class="disabled"><span class="cross">&#10007;</span> Live VM migration</li>
-                        <li class="disabled"><span class="cross">&#10007;</span> Priority support</li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f1">Single-node deployment</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f2">VM lifecycle management</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f3">Terraform provider</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f4">kctl CLI</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f5">gRPC API</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f6">MCP server for AI agents</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f7">Local storage (dir, LVM, ZFS)</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f8">Atomic OS updates & rollback</span></li>
+                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f9">Multi-node clustering</span></li>
+                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f10">High availability</span></li>
+                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f11">Live VM migration</span></li>
+                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f12">Priority support</span></li>
                     </ul>
-                    <a href="https://github.com/rtacconi/kcore/releases" class="pricing-cta pricing-cta-secondary">Download</a>
+                    <a href="https://github.com/rtacconi/kcore/releases" class="pricing-cta pricing-cta-secondary" data-i18n="pricing.download">Download</a>
                 </div>
                 <div class="pricing-card featured">
-                    <div class="pricing-label">Production</div>
-                    <div class="pricing-name">Enterprise</div>
-                    <div class="pricing-price">Contact us</div>
-                    <p class="pricing-desc">
+                    <div class="pricing-label" data-i18n="pricing.production">Production</div>
+                    <div class="pricing-name" data-i18n="pricing.enterprise">Enterprise</div>
+                    <div class="pricing-price" data-i18n="pricing.contact">Contact us</div>
+                    <p class="pricing-desc" data-i18n="pricing.enterprise.desc">
                         Multi-node clustering, high availability, and support
                         for production workloads.
                     </p>
                     <ul class="pricing-features">
-                        <li><span class="check">&#10003;</span> Everything in Community</li>
-                        <li><span class="check">&#10003;</span> Multi-node clustering</li>
-                        <li><span class="check">&#10003;</span> High availability & failover</li>
-                        <li><span class="check">&#10003;</span> Live VM migration</li>
-                        <li><span class="check">&#10003;</span> Distributed storage</li>
-                        <li><span class="check">&#10003;</span> Network overlay (OVN)</li>
-                        <li><span class="check">&#10003;</span> Role-based access control</li>
-                        <li><span class="check">&#10003;</span> Audit logging</li>
-                        <li><span class="check">&#10003;</span> Priority support</li>
-                        <li><span class="check">&#10003;</span> Custom integrations</li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f1">Everything in Community</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f2">Multi-node clustering</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f3">High availability & failover</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f4">Live VM migration</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f5">Distributed storage</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f6">Network overlay (OVN)</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f7">Role-based access control</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f8">Audit logging</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f9">Priority support</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f10">Custom integrations</span></li>
                     </ul>
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Enterprise" class="pricing-cta pricing-cta-primary">Get in touch</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Enterprise" class="pricing-cta pricing-cta-primary" data-i18n="pricing.getInTouch">Get in touch</a>
                 </div>
             </div>
 
             <div class="pricing-faq">
-                <h2>Questions</h2>
+                <h2 data-i18n="pricing.faq">Questions</h2>
                 <div class="faq-item">
-                    <h3>Can I use the free version in production?</h3>
-                    <p>
+                    <h3 data-i18n="pricing.faq1.q">Can I use the free version in production?</h3>
+                    <p data-i18n="pricing.faq1.a">
                         Yes. The Community edition is the full kcore hypervisor running on a single node.
                         There are no artificial limits on the number of VMs or resources you can use.
                     </p>
                 </div>
                 <div class="faq-item">
-                    <h3>What counts as clustering?</h3>
-                    <p>
+                    <h3 data-i18n="pricing.faq2.q">What counts as clustering?</h3>
+                    <p data-i18n="pricing.faq2.a">
                         Running multiple kcore nodes managed by a single controller with
                         automatic scheduling, failover, and live migration between nodes.
                     </p>
                 </div>
                 <div class="faq-item">
-                    <h3>Is kcore open source?</h3>
-                    <p>
+                    <h3 data-i18n="pricing.faq3.q">Is kcore open source?</h3>
+                    <p data-i18n-html="pricing.faq3.a">
                         The core hypervisor is open source on
                         <a href="https://github.com/rtacconi/kcore" style="color: var(--accent-primary);">GitHub</a>.
                         Enterprise clustering and advanced features are available under a commercial licence.
@@ -298,28 +298,28 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>kcore</h4>
-                    <p>Declarative virtualization for edge and datacenters</p>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Product</h4>
+                    <h4 data-i18n="footer.product">Product</h4>
                     <ul>
-                        <li><a href="features.html">Features</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Resources</h4>
+                    <h4 data-i18n="footer.resources">Resources</h4>
                     <ul>
-                        <li><a href="docs.html">Documentation</a></li>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Company</h4>
+                    <h4 data-i18n="footer.company">Company</h4>
                     <ul>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
                         <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
-                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -329,6 +329,7 @@
         </div>
     </footer>
 
+    <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

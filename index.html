@@ -16,10 +16,10 @@
                 <span class="logo-tag">hypervisor</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="features.html">Features</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="docs.html">Docs</a></li>
-                <li><a href="#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
@@ -28,17 +28,17 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">
+                <h1 class="hero-title" data-i18n-html="hero.title">
                     Declarative Virtualization<br>
                     <span class="gradient-text">for Edge & Datacenters</span>
                 </h1>
-                <p class="hero-subtitle">
+                <p class="hero-subtitle" data-i18n="hero.subtitle">
                     kcore is a NixOS-based hypervisor that treats VMs as declarative resources.
                     Define them in Terraform, manage them with a CLI, roll back when things break.
                 </p>
                 <div class="hero-buttons">
-                    <a href="#get-started" class="btn btn-primary">Get Started</a>
-                    <a href="#docs" class="btn btn-secondary">Read Docs</a>
+                    <a href="#get-started" class="btn btn-primary" data-i18n="hero.getStarted">Get Started</a>
+                    <a href="#docs" class="btn btn-secondary" data-i18n="hero.readDocs">Read Docs</a>
                 </div>
                 <div class="hero-code">
                     <pre><code><span class="code-comment"># Deploy a VM with kcore</span>
@@ -60,8 +60,8 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2>What you get</h2>
-                <p>The things we actually built, not a wishlist</p>
+                <h2 data-i18n="features.title">What you get</h2>
+                <p data-i18n="features.subtitle">The things we actually built, not a wishlist</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -72,8 +72,8 @@
                             <line x1="12" y1="22.08" x2="12" y2="12"></line>
                         </svg>
                     </div>
-                    <h3>Atomic Updates & Rollback</h3>
-                    <p>NixOS under the hood means every system change is atomic. If an update breaks something, roll back in seconds. The host OS is immutable.</p>
+                    <h3 data-i18n="features.atomic.title">Atomic Updates & Rollback</h3>
+                    <p data-i18n="features.atomic.desc">NixOS under the hood means every system change is atomic. If an update breaks something, roll back in seconds. The host OS is immutable.</p>
                 </div>
 
                 <div class="feature-card">
@@ -84,8 +84,8 @@
                             <line x1="12" y1="17" x2="12" y2="21"></line>
                         </svg>
                     </div>
-                    <h3>Declarative Infrastructure</h3>
-                    <p>VMs are defined in Terraform or YAML. Commit your infra to git, review it in a PR, apply it like any other config change.</p>
+                    <h3 data-i18n="features.declarative.title">Declarative Infrastructure</h3>
+                    <p data-i18n="features.declarative.desc">VMs are defined in Terraform or YAML. Commit your infra to git, review it in a PR, apply it like any other config change.</p>
                 </div>
 
                 <div class="feature-card">
@@ -97,8 +97,8 @@
                             <path d="M9 15c1.5 1 3.5 1 5 0"></path>
                         </svg>
                     </div>
-                    <h3>MCP Server for AI Agents</h3>
-                    <p>kcore exposes an MCP server so AI coding agents (Cursor, Claude, etc.) can query and manage your VMs directly through the API.</p>
+                    <h3 data-i18n="features.mcp.title">MCP Server for AI Agents</h3>
+                    <p data-i18n="features.mcp.desc">kcore exposes an MCP server so AI coding agents (Cursor, Claude, etc.) can query and manage your VMs directly through the API.</p>
                 </div>
 
                 <div class="feature-card">
@@ -108,8 +108,8 @@
                             <polyline points="8 6 2 12 8 18"></polyline>
                         </svg>
                     </div>
-                    <h3>gRPC API</h3>
-                    <p>Everything goes through a gRPC API. The CLI, the Terraform provider, and the MCP server all use the same interface. Build your own tooling on top.</p>
+                    <h3 data-i18n="features.grpc.title">gRPC API</h3>
+                    <p data-i18n="features.grpc.desc">Everything goes through a gRPC API. The CLI, the Terraform provider, and the MCP server all use the same interface. Build your own tooling on top.</p>
                 </div>
 
                 <div class="feature-card">
@@ -120,8 +120,8 @@
                             <polyline points="2 12 12 17 22 12"></polyline>
                         </svg>
                     </div>
-                    <h3>Terraform Provider</h3>
-                    <p>A proper Terraform provider, not a wrapper around shell scripts. Plan, apply, and destroy VMs alongside the rest of your stack.</p>
+                    <h3 data-i18n="features.terraform.title">Terraform Provider</h3>
+                    <p data-i18n="features.terraform.desc">A proper Terraform provider, not a wrapper around shell scripts. Plan, apply, and destroy VMs alongside the rest of your stack.</p>
                 </div>
 
                 <div class="feature-card">
@@ -131,8 +131,8 @@
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                     </div>
-                    <h3>Fast Provisioning</h3>
-                    <p>VMs boot in seconds. No waiting around for cloud-init to finish or image downloads to complete. Local storage, local speed.</p>
+                    <h3 data-i18n="features.fast.title">Fast Provisioning</h3>
+                    <p data-i18n="features.fast.desc">VMs boot in seconds. No waiting around for cloud-init to finish or image downloads to complete. Local storage, local speed.</p>
                 </div>
             </div>
         </div>
@@ -143,8 +143,8 @@
         <div class="container">
             <div class="platform-content">
                 <div class="platform-text">
-                    <h2>How it works</h2>
-                    <p class="section-lead">
+                    <h2 data-i18n="platform.title">How it works</h2>
+                    <p class="section-lead" data-i18n="platform.subtitle">
                         A controller manages state, node agents run VMs via libvirt,
                         and you talk to it all through a single CLI.
                     </p>
@@ -152,29 +152,29 @@
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
-                                <strong>Immutable OS</strong>
-                                <p>Built on NixOS. The host filesystem is read-only. Updates swap the entire system atomically.</p>
+                                <strong data-i18n="platform.immutable.title">Immutable OS</strong>
+                                <p data-i18n="platform.immutable.desc">Built on NixOS. The host filesystem is read-only. Updates swap the entire system atomically.</p>
                             </div>
                         </li>
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
-                                <strong>API-First</strong>
-                                <p>gRPC all the way down. The CLI and Terraform provider are just API clients.</p>
+                                <strong data-i18n="platform.api.title">API-First</strong>
+                                <p data-i18n="platform.api.desc">gRPC all the way down. The CLI and Terraform provider are just API clients.</p>
                             </div>
                         </li>
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
-                                <strong>Multi-Node</strong>
-                                <p>Add nodes by booting the ISO and pointing them at the controller. They register automatically.</p>
+                                <strong data-i18n="platform.multi.title">Multi-Node</strong>
+                                <p data-i18n="platform.multi.desc">Add nodes by booting the ISO and pointing them at the controller. They register automatically.</p>
                             </div>
                         </li>
                         <li>
                             <span class="check-icon">✓</span>
                             <div>
-                                <strong>Flexible Storage</strong>
-                                <p>Local directories, LVM, or ZFS. Pick what makes sense for your hardware.</p>
+                                <strong data-i18n="platform.storage.title">Flexible Storage</strong>
+                                <p data-i18n="platform.storage.desc">Local directories, LVM, or ZFS. Pick what makes sense for your hardware.</p>
                             </div>
                         </li>
                     </ul>
@@ -290,29 +290,29 @@ Created:     2026-03-10 14:23:45</span>
                     </div>
                 </div>
                 <div class="ai-text">
-                    <h2>AI agents can manage your VMs</h2>
-                    <p class="section-lead">
+                    <h2 data-i18n="ai.title">AI agents can manage your VMs</h2>
+                    <p class="section-lead" data-i18n="ai.subtitle">
                         kcore ships with an MCP server. Connect it to Claude, Cursor, or any 
                         MCP-compatible agent and let it create and manage infrastructure for you.
                     </p>
                     <div class="ai-features">
                         <div class="ai-feature">
-                            <h4>MCP Server</h4>
-                            <p>
+                            <h4 data-i18n="ai.mcp.title">MCP Server</h4>
+                            <p data-i18n="ai.mcp.desc">
                                 The MCP server exposes VM lifecycle, node status, and resource 
                                 info to any compatible AI agent over a standard protocol.
                             </p>
                         </div>
                         <div class="ai-feature">
-                            <h4>Terraform Generation</h4>
-                            <p>
+                            <h4 data-i18n="ai.terraform.title">Terraform Generation</h4>
+                            <p data-i18n="ai.terraform.desc">
                                 Ask an agent to set up infrastructure and it generates real 
                                 Terraform HCL that you can review, version, and apply.
                             </p>
                         </div>
                         <div class="ai-feature">
-                            <h4>Observability</h4>
-                            <p>
+                            <h4 data-i18n="ai.observability.title">Observability</h4>
+                            <p data-i18n="ai.observability.desc">
                                 Agents can query node health, VM status, and resource usage
                                 to help you debug or plan capacity changes.
                             </p>
@@ -326,8 +326,8 @@ Created:     2026-03-10 14:23:45</span>
     <!-- Code Example Section -->
     <section class="code-example">
         <div class="container">
-            <h2>Declarative by Design</h2>
-            <p class="section-lead">Define your infrastructure with clean, readable code</p>
+            <h2 data-i18n="code.title">Declarative by Design</h2>
+            <p class="section-lead" data-i18n="code.subtitle">Define your infrastructure with clean, readable code</p>
             <div class="code-tabs">
                 <button class="tab-button active" data-tab="terraform">Terraform</button>
                 <button class="tab-button" data-tab="yaml">YAML</button>
@@ -403,11 +403,11 @@ Created:     2026-03-10 14:23:45</span>
     <section id="get-started" class="cta">
         <div class="container">
             <div class="cta-content">
-                <h2>Try it out</h2>
-                <p>kcore is open source. Download the ISO and kctl from GitHub releases, boot a spare machine, and you're running.</p>
+                <h2 data-i18n="cta.title">Try it out</h2>
+                <p data-i18n="cta.desc">kcore is open source. Download the ISO and kctl from GitHub releases, boot a spare machine, and you're running.</p>
                 <div class="cta-buttons">
-                    <a href="https://github.com/rtacconi/kcore/releases" class="btn btn-primary btn-large">Download ISO & kctl</a>
-                    <a href="https://github.com/rtacconi/kcore" class="btn btn-secondary btn-large">View on GitHub</a>
+                    <a href="https://github.com/rtacconi/kcore/releases" class="btn btn-primary btn-large" data-i18n="cta.download">Download ISO & kctl</a>
+                    <a href="https://github.com/rtacconi/kcore" class="btn btn-secondary btn-large" data-i18n="cta.github">View on GitHub</a>
                 </div>
             </div>
         </div>
@@ -419,28 +419,28 @@ Created:     2026-03-10 14:23:45</span>
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>kcore</h4>
-                    <p>Declarative virtualization for edge and datacenters</p>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Product</h4>
+                    <h4 data-i18n="footer.product">Product</h4>
                     <ul>
-                        <li><a href="features.html">Features</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Resources</h4>
+                    <h4 data-i18n="footer.resources">Resources</h4>
                     <ul>
-                        <li><a href="docs.html">Documentation</a></li>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Company</h4>
+                    <h4 data-i18n="footer.company">Company</h4>
                     <ul>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
                         <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
-                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -450,6 +450,7 @@ Created:     2026-03-10 14:23:45</span>
         </div>
     </footer>
 
+    <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

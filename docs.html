@@ -200,10 +200,10 @@
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="features.html">Features</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="docs.html">Docs</a></li>
-                <li><a href="index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
@@ -263,9 +263,9 @@
                     <a href="index.html">Home</a> / <a href="docs.html">Documentation</a> / Getting Started
                 </div>
 
-                <h1 id="introduction">Introduction to kcore</h1>
+                <h1 id="introduction" data-i18n="docs.intro.title">Introduction to kcore</h1>
                 
-                <p>
+                <p data-i18n="docs.intro.desc">
                     kcore is a NixOS-based hypervisor for running VMs on bare metal. It gives you a 
                     Terraform provider, a CLI, and a gRPC API. You define VMs declaratively and the 
                     platform handles the rest.
@@ -484,28 +484,28 @@ kctl restart vm web-server</code></pre>
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>kcore</h4>
-                    <p>Declarative virtualization for edge and datacenters</p>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Product</h4>
+                    <h4 data-i18n="footer.product">Product</h4>
                     <ul>
-                        <li><a href="features.html">Features</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Resources</h4>
+                    <h4 data-i18n="footer.resources">Resources</h4>
                     <ul>
-                        <li><a href="docs.html">Documentation</a></li>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Company</h4>
+                    <h4 data-i18n="footer.company">Company</h4>
                     <ul>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
                         <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
-                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -515,6 +515,7 @@ kctl restart vm web-server</code></pre>
         </div>
     </footer>
 
+    <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
     <script>
         // Smooth scroll for sidebar links
