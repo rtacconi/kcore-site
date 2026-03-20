@@ -173,3 +173,7 @@ Part of the kcore project.
 
 For questions about kcore, visit the main repository or documentation.
 
+## Customer Installation Docs
+
+- [Customer Installation (Automator API)](INSTALLATION_CUSTOMER.md)
+
