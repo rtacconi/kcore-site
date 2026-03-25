@@ -111,25 +111,25 @@
 
     <section class="post-hero">
         <div class="container">
-            <h1>Why kcore Is Written in Rust</h1>
-            <p class="post-meta">25 March 2026</p>
+            <h1 data-i18n="bp.rust.title">Why kcore Is Written in Rust</h1>
+            <p class="post-meta" data-i18n="bp.rust.date">25 March 2026</p>
         </div>
     </section>
 
     <article class="post-content">
-        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.rust.back">&larr; Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.rust.intro1">
             kcore was originally written in Go. That's what most people reach for
             when building control planes &mdash; Kubernetes, Nomad, Terraform
             providers, they're all Go. It's the safe bet, and I went with it.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.intro2">
             Then I rewrote the whole thing in Rust.
         </p>
 
-        <p>
+        <p data-i18n-html="bp.rust.intro3">
             That sounds drastic, and it was. But kcore isn't a web service that
             shuffles JSON around. It writes NixOS system configs, manages TLS
             certificates, talks to Cloud Hypervisor through Unix sockets, and
@@ -138,16 +138,16 @@
             Here's what pushed me to make the switch.
         </p>
 
-        <h2>Null doesn't exist, and that's a big deal</h2>
+        <h2 data-i18n="bp.rust.h2null">Null doesn't exist, and that's a big deal</h2>
 
-        <p>
+        <p data-i18n-html="bp.rust.null1">
             This was one of the first things that bugged me in the Go version.
             Everything can be <code>nil</code> &mdash; pointers, interfaces,
             slices, maps, channels. Forget one check and your service panics at
             3 AM. I hit this more than once.
         </p>
 
-        <p>
+        <p data-i18n-html="bp.rust.null2">
             Rust just doesn't have null. If a value might not be there, you use
             <code>Option&lt;T&gt;</code> &mdash; it's either <code>Some(value)</code>
             or <code>None</code>, and the compiler literally won't let you use it
@@ -156,23 +156,23 @@
             You can't just ignore it and hope for the best.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.null3">
             In practice, this means a whole category of bugs that would blow up at
             runtime in Go just don't compile in Rust. For something like a control
             plane that other services depend on, that's not a nice-to-have &mdash;
             it's table stakes.
         </p>
 
-        <h2>The type system actually helps you</h2>
+        <h2 data-i18n="bp.rust.h2types">The type system actually helps you</h2>
 
-        <p>
+        <p data-i18n="bp.rust.types1">
             Go keeps its type system simple on purpose, and I appreciated that at
             first. But the further I got into modelling VM states, RPC responses,
             and configuration variants, the more "simple" started to mean "the
             compiler lets through mistakes it should have caught."
         </p>
 
-        <p>
+        <p data-i18n-html="bp.rust.types2">
             Rust's enums with associated data are a game changer. You model your VM
             state as an enum, and if you add a new state later, every single
             <code>match</code> in the codebase has to handle it or the build breaks.
@@ -180,16 +180,16 @@
             second pair of eyes that never gets tired and never misses anything.
         </p>
 
-        <h2>Fast, and you don't have to think about it</h2>
+        <h2 data-i18n="bp.rust.h2perf">Fast, and you don't have to think about it</h2>
 
-        <p>
+        <p data-i18n="bp.rust.perf1">
             Rust compiles to native code. No garbage collector, no runtime overhead.
             For kcore, that means snappy gRPC responses, tiny memory footprint on
             each node agent, and fast Nix config generation even when you're
             managing dozens of VMs on a single host.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.perf2">
             The Go version was fast enough most of the time, but GC pauses showed
             up in weird places. When your controller is pushing config to nodes
             and those nodes are applying it live, you want predictable performance.
@@ -197,16 +197,16 @@
             gives you that by default.
         </p>
 
-        <h2>This is systems programming &mdash; Rust was made for this</h2>
+        <h2 data-i18n="bp.rust.h2sys">This is systems programming &mdash; Rust was made for this</h2>
 
-        <p>
+        <p data-i18n-html="bp.rust.sys1">
             Look at what kcore actually does day to day: it writes files to
             <code>/etc/nixos</code>, spawns subprocesses, reads VM status from API
             sockets under <code>/run/kcore</code>, manages certificate files with
             strict permissions. This is low-level stuff.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.sys2">
             Rust's ownership model means I don't get data races when the node agent
             is handling gRPC requests while a background rebuild is running. I don't
             get use-after-free bugs when passing things between async tasks. Yeah,
@@ -215,9 +215,9 @@
             in production.
         </p>
 
-        <h2>The Nix community already loves Rust</h2>
+        <h2 data-i18n="bp.rust.h2nix">The Nix community already loves Rust</h2>
 
-        <p>
+        <p data-i18n-html="bp.rust.nix1">
             kcore runs on NixOS, and the whole build pipeline is Nix. Here's the
             thing &mdash; the NixOS community has been moving toward Rust for years.
             <a href="https://github.com/tvlfyi/tvix" style="color: var(--accent-primary);">Tvix</a>
@@ -229,16 +229,16 @@
             is Rust. The pattern is clear.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.nix2">
             Building kcore in Rust means it fits right in. Nix's Crane library makes
             Rust builds reproducible without any fuss. People contributing from the
             NixOS world already know the toolchain. There's no friction between the
             language and the platform.
         </p>
 
-        <h2>When your code runs as root, correctness isn't optional</h2>
+        <h2 data-i18n="bp.rust.h2correct">When your code runs as root, correctness isn't optional</h2>
 
-        <p>
+        <p data-i18n="bp.rust.correct1">
             This is the part that really matters to me. kcore generates NixOS configs
             and pushes them to nodes where they get applied as root. It writes TLS
             certificates with specific file permissions. It validates disk paths
@@ -247,7 +247,7 @@
             incident.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.correct2">
             Rust pushes you toward getting these things right. The Nix config
             generator escapes all user-controlled strings to prevent injection
             attacks. The auth layer uses exhaustive pattern matching on certificate
@@ -256,9 +256,9 @@
             was designed to make correct code the path of least resistance.
         </p>
 
-        <h2>Honestly, it's just more fun to write</h2>
+        <h2 data-i18n="bp.rust.h2fun">Honestly, it's just more fun to write</h2>
 
-        <p>
+        <p data-i18n-html="bp.rust.fun1">
             I know this is subjective, but I'm going to say it anyway. Writing Rust
             is enjoyable. Pattern matching, iterator chains, the trait system &mdash;
             the code ends up reading close to what it actually means. And the tooling
@@ -268,22 +268,22 @@
             It just works.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.fun2">
             When you're building something you're going to maintain for years, the
             experience of reading and writing the code every day matters more than
             people think. Rust makes that experience genuinely good.
         </p>
 
-        <h2>It's not all sunshine</h2>
+        <h2 data-i18n="bp.rust.h2tradeoffs">It's not all sunshine</h2>
 
-        <p>
+        <p data-i18n="bp.rust.tradeoffs1">
             I'm not going to pretend Rust is perfect. The learning curve is steep
             &mdash; steeper than Go was. Compile times can be painful. The ecosystem
             is less mature in some areas. And yes, rewriting a working codebase is
             a big investment. These are real tradeoffs and I won't sugarcoat them.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.tradeoffs2">
             But for a project like kcore &mdash; where the code runs as root, manages
             real infrastructure, and needs to be reliable above everything else &mdash;
             Rust's tradeoffs are worth it. The compiler catches bugs before they reach
@@ -291,7 +291,7 @@
             invariants hold.
         </p>
 
-        <p>
+        <p data-i18n="bp.rust.tradeoffs3">
             For infrastructure software on bare metal, the rewrite was worth every
             hour. I wouldn't go back.
         </p>
