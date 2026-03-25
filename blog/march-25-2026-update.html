@@ -120,182 +120,172 @@
         <a href="../blog.html" class="back-link">&larr; Back to blog</a>
 
         <p>
-            kcore is a hypervisor control plane. It manages VM lifecycles, writes
-            system-level NixOS configurations, talks to hardware through Unix sockets,
-            and handles certificates for mTLS. This is systems programming. The
-            language you pick for it matters a lot.
+            People keep asking me why I wrote kcore in Rust instead of Go. Fair
+            question &mdash; most control planes in the infrastructure world are
+            written in Go. Kubernetes, Nomad, Terraform providers, you name it.
+            Go is the safe bet.
         </p>
 
         <p>
-            I wrote kcore in Rust, and I'd make the same choice again. Here's why.
+            But kcore isn't a web service that shuffles JSON around. It writes
+            NixOS system configs, manages TLS certificates, talks to Cloud
+            Hypervisor through Unix sockets, and runs <code>nixos-rebuild</code>
+            as root. That's systems programming, and for systems programming,
+            Rust is just better. Let me explain.
         </p>
 
-        <h2>No null, no surprises</h2>
+        <h2>Null doesn't exist, and that's a big deal</h2>
 
         <p>
-            Go has <code>nil</code>. Any pointer, interface, slice, map, channel, or
-            function value can be <code>nil</code>, and if you forget to check,
-            you get a runtime panic. In a long-running system service that manages
-            VMs, a nil pointer dereference at 3 AM is not a minor inconvenience &mdash;
-            it's an outage.
-        </p>
-
-        <p>
-            Rust doesn't have null. Instead, it has <code>Option&lt;T&gt;</code>:
-            a value is either <code>Some(T)</code> or <code>None</code>, and the
-            compiler forces you to handle both cases before you can use the inner
-            value. You can't accidentally dereference something that isn't there.
-            The same pattern applies to errors with <code>Result&lt;T, E&gt;</code>
-            &mdash; every fallible operation returns an explicit success or failure,
-            and the compiler won't let you ignore it.
+            If you've written Go, you know <code>nil</code>. Everything can be
+            <code>nil</code> &mdash; pointers, interfaces, slices, maps, channels.
+            Forget one check and your service panics at 3 AM. We've all been there.
         </p>
 
         <p>
-            In practice, this means entire classes of bugs that would show up as
-            runtime panics in Go simply don't compile in Rust. For a control plane
-            that other services depend on, that's a meaningful reliability advantage.
-        </p>
-
-        <h2>Type safety that actually catches things</h2>
-
-        <p>
-            Go's type system is deliberately simple. That simplicity is a feature for
-            some projects, but for systems code it means the compiler lets through
-            mistakes that a stronger type system would catch at build time.
+            Rust just doesn't have null. If a value might not be there, you use
+            <code>Option&lt;T&gt;</code> &mdash; it's either <code>Some(value)</code>
+            or <code>None</code>, and the compiler literally won't let you use it
+            without handling both cases. Same thing for errors:
+            <code>Result&lt;T, E&gt;</code> forces you to deal with the failure path.
+            You can't just ignore it and hope for the best.
         </p>
 
         <p>
-            Rust's type system is expressive enough to encode real invariants. Enums
-            with associated data mean you can model VM states, RPC responses, and
-            configuration variants as closed types &mdash; if you add a new variant,
-            every <code>match</code> arm in the codebase has to handle it or the
-            build fails. Traits let you define shared behavior without inheritance.
-            Lifetimes ensure references are always valid. Generics are monomorphized,
-            so there's no runtime type erasure and no hidden allocations.
+            In practice, this means a whole category of bugs that would blow up at
+            runtime in Go just don't compile in Rust. For something like a control
+            plane that other services depend on, that's not a nice-to-have &mdash;
+            it's table stakes.
+        </p>
+
+        <h2>The type system actually helps you</h2>
+
+        <p>
+            Go keeps its type system simple on purpose. I get it &mdash; simplicity
+            has value. But when you're modelling VM states, RPC responses, and
+            configuration variants, "simple" starts to mean "the compiler lets
+            through mistakes it should have caught."
         </p>
 
         <p>
-            The result is code where the compiler is actively helping you find mistakes
-            during development, not after deployment.
+            Rust's enums with associated data are a game changer. You model your VM
+            state as an enum, and if you add a new state later, every single
+            <code>match</code> in the codebase has to handle it or the build breaks.
+            No silent bugs. No forgotten edge cases. The compiler is basically a
+            second pair of eyes that never gets tired and never misses anything.
         </p>
 
-        <h2>Performance without compromise</h2>
+        <h2>Fast, and you don't have to think about it</h2>
 
         <p>
-            Rust compiles to native code with no garbage collector. For kcore, this
-            means predictable latency on gRPC calls, low memory overhead per node
-            agent, and fast NixOS config generation even when managing many VMs on
-            a single host.
-        </p>
-
-        <p>
-            Go is fast enough for many things, but GC pauses are real, and they're
-            harder to reason about in latency-sensitive paths. In a system where the
-            controller pushes config to nodes and nodes apply it in real time, you
-            want deterministic performance. Rust gives you that by default.
-        </p>
-
-        <h2>Systems programming is where Rust shines</h2>
-
-        <p>
-            kcore interacts directly with the operating system: writing files to
-            <code>/etc/nixos</code>, spawning <code>nixos-rebuild</code> as a
-            subprocess, reading VM status from Cloud Hypervisor API sockets under
-            <code>/run/kcore</code>, managing TLS certificates with strict file
-            permissions. This is textbook systems programming.
+            Rust compiles to native code. No garbage collector, no runtime overhead.
+            For kcore, that means snappy gRPC responses, tiny memory footprint on
+            each node agent, and fast Nix config generation even when you're
+            managing dozens of VMs on a single host.
         </p>
 
         <p>
-            Rust's ownership model means there are no data races when the node agent
-            handles concurrent gRPC requests while a background rebuild is running.
-            There are no use-after-free bugs when passing file descriptors between
-            async tasks. The borrow checker is annoying sometimes, but it catches
-            real concurrency bugs that would be subtle and dangerous in any other
-            language.
+            Go is fast enough for a lot of things, sure. But GC pauses are real, and
+            they show up in weird places. When your controller is pushing config to
+            nodes and those nodes are applying it live, you want predictable
+            performance. Rust gives you that without you having to tune anything.
         </p>
 
-        <h2>The NixOS ecosystem speaks Rust</h2>
+        <h2>This is systems programming &mdash; Rust was made for this</h2>
 
         <p>
-            kcore runs on NixOS and uses Nix for its entire build and deployment
-            pipeline. The NixOS community has increasingly adopted Rust for systems
-            tooling. Projects like
-            <a href="https://github.com/nix-community/nix-ld" style="color: var(--accent-primary);">nix-ld</a>,
-            <a href="https://github.com/nix-community/disko" style="color: var(--accent-primary);">disko</a>, and
+            Look at what kcore actually does day to day: it writes files to
+            <code>/etc/nixos</code>, spawns subprocesses, reads VM status from API
+            sockets under <code>/run/kcore</code>, manages certificate files with
+            strict permissions. This is low-level stuff.
+        </p>
+
+        <p>
+            Rust's ownership model means I don't get data races when the node agent
+            is handling gRPC requests while a background rebuild is running. I don't
+            get use-after-free bugs when passing things between async tasks. Yeah,
+            the borrow checker fights you sometimes &mdash; but every time it does,
+            it's catching a real bug that would have been a subtle nightmare to debug
+            in production.
+        </p>
+
+        <h2>The Nix community already loves Rust</h2>
+
+        <p>
+            kcore runs on NixOS, and the whole build pipeline is Nix. Here's the
+            thing &mdash; the NixOS community has been moving toward Rust for years.
+            <a href="https://github.com/tvlfyi/tvix" style="color: var(--accent-primary);">Tvix</a>
+            (the Rust reimplementation of the Nix evaluator) is one of the biggest
+            projects in the ecosystem.
             <a href="https://github.com/oxalica/nil" style="color: var(--accent-primary);">nil</a>
-            (the Nix LSP) are written in Rust.
-            The <a href="https://github.com/tvlfyi/tvix" style="color: var(--accent-primary);">Tvix</a>
-            project &mdash; a Rust reimplementation of the Nix evaluator &mdash; is
-            one of the most significant efforts in the ecosystem.
+            (the Nix LSP) is Rust.
+            <a href="https://github.com/nix-community/nix-ld" style="color: var(--accent-primary);">nix-ld</a>
+            is Rust. The pattern is clear.
         </p>
 
         <p>
-            Building kcore in Rust means it fits naturally into this ecosystem. Nix's
-            Crane library makes Rust builds reproducible out of the box. Contributors
-            from the NixOS community are already comfortable with Rust tooling.
-            There's no impedance mismatch between the project's language and its
-            deployment platform.
+            Building kcore in Rust means it fits right in. Nix's Crane library makes
+            Rust builds reproducible without any fuss. People contributing from the
+            NixOS world already know the toolchain. There's no friction between the
+            language and the platform.
         </p>
 
-        <h2>Correctness as a design value</h2>
+        <h2>When your code runs as root, correctness isn't optional</h2>
 
         <p>
-            A hypervisor control plane is responsible for other people's workloads.
-            When it generates a NixOS configuration and pushes it to a node, that
-            config gets applied as root. When it writes TLS certificates, the
-            permissions have to be right. When it reports VM state, the data has to
-            be accurate.
-        </p>
-
-        <p>
-            Rust's guarantees &mdash; no null, no data races, exhaustive pattern
-            matching, explicit error handling &mdash; aren't academic niceties.
-            They're practical safeguards for code that runs with high privilege and
-            manages real infrastructure. In kcore's codebase, the Nix config
-            generator escapes all user-controlled strings to prevent injection.
-            The auth layer validates certificate Common Names with exhaustive
-            matching. The disk path validator rejects traversal attempts at the
-            type level. These patterns are natural in Rust because the language
-            pushes you toward them.
-        </p>
-
-        <h2>It's more enjoyable to write</h2>
-
-        <p>
-            This is subjective, but it matters. Rust code is dense and expressive.
-            Pattern matching, iterator chains, and the trait system let you write
-            code that reads close to what it means. <code>cargo clippy</code> acts
-            as a second reviewer. <code>cargo test</code> runs fast because there's
-            no VM startup. The toolchain is cohesive in a way that Go's isn't &mdash;
-            formatting, linting, testing, building, and auditing are all part of the
-            same <code>cargo</code> workflow.
+            This is the part that really matters to me. kcore generates NixOS configs
+            and pushes them to nodes where they get applied as root. It writes TLS
+            certificates with specific file permissions. It validates disk paths
+            before handing them to an installer script. If any of this is wrong,
+            you're not just looking at a bug &mdash; you're looking at a security
+            incident.
         </p>
 
         <p>
-            When you're building something from scratch and you're going to live in
-            the codebase for years, the day-to-day experience of writing and reading
-            the code matters. Rust makes that experience good.
+            Rust pushes you toward getting these things right. The Nix config
+            generator escapes all user-controlled strings to prevent injection
+            attacks. The auth layer uses exhaustive pattern matching on certificate
+            Common Names. The disk path validator rejects traversal attempts at
+            the type level. These patterns feel natural in Rust because the language
+            was designed to make correct code the path of least resistance.
         </p>
 
-        <h2>The tradeoffs</h2>
+        <h2>Honestly, it's just more fun to write</h2>
 
         <p>
-            Rust has a steeper learning curve than Go. Compile times are longer.
-            The ecosystem for some areas (like ORMs or web frameworks) is less
-            mature. These are real costs.
+            I know this is subjective, but I'm going to say it anyway. Writing Rust
+            is enjoyable. Pattern matching, iterator chains, the trait system &mdash;
+            the code ends up reading close to what it actually means. And the tooling
+            is great: <code>cargo clippy</code> is like having a code reviewer that
+            never takes a day off. <code>cargo test</code>, <code>cargo fmt</code>,
+            <code>cargo audit</code> &mdash; everything lives under one command.
+            It just works.
         </p>
 
         <p>
-            But for a systems project like kcore &mdash; where correctness, performance,
-            and reliability are non-negotiable &mdash; Rust's tradeoffs land in
-            the right place. The compiler catches bugs before they reach production.
-            The runtime doesn't surprise you with GC pauses. The type system encodes
-            your invariants so they can't be silently violated.
+            When you're building something you're going to maintain for years, the
+            experience of reading and writing the code every day matters more than
+            people think. Rust makes that experience genuinely good.
+        </p>
+
+        <h2>It's not all sunshine</h2>
+
+        <p>
+            I'm not going to pretend Rust is perfect. The learning curve is steep.
+            Compile times can be painful. The ecosystem is less mature than Go's in
+            some areas. These are real tradeoffs and I won't sugarcoat them.
         </p>
 
         <p>
-            For infrastructure software that manages VMs on bare metal, that's
-            exactly what you want.
+            But for a project like kcore &mdash; where the code runs as root, manages
+            real infrastructure, and needs to be reliable above everything else &mdash;
+            Rust's tradeoffs are worth it. The compiler catches bugs before they reach
+            production. There's no GC to surprise you. The type system makes sure your
+            invariants hold.
+        </p>
+
+        <p>
+            For infrastructure software on bare metal, I wouldn't pick anything else.
         </p>
     </article>
 
