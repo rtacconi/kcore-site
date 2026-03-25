@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why kcore is written in Rust — type safety, no null errors, performance, and alignment with the NixOS ecosystem">
+    <title>Why kcore Is Written in Rust - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .post-content {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+
+        .post-content h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1>Why kcore Is Written in Rust</h1>
+            <p class="post-meta">25 March 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+
+        <p>
+            kcore is a hypervisor control plane. It manages VM lifecycles, writes
+            system-level NixOS configurations, talks to hardware through Unix sockets,
+            and handles certificates for mTLS. This is systems programming. The
+            language you pick for it matters a lot.
+        </p>
+
+        <p>
+            I wrote kcore in Rust, and I'd make the same choice again. Here's why.
+        </p>
+
+        <h2>No null, no surprises</h2>
+
+        <p>
+            Go has <code>nil</code>. Any pointer, interface, slice, map, channel, or
+            function value can be <code>nil</code>, and if you forget to check,
+            you get a runtime panic. In a long-running system service that manages
+            VMs, a nil pointer dereference at 3 AM is not a minor inconvenience &mdash;
+            it's an outage.
+        </p>
+
+        <p>
+            Rust doesn't have null. Instead, it has <code>Option&lt;T&gt;</code>:
+            a value is either <code>Some(T)</code> or <code>None</code>, and the
+            compiler forces you to handle both cases before you can use the inner
+            value. You can't accidentally dereference something that isn't there.
+            The same pattern applies to errors with <code>Result&lt;T, E&gt;</code>
+            &mdash; every fallible operation returns an explicit success or failure,
+            and the compiler won't let you ignore it.
+        </p>
+
+        <p>
+            In practice, this means entire classes of bugs that would show up as
+            runtime panics in Go simply don't compile in Rust. For a control plane
+            that other services depend on, that's a meaningful reliability advantage.
+        </p>
+
+        <h2>Type safety that actually catches things</h2>
+
+        <p>
+            Go's type system is deliberately simple. That simplicity is a feature for
+            some projects, but for systems code it means the compiler lets through
+            mistakes that a stronger type system would catch at build time.
+        </p>
+
+        <p>
+            Rust's type system is expressive enough to encode real invariants. Enums
+            with associated data mean you can model VM states, RPC responses, and
+            configuration variants as closed types &mdash; if you add a new variant,
+            every <code>match</code> arm in the codebase has to handle it or the
+            build fails. Traits let you define shared behavior without inheritance.
+            Lifetimes ensure references are always valid. Generics are monomorphized,
+            so there's no runtime type erasure and no hidden allocations.
+        </p>
+
+        <p>
+            The result is code where the compiler is actively helping you find mistakes
+            during development, not after deployment.
+        </p>
+
+        <h2>Performance without compromise</h2>
+
+        <p>
+            Rust compiles to native code with no garbage collector. For kcore, this
+            means predictable latency on gRPC calls, low memory overhead per node
+            agent, and fast NixOS config generation even when managing many VMs on
+            a single host.
+        </p>
+
+        <p>
+            Go is fast enough for many things, but GC pauses are real, and they're
+            harder to reason about in latency-sensitive paths. In a system where the
+            controller pushes config to nodes and nodes apply it in real time, you
+            want deterministic performance. Rust gives you that by default.
+        </p>
+
+        <h2>Systems programming is where Rust shines</h2>
+
+        <p>
+            kcore interacts directly with the operating system: writing files to
+            <code>/etc/nixos</code>, spawning <code>nixos-rebuild</code> as a
+            subprocess, reading VM status from Cloud Hypervisor API sockets under
+            <code>/run/kcore</code>, managing TLS certificates with strict file
+            permissions. This is textbook systems programming.
+        </p>
+
+        <p>
+            Rust's ownership model means there are no data races when the node agent
+            handles concurrent gRPC requests while a background rebuild is running.
+            There are no use-after-free bugs when passing file descriptors between
+            async tasks. The borrow checker is annoying sometimes, but it catches
+            real concurrency bugs that would be subtle and dangerous in any other
+            language.
+        </p>
+
+        <h2>The NixOS ecosystem speaks Rust</h2>
+
+        <p>
+            kcore runs on NixOS and uses Nix for its entire build and deployment
+            pipeline. The NixOS community has increasingly adopted Rust for systems
+            tooling. Projects like
+            <a href="https://github.com/nix-community/nix-ld" style="color: var(--accent-primary);">nix-ld</a>,
+            <a href="https://github.com/nix-community/disko" style="color: var(--accent-primary);">disko</a>, and
+            <a href="https://github.com/oxalica/nil" style="color: var(--accent-primary);">nil</a>
+            (the Nix LSP) are written in Rust.
+            The <a href="https://github.com/tvlfyi/tvix" style="color: var(--accent-primary);">Tvix</a>
+            project &mdash; a Rust reimplementation of the Nix evaluator &mdash; is
+            one of the most significant efforts in the ecosystem.
+        </p>
+
+        <p>
+            Building kcore in Rust means it fits naturally into this ecosystem. Nix's
+            Crane library makes Rust builds reproducible out of the box. Contributors
+            from the NixOS community are already comfortable with Rust tooling.
+            There's no impedance mismatch between the project's language and its
+            deployment platform.
+        </p>
+
+        <h2>Correctness as a design value</h2>
+
+        <p>
+            A hypervisor control plane is responsible for other people's workloads.
+            When it generates a NixOS configuration and pushes it to a node, that
+            config gets applied as root. When it writes TLS certificates, the
+            permissions have to be right. When it reports VM state, the data has to
+            be accurate.
+        </p>
+
+        <p>
+            Rust's guarantees &mdash; no null, no data races, exhaustive pattern
+            matching, explicit error handling &mdash; aren't academic niceties.
+            They're practical safeguards for code that runs with high privilege and
+            manages real infrastructure. In kcore's codebase, the Nix config
+            generator escapes all user-controlled strings to prevent injection.
+            The auth layer validates certificate Common Names with exhaustive
+            matching. The disk path validator rejects traversal attempts at the
+            type level. These patterns are natural in Rust because the language
+            pushes you toward them.
+        </p>
+
+        <h2>It's more enjoyable to write</h2>
+
+        <p>
+            This is subjective, but it matters. Rust code is dense and expressive.
+            Pattern matching, iterator chains, and the trait system let you write
+            code that reads close to what it means. <code>cargo clippy</code> acts
+            as a second reviewer. <code>cargo test</code> runs fast because there's
+            no VM startup. The toolchain is cohesive in a way that Go's isn't &mdash;
+            formatting, linting, testing, building, and auditing are all part of the
+            same <code>cargo</code> workflow.
+        </p>
+
+        <p>
+            When you're building something from scratch and you're going to live in
+            the codebase for years, the day-to-day experience of writing and reading
+            the code matters. Rust makes that experience good.
+        </p>
+
+        <h2>The tradeoffs</h2>
+
+        <p>
+            Rust has a steeper learning curve than Go. Compile times are longer.
+            The ecosystem for some areas (like ORMs or web frameworks) is less
+            mature. These are real costs.
+        </p>
+
+        <p>
+            But for a systems project like kcore &mdash; where correctness, performance,
+            and reliability are non-negotiable &mdash; Rust's tradeoffs land in
+            the right place. The compiler catches bugs before they reach production.
+            The runtime doesn't surprise you with GC pauses. The type system encodes
+            your invariants so they can't be silently violated.
+        </p>
+
+        <p>
+            For infrastructure software that manages VMs on bare metal, that's
+            exactly what you want.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
