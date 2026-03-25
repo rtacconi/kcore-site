@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Why kcore is written in Rust — type safety, no null errors, performance, and alignment with the NixOS ecosystem">
+    <meta name="description" content="kcore started in Go. I rewrote it in Rust — here's why the switch was worth it.">
     <title>Why kcore Is Written in Rust - kcore hypervisor</title>
     <link rel="stylesheet" href="../css/styles.css">
     <style>
@@ -120,26 +120,31 @@
         <a href="../blog.html" class="back-link">&larr; Back to blog</a>
 
         <p>
-            People keep asking me why I wrote kcore in Rust instead of Go. Fair
-            question &mdash; most control planes in the infrastructure world are
-            written in Go. Kubernetes, Nomad, Terraform providers, you name it.
-            Go is the safe bet.
+            kcore was originally written in Go. That's what most people reach for
+            when building control planes &mdash; Kubernetes, Nomad, Terraform
+            providers, they're all Go. It's the safe bet, and I went with it.
         </p>
 
         <p>
-            But kcore isn't a web service that shuffles JSON around. It writes
-            NixOS system configs, manages TLS certificates, talks to Cloud
-            Hypervisor through Unix sockets, and runs <code>nixos-rebuild</code>
-            as root. That's systems programming, and for systems programming,
-            Rust is just better. Let me explain.
+            Then I rewrote the whole thing in Rust.
+        </p>
+
+        <p>
+            That sounds drastic, and it was. But kcore isn't a web service that
+            shuffles JSON around. It writes NixOS system configs, manages TLS
+            certificates, talks to Cloud Hypervisor through Unix sockets, and
+            runs <code>nixos-rebuild</code> as root. The more I worked on it in
+            Go, the more I kept running into problems that Rust just doesn't have.
+            Here's what pushed me to make the switch.
         </p>
 
         <h2>Null doesn't exist, and that's a big deal</h2>
 
         <p>
-            If you've written Go, you know <code>nil</code>. Everything can be
-            <code>nil</code> &mdash; pointers, interfaces, slices, maps, channels.
-            Forget one check and your service panics at 3 AM. We've all been there.
+            This was one of the first things that bugged me in the Go version.
+            Everything can be <code>nil</code> &mdash; pointers, interfaces,
+            slices, maps, channels. Forget one check and your service panics at
+            3 AM. I hit this more than once.
         </p>
 
         <p>
@@ -161,10 +166,10 @@
         <h2>The type system actually helps you</h2>
 
         <p>
-            Go keeps its type system simple on purpose. I get it &mdash; simplicity
-            has value. But when you're modelling VM states, RPC responses, and
-            configuration variants, "simple" starts to mean "the compiler lets
-            through mistakes it should have caught."
+            Go keeps its type system simple on purpose, and I appreciated that at
+            first. But the further I got into modelling VM states, RPC responses,
+            and configuration variants, the more "simple" started to mean "the
+            compiler lets through mistakes it should have caught."
         </p>
 
         <p>
@@ -185,10 +190,11 @@
         </p>
 
         <p>
-            Go is fast enough for a lot of things, sure. But GC pauses are real, and
-            they show up in weird places. When your controller is pushing config to
-            nodes and those nodes are applying it live, you want predictable
-            performance. Rust gives you that without you having to tune anything.
+            The Go version was fast enough most of the time, but GC pauses showed
+            up in weird places. When your controller is pushing config to nodes
+            and those nodes are applying it live, you want predictable performance.
+            After the rewrite, I just don't think about it anymore &mdash; Rust
+            gives you that by default.
         </p>
 
         <h2>This is systems programming &mdash; Rust was made for this</h2>
@@ -271,9 +277,10 @@
         <h2>It's not all sunshine</h2>
 
         <p>
-            I'm not going to pretend Rust is perfect. The learning curve is steep.
-            Compile times can be painful. The ecosystem is less mature than Go's in
-            some areas. These are real tradeoffs and I won't sugarcoat them.
+            I'm not going to pretend Rust is perfect. The learning curve is steep
+            &mdash; steeper than Go was. Compile times can be painful. The ecosystem
+            is less mature in some areas. And yes, rewriting a working codebase is
+            a big investment. These are real tradeoffs and I won't sugarcoat them.
         </p>
 
         <p>
@@ -285,7 +292,8 @@
         </p>
 
         <p>
-            For infrastructure software on bare metal, I wouldn't pick anything else.
+            For infrastructure software on bare metal, the rewrite was worth every
+            hour. I wouldn't go back.
         </p>
     </article>
 
