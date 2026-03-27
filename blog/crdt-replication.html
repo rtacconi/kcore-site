@@ -88,6 +88,18 @@
         .back-link:hover {
             text-decoration: underline;
         }
+
+        .post-header-img {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 2rem 1rem 0;
+        }
+
+        .post-header-img img {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
     </style>
 </head>
 <body>
@@ -115,6 +127,10 @@
             <p class="post-meta" data-i18n="bp.crdt.date">27 March 2026</p>
         </div>
     </section>
+
+    <div class="post-header-img">
+        <img src="../assets/crdt-replication-header.png" alt="Whiteboard sketch of CRDT replication across datacenters">
+    </div>
 
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.crdt.back">&larr; Back to blog</a>
