@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How kcore uses CRDTs for multi-controller replication across datacenters, and why we chose them over Raft.">
+    <title>CRDTs for Inter-Datacenter Replication in kcore - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .post-content {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+
+        .post-content h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.crdt.title">Why We Chose CRDTs over Raft for Multi-DC Replication</h1>
+            <p class="post-meta" data-i18n="bp.crdt.date">27 March 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.crdt.back">&larr; Back to blog</a>
+
+        <p data-i18n="bp.crdt.intro1">
+            kcore started as a single-controller system. One controller, one SQLite database, one source of truth. That works fine when you have a handful of nodes in a single rack. It stops working when you need the control plane to survive a controller going down, or when you want to run controllers in two different datacenters.
+        </p>
+
+        <p data-i18n="bp.crdt.intro2">
+            Most people solving this problem reach for Raft. etcd uses it, CockroachDB uses it, Consul uses it. It's the standard answer. We went a different way: CRDTs &mdash; Conflict-free Replicated Data Types. Here's why.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2problem">The problem with consensus across datacenters</h2>
+
+        <p data-i18n="bp.crdt.problem1">
+            Raft gives you strong consistency. Every write goes through a leader, gets replicated to a majority of nodes, and only then is acknowledged. This is great within a single datacenter where round-trip times are sub-millisecond. It's terrible across datacenters.
+        </p>
+
+        <p data-i18n="bp.crdt.problem2">
+            If your Raft cluster spans DC1 in London and DC2 in Frankfurt, every write now pays a 10-20ms cross-DC round trip &mdash; not for the actual work, but just to reach consensus. Worse: if the link between DCs goes down, the minority side can't accept writes at all. Your control plane in DC2 becomes read-only or fully unavailable, even though the local machines are perfectly healthy.
+        </p>
+
+        <p data-i18n="bp.crdt.problem3">
+            For a hypervisor control plane, that's unacceptable. If DC2 loses connectivity to DC1, the operator in DC2 should still be able to create VMs, stop VMs, and manage their local nodes. The world doesn't stop because a fiber got cut.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2what">What CRDTs actually give you</h2>
+
+        <p data-i18n="bp.crdt.what1">
+            A CRDT is a data structure where any two replicas can be merged without coordination and the result is always correct. No leader election, no majority quorum, no blocking on remote nodes. Each controller writes to its own local SQLite, and changes propagate to peers asynchronously. When they arrive, they merge deterministically.
+        </p>
+
+        <p data-i18n="bp.crdt.what2">
+            The key insight is that merge must be commutative, associative, and idempotent. If controller A and controller B both make changes while disconnected, when they reconnect, the merge of A's state into B gives the same result as merging B's state into A. Order doesn't matter. Duplicates don't matter. You always converge.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2hybrid">kcore's hybrid CRDT model</h2>
+
+        <p data-i18n="bp.crdt.hybrid1">
+            Not all data in a hypervisor control plane has the same consistency requirements. A VM's runtime state (running, stopped, CPU usage) is fundamentally different from a VM's desired specification (how many cores, which image, which network). We use different CRDT strategies for each.
+        </p>
+
+        <p data-i18n-html="bp.crdt.hybrid2">
+            <strong>Runtime/observational state</strong> uses Last-Writer-Wins (LWW) registers. Node heartbeats, VM runtime status, last-seen timestamps &mdash; these fields naturally represent the latest observation. If two controllers both receive a heartbeat from the same node, the most recent one wins. Simple, correct, zero conflicts.
+        </p>
+
+        <p data-i18n-html="bp.crdt.hybrid3">
+            <strong>Desired/declarative state</strong> uses an OR-Map with multi-value registers. VM specs, network configs, SSH keys, labels &mdash; these represent operator intent. If two operators concurrently modify the same VM from different controllers, we don't silently drop one edit. Both values are preserved as a conflict that the operator can see and resolve. This is the same approach Riak used, and it's the only honest thing to do when you give up linearizability.
+        </p>
+
+        <p data-i18n="bp.crdt.hybrid4">
+            Deletes use tombstones with causal metadata. A tombstone isn't garbage-collected until all known peers have acknowledged seeing it. This prevents the classic "delete resurrection" problem where a peer that hasn't seen the delete re-introduces the deleted record.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2replication">How replication works in practice</h2>
+
+        <p data-i18n="bp.crdt.replication1">
+            Each kcore controller keeps its own SQLite database plus a replication log &mdash; an append-only table of mutation events with causal metadata. When a controller processes a write (create VM, register node, update network), it appends the event to its replication log and fans it out to peers over gRPC.
+        </p>
+
+        <p data-i18n="bp.crdt.replication2">
+            Peers receive events, apply CRDT merge rules, and acknowledge up to a frontier. The sending controller tracks the acknowledgement frontier per peer, so it knows which events have been seen and which haven't.
+        </p>
+
+        <p data-i18n="bp.crdt.replication3">
+            This realtime path handles the happy case. For the unhappy case &mdash; a peer was down for hours, the log was compacted, or events were lost &mdash; there's a periodic anti-entropy reconciler. It runs as a background task, compares frontiers with each peer, pulls missing event ranges, and falls back to a full snapshot sync if the gap is too large.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2dc">Why this matters for multi-DC</h2>
+
+        <p data-i18n="bp.crdt.dc1">
+            In a two-DC setup, the topology looks like this: DC1 has one or more controllers, DC2 has one or more controllers, and they replicate across the WAN. Under normal conditions, replication lag is the WAN round-trip time &mdash; maybe 10-20ms between European cities, 50-100ms intercontinental.
+        </p>
+
+        <p data-i18n="bp.crdt.dc2">
+            When the inter-DC link goes down, both sides keep operating independently. Operators in DC1 create VMs, operators in DC2 create VMs. When the link comes back, the anti-entropy reconciler catches up and merges everything. If there are conflicts (two operators modified the same VM spec), they surface as explicit multi-value conflicts that the operator resolves.
+        </p>
+
+        <p data-i18n="bp.crdt.dc3">
+            With Raft, one side would have been frozen. With CRDTs, both sides stayed productive. The cost is that you might occasionally need to resolve a conflict &mdash; but in practice, concurrent edits to the same VM from different DCs are rare. The common case (creating different VMs, heartbeats, status updates) merges without any conflicts at all.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2scheduler">The scheduler under eventual consistency</h2>
+
+        <p data-i18n="bp.crdt.scheduler1">
+            The trickiest part isn't replication itself &mdash; it's the scheduler. When a controller places a VM on a node, it reads the node's capacity and current load from its local replica. That data might be slightly stale. The node might already be at capacity from a placement made by another controller that hasn't replicated yet.
+        </p>
+
+        <p data-i18n="bp.crdt.scheduler2">
+            We handle this with commit-time validation. The scheduler makes a placement decision based on its local view, but the node-agent rejects the apply if the actual resources don't match. The controller then retries with a fresh view. It's optimistic concurrency control, the same pattern databases have used for decades. In practice, conflicts are rare because capacity headroom is usually large relative to individual VM size.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2sqlite">SQLite stays</h2>
+
+        <p data-i18n-html="bp.crdt.sqlite1">
+            A common reaction to "we need replication" is "time to switch to Postgres" or "let's use etcd." We didn't. Each controller keeps its own SQLite database. Replication happens at the application level through the CRDT event log, not at the storage level.
+        </p>
+
+        <p data-i18n="bp.crdt.sqlite2">
+            This is a deliberate choice. SQLite is fast, requires zero operational overhead, and is the perfect fit for a control plane that manages tens to hundreds of nodes. Adding a separate database cluster would double the operational complexity for zero benefit at this scale. The CRDT layer gives us the replication semantics we need without giving up SQLite's simplicity.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2tla">Verifying correctness with TLA+</h2>
+
+        <p data-i18n="bp.crdt.tla1">
+            Distributed protocols are notoriously hard to get right. The kind of bugs you find &mdash; lost deletes, state resurrection after partition heal, divergent replicas that never converge &mdash; don't show up in unit tests. They show up at 3 AM when two datacenters reconnect after a 4-hour partition.
+        </p>
+
+        <p data-i18n="bp.crdt.tla2">
+            We're using TLA+ to model the replication protocol before fully committing to the implementation. The spec covers controller-to-controller replication convergence, cross-DC eventual consistency under partition and rejoin, and the guarantee that no VM desired state is orphaned after a controller crash. If the model checker finds a violation, we fix the protocol design before writing Rust code &mdash; not after a customer hits it in production.
+        </p>
+
+        <h2 data-i18n="bp.crdt.h2tradeoffs">The honest tradeoffs</h2>
+
+        <p data-i18n="bp.crdt.tradeoffs1">
+            CRDTs aren't free. You give up linearizability &mdash; two controllers might briefly disagree about the current state of the world. You need a conflict resolution UX for the rare case where concurrent edits collide. Tombstones accumulate metadata that needs periodic compaction. Debugging replication issues is harder than debugging a single-writer database.
+        </p>
+
+        <p data-i18n="bp.crdt.tradeoffs2">
+            For kcore, these tradeoffs are right. A hypervisor control plane must stay available during network partitions &mdash; operators need to manage their local VMs even when the WAN is down. Occasional conflicts on concurrent edits are a small price to pay for a control plane that never goes read-only because it lost quorum.
+        </p>
+
+        <p data-i18n="bp.crdt.tradeoffs3">
+            The replication infrastructure is being built incrementally. Phase 1 (multi-controller topology and failover) is already in place. Phase 2 (the CRDT event log and merge engine) is in progress. We'll write more about the implementation details as they land.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
