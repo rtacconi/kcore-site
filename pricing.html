@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore pricing - free to try, enterprise plans for clustering and advanced features">
-    <title>Pricing - kcore hypervisor</title>
+    <meta name="description" content="kcore open-core pricing: Apache-2.0 Community Edition; Standard and Premium subscriptions per CPU socket for official ISOs, enterprise updates, and support.">
+    <title>Pricing &amp; licensing - kcore hypervisor</title>
     <link rel="stylesheet" href="css/styles.css">
     <style>
         .pricing-hero {
-            padding: 8rem 0 4rem;
+            padding: 8rem 0 3rem;
             margin-top: 60px;
             text-align: center;
             background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
@@ -16,13 +16,41 @@
 
         .pricing-hero h1 {
             margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .pricing-hero p {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            max-width: 700px;
+            max-width: 720px;
             margin: 0 auto;
+            line-height: 1.65;
+        }
+
+        .pricing-opencore {
+            padding: 2rem 0 3rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-primary);
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .pricing-opencore h2 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .pricing-opencore p {
+            color: var(--text-secondary);
+            line-height: 1.75;
+            max-width: 800px;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-opencore p:last-child {
+            margin-bottom: 0;
         }
 
         .pricing-section {
@@ -31,19 +59,21 @@
 
         .pricing-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            max-width: 900px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1120px;
             margin: 0 auto;
+            align-items: stretch;
         }
 
         .pricing-card {
             background: var(--bg-card);
             border: 1px solid var(--border-primary);
             border-radius: 0.75rem;
-            padding: 2.5rem;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
+            min-height: 100%;
         }
 
         .pricing-card.featured {
@@ -63,73 +93,70 @@
         }
 
         .pricing-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
             color: var(--accent-primary);
             margin-bottom: 0.5rem;
         }
 
         .pricing-name {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
         .pricing-price {
-            font-size: 2.5rem;
+            font-size: 1.85rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
+            line-height: 1.2;
         }
 
         .pricing-price span {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 400;
             color: var(--text-secondary);
         }
 
         .pricing-desc {
             color: var(--text-secondary);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         .pricing-features {
             list-style: none;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             flex-grow: 1;
         }
 
         .pricing-features li {
-            padding: 0.5rem 0;
+            padding: 0.4rem 0;
             color: var(--text-secondary);
             display: flex;
-            align-items: center;
-            gap: 0.75rem;
+            align-items: flex-start;
+            gap: 0.65rem;
+            font-size: 0.9rem;
+            line-height: 1.45;
         }
 
         .pricing-features li .check {
             color: var(--success);
             flex-shrink: 0;
-        }
-
-        .pricing-features li .cross {
-            color: var(--text-tertiary);
-            flex-shrink: 0;
-        }
-
-        .pricing-features li.disabled {
-            color: var(--text-tertiary);
+            margin-top: 0.15rem;
         }
 
         .pricing-cta {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             border-radius: 0.5rem;
             text-align: center;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.2s ease;
+            font-size: 0.95rem;
         }
 
         .pricing-cta-primary {
@@ -139,6 +166,7 @@
 
         .pricing-cta-primary:hover {
             opacity: 0.9;
+            color: white;
         }
 
         .pricing-cta-secondary {
@@ -152,7 +180,7 @@
         }
 
         .pricing-faq {
-            max-width: 700px;
+            max-width: 720px;
             margin: 4rem auto 0;
         }
 
@@ -163,22 +191,24 @@
 
         .faq-item {
             border-bottom: 1px solid var(--border-primary);
-            padding: 1.5rem 0;
+            padding: 1.35rem 0;
         }
 
         .faq-item h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
+            font-size: 1.05rem;
+            margin-bottom: 0.65rem;
         }
 
         .faq-item p {
             color: var(--text-secondary);
             line-height: 1.7;
+            font-size: 0.95rem;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .pricing-grid {
                 grid-template-columns: 1fr;
+                max-width: 480px;
             }
         }
     </style>
@@ -206,87 +236,108 @@
     <!-- Hero -->
     <section class="pricing-hero">
         <div class="container">
-            <h1 data-i18n="pricing.title">Pricing</h1>
+            <h1 data-i18n="pricing.title">Open core pricing for production virtualization</h1>
             <p data-i18n="pricing.subtitle">
-                Free to download and run on a single node.
-                Enterprise features available for production clusters.
+                kcore keeps the core platform open source under Apache-2.0, while paid subscriptions provide the official production-ready distribution, stable updates, and support.
             </p>
         </div>
     </section>
 
-    <!-- Pricing Cards -->
+    <section class="pricing-opencore">
+        <div class="container">
+            <h2 data-i18n="pricing.openCoreTitle">Open core</h2>
+            <p data-i18n="pricing.openCoreP1">
+                The open-source core remains available to everyone under Apache-2.0. You can build from source, run it in your lab, and contribute without a subscription.
+            </p>
+            <p data-i18n="pricing.openCoreP2">
+                Subscriptions fund the official signed ISOs, the curated enterprise update channel, tested production releases, and commercial support. They do not change the licence on the public source tree.
+            </p>
+        </div>
+    </section>
+
+    <!-- Pricing cards: Community Edition, Standard, Premium -->
     <section class="pricing-section">
         <div class="container">
             <div class="pricing-grid">
                 <div class="pricing-card">
-                    <div class="pricing-name" data-i18n="pricing.community">Community</div>
-                    <div class="pricing-price" data-i18n="pricing.free">Free</div>
+                    <div class="pricing-name" data-i18n="pricing.community">Community Edition</div>
+                    <div class="pricing-price" data-i18n="pricing.free">Apache-2.0</div>
                     <p class="pricing-desc" data-i18n="pricing.community.desc">
-                        Everything you need to run kcore on a single node.
-                        No time limits, no usage caps.
+                        Open-source core under Apache-2.0. Build from source, evaluate freely, and contribute to the project.
                     </p>
                     <ul class="pricing-features">
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f1">Single-node deployment</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f2">VM lifecycle management</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f3">Terraform provider</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f4">kctl CLI</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f5">gRPC API</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f6">MCP server for AI agents</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f7">Local storage (dir, LVM, ZFS)</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f8">Atomic OS updates & rollback</span></li>
-                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f9">Multi-node clustering</span></li>
-                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f10">High availability</span></li>
-                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f11">Live VM migration</span></li>
-                        <li class="disabled"><span class="cross">&#10007;</span> <span data-i18n="pricing.community.f12">Priority support</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f1">Full core platform from public source</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f2">Suitable for labs, homelabs, evaluation, and contributors</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f3">No subscription required to build or run from source</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f4">Commercial use of your own builds is not restricted by us beyond Apache-2.0</span></li>
                     </ul>
-                    <a href="https://github.com/rtacconi/kcore/releases" class="pricing-cta pricing-cta-secondary" data-i18n="pricing.download">Download</a>
+                    <a href="https://github.com/rtacconi/kcore" class="pricing-cta pricing-cta-secondary" data-i18n="pricing.source">Source on GitHub</a>
                 </div>
+
                 <div class="pricing-card featured">
-                    <div class="pricing-label" data-i18n="pricing.production">Production</div>
-                    <div class="pricing-name" data-i18n="pricing.enterprise">Enterprise</div>
-                    <div class="pricing-price" data-i18n="pricing.contact">Contact us</div>
-                    <p class="pricing-desc" data-i18n="pricing.enterprise.desc">
-                        Multi-node clustering, high availability, and support
-                        for production workloads.
+                    <div class="pricing-label" data-i18n="pricing.standardBadge">Production</div>
+                    <div class="pricing-name" data-i18n="pricing.standard">kcore Standard</div>
+                    <div class="pricing-price">£295 <span data-i18n="pricing.perSocketYear">/ year / CPU socket</span></div>
+                    <p class="pricing-desc" data-i18n="pricing.standard.desc">
+                        For production teams that want official ISO images, stable updates, and commercial support.
                     </p>
                     <ul class="pricing-features">
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f1">Everything in Community</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f2">Multi-node clustering</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f3">High availability & failover</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f4">Live VM migration</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f5">Distributed storage</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f6">EVPN + VXLAN fabric</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f7">Role-based access control</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f8">Audit logging</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f9">Priority support</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f10">Custom integrations</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f1">Stable and secure updates</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f2">Enterprise repository / production update channel</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f3">Official signed ISO images</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f4">All core platform features in the supported distribution</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f5">Support via customer portal or email</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f6">15 support tickets per year</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f7">Initial response within 1 business day</span></li>
                     </ul>
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Enterprise" class="pricing-cta pricing-cta-primary" data-i18n="pricing.getInTouch">Get in touch</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Standard%20subscription" class="pricing-cta pricing-cta-primary" data-i18n="pricing.subscribeStandard">Subscribe</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-label" data-i18n="pricing.premiumBadge">Premium support</div>
+                    <div class="pricing-name" data-i18n="pricing.premium">kcore Premium</div>
+                    <div class="pricing-price">£695 <span data-i18n="pricing.perSocketYear">/ year / CPU socket</span></div>
+                    <p class="pricing-desc" data-i18n="pricing.premium.desc">
+                        For teams that need faster responses, unlimited support access, and hands-on remote troubleshooting.
+                    </p>
+                    <ul class="pricing-features">
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f1">Everything in Standard (distribution and update channel)</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f2">Unlimited support tickets</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f3">Initial response within 4 hours on a business day</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f4">Remote support (SSH or equivalent secure session)</span></li>
+                    </ul>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Premium%20subscription" class="pricing-cta pricing-cta-secondary" data-i18n="pricing.subscribePremium">Subscribe</a>
                 </div>
             </div>
 
+            <p style="max-width: 800px; margin: 2.5rem auto 0; color: var(--text-tertiary); font-size: 0.9rem; line-height: 1.6; text-align: center;" data-i18n="pricing.socketNote">
+                Pricing is per physical CPU socket, not per core. Production clusters should run the same subscription tier on every node for repository consistency and support eligibility.
+            </p>
+
             <div class="pricing-faq">
-                <h2 data-i18n="pricing.faq">Questions</h2>
+                <h2 data-i18n="pricing.faq">FAQ</h2>
                 <div class="faq-item">
-                    <h3 data-i18n="pricing.faq1.q">Can I use the free version in production?</h3>
+                    <h3 data-i18n="pricing.faq1.q">Is kcore open source?</h3>
                     <p data-i18n="pricing.faq1.a">
-                        Yes. The Community edition is the full kcore hypervisor running on a single node.
-                        There are no artificial limits on the number of VMs or resources you can use.
+                        Yes. The kcore Community Edition core is open source under Apache-2.0.
                     </p>
                 </div>
                 <div class="faq-item">
-                    <h3 data-i18n="pricing.faq2.q">What counts as clustering?</h3>
+                    <h3 data-i18n="pricing.faq2.q">Do I need a subscription to use kcore?</h3>
                     <p data-i18n="pricing.faq2.a">
-                        Running multiple kcore nodes managed by a single controller with
-                        automatic scheduling, failover, and live migration between nodes.
+                        No. You can build and use Community Edition without a subscription. A subscription is for the official supported distribution, enterprise update channel, and commercial support.
                     </p>
                 </div>
                 <div class="faq-item">
-                    <h3 data-i18n="pricing.faq3.q">Is kcore open source?</h3>
-                    <p data-i18n-html="pricing.faq3.a">
-                        The core hypervisor is open source on
-                        <a href="https://github.com/rtacconi/kcore" style="color: var(--accent-primary);">GitHub</a>.
-                        Enterprise clustering and advanced features are available under a commercial licence.
+                    <h3 data-i18n="pricing.faq3.q">What does a subscription include?</h3>
+                    <p data-i18n="pricing.faq3.a">
+                        Official signed ISO images, stable enterprise updates, tested production releases, and commercial support. Optional offline subscription key activation may be offered when available.
+                    </p>
+                </div>
+                <div class="faq-item">
+                    <h3 data-i18n="pricing.faq4.q">How is pricing calculated?</h3>
+                    <p data-i18n="pricing.faq4.a">
+                        Per physical CPU socket, not per core.
                     </p>
                 </div>
             </div>
