@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore hypervisor roadmap - planned features, improvements, and future direction">
+    <title>Roadmap - kcore hypervisor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .roadmap-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .roadmap-hero h1 {
+            margin-bottom: 1rem;
+        }
+
+        .roadmap-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .roadmap-section {
+            padding: 4rem 0;
+        }
+
+        .roadmap-section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .roadmap-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .roadmap-card:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .roadmap-card h3 {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .roadmap-card h3 .card-icon {
+            flex-shrink: 0;
+            width: 2.25rem;
+            height: 2.25rem;
+            background: var(--accent-gradient);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .roadmap-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .roadmap-card ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .roadmap-card ul li {
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border-primary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: start;
+            gap: 0.5rem;
+        }
+
+        .roadmap-card ul li:first-child {
+            border-top: none;
+        }
+
+        .roadmap-card ul li .item-status {
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-planned {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent-primary);
+        }
+
+        .status-in-progress {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .status-partial {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .phase-header {
+            margin-bottom: 1rem;
+        }
+
+        .phase-header h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+        }
+
+        .timeline-marker {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .timeline-dot.planned { background: var(--accent-primary); }
+        .timeline-dot.in-progress { background: var(--warning); }
+        .timeline-dot.partial { background: var(--success); }
+
+        .timeline-label {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+        }
+
+        .legend {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .not-planned-note {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .not-planned-note h3 {
+            margin-bottom: 1rem;
+        }
+
+        .not-planned-note ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .not-planned-note ul li {
+            padding: 0.4rem 0;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        .not-planned-note ul li::before {
+            content: "—";
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 968px) {
+            .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legend {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="roadmap-hero">
+        <div class="container">
+            <h1>Roadmap</h1>
+            <p>
+                Where kcore is heading. This reflects real plans from our codebase &mdash;
+                not aspirational marketing. Items move as engineering priorities shift.
+            </p>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="status-badge status-partial">Partial</span>
+                    <span>Some groundwork done</span>
+                </div>
+                <div class="legend-item">
+                    <span class="status-badge status-in-progress">In Progress</span>
+                    <span>Actively being built</span>
+                </div>
+                <div class="legend-item">
+                    <span class="status-badge status-planned">Planned</span>
+                    <span>Designed, not yet started</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security & Compliance -->
+    <section class="roadmap-section">
+        <div class="container">
+            <div class="phase-header">
+                <h2>Security &amp; Compliance</h2>
+                <p>Hardening the trust model, adding audit trails, and enabling regulated deployments.</p>
+            </div>
+            <div class="roadmap-grid">
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🔐</span> Certificate Lifecycle</h3>
+                    <p>Full rotation, expiry handling, and revocation for the mTLS PKI.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-partial">Partial</span></span>
+                            <span>Manual cert rotation via <code>kctl rotate</code></span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Automated certificate rotation workflows</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>CRL / OCSP revocation support</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Certificate status API (<code>GetCertificateStatus</code>, <code>RotateCertificates</code>)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🛡️</span> RBAC &amp; Authorization</h3>
+                    <p>Moving from coarse identity-based auth to fine-grained role-based access control.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Role definitions: read-only, vm-admin, cluster-admin</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Per-API-call authorization enforcement</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Admin-gated compliance commands</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">📋</span> Audit Logging</h3>
+                    <p>Append-only record of every mutating API call for compliance and forensics.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Append-only JSON audit log with actor, action, resource, timestamp</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>ListAuditEvents</code> gRPC API with retention policies</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Webhook events for <code>audit.event</code> integration</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">📦</span> Supply Chain &amp; Reporting</h3>
+                    <p>SBOM generation, signed releases, and compliance reporting APIs.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Software Bill of Materials (SBOM) generation</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Signed release artifacts</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>GetComplianceReport</code>, <code>ExportSbom</code>, <code>GetCryptoConfig</code> APIs</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>gRPC rate limiting</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- High Availability & Replication -->
+    <section class="roadmap-section">
+        <div class="container">
+            <div class="phase-header">
+                <h2>High Availability &amp; Replication</h2>
+                <p>Multi-controller clusters with CRDT-based state replication across data centres.</p>
+            </div>
+            <div class="roadmap-grid">
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🔄</span> CRDT Replication Engine</h3>
+                    <p>Eventually-consistent state merge across controllers using CRDTs and an append-only replication log.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-partial">Partial</span></span>
+                            <span>Topology and DC identity model designed</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
+                            <span>Replication log, ack frontiers, and merge engine</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Cross-DC peer fan-out and anti-entropy</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Conflict resolution UX and operator tooling</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">⚙️</span> State Reconciliation</h3>
+                    <p>Robust reconciler for controller-to-node desired-state sync with retry and rollback.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
+                            <span>Head materialisation for event-sourced state</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
+                            <span>Reservation model for IP and storage escrow</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Full compensation executor for domain rollback</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Generation counters and multi-node rollout coordination</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🌐</span> Multi-Controller Failover</h3>
+                    <p>Nodes and kctl automatically fail over when the primary controller is unreachable.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-partial">Partial</span></span>
+                            <span><code>--dc-id</code> and <code>--join-controller</code> CLI flags designed</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>kctl / node-agent fallback to secondary controllers</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Scheduler operating on eventually-consistent state</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">📡</span> Webhooks &amp; Events</h3>
+                    <p>Push-based event system for external integrations and monitoring.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>node.heartbeat.missed</code> event</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>cert.expiry.warning</code> event</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>node.registered</code>, <code>vm.state.changed</code> events</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Configurable webhook endpoints in <code>controller.yaml</code></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scheduler & Networking -->
+    <section class="roadmap-section">
+        <div class="container">
+            <div class="phase-header">
+                <h2>Scheduler &amp; Networking</h2>
+                <p>Smarter VM placement and richer network capabilities.</p>
+            </div>
+            <div class="roadmap-grid">
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">📊</span> Scheduler Policies</h3>
+                    <p>Moving beyond basic capacity-aware scheduling to topology-aware placement.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Label-based affinity (<code>--label dc=dc-a</code>)</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Anti-affinity rules for HA (avoid co-locating same-prefix VMs)</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Overcommit ratio for scheduling beyond physical capacity</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Load-aware placement using real-time node metrics</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🌍</span> Networking</h3>
+                    <p>Expanding from single-NIC IPv4 to richer network topologies and controls.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Multi-NIC / multi-homed VMs</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>IPv6 support</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>East-west firewall between VMs on the same bridge</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-partial">Partial</span></span>
+                            <span>TCP/UDP port filtering (proto defined, not yet wired to kctl)</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>VXLAN IP reclamation and improved peer discovery</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formal Verification -->
+    <section class="roadmap-section">
+        <div class="container">
+            <div class="phase-header">
+                <h2>Formal Verification</h2>
+                <p>Property-based testing, model checking, and mathematical proofs for critical paths.</p>
+            </div>
+            <div class="roadmap-grid">
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🧪</span> Property Testing &amp; Model Checking</h3>
+                    <p>Phased rollout of proptest and Kani harnesses across the safety-critical codebase.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Phase 1: proptest on Nix generation (escape round-trip, sanitisation, structural validity)</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Phase 2: Kani harnesses for nixgen and disk path validation</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Phase 3: proptest on database invariants</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">📐</span> TLA+ Specifications</h3>
+                    <p>Modelling distributed protocols to catch design bugs before they become code bugs.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-partial">Partial</span></span>
+                            <span>Bounded TLA+ specs and CI integration delivered</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>ControllerNodeReconcile.tla</code> model</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>ControllerReplication.tla</code> model</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>CrossDcReplication.tla</code> model</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Trace bridge: Rust test traces validated against TLA+ invariants</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Operations & Node Lifecycle -->
+    <section class="roadmap-section">
+        <div class="container">
+            <div class="phase-header">
+                <h2>Operations &amp; Node Lifecycle</h2>
+                <p>Day-2 operational tooling and resilience improvements.</p>
+            </div>
+            <div class="roadmap-grid">
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🔧</span> Operational APIs</h3>
+                    <p>New gRPC endpoints for cluster health and operational insight.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span><code>GetClusterHealth</code> API</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Backup and restore tooling</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>ISO upload support in image workflows</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="roadmap-card">
+                    <h3><span class="card-icon">🖥️</span> Node Lifecycle</h3>
+                    <p>Stronger safety around node removal and VM continuity.</p>
+                    <ul>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Automatic VM migration when a node becomes unreachable</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Node cordon (currently only drain is supported)</span>
+                        </li>
+                        <li>
+                            <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                            <span>Certificate invalidation on node deletion</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="not-planned-note">
+                <h3>Explicitly not planned</h3>
+                <ul>
+                    <li>CSR approval flow (Kubernetes-style certificate signing requests)</li>
+                    <li>Admission webhooks</li>
+                    <li>Formal API versioning contract</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" style="margin-top: 0;">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Want to shape the roadmap?</h2>
+                <p>Open an issue on GitHub or reach out directly. We prioritise based on real usage.</p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/rtacconi/kcore" class="btn btn-primary btn-large">GitHub</a>
+                    <a href="mailto:team@tacconiconsulting.com" class="btn btn-secondary btn-large">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
