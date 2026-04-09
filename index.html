@@ -6,6 +6,52 @@
     <meta name="description" content="kcore — NixOS virtualization with an Apache-2.0 open core; subscriptions for official ISOs, enterprise updates, and support.">
     <title>kcore hypervisor - Declarative Virtualization Platform</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    <style>
+        .quickstart-demo {
+            padding: 4rem 0;
+            border-top: 1px solid var(--border-primary);
+            border-bottom: 1px solid var(--border-primary);
+            background: var(--bg-secondary);
+        }
+
+        .quickstart-demo h2 {
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .quickstart-demo .intro {
+            color: var(--text-secondary);
+            max-width: 780px;
+            margin: 0 auto 1rem;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .quickstart-demo .links {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .quickstart-demo .links a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .quickstart-demo .links a:hover {
+            text-decoration: underline;
+        }
+
+        #first-cluster-demo {
+            max-width: 1040px;
+            margin: 0 auto;
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -55,6 +101,24 @@
         </div>
         <div class="hero-background">
             <div class="grid-overlay"></div>
+        </div>
+    </section>
+
+    <!-- Quickstart Asciinema -->
+    <section class="quickstart-demo">
+        <div class="container">
+            <h2>First cluster in one terminal demo</h2>
+            <p class="intro">
+                This asciinema shows the full first-run flow: install and approve your first node,
+                add the operator SSH key, create a Debian 12 VM, and SSH into it.
+            </p>
+            <p class="links">
+                Read the full tutorial in the
+                <a href="blog/first-node-debian12-quickstart.html">new quickstart blog post</a>
+                or jump to the new user docs at
+                <a href="https://github.com/rtacconi/kcore/tree/main/docs/user">github.com/rtacconi/kcore/docs/user</a>.
+            </p>
+            <div id="first-cluster-demo"></div>
         </div>
     </section>
 
@@ -473,6 +537,23 @@ Created:     2026-03-10 14:23:45</span>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+    <script>
+        if (window.AsciinemaPlayer) {
+            AsciinemaPlayer.create(
+                "assets/first-cluster-demo.cast",
+                document.getElementById("first-cluster-demo"),
+                {
+                    autoPlay: false,
+                    loop: false,
+                    fit: "width",
+                    preload: true,
+                    theme: "asciinema",
+                    speed: 1.2
+                }
+            );
+        }
+    </script>
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
