@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Step-by-step quickstart: install your first kcore node, add an operator SSH key, create a Debian 12 VM, and SSH into it.">
+    <title>First Node to Debian 12 VM Quickstart - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+
+        .post-content h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.04rem;
+        }
+
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .demo-wrap {
+            margin: 1.5rem 0 2rem;
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .note {
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 1rem;
+            color: var(--text-secondary);
+            margin: 1rem 0 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1>From first node to Debian 12 VM in one flow</h1>
+            <p class="post-meta">9 April 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+
+        <p>
+            This tutorial walks through the first practical kcore path: install and approve your first node,
+            register an operator SSH key, create a Debian 12 VM, then SSH into that VM.
+        </p>
+        <p>
+            We also published new user documentation in the kcore repo:
+            <a href="https://github.com/rtacconi/kcore/tree/main/docs/user" style="color: var(--accent-primary);">github.com/rtacconi/kcore/tree/main/docs/user</a>.
+        </p>
+
+        <h2>Asciinema walkthrough</h2>
+        <div id="quickstart-cast" class="demo-wrap"></div>
+
+        <h2>Prerequisites</h2>
+        <p>Before running the commands below:</p>
+        <ul>
+            <li>One machine booted into the kcore node environment and reachable as <code>&lt;NEW_NODE_IP&gt;:9091</code>.</li>
+            <li>A running controller reachable at <code>&lt;CTRL1_IP&gt;:9090</code> (plus optional secondary controller).</li>
+            <li>Operator machine with <code>kctl</code> and <code>kcore-kctl</code> configured for your cluster context.</li>
+            <li>An operator SSH public key, usually from <code>~/.ssh/id_ed25519.pub</code>.</li>
+        </ul>
+
+        <h2>1) Install and approve the first node</h2>
+<pre><code>kctl --node &lt;NEW_NODE_IP&gt;:9091 node disks
+kctl --node &lt;NEW_NODE_IP&gt;:9091 node nics
+
+kctl --node &lt;NEW_NODE_IP&gt;:9091 node install \
+  --os-disk /dev/sda \
+  --join-controller &lt;CTRL1_IP&gt;:9090 \
+  --join-controller &lt;CTRL2_IP&gt;:9090 \
+  --dc-id DC1
+
+kctl get nodes
+kctl node approve &lt;NODE_ID&gt;
+kctl get nodes</code></pre>
+
+        <p class="note">
+            After approval, the node becomes schedulable for VM placement.
+        </p>
+
+        <h2>2) Add the operator SSH key</h2>
+<pre><code>kcore-kctl ssh-key create operator-key \
+  --public-key "$(cat ~/.ssh/id_ed25519.pub)"</code></pre>
+
+        <p>
+            This stores the public key as a named object so you can reference it with <code>--ssh-key operator-key</code>
+            during VM creation.
+        </p>
+
+        <h2>3) Create a Debian 12 VM on that node</h2>
+<pre><code>kcore-kctl create vm debian12-01 \
+  --target-node &lt;NODE_ID&gt; \
+  --image https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2 \
+  --image-sha256 &lt;DEBIAN12_QCOW2_SHA256&gt; \
+  --network default \
+  --storage-backend filesystem \
+  --storage-size-bytes 42949672960 \
+  --ssh-key operator-key \
+  --wait-for-ssh \
+  --wait-timeout-seconds 300</code></pre>
+
+        <h2>4) SSH into the VM</h2>
+<pre><code>ssh -i ~/.ssh/id_ed25519 &lt;username&gt;@&lt;vm-ip&gt;</code></pre>
+
+        <p>
+            If you use a different keypair, pass the matching private key with <code>-i</code>.
+            For more variants and flags, see
+            <a href="https://github.com/rtacconi/kcore/blob/main/docs/user/vm-creation-modes.md" style="color: var(--accent-primary);">VM creation modes</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+    <script>
+        if (window.AsciinemaPlayer) {
+            AsciinemaPlayer.create(
+                "../assets/first-cluster-demo.cast",
+                document.getElementById("quickstart-cast"),
+                {
+                    autoPlay: false,
+                    loop: false,
+                    fit: "width",
+                    preload: true,
+                    speed: 1.2
+                }
+            );
+        }
+    </script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
