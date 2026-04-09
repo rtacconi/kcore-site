@@ -126,7 +126,8 @@
 
         <p>
             This tutorial walks through the first practical kcore path: install and approve your first node,
-            register an operator SSH key, create a Debian 12 VM, then SSH into that VM.
+            register an operator SSH key, create a Debian 12 VM, discover its IP using <code>describe</code>,
+            then SSH into that VM.
         </p>
         <p>
             We also published new user documentation in the kcore repo:
@@ -181,10 +182,17 @@ kctl get nodes</code></pre>
   --storage-backend filesystem \
   --storage-size-bytes 42949672960 \
   --ssh-key operator-key \
-  --wait-for-ssh \
+  --wait \
   --wait-timeout-seconds 300</code></pre>
 
-        <h2>4) SSH into the VM</h2>
+        <h2>4) Find the VM IP with describe</h2>
+<pre><code>kcore-kctl describe vm debian12-01</code></pre>
+
+        <p>
+            Use the <code>Network</code> (and SSH port, if shown) from the describe output.
+        </p>
+
+        <h2>5) SSH into the VM</h2>
 <pre><code>ssh -i ~/.ssh/id_ed25519 &lt;username&gt;@&lt;vm-ip&gt;</code></pre>
 
         <p>
@@ -242,7 +250,7 @@ kctl get nodes</code></pre>
                     loop: false,
                     fit: "width",
                     preload: true,
-                    speed: 1.2
+                    speed: 0.8
                 }
             );
         }
