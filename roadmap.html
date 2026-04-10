@@ -395,6 +395,8 @@
                                 <h4>VM Lifecycle</h4>
                                 <ul>
                                     <li>Create, delete, start, stop, update VMs</li>
+                                    <li>Container workloads via containerd (<code>kctl workload</code> / <code>kctl container</code>)</li>
+                                    <li>Unified workload API for VMs and containers</li>
                                     <li>Desired-state reconciliation via Nix</li>
                                     <li>Cloud Hypervisor runtime</li>
                                     <li>YAML manifest support (<code>kctl create vm -f</code>)</li>
@@ -416,6 +418,8 @@
                                     <li>NAT, bridge, and VXLAN network types</li>
                                     <li>Cross-host VXLAN with optional outbound NAT</li>
                                     <li>VLAN ID support on gateway</li>
+                                    <li>Security groups with ingress + optional DNAT policy</li>
+                                    <li><code>kctl apply -f ...</code> kind-based manifest dispatch (kubectl-style)</li>
                                     <li>dnsmasq + nftables per network</li>
                                 </ul>
                             </div>
@@ -494,67 +498,67 @@
                 <!-- LATE APRIL: HA + TLA+ -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Late April 2026</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">April 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128279;</span> High Availability &amp; Replication</h3>
+                        <h3><span class="card-icon shipped">&#128279;</span> High Availability &amp; Replication</h3>
                         <p>
                             Multi-controller clusters with CRDT-based state merge and cross-DC replication.
-                            Building on existing replication primitives (conflict list/resolve already in <code>kctl</code>).
+                            Replication now runs with automatic reconciliation and compensation paths instead of manual conflict resolution.
                         </p>
                         <ul class="detail-list">
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>Replication DB tables, <code>kctl get conflicts</code>, <code>kctl resolve conflict</code></span>
+                                <span>Replication DB tables, ack frontiers, LWW/MV merge, and anti-entropy fan-out</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>CRDT replication log with ack frontiers and merge engine</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Domain materialization for node/network/vm/security-group/ssh-key event families</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Peer fan-out, anti-entropy, and cross-DC sync</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Typed, idempotent compensation executor with zero-manual SLO gating</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>kctl / node-agent failover to secondary controllers</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>kctl get replication-status [--require-healthy]</code> for hard runtime gates</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Conflict resolution UX and operator tooling</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Manual <code>kctl resolve conflict</code> removed from operator workflow</span>
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Late April 2026</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">April 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128208;</span> TLA+ Specifications</h3>
+                        <h3><span class="card-icon shipped">&#128208;</span> TLA+ Specifications</h3>
                         <p>
                             Formal models of distributed protocols to catch design bugs before they become code bugs.
-                            Starting alongside HA work to verify replication correctness.
+                            Models and trace checks are now wired as required CI gates.
                         </p>
                         <ul class="detail-list">
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>Bounded TLA+ specs and CI integration</span>
+                                <span>Bounded TLA+ specs and required CI integration</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span><code>ControllerNodeReconcile.tla</code> &mdash; reconciliation model</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span><code>ControllerReplication.tla</code> &mdash; single-DC replication</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span><code>CrossDcReplication.tla</code> &mdash; multi-DC model</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Trace bridge: Rust test traces validated against TLA+ invariants</span>
                             </li>
                         </ul>
@@ -676,7 +680,7 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>TCP/UDP port allowlists (proto defined, kctl wiring next)</span>
+                                <span>Security groups with YAML apply flow and nftables rendering on nodes</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
