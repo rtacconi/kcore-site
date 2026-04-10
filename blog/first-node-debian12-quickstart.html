@@ -116,37 +116,37 @@
 
     <section class="post-hero">
         <div class="container">
-            <h1>From first node to Debian 12 VM in one flow</h1>
-            <p class="post-meta">9 April 2026</p>
+            <h1 data-i18n="bp.first.title">From first node to Debian 12 VM in one flow</h1>
+            <p class="post-meta" data-i18n="bp.first.date">9 April 2026</p>
         </div>
     </section>
 
     <article class="post-content">
-        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.first.back">&larr; Back to blog</a>
 
-        <p>
+        <p data-i18n-html="bp.first.intro1">
             This tutorial walks through the first practical kcore path: install and approve your first node,
             register an operator SSH key, create a Debian 12 VM, discover its IP using <code>describe</code>,
             then SSH into that VM.
         </p>
-        <p>
+        <p data-i18n-html="bp.first.intro2">
             We also published new user documentation in the kcore repo:
             <a href="https://github.com/rtacconi/kcore/tree/main/docs/user" style="color: var(--accent-primary);">github.com/rtacconi/kcore/tree/main/docs/user</a>.
         </p>
 
-        <h2>Asciinema walkthrough</h2>
+        <h2 data-i18n="bp.first.h2cast">Asciinema walkthrough</h2>
         <div id="quickstart-cast" class="demo-wrap"></div>
 
-        <h2>Prerequisites</h2>
-        <p>Before running the commands below:</p>
+        <h2 data-i18n="bp.first.h2prereq">Prerequisites</h2>
+        <p data-i18n="bp.first.prereqLead">Before running the commands below:</p>
         <ul>
-            <li>One machine booted into the kcore node environment and reachable as <code>&lt;NEW_NODE_IP&gt;:9091</code>.</li>
-            <li>A running controller reachable at <code>&lt;CTRL1_IP&gt;:9090</code> (plus optional secondary controller).</li>
-            <li>Operator machine with <code>kctl</code> and <code>kcore-kctl</code> configured for your cluster context.</li>
-            <li>An operator SSH public key, usually from <code>~/.ssh/id_ed25519.pub</code>.</li>
+            <li data-i18n-html="bp.first.prereq1">One machine booted into the kcore node environment and reachable as <code>&lt;NEW_NODE_IP&gt;:9091</code>.</li>
+            <li data-i18n-html="bp.first.prereq2">A running controller reachable at <code>&lt;CTRL1_IP&gt;:9090</code> (plus optional secondary controller).</li>
+            <li data-i18n-html="bp.first.prereq3">Operator machine with <code>kctl</code> and <code>kcore-kctl</code> configured for your cluster context.</li>
+            <li data-i18n-html="bp.first.prereq4">An operator SSH public key, usually from <code>~/.ssh/id_ed25519.pub</code>.</li>
         </ul>
 
-        <h2>1) Install and approve the first node</h2>
+        <h2 data-i18n="bp.first.h2step1">1) Install and approve the first node</h2>
 <pre><code>kctl --node &lt;NEW_NODE_IP&gt;:9091 node disks
 kctl --node &lt;NEW_NODE_IP&gt;:9091 node nics
 
@@ -160,20 +160,20 @@ kctl get nodes
 kctl node approve &lt;NODE_ID&gt;
 kctl get nodes</code></pre>
 
-        <p class="note">
+        <p class="note" data-i18n="bp.first.note1">
             After approval, the node becomes schedulable for VM placement.
         </p>
 
-        <h2>2) Add the operator SSH key</h2>
+        <h2 data-i18n="bp.first.h2step2">2) Add the operator SSH key</h2>
 <pre><code>kcore-kctl ssh-key create operator-key \
   --public-key "$(cat ~/.ssh/id_ed25519.pub)"</code></pre>
 
-        <p>
+        <p data-i18n-html="bp.first.step2desc">
             This stores the public key as a named object so you can reference it with <code>--ssh-key operator-key</code>
             during VM creation.
         </p>
 
-        <h2>3) Create a Debian 12 VM on that node</h2>
+        <h2 data-i18n="bp.first.h2step3">3) Create a Debian 12 VM on that node</h2>
 <pre><code>kcore-kctl create vm debian12-01 \
   --target-node &lt;NODE_ID&gt; \
   --image https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2 \
@@ -185,17 +185,17 @@ kctl get nodes</code></pre>
   --wait \
   --wait-timeout-seconds 300</code></pre>
 
-        <h2>4) Find the VM IP with describe</h2>
+        <h2 data-i18n="bp.first.h2step4">4) Find the VM IP with describe</h2>
 <pre><code>kcore-kctl describe vm debian12-01</code></pre>
 
-        <p>
+        <p data-i18n-html="bp.first.step4desc">
             Use the <code>Network</code> (and SSH port, if shown) from the describe output.
         </p>
 
-        <h2>5) SSH into the VM</h2>
+        <h2 data-i18n="bp.first.h2step5">5) SSH into the VM</h2>
 <pre><code>ssh -i ~/.ssh/id_ed25519 &lt;username&gt;@&lt;vm-ip&gt;</code></pre>
 
-        <p>
+        <p data-i18n-html="bp.first.outro">
             If you use a different keypair, pass the matching private key with <code>-i</code>.
             For more variants and flags, see
             <a href="https://github.com/rtacconi/kcore/blob/main/docs/user/vm-creation-modes.md" style="color: var(--accent-primary);">VM creation modes</a>.
