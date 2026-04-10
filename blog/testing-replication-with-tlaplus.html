@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How kcore tests replication with TLA+, what bugs model checking catches, and where to learn TLA+ in practice.">
+    <title>How We Test Replication with TLA+ - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.4rem; }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html">Features</a></li>
+                <li><a href="../pricing.html">Pricing</a></li>
+                <li><a href="../docs.html">Docs</a></li>
+                <li><a href="../roadmap.html">Roadmap</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1>How We Test Replication with TLA+</h1>
+            <p class="post-meta">11 April 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+
+        <p>
+            Distributed replication bugs are the most expensive bugs to debug in production:
+            they usually depend on timing, retries, partitions, and reordering. Unit tests and
+            integration tests are still essential, but they are examples. TLA+ lets us validate
+            the protocol itself across many possible interleavings before those bugs hit real clusters.
+        </p>
+
+        <h2>What we model in kcore</h2>
+        <p>
+            In kcore, we model replication behavior in three TLA+ specs under <code>specs/tla/</code>:
+        </p>
+        <ul>
+            <li><code>ControllerNodeReconcile.tla</code> for node/controller reconciliation behavior.</li>
+            <li><code>ControllerReplication.tla</code> for single-DC event replication and merge semantics.</li>
+            <li><code>CrossDcReplication.tla</code> for cross-DC anti-entropy and eventual convergence.</li>
+        </ul>
+        <p>
+            We run bounded model checking in CI, plus a trace bridge that validates Rust-generated
+            replication traces against model invariants.
+        </p>
+
+        <h2>How TLA+ catches bugs that normal tests miss</h2>
+        <p>
+            TLA+ explores state transitions, not just expected scripts. That means it can surface bugs like:
+        </p>
+        <ul>
+            <li>Conflict paths that can leave a resource in non-terminal or manual-only states.</li>
+            <li>Convergence failures where replicas can diverge under certain delivery orders.</li>
+            <li>Broken compensation semantics where an auto-compensated conflict has no valid loser event.</li>
+            <li>Edge cases in anti-entropy where retries and dedupe interact unexpectedly.</li>
+        </ul>
+        <p>
+            A key practical benefit is speed of feedback: we fix the model and invariants before
+            writing or finalizing implementation details, which reduces high-risk rework later.
+        </p>
+
+        <h2>How this fits with runtime testing</h2>
+        <p>
+            We treat this as layered verification:
+        </p>
+        <ul>
+            <li><strong>Model level:</strong> bounded TLC checks for protocol safety/liveness properties.</li>
+            <li><strong>Trace level:</strong> replication trace checks to prevent model/runtime drift.</li>
+            <li><strong>Runtime level:</strong> controller replication tests and soak runs under retries.</li>
+        </ul>
+        <p>
+            This combination helps catch both design bugs and implementation regressions.
+        </p>
+
+        <h2>Who else uses TLA+</h2>
+        <p>
+            TLA+ is not an academic-only tool. Public engineering writeups describe production use by teams at:
+        </p>
+        <ul>
+            <li><strong>Amazon</strong> (S3, DynamoDB, EBS and others) to find subtle distributed-system bugs early.</li>
+            <li><strong>Microsoft</strong> (Azure teams) for protocol and system design validation.</li>
+            <li><strong>Cockroach Labs</strong> for parts of distributed database protocol verification.</li>
+        </ul>
+        <p>
+            The pattern is consistent: model check critical protocols early, then keep models close to implementation as systems evolve.
+        </p>
+
+        <h2>Where to learn TLA+ quickly</h2>
+        <ul>
+            <li><a href="https://lamport.azurewebsites.net/tla/tla.html">Leslie Lamport's TLA+ page</a> (official starting point).</li>
+            <li><a href="https://learntla.com/">Learn TLA+</a> (practical, beginner-friendly guide).</li>
+            <li><a href="https://www.learntla.com/introduction/">Learn TLA+ intro</a> for first model-checking workflow.</li>
+            <li><a href="https://www.hillelwayne.com/post/tla-messages/">Hillel Wayne articles</a> for practical modeling style.</li>
+            <li><a href="https://www.youtube.com/results?search_query=tla%2B+conference">TLA+ conference talks</a> for real-world case studies.</li>
+        </ul>
+
+        <h2>What this means for operators</h2>
+        <p>
+            The goal is simple: less scary failure behavior in real clusters. When peers reconnect after faults,
+            replication should converge deterministically, and operational gates should clearly report health.
+            TLA+ is one of the tools we use to keep that promise honest.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p>Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="../features.html">Features</a></li>
+                        <li><a href="../pricing.html">Pricing</a></li>
+                        <li><a href="../roadmap.html">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../blog.html">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
