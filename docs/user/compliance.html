@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How kcore supports customer compliance programs: encryption, identity, isolation, and auditability.">
+    <title>Compliance enablement - kcore user documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        .doc-hero { padding: 7rem 0 2.5rem; margin-top: 60px; background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); text-align: center; }
+        .post-content { max-width: 860px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+        .post-content h2 { margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border-primary); }
+        .post-content p, .post-content li { color: var(--text-secondary); line-height: 1.8; font-size: 1.04rem; }
+        .post-content ul { padding-left: 1.25rem; margin-bottom: 1.2rem; }
+        .back-link { color: var(--accent-primary); text-decoration: none; display: inline-block; margin-bottom: 1.5rem; }
+        .back-link:hover { text-decoration: underline; }
+        .note { border-left: 3px solid var(--accent-primary); padding-left: 1rem; color: var(--text-secondary); margin: 1.5rem 0; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand"><a href="../../index.html" style="color: inherit; text-decoration: none;"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+            <ul class="nav-menu">
+                <li><a href="../../features.html">Features</a></li>
+                <li><a href="../../pricing.html">Pricing</a></li>
+                <li><a href="../../docs.html">Docs</a></li>
+                <li><a href="../../roadmap.html">Roadmap</a></li>
+                <li><a href="../../blog.html">Blog</a></li>
+                <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+    <header class="doc-hero"><div class="container"><h1>Compliance enablement</h1></div></header>
+    <article class="post-content">
+        <a href="index.html" class="back-link">&larr; User documentation</a>
+
+        <p>kcore is <strong>infrastructure software</strong>. Your organisation owns compliance scope for how you deploy it (GDPR, SOC 2, PCI DSS, sector-specific rules, etc.). kcore is designed to be a <strong>compliance-enabling platform</strong>: it provides controls, APIs, and isolation properties your assessors can test, similar in spirit to shared-responsibility models used by public clouds.</p>
+
+        <p class="note">kcore itself is not a substitute for your own certifications. You inherit platform controls and document your policies, processes, and workloads on top.</p>
+
+        <h2>Encryption and identity</h2>
+        <ul>
+            <li>Management-plane traffic uses <strong>mutual TLS</strong> between <code>kctl</code>, the controller, and node agents, with cluster-issued client certificates.</li>
+            <li>gRPC methods enforce <strong>caller identity</strong> from certificate subject (e.g. operator vs node roles).</li>
+        </ul>
+
+        <h2>Workload isolation</h2>
+        <p>Each VM runs under Cloud Hypervisor with dedicated KVM context, network interfaces, and disks. This separation is the basis for tenancy and cardholder/workload boundaries in your architecture.</p>
+
+        <h2>Declarative, auditable hosts</h2>
+        <p>NixOS configurations are reproducible and versioned; system generations support rollback. Changes flow through declared config rather than ad hoc shell edits on production hosts.</p>
+
+        <h2>Next steps</h2>
+        <p>Map these capabilities to your control framework with your security team. For product-specific security comparisons, see <a href="https://github.com/rtacconi/kcore/blob/main/docs/security-k8s-vs-kcore.md" style="color: var(--accent-primary);">kcore vs Kubernetes (security model)</a> in the repository. Commercial terms and support are described under <a href="licensing.html" style="color: var(--accent-primary);">Licensing</a> and on the <a href="../../pricing.html" style="color: var(--accent-primary);">Pricing</a> page.</p>
+    </article>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+</body>
+</html>
