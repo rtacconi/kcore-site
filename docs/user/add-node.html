@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add a bare-metal kcore node: install to disk, join controllers, approve the node, manage certificates.">
+    <title>Add a node - kcore user documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        .doc-hero { padding: 7rem 0 2.5rem; margin-top: 60px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); text-align: center; }
+        .doc-hero h1 { margin-bottom: 0.5rem; }
+        .post-content { max-width: 860px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+        .post-content h2 { margin-top: 2.25rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border-primary); }
+        .post-content p, .post-content li { color: var(--text-secondary); line-height: 1.8; font-size: 1.04rem; }
+        .post-content ul { margin-bottom: 1.25rem; padding-left: 1.25rem; }
+        .post-content pre { background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.5rem; padding: 1.25rem; overflow-x: auto; margin: 1rem 0 1.5rem; }
+        .post-content code { background: var(--bg-card); border: 1px solid var(--border-primary); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .post-content pre code { background: none; border: none; padding: 0; }
+        .back-link { color: var(--accent-primary); text-decoration: none; display: inline-block; margin-bottom: 1.5rem; }
+        .back-link:hover { text-decoration: underline; }
+        .note { border-left: 3px solid var(--accent-primary); padding-left: 1rem; color: var(--text-secondary); margin: 1.25rem 0; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; color: var(--text-secondary); margin: 1rem 0; }
+        th, td { border: 1px solid var(--border-primary); padding: 0.5rem 0.75rem; text-align: left; }
+        th { background: var(--bg-card); color: var(--text-primary); }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../../index.html" style="color: inherit; text-decoration: none;"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../../features.html">Features</a></li>
+                <li><a href="../../pricing.html">Pricing</a></li>
+                <li><a href="../../docs.html">Docs</a></li>
+                <li><a href="../../roadmap.html">Roadmap</a></li>
+                <li><a href="../../blog.html">Blog</a></li>
+                <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="doc-hero"><div class="container"><h1>Add a node to the cluster</h1></div></header>
+
+    <article class="post-content">
+        <a href="index.html" class="back-link">&larr; User documentation</a>
+
+        <p>This page describes how to install kcore on a new bare-metal machine, join it to your controllers, and move it from <strong>pending</strong> to <strong>approved</strong> so it can schedule VMs.</p>
+
+        <h2>Prerequisites</h2>
+        <ul>
+            <li>A running controller (or HA pair) reachable from your operator workstation.</li>
+            <li><code>kctl</code> configured with your cluster TLS context (<code>~/.kcore/&lt;context&gt;/</code>).</li>
+            <li>The new machine booted from the kcore ISO or live environment, reachable at <code>&lt;NEW_NODE_IP&gt;:9091</code>.</li>
+        </ul>
+
+        <h2>Discover hardware</h2>
+<pre><code>kctl --node &lt;NEW_NODE_IP&gt;:9091 node disks
+kctl --node &lt;NEW_NODE_IP&gt;:9091 node nics</code></pre>
+
+        <h2>Install to disk</h2>
+        <p><code>kctl</code> signs a node certificate with your cluster CA and sends an install request to the node agent. The OS disk is prepared with LUKS (TPM-sealed when TPM2 is available). Controllers and datacenter ID are written into node configuration.</p>
+<pre><code>kctl --node &lt;NEW_NODE_IP&gt;:9091 node install \
+  --os-disk /dev/sda \
+  --join-controller 192.168.40.105:9090 \
+  --join-controller 192.168.40.106:9090 \
+  --dc-id DC1</code></pre>
+        <p>Optional flags include <code>--data-disk</code> (repeatable), <code>--storage-backend</code>, LVM/ZFS names, and <code>--disable-vxlan</code>. After install the node reboots into the installed system.</p>
+
+        <h2>Registration and approval</h2>
+        <p>After boot, the node agent registers with the controller and appears as <strong>pending</strong>. Pending nodes cannot run workloads until you approve them.</p>
+<pre><code>kctl get nodes
+kctl node approve &lt;NODE_ID&gt;</code></pre>
+        <p>Use <code>kctl node reject &lt;NODE_ID&gt;</code> if the registration is unexpected. Rejected nodes stay rejected until you explicitly approve them later.</p>
+        <p class="note">Approval is the human gate on top of mTLS: even with a valid client certificate, a node does not participate in scheduling until approved.</p>
+
+        <h2>Certificates</h2>
+        <p>Node certificates are renewed automatically when within 30 days of expiry. Operators can rotate the sub-CA with <code>kctl rotate sub-ca</code>. Use <code>kctl get nodes</code> to inspect certificate expiry.</p>
+
+        <h2>Quick reference</h2>
+        <table>
+            <tr><th>Action</th><th>Command</th></tr>
+            <tr><td>List disks / NICs</td><td><code>kctl --node &lt;IP&gt;:9091 node disks</code> / <code>node nics</code></td></tr>
+            <tr><td>Install</td><td><code>kctl --node &lt;IP&gt;:9091 node install --os-disk /dev/sda --join-controller &lt;host:port&gt; ... --dc-id DC1</code></td></tr>
+            <tr><td>List / describe nodes</td><td><code>kctl get nodes</code> / <code>kctl get node &lt;ID&gt;</code></td></tr>
+            <tr><td>Approve / reject</td><td><code>kctl node approve &lt;ID&gt;</code> / <code>kctl node reject &lt;ID&gt;</code></td></tr>
+        </table>
+
+        <p>For a full end-to-end terminal walkthrough (including VM creation), see the <a href="../../blog/first-node-debian12-quickstart.html" style="color: var(--accent-primary);">Debian 12 quickstart</a>. For security context, see <a href="https://github.com/rtacconi/kcore/blob/main/docs/security-k8s-vs-kcore.md" style="color: var(--accent-primary);">security model vs Kubernetes</a> in the repository.</p>
+    </article>
+
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+</body>
+</html>
