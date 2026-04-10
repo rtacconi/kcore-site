@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Demo: nginx on a kcore NAT network is not reachable from the host until a security group adds DNAT; verify with curl and RFC1918 addresses.">
+    <title>Security groups: nginx on a NAT network (before and after) - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta { color: var(--text-secondary); font-size: 0.95rem; }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 { margin-top: 2.25rem; margin-bottom: 1rem; }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.04rem;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.4rem;
+            padding-left: 1.25rem;
+        }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        .post-content pre code { background: none; border: none; padding: 0; }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .note {
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 1rem;
+            color: var(--text-secondary);
+            margin: 1rem 0 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.sg.title">Security groups: nginx on a NAT network (before and after)</h1>
+            <p class="post-meta" data-i18n="bp.sg.date">11 April 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.sg.back">&larr; Back to blog</a>
+
+        <p data-i18n="bp.sg.intro1">
+            On a NAT-backed overlay, a workload can listen on a private address without exposing anything on the physical host.
+            Until you attach a security group that opens (and optionally DNATs) traffic, curling the host’s LAN IP does not hit nginx.
+        </p>
+
+        <p data-i18n-html="bp.sg.intro2">
+            The commands below use realistic RFC1918 addresses from a lab: host <code>192.168.40.105</code>, overlay guest
+            <code>10.250.0.7</code>, node id <code>kvm-node-192-168-40-105</code>, network <code>private</code>.
+            Substitute your own names and IPs.
+        </p>
+
+        <p class="note" data-i18n-html="bp.sg.note1">
+            <strong>Why a VM in the manifest:</strong> Security group DNAT resolves <code>targetVm</code> to a
+            <strong>VM workload’s</strong> stored private IP in the controller today. Running nginx in an OCI container on the same NAT
+            hits the same forwarding behaviour; use the VM-shaped flow below for a copy-paste match with <code>kctl describe vm</code>
+            and <code>targetVm</code>.
+        </p>
+
+        <h2 data-i18n="bp.sg.h2prereq">Prerequisites</h2>
+        <ul>
+            <li data-i18n-html="bp.sg.prereq1">Controller reachable from your operator machine; <code>kctl</code> configured.</li>
+            <li data-i18n-html="bp.sg.prereq2">A NAT-style network named <code>private</code> (or change the manifest) attached to your node.</li>
+            <li data-i18n-html="bp.sg.prereq3">A Debian or similar image already registered for VM creation (same as other quickstarts).</li>
+        </ul>
+
+        <h2 data-i18n="bp.sg.h2step1">1) Run nginx on the overlay</h2>
+        <p data-i18n-html="bp.sg.step1desc">
+            Create a small VM workload that will run nginx on port 80 inside the guest. The controller assigns an overlay address such as
+            <code>10.250.0.7</code> on network <code>private</code>.
+        </p>
+<pre><code>kctl workload create --kind vm nginx-demo \
+  --network private \
+  --target-node kvm-node-192-168-40-105 \
+  --image &lt;your-debian-or-nginx-image&gt;</code></pre>
+        <p data-i18n-html="bp.sg.step1b">
+            Install and start nginx inside the guest (for example via cloud-init or SSH) so it listens on <code>0.0.0.0:80</code>.
+            Confirm the private IP:
+        </p>
+<pre><code>kctl describe vm nginx-demo</code></pre>
+        <p data-i18n-html="bp.sg.step1c">
+            Expect a line or table entry showing <code>10.250.0.7</code> (or another address in your overlay range).
+        </p>
+
+        <h2 data-i18n="bp.sg.h2step2">2) From the host, curl fails without a security group</h2>
+        <p data-i18n-html="bp.sg.step2desc">
+            On the hypervisor host (<code>192.168.40.105</code>), direct access to the overlay address is not wired through ingress/DNAT yet:
+        </p>
+<pre><code>curl -v --connect-timeout 3 http://10.250.0.7/
+curl -v --connect-timeout 3 http://192.168.40.105:8080/</code></pre>
+        <p data-i18n="bp.sg.step2out">
+            The first request may time out or be refused; the second hits the host address but nothing is published on port 8080 yet.
+        </p>
+
+        <h2 data-i18n="bp.sg.h2step3">3) Declare a security group (DNAT host 8080 → guest 80)</h2>
+        <p data-i18n-html="bp.sg.step3desc">
+            Save the following as <code>expose-nginx.yaml</code>. It attaches to the network on the node and sends TCP traffic destined for
+            the host’s external IP on port 8080 to the guest’s private IP on port 80.
+        </p>
+<pre><code>kind: SecurityGroup
+metadata:
+  name: expose-nginx-demo
+spec:
+  description: DNAT TCP/8080 on the host to nginx on the overlay
+  rules:
+    - id: http-dnat
+      protocol: tcp
+      hostPort: 8080
+      targetPort: 80
+      sourceCidr: 0.0.0.0/0
+      targetVm: nginx-demo
+      enableDnat: true
+  attachments:
+    - kind: network
+      target: private
+      node: kvm-node-192-168-40-105</code></pre>
+
+        <h2 data-i18n="bp.sg.h2step4">4) Apply and reconcile</h2>
+<pre><code>kctl security-group apply -f expose-nginx.yaml</code></pre>
+        <p data-i18n-html="bp.sg.step4desc">
+            Wait for the node to reconcile Nix and nftables (usually within one controller/node sync cycle). If you use a different
+            external IP than <code>192.168.40.105</code> for the NAT network, the DNAT rule still keys off that network’s
+            <code>externalIP</code> as rendered on the node.
+        </p>
+
+        <h2 data-i18n="bp.sg.h2step5">5) Curl succeeds via the host</h2>
+        <p data-i18n-html="bp.sg.step5desc">
+            From any machine that can reach the node on the LAN:
+        </p>
+<pre><code>curl -sS -D- http://192.168.40.105:8080/ -o /dev/null | head -n 5</code></pre>
+        <p data-i18n="bp.sg.step5b">
+            You should see HTTP 200 and nginx response headers. Traffic is DNATted to 10.250.0.7:80 inside the overlay.
+        </p>
+
+        <h2 data-i18n="bp.sg.h2container">What about an nginx container?</h2>
+        <p data-i18n-html="bp.sg.container1">
+            Create one with <code>kctl workload create --kind container nginx-demo ... --network private</code>. The isolation story is the same:
+            the service starts on a private address, not on the host’s Ethernet port, until policy opens a path.
+        </p>
+        <p data-i18n-html="bp.sg.container2">
+            Until DNAT can bind directly to container endpoints in the controller, pair the container with a VM front or use the VM flow
+            above for rules that reference <code>targetVm</code>. See
+            <a href="https://github.com/rtacconi/kcore/blob/main/docs/dev/security-groups.md" style="color: var(--accent-primary);">security-groups.md</a>
+            in the product repo for the rule model.
+        </p>
+
+        <p data-i18n-html="bp.sg.outro">
+            For more examples, see
+            <a href="https://github.com/rtacconi/kcore/blob/main/examples/security-groups/expose-nginx-host.yaml" style="color: var(--accent-primary);">expose-nginx-host.yaml</a>
+            in the kcore tree.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
