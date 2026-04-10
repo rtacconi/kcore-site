@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Initial containerd operations in kcore: conservative, node-scoped workflow for creating, listing, starting, stopping, and deleting containers.">
+    <title>Initial containerd operations in kcore - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+
+        .post-content h2 {
+            margin-top: 2.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.04rem;
+        }
+
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.4rem;
+            padding-left: 1.25rem;
+        }
+
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .note {
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 1rem;
+            color: var(--text-secondary);
+            margin: 1rem 0 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.containerd.title">Initial containerd operations in kcore (conservative guide)</h1>
+            <p class="post-meta" data-i18n="bp.containerd.date">10 April 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.containerd.back">&larr; Back to blog</a>
+
+        <p data-i18n="bp.containerd.intro1">
+            kcore now has initial container operations. This post documents what you can run today,
+            with conservative expectations.
+        </p>
+
+        <p class="note" data-i18n="bp.containerd.note1">
+            This is early support. Treat it as an operator workflow for labs and controlled environments,
+            not as a full container orchestration platform.
+        </p>
+
+        <h2 data-i18n="bp.containerd.h2covers">What this currently covers</h2>
+        <ul>
+            <li data-i18n-html="bp.containerd.covers1">Node-scoped container lifecycle via <code>kctl --node ...</code>.</li>
+            <li data-i18n="bp.containerd.covers2">Create, list, inspect, start, stop, and delete container workloads.</li>
+            <li data-i18n-html="bp.containerd.covers3">Container runtime CLI auto-detection with <code>nerdctl</code> preferred (or <code>docker</code> fallback).</li>
+            <li data-i18n="bp.containerd.covers4">Optional network attachment by name when the network already exists and is bridge-backed.</li>
+        </ul>
+
+        <h2 data-i18n="bp.containerd.h2notyet">What this does not claim yet</h2>
+        <ul>
+            <li data-i18n="bp.containerd.notyet1">No claim of Kubernetes-style scheduling or orchestration semantics.</li>
+            <li data-i18n="bp.containerd.notyet2">No claim of production-grade HA behavior for this container path yet.</li>
+            <li data-i18n="bp.containerd.notyet3">No claim of full parity with the VM workflow in all dimensions.</li>
+        </ul>
+
+        <h2 data-i18n="bp.containerd.h2prereq">Prerequisites</h2>
+        <ul>
+            <li data-i18n-html="bp.containerd.prereq1">An installed kcore node reachable at <code>&lt;NODE_IP&gt;:9091</code>.</li>
+            <li data-i18n-html="bp.containerd.prereq2"><code>kctl</code> configured on your operator machine.</li>
+            <li data-i18n-html="bp.containerd.prereq3"><code>nerdctl</code> (preferred) or <code>docker</code> available on the node runtime.</li>
+            <li data-i18n-html="bp.containerd.prereq4">If you pass <code>--network</code>, ensure that network already exists.</li>
+        </ul>
+
+        <h2 data-i18n="bp.containerd.h2step1">1) Create a container</h2>
+<pre><code>kctl --node &lt;NODE_IP&gt;:9091 create container web-01 \
+  --image nginx:alpine \
+  --port 8080:80 \
+  --env NGINX_ENTRYPOINT_QUIET_LOGS=1</code></pre>
+
+        <p data-i18n-html="bp.containerd.step1desc">
+            You can also pass command arguments with repeated <code>--cmd</code> flags.
+            Keep initial tests simple.
+        </p>
+
+        <h2 data-i18n="bp.containerd.h2step2">2) List containers</h2>
+<pre><code>kctl --node &lt;NODE_IP&gt;:9091 get containers</code></pre>
+
+        <h2 data-i18n="bp.containerd.h2step3">3) Inspect one container</h2>
+<pre><code>kctl --node &lt;NODE_IP&gt;:9091 get containers web-01</code></pre>
+
+        <h2 data-i18n="bp.containerd.h2step4">4) Stop and start</h2>
+<pre><code>kctl --node &lt;NODE_IP&gt;:9091 stop container web-01
+kctl --node &lt;NODE_IP&gt;:9091 start container web-01</code></pre>
+
+        <h2 data-i18n="bp.containerd.h2step5">5) Delete</h2>
+<pre><code>kctl --node &lt;NODE_IP&gt;:9091 delete container web-01
+# force delete if needed:
+kctl --node &lt;NODE_IP&gt;:9091 delete container web-01 --force</code></pre>
+
+        <h2 data-i18n="bp.containerd.h2troubleshoot">Troubleshooting notes</h2>
+        <ul>
+            <li data-i18n-html="bp.containerd.troubleshoot1">If runtime detection fails, install <code>nerdctl</code> on the node first.</li>
+            <li data-i18n="bp.containerd.troubleshoot2">If network attach fails, verify the target network name and bridge-backed setup.</li>
+            <li data-i18n="bp.containerd.troubleshoot3">Prefer small, stateless test workloads while this support matures.</li>
+        </ul>
+
+        <p data-i18n-html="bp.containerd.outro">
+            For technical planning details and phased rollout notes, see the design doc in the main repository:
+            <a href="https://github.com/rtacconi/kcore/blob/main/docs/dev/support-for-containerd.md" style="color: var(--accent-primary);">support-for-containerd.md</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
