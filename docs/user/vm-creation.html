@@ -71,6 +71,8 @@ metadata:
 spec:
   cpu: 2
   memoryBytes: "4G"
+  storageBackend: filesystem
+  storageSizeBytes: 42949672960
   disks:
     - backendHandle: https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2
       sha256: "&lt;sha256&gt;"
@@ -78,9 +80,8 @@ spec:
   nics:
     - network: default</code></pre>
         <p>Apply the manifest:</p>
-<pre><code>kcore-kctl create vm -f vm.yaml \
-  --storage-backend filesystem \
-  --storage-size-bytes 42949672960</code></pre>
+<pre><code>kcore-kctl create vm -f vm.yaml</code></pre>
+        <p>CLI flags (<code>--storage-backend</code>, <code>--storage-size-bytes</code>) override the YAML values when both are provided.</p>
 
         <h2 data-i18n="userdoc.vmcreate.h2.ssh">SSH access patterns</h2>
         <ul>
