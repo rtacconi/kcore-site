@@ -64,6 +64,23 @@
 
         <h2 data-i18n="userdoc.vmcreate.h2.yaml">YAML manifest</h2>
         <p data-i18n-html="userdoc.vmcreate.yaml.p">Declarative definitions can be applied with <code>kcore-kctl create vm -f vm.yaml</code>. Use <code>kind: VM</code>, image reference under <code>spec.disks</code>, and NICs under <code>spec.nics</code>.</p>
+<pre><code># vm.yaml
+kind: VM
+metadata:
+  name: web-01
+spec:
+  cpu: 2
+  memoryBytes: "4G"
+  disks:
+    - backendHandle: https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2
+      sha256: "&lt;sha256&gt;"
+      format: qcow2
+  nics:
+    - network: default</code></pre>
+        <p>Apply the manifest:</p>
+<pre><code>kcore-kctl create vm -f vm.yaml \
+  --storage-backend filesystem \
+  --storage-size-bytes 42949672960</code></pre>
 
         <h2 data-i18n="userdoc.vmcreate.h2.ssh">SSH access patterns</h2>
         <ul>
