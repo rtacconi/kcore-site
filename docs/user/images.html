@@ -24,38 +24,38 @@
         <div class="container">
             <div class="nav-brand"><a href="../../index.html" style="color: inherit; text-decoration: none;"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
             <ul class="nav-menu">
-                <li><a href="../../features.html">Features</a></li>
-                <li><a href="../../pricing.html">Pricing</a></li>
-                <li><a href="../../docs.html">Docs</a></li>
-                <li><a href="../../roadmap.html">Roadmap</a></li>
-                <li><a href="../../blog.html">Blog</a></li>
-                <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
-    <header class="doc-hero"><div class="container"><h1>VM images</h1></div></header>
+    <header class="doc-hero"><div class="container"><h1 data-i18n="userdoc.images.h1">VM images</h1></div></header>
     <article class="post-content">
-        <a href="index.html" class="back-link">&larr; User documentation</a>
-        <p>Supported formats for VM disks are <strong>qcow2</strong> and <strong>raw</strong>. ISO-based workflows for VM disks are not supported in the current upload path.</p>
+        <a href="index.html" class="back-link" data-i18n="userdoc.back.index">&larr; User documentation</a>
+        <p data-i18n-html="userdoc.images.intro">Supported formats for VM disks are <strong>qcow2</strong> and <strong>raw</strong>. ISO-based workflows for VM disks are not supported in the current upload path.</p>
 
-        <h2>Controller-fetched image</h2>
-        <p>The controller records desired state; the node agent downloads and verifies the image, caches it under <code>/var/lib/kcore/images/</code>, and applies generated Nix configuration. Use <code>--image</code> with <code>--image-sha256</code> (see <a href="vm-creation.html" style="color: var(--accent-primary);">VM creation modes</a>).</p>
+        <h2 data-i18n="userdoc.images.h2.ctrl">Controller-fetched image</h2>
+        <p data-i18n-html="userdoc.images.ctrl.p">The controller records desired state; the node agent downloads and verifies the image, caches it under <code>/var/lib/kcore/images/</code>, and applies generated Nix configuration. Use <code>--image</code> with <code>--image-sha256</code> (see <a href="vm-creation.html" style="color: var(--accent-primary);">VM creation modes</a>).</p>
 
-        <h2>Upload to a node</h2>
-        <p>For large or air-gapped files, stream an image to the node cache once, then reference it by path on subsequent creates:</p>
+        <h2 data-i18n="userdoc.images.h2.upload">Upload to a node</h2>
+        <p data-i18n="userdoc.images.upload.p1">For large or air-gapped files, stream an image to the node cache once, then reference it by path on subsequent creates:</p>
 <pre><code>kcore-kctl --node 192.168.40.105:9091 node upload-image \
   -f /path/to/image.qcow2 \
   --name my-image.qcow2 \
   --format qcow2</code></pre>
-        <p>Optional <code>--image-sha256</code> validates content during upload. Then create a VM with <code>--image-path /var/lib/kcore/images/...</code> and <code>--image-format</code>.</p>
+        <p data-i18n-html="userdoc.images.upload.p2">Optional <code>--image-sha256</code> validates content during upload. Then create a VM with <code>--image-path /var/lib/kcore/images/...</code> and <code>--image-format</code>.</p>
 
-        <h2>Wait for SSH</h2>
-        <p><code>--wait-for-ssh</code> checks that the VM is running, resolves an IP (DHCP lease or fallback), and probes the SSH port from the hypervisor. Use a timeout appropriate for cloud-init.</p>
+        <h2 data-i18n="userdoc.images.h2.ssh">Wait for SSH</h2>
+        <p data-i18n-html="userdoc.images.ssh.p"><code>--wait-for-ssh</code> checks that the VM is running, resolves an IP (DHCP lease or fallback), and probes the SSH port from the hypervisor. Use a timeout appropriate for cloud-init.</p>
 
-        <h2>Constraints</h2>
+        <h2 data-i18n="userdoc.images.h2.constraints">Constraints</h2>
         <ul>
-            <li>A writable image path can only be attached to <strong>one</strong> VM at a time on a given node.</li>
-            <li>If the controller cannot apply create to the node, the VM row is rolled back to avoid stale state.</li>
+            <li data-i18n-html="userdoc.images.c1">A writable image path can only be attached to <strong>one</strong> VM at a time on a given node.</li>
+            <li data-i18n="userdoc.images.c2">If the controller cannot apply create to the node, the VM row is rolled back to avoid stale state.</li>
         </ul>
     </article>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

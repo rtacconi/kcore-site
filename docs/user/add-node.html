@@ -32,63 +32,63 @@
                 <a href="../../index.html" style="color: inherit; text-decoration: none;"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a>
             </div>
             <ul class="nav-menu">
-                <li><a href="../../features.html">Features</a></li>
-                <li><a href="../../pricing.html">Pricing</a></li>
-                <li><a href="../../docs.html">Docs</a></li>
-                <li><a href="../../roadmap.html">Roadmap</a></li>
-                <li><a href="../../blog.html">Blog</a></li>
-                <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
 
-    <header class="doc-hero"><div class="container"><h1>Add a node to the cluster</h1></div></header>
+    <header class="doc-hero"><div class="container"><h1 data-i18n="userdoc.addnode.h1">Add a node to the cluster</h1></div></header>
 
     <article class="post-content">
-        <a href="index.html" class="back-link">&larr; User documentation</a>
+        <a href="index.html" class="back-link" data-i18n="userdoc.back.index">&larr; User documentation</a>
 
-        <p>This page describes how to install kcore on a new bare-metal machine, join it to your controllers, and move it from <strong>pending</strong> to <strong>approved</strong> so it can schedule VMs.</p>
+        <p data-i18n-html="userdoc.addnode.intro">This page describes how to install kcore on a new bare-metal machine, join it to your controllers, and move it from <strong>pending</strong> to <strong>approved</strong> so it can schedule VMs.</p>
 
-        <h2>Prerequisites</h2>
+        <h2 data-i18n="userdoc.addnode.h2.prereq">Prerequisites</h2>
         <ul>
-            <li>A running controller (or HA pair) reachable from your operator workstation.</li>
-            <li><code>kctl</code> configured with your cluster TLS context (<code>~/.kcore/&lt;context&gt;/</code>).</li>
-            <li>The new machine booted from the kcore ISO or live environment, reachable at <code>&lt;NEW_NODE_IP&gt;:9091</code>.</li>
+            <li data-i18n="userdoc.addnode.prereq1">A running controller (or HA pair) reachable from your operator workstation.</li>
+            <li data-i18n-html="userdoc.addnode.prereq2"><code>kctl</code> configured with your cluster TLS context (<code>~/.kcore/&lt;context&gt;/</code>).</li>
+            <li data-i18n-html="userdoc.addnode.prereq3">The new machine booted from the kcore ISO or live environment, reachable at <code>&lt;NEW_NODE_IP&gt;:9091</code>.</li>
         </ul>
 
-        <h2>Discover hardware</h2>
+        <h2 data-i18n="userdoc.addnode.h2.discover">Discover hardware</h2>
 <pre><code>kctl --node &lt;NEW_NODE_IP&gt;:9091 node disks
 kctl --node &lt;NEW_NODE_IP&gt;:9091 node nics</code></pre>
 
-        <h2>Install to disk</h2>
-        <p><code>kctl</code> signs a node certificate with your cluster CA and sends an install request to the node agent. The OS disk is prepared with LUKS (TPM-sealed when TPM2 is available). Controllers and datacenter ID are written into node configuration.</p>
+        <h2 data-i18n="userdoc.addnode.h2.install">Install to disk</h2>
+        <p data-i18n-html="userdoc.addnode.install.p1"><code>kctl</code> signs a node certificate with your cluster CA and sends an install request to the node agent. The OS disk is prepared with LUKS (TPM-sealed when TPM2 is available). Controllers and datacenter ID are written into node configuration.</p>
 <pre><code>kctl --node &lt;NEW_NODE_IP&gt;:9091 node install \
   --os-disk /dev/sda \
   --join-controller 192.168.40.105:9090 \
   --join-controller 192.168.40.106:9090 \
   --dc-id DC1</code></pre>
-        <p>Optional flags include <code>--data-disk</code> (repeatable), <code>--storage-backend</code>, LVM/ZFS names, and <code>--disable-vxlan</code>. After install the node reboots into the installed system.</p>
+        <p data-i18n-html="userdoc.addnode.install.p2">Optional flags include <code>--data-disk</code> (repeatable), <code>--storage-backend</code>, LVM/ZFS names, and <code>--disable-vxlan</code>. After install the node reboots into the installed system.</p>
 
-        <h2>Registration and approval</h2>
-        <p>After boot, the node agent registers with the controller and appears as <strong>pending</strong>. Pending nodes cannot run workloads until you approve them.</p>
+        <h2 data-i18n="userdoc.addnode.h2.registration">Registration and approval</h2>
+        <p data-i18n-html="userdoc.addnode.reg.p1">After boot, the node agent registers with the controller and appears as <strong>pending</strong>. Pending nodes cannot run workloads until you approve them.</p>
 <pre><code>kctl get nodes
 kctl node approve &lt;NODE_ID&gt;</code></pre>
-        <p>Use <code>kctl node reject &lt;NODE_ID&gt;</code> if the registration is unexpected. Rejected nodes stay rejected until you explicitly approve them later.</p>
-        <p class="note">Approval is the human gate on top of mTLS: even with a valid client certificate, a node does not participate in scheduling until approved.</p>
+        <p data-i18n-html="userdoc.addnode.reg.p2">Use <code>kctl node reject &lt;NODE_ID&gt;</code> if the registration is unexpected. Rejected nodes stay rejected until you explicitly approve them later.</p>
+        <p class="note" data-i18n="userdoc.addnode.reg.note">Approval is the human gate on top of mTLS: even with a valid client certificate, a node does not participate in scheduling until approved.</p>
 
-        <h2>Certificates</h2>
-        <p>Node certificates are renewed automatically when within 30 days of expiry. Operators can rotate the sub-CA with <code>kctl rotate sub-ca</code>. Use <code>kctl get nodes</code> to inspect certificate expiry.</p>
+        <h2 data-i18n="userdoc.addnode.h2.certs">Certificates</h2>
+        <p data-i18n-html="userdoc.addnode.certs.p1">Node certificates are renewed automatically when within 30 days of expiry. Operators can rotate the sub-CA with <code>kctl rotate sub-ca</code>. Use <code>kctl get nodes</code> to inspect certificate expiry.</p>
 
-        <h2>Quick reference</h2>
+        <h2 data-i18n="userdoc.addnode.h2.ref">Quick reference</h2>
         <table>
-            <tr><th>Action</th><th>Command</th></tr>
-            <tr><td>List disks / NICs</td><td><code>kctl --node &lt;IP&gt;:9091 node disks</code> / <code>node nics</code></td></tr>
-            <tr><td>Install</td><td><code>kctl --node &lt;IP&gt;:9091 node install --os-disk /dev/sda --join-controller &lt;host:port&gt; ... --dc-id DC1</code></td></tr>
-            <tr><td>List / describe nodes</td><td><code>kctl get nodes</code> / <code>kctl get node &lt;ID&gt;</code></td></tr>
-            <tr><td>Approve / reject</td><td><code>kctl node approve &lt;ID&gt;</code> / <code>kctl node reject &lt;ID&gt;</code></td></tr>
+            <tr><th data-i18n="userdoc.addnode.th.action">Action</th><th data-i18n="userdoc.addnode.th.command">Command</th></tr>
+            <tr><td data-i18n="userdoc.addnode.tr.disks">List disks / NICs</td><td><code>kctl --node &lt;IP&gt;:9091 node disks</code> / <code>node nics</code></td></tr>
+            <tr><td data-i18n="userdoc.addnode.tr.install">Install</td><td><code>kctl --node &lt;IP&gt;:9091 node install --os-disk /dev/sda --join-controller &lt;host:port&gt; ... --dc-id DC1</code></td></tr>
+            <tr><td data-i18n="userdoc.addnode.tr.list">List / describe nodes</td><td><code>kctl get nodes</code> / <code>kctl get node &lt;ID&gt;</code></td></tr>
+            <tr><td data-i18n="userdoc.addnode.tr.approve">Approve / reject</td><td><code>kctl node approve &lt;ID&gt;</code> / <code>kctl node reject &lt;ID&gt;</code></td></tr>
         </table>
 
-        <p>For a full end-to-end terminal walkthrough (including VM creation), see the <a href="../../blog/first-node-debian12-quickstart.html" style="color: var(--accent-primary);">Debian 12 quickstart</a>. For security context, see <a href="https://github.com/rtacconi/kcore/blob/main/docs/security-k8s-vs-kcore.md" style="color: var(--accent-primary);">security model vs Kubernetes</a> in the repository.</p>
+        <p data-i18n-html="userdoc.addnode.outro">For a full end-to-end terminal walkthrough (including VM creation), see the <a href="../../blog/first-node-debian12-quickstart.html" style="color: var(--accent-primary);">Debian 12 quickstart</a>. For security context, see <a href="https://github.com/rtacconi/kcore/blob/main/docs/security-k8s-vs-kcore.md" style="color: var(--accent-primary);">security model vs Kubernetes</a> in the repository.</p>
     </article>
 
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
