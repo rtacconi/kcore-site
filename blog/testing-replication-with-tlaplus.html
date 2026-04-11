@@ -72,99 +72,99 @@
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="../features.html">Features</a></li>
-                <li><a href="../pricing.html">Pricing</a></li>
-                <li><a href="../docs.html">Docs</a></li>
-                <li><a href="../roadmap.html">Roadmap</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-                <li><a href="../index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
 
     <section class="post-hero">
         <div class="container">
-            <h1>How We Test Replication with TLA+</h1>
-            <p class="post-meta">11 April 2026</p>
+            <h1 data-i18n="bp.tla.title">How We Test Replication with TLA+</h1>
+            <p class="post-meta" data-i18n="bp.tla.date">11 April 2026</p>
         </div>
     </section>
 
     <article class="post-content">
-        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.tla.back">&larr; Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.tla.intro">
             Distributed replication bugs are the most expensive bugs to debug in production:
             they usually depend on timing, retries, partitions, and reordering. Unit tests and
             integration tests are still essential, but they are examples. TLA+ lets us validate
             the protocol itself across many possible interleavings before those bugs hit real clusters.
         </p>
 
-        <h2>What we model in kcore</h2>
-        <p>
+        <h2 data-i18n="bp.tla.h2model">What we model in kcore</h2>
+        <p data-i18n-html="bp.tla.model.p1">
             In kcore, we model replication behavior in three TLA+ specs under <code>specs/tla/</code>:
         </p>
         <ul>
-            <li><code>ControllerNodeReconcile.tla</code> for node/controller reconciliation behavior.</li>
-            <li><code>ControllerReplication.tla</code> for single-DC event replication and merge semantics.</li>
-            <li><code>CrossDcReplication.tla</code> for cross-DC anti-entropy and eventual convergence.</li>
+            <li data-i18n-html="bp.tla.model.li1"><code>ControllerNodeReconcile.tla</code> for node/controller reconciliation behavior.</li>
+            <li data-i18n-html="bp.tla.model.li2"><code>ControllerReplication.tla</code> for single-DC event replication and merge semantics.</li>
+            <li data-i18n-html="bp.tla.model.li3"><code>CrossDcReplication.tla</code> for cross-DC anti-entropy and eventual convergence.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.tla.model.p2">
             We run bounded model checking in CI, plus a trace bridge that validates Rust-generated
             replication traces against model invariants.
         </p>
 
-        <h2>How TLA+ catches bugs that normal tests miss</h2>
-        <p>
+        <h2 data-i18n="bp.tla.h2catches">How TLA+ catches bugs that normal tests miss</h2>
+        <p data-i18n="bp.tla.catches.p1">
             TLA+ explores state transitions, not just expected scripts. That means it can surface bugs like:
         </p>
         <ul>
-            <li>Conflict paths that can leave a resource in non-terminal or manual-only states.</li>
-            <li>Convergence failures where replicas can diverge under certain delivery orders.</li>
-            <li>Broken compensation semantics where an auto-compensated conflict has no valid loser event.</li>
-            <li>Edge cases in anti-entropy where retries and dedupe interact unexpectedly.</li>
+            <li data-i18n="bp.tla.catches.li1">Conflict paths that can leave a resource in non-terminal or manual-only states.</li>
+            <li data-i18n="bp.tla.catches.li2">Convergence failures where replicas can diverge under certain delivery orders.</li>
+            <li data-i18n="bp.tla.catches.li3">Broken compensation semantics where an auto-compensated conflict has no valid loser event.</li>
+            <li data-i18n="bp.tla.catches.li4">Edge cases in anti-entropy where retries and dedupe interact unexpectedly.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.tla.catches.p2">
             A key practical benefit is speed of feedback: we fix the model and invariants before
             writing or finalizing implementation details, which reduces high-risk rework later.
         </p>
 
-        <h2>How this fits with runtime testing</h2>
-        <p>
+        <h2 data-i18n="bp.tla.h2layered">How this fits with runtime testing</h2>
+        <p data-i18n="bp.tla.layered.p1">
             We treat this as layered verification:
         </p>
         <ul>
-            <li><strong>Model level:</strong> bounded TLC checks for protocol safety/liveness properties.</li>
-            <li><strong>Trace level:</strong> replication trace checks to prevent model/runtime drift.</li>
-            <li><strong>Runtime level:</strong> controller replication tests and soak runs under retries.</li>
+            <li data-i18n-html="bp.tla.layered.li1"><strong>Model level:</strong> bounded TLC checks for protocol safety/liveness properties.</li>
+            <li data-i18n-html="bp.tla.layered.li2"><strong>Trace level:</strong> replication trace checks to prevent model/runtime drift.</li>
+            <li data-i18n-html="bp.tla.layered.li3"><strong>Runtime level:</strong> controller replication tests and soak runs under retries.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.tla.layered.p2">
             This combination helps catch both design bugs and implementation regressions.
         </p>
 
-        <h2>Who else uses TLA+</h2>
-        <p>
+        <h2 data-i18n="bp.tla.h2who">Who else uses TLA+</h2>
+        <p data-i18n="bp.tla.who.p1">
             TLA+ is not an academic-only tool. Public engineering writeups describe production use by teams at:
         </p>
         <ul>
-            <li><strong>Amazon</strong> (S3, DynamoDB, EBS and others) to find subtle distributed-system bugs early.</li>
-            <li><strong>Microsoft</strong> (Azure teams) for protocol and system design validation.</li>
-            <li><strong>Cockroach Labs</strong> for parts of distributed database protocol verification.</li>
+            <li data-i18n-html="bp.tla.who.li1"><strong>Amazon</strong> (S3, DynamoDB, EBS and others) to find subtle distributed-system bugs early.</li>
+            <li data-i18n-html="bp.tla.who.li2"><strong>Microsoft</strong> (Azure teams) for protocol and system design validation.</li>
+            <li data-i18n-html="bp.tla.who.li3"><strong>Cockroach Labs</strong> for parts of distributed database protocol verification.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.tla.who.p2">
             The pattern is consistent: model check critical protocols early, then keep models close to implementation as systems evolve.
         </p>
 
-        <h2>Where to learn TLA+ quickly</h2>
+        <h2 data-i18n="bp.tla.h2learn">Where to learn TLA+ quickly</h2>
         <ul>
-            <li><a href="https://lamport.azurewebsites.net/tla/tla.html">Leslie Lamport's TLA+ page</a> (official starting point).</li>
-            <li><a href="https://learntla.com/">Learn TLA+</a> (practical, beginner-friendly guide).</li>
-            <li><a href="https://www.learntla.com/introduction/">Learn TLA+ intro</a> for first model-checking workflow.</li>
-            <li><a href="https://www.hillelwayne.com/post/tla-messages/">Hillel Wayne articles</a> for practical modeling style.</li>
-            <li><a href="https://www.youtube.com/results?search_query=tla%2B+conference">TLA+ conference talks</a> for real-world case studies.</li>
+            <li data-i18n-html="bp.tla.learn.li1"><a href="https://lamport.azurewebsites.net/tla/tla.html">Leslie Lamport's TLA+ page</a> (official starting point).</li>
+            <li data-i18n-html="bp.tla.learn.li2"><a href="https://learntla.com/">Learn TLA+</a> (practical, beginner-friendly guide).</li>
+            <li data-i18n-html="bp.tla.learn.li3"><a href="https://www.learntla.com/introduction/">Learn TLA+ intro</a> for first model-checking workflow.</li>
+            <li data-i18n-html="bp.tla.learn.li4"><a href="https://www.hillelwayne.com/post/tla-messages/">Hillel Wayne articles</a> for practical modeling style.</li>
+            <li data-i18n-html="bp.tla.learn.li5"><a href="https://www.youtube.com/results?search_query=tla%2B+conference">TLA+ conference talks</a> for real-world case studies.</li>
         </ul>
 
-        <h2>What this means for operators</h2>
-        <p>
+        <h2 data-i18n="bp.tla.h2ops">What this means for operators</h2>
+        <p data-i18n="bp.tla.ops.p1">
             The goal is simple: less scary failure behavior in real clusters. When peers reconnect after faults,
             replication should converge deterministically, and operational gates should clearly report health.
             TLA+ is one of the tools we use to keep that promise honest.

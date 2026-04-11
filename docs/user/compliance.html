@@ -22,37 +22,37 @@
         <div class="container">
             <div class="nav-brand"><a href="../../index.html" style="color: inherit; text-decoration: none;"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
             <ul class="nav-menu">
-                <li><a href="../../features.html">Features</a></li>
-                <li><a href="../../pricing.html">Pricing</a></li>
-                <li><a href="../../docs.html">Docs</a></li>
-                <li><a href="../../roadmap.html">Roadmap</a></li>
-                <li><a href="../../blog.html">Blog</a></li>
-                <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
-    <header class="doc-hero"><div class="container"><h1>Compliance enablement</h1></div></header>
+    <header class="doc-hero"><div class="container"><h1 data-i18n="userdoc.compliance.h1">Compliance enablement</h1></div></header>
     <article class="post-content">
-        <a href="index.html" class="back-link">&larr; User documentation</a>
+        <a href="index.html" class="back-link" data-i18n="userdoc.back.index">&larr; User documentation</a>
 
-        <p>kcore is <strong>infrastructure software</strong>. Your organisation owns compliance scope for how you deploy it (GDPR, SOC 2, PCI DSS, sector-specific rules, etc.). kcore is designed to be a <strong>compliance-enabling platform</strong>: it provides controls, APIs, and isolation properties your assessors can test, similar in spirit to shared-responsibility models used by public clouds.</p>
+        <p data-i18n-html="userdoc.compliance.intro">kcore is <strong>infrastructure software</strong>. Your organisation owns compliance scope for how you deploy it (GDPR, SOC 2, PCI DSS, sector-specific rules, etc.). kcore is designed to be a <strong>compliance-enabling platform</strong>: it provides controls, APIs, and isolation properties your assessors can test, similar in spirit to shared-responsibility models used by public clouds.</p>
 
-        <p class="note">kcore itself is not a substitute for your own certifications. You inherit platform controls and document your policies, processes, and workloads on top.</p>
+        <p class="note" data-i18n="userdoc.compliance.note">kcore itself is not a substitute for your own certifications. You inherit platform controls and document your policies, processes, and workloads on top.</p>
 
-        <h2>Encryption and identity</h2>
+        <h2 data-i18n="userdoc.compliance.h2.enc">Encryption and identity</h2>
         <ul>
-            <li>Management-plane traffic uses <strong>mutual TLS</strong> between <code>kctl</code>, the controller, and node agents, with cluster-issued client certificates.</li>
-            <li>gRPC methods enforce <strong>caller identity</strong> from certificate subject (e.g. operator vs node roles).</li>
+            <li data-i18n-html="userdoc.compliance.enc1">Management-plane traffic uses <strong>mutual TLS</strong> between <code>kctl</code>, the controller, and node agents, with cluster-issued client certificates.</li>
+            <li data-i18n-html="userdoc.compliance.enc2">gRPC methods enforce <strong>caller identity</strong> from certificate subject (e.g. operator vs node roles).</li>
         </ul>
 
-        <h2>Workload isolation</h2>
-        <p>Each VM runs under Cloud Hypervisor with dedicated KVM context, network interfaces, and disks. This separation is the basis for tenancy and cardholder/workload boundaries in your architecture.</p>
+        <h2 data-i18n="userdoc.compliance.h2.iso">Workload isolation</h2>
+        <p data-i18n="userdoc.compliance.iso.p">Each VM runs under Cloud Hypervisor with dedicated KVM context, network interfaces, and disks. This separation is the basis for tenancy and cardholder/workload boundaries in your architecture.</p>
 
-        <h2>Declarative, auditable hosts</h2>
-        <p>NixOS configurations are reproducible and versioned; system generations support rollback. Changes flow through declared config rather than ad hoc shell edits on production hosts.</p>
+        <h2 data-i18n="userdoc.compliance.h2.decl">Declarative, auditable hosts</h2>
+        <p data-i18n="userdoc.compliance.decl.p">NixOS configurations are reproducible and versioned; system generations support rollback. Changes flow through declared config rather than ad hoc shell edits on production hosts.</p>
 
-        <h2>Next steps</h2>
-        <p>Map these capabilities to your control framework with your security team. For product-specific security comparisons, see <a href="https://github.com/rtacconi/kcore/blob/main/docs/security-k8s-vs-kcore.md" style="color: var(--accent-primary);">kcore vs Kubernetes (security model)</a> in the repository. Commercial terms and support are described under <a href="licensing.html" style="color: var(--accent-primary);">Licensing</a> and on the <a href="../../pricing.html" style="color: var(--accent-primary);">Pricing</a> page.</p>
+        <h2 data-i18n="userdoc.compliance.h2.next">Next steps</h2>
+        <p data-i18n-html="userdoc.compliance.next.p">Map these capabilities to your control framework with your security team. For product-specific security comparisons, see <a href="https://github.com/rtacconi/kcore/blob/main/docs/security-k8s-vs-kcore.md" style="color: var(--accent-primary);">kcore vs Kubernetes (security model)</a> in the repository. Commercial terms and support are described under <a href="licensing.html" style="color: var(--accent-primary);">Licensing</a> and on the <a href="../../pricing.html" style="color: var(--accent-primary);">Pricing</a> page.</p>
     </article>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
