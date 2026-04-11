@@ -3,49 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore VM creation: images, YAML, SSH keys, cloud-init, waits, and scheduling.">
-    <title>VM creation modes - kcore user documentation</title>
+    <meta name="description" content="kcore VM creation: CLI, YAML manifests, images, SSH keys, cloud-init, scheduling.">
+    <title>VM creation modes - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
     <style>
-        .doc-hero { padding: 7rem 0 2.5rem; margin-top: 60px; background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); text-align: center; }
-        .post-content { max-width: 860px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-        .post-content h2 { margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border-primary); }
-        .post-content p, .post-content li { color: var(--text-secondary); line-height: 1.8; font-size: 1.04rem; }
-        .post-content ul { padding-left: 1.25rem; margin-bottom: 1.2rem; }
-        .post-content pre { background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.5rem; padding: 1.25rem; overflow-x: auto; margin: 1rem 0 1.5rem; }
-        .post-content code { background: var(--bg-card); border: 1px solid var(--border-primary); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-        .post-content pre code { background: none; border: none; padding: 0; }
-        .back-link { color: var(--accent-primary); text-decoration: none; display: inline-block; margin-bottom: 1.5rem; }
-        .back-link:hover { text-decoration: underline; }
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand"><a href="../../index.html" style="color: inherit; text-decoration: none;"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-            <ul class="nav-menu">
-                <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-                <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-                <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-                <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-                <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-                <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
-            </ul>
-        </div>
-    </nav>
-    <header class="doc-hero"><div class="container"><h1 data-i18n="userdoc.vmcreate.h1">VM creation modes</h1></div></header>
-    <article class="post-content">
-        <a href="../../docs.html#user-guides" class="back-link" data-i18n="userdoc.back.index">← User documentation</a>
-        <p data-i18n-html="userdoc.vmcreate.intro">VMs are created through the controller API. Below are the main patterns supported by <code>kcore-kctl create vm</code> (and equivalent YAML).</p>
-
-        <h2 data-i18n="userdoc.vmcreate.h2.req">Requirements</h2>
-        <ul>
-            <li data-i18n-html="userdoc.vmcreate.req1">At least one <strong>approved</strong> node.</li>
-            <li data-i18n-html="userdoc.vmcreate.req2">Storage flags: <code>--storage-backend</code> (<code>filesystem</code>, <code>lvm</code>, or <code>zfs</code>) and <code>--storage-size-bytes</code>.</li>
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html">Features</a></li>
+            <li><a href="../../pricing.html">Pricing</a></li>
+            <li><a href="../../docs.html">Docs</a></li>
+            <li><a href="../../roadmap.html">Roadmap</a></li>
+            <li><a href="../../blog.html">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
         </ul>
+    </div></nav>
 
-        <h2 data-i18n="userdoc.vmcreate.h2.https">HTTPS image + SHA256</h2>
-        <p data-i18n-html="userdoc.vmcreate.https.p">Recommended when you want deterministic verification and node-side caching. Provide <code>https://</code> URL and <code>--image-sha256</code>.</p>
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4>Getting started</h4><ul>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="first-cluster.html">First cluster</a></li>
+                <li><a href="add-node.html">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" class="active">VM creation</a></li>
+                <li><a href="images.html">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Containers</h4><ul>
+                <li><a href="containers.html">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Networking</h4><ul>
+                <li><a href="networks.html">Networks</a></li>
+                <li><a href="overlay-vxlan.html">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Storage</h4><ul>
+                <li><a href="storage.html">Storage backends</a></li>
+                <li><a href="storage-day2.html">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Security</h4><ul>
+                <li><a href="security-groups.html">Security groups</a></li>
+                <li><a href="compliance.html">Compliance</a></li>
+                <li><a href="certificates.html">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Reference</h4><ul>
+                <li><a href="kctl-reference.html">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul>
+                <li><a href="licensing.html">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+
+        <main class="docs-content">
+            <h1>VM creation modes</h1>
+            <p>VMs are created through the controller API. Below are the main patterns supported by <code>kcore-kctl create vm</code> (and equivalent YAML).</p>
+
+            <h2>Requirements</h2>
+            <ul>
+                <li>At least one <strong>approved</strong> node.</li>
+                <li>Storage flags: <code>--storage-backend</code> (<code>filesystem</code>, <code>lvm</code>, or <code>zfs</code>) and <code>--storage-size-bytes</code>.</li>
+            </ul>
+
+            <h2>HTTPS image + SHA256</h2>
+            <p>Recommended when you want deterministic verification and node-side caching. Provide an <code>https://</code> URL and <code>--image-sha256</code>.</p>
 <pre><code>kcore-kctl create vm web-01 \
   --image https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2 \
   --image-sha256 &lt;sha256&gt; \
@@ -53,8 +96,8 @@
   --storage-backend filesystem \
   --storage-size-bytes 42949672960</code></pre>
 
-        <h2 data-i18n="userdoc.vmcreate.h2.localpath">Node-local image path</h2>
-        <p data-i18n-html="userdoc.vmcreate.localpath.p">Use when the image file already exists on the target node (e.g. after <a href="images.html" style="color: var(--accent-primary);">upload</a>).</p>
+            <h2>Node-local image path</h2>
+            <p>Use when the image file already exists on the target node (e.g. after <a href="images.html" style="color:var(--accent-primary)">upload</a>).</p>
 <pre><code>kcore-kctl create vm web-01 \
   --image-path /var/lib/kcore/images/base.qcow2 \
   --image-format qcow2 \
@@ -62,8 +105,8 @@
   --storage-backend filesystem \
   --storage-size-bytes 42949672960</code></pre>
 
-        <h2 data-i18n="userdoc.vmcreate.h2.yaml">YAML manifest</h2>
-        <p data-i18n-html="userdoc.vmcreate.yaml.p">Declarative definitions can be applied with <code>kcore-kctl create vm -f vm.yaml</code>. Use <code>kind: VM</code>, image reference under <code>spec.disks</code>, and NICs under <code>spec.nics</code>.</p>
+            <h2>YAML manifest</h2>
+            <p>Declarative definitions can be applied with <code>kcore-kctl create vm -f vm.yaml</code>. Use <code>kind: VM</code>, image reference under <code>spec.disks</code>, and NICs under <code>spec.nics</code>.</p>
 <pre><code># vm.yaml
 kind: VM
 metadata:
@@ -79,35 +122,37 @@ spec:
       format: qcow2
   nics:
     - network: default</code></pre>
-        <p>Apply the manifest:</p>
+            <p>Apply the manifest:</p>
 <pre><code>kcore-kctl create vm -f vm.yaml</code></pre>
-        <p>CLI flags (<code>--storage-backend</code>, <code>--storage-size-bytes</code>) override the YAML values when both are provided.</p>
+            <p>CLI flags (<code>--storage-backend</code>, <code>--storage-size-bytes</code>) override the YAML values when both are provided.</p>
 
-        <h2 data-i18n="userdoc.vmcreate.h2.ssh">SSH access patterns</h2>
-        <ul>
-            <li data-i18n-html="userdoc.vmcreate.ssh1"><strong>Controller-managed keys:</strong> register a public key (<code>kcore-kctl ssh-key create ...</code>) and pass <code>--ssh-key &lt;name&gt;</code> on create.</li>
-            <li data-i18n-html="userdoc.vmcreate.ssh2"><strong>Inline key:</strong> <code>--username</code> + <code>--ssh-public-key</code> for compliant, passwordless cloud-init.</li>
-            <li data-i18n-html="userdoc.vmcreate.ssh3"><strong>Custom cloud-init:</strong> <code>--cloud-init-user-data-file</code> (cannot combine with generated identity flags).</li>
-            <li data-i18n-html="userdoc.vmcreate.ssh4"><strong>Password login</strong> requires explicit <code>--compliant=false</code> (non-compliant mode).</li>
-        </ul>
+            <h2>SSH access patterns</h2>
+            <ul>
+                <li><strong>Controller-managed keys:</strong> register a public key (<code>kcore-kctl ssh-key create ...</code>) and pass <code>--ssh-key &lt;name&gt;</code> on create.</li>
+                <li><strong>Inline key:</strong> <code>--username</code> + <code>--ssh-public-key</code> for compliant, passwordless cloud-init.</li>
+                <li><strong>Custom cloud-init:</strong> <code>--cloud-init-user-data-file</code> (cannot combine with generated identity flags).</li>
+                <li><strong>Password login</strong> requires explicit <code>--compliant=false</code> (non-compliant mode).</li>
+            </ul>
 
-        <h2 data-i18n="userdoc.vmcreate.h2.sched">Scheduling</h2>
-        <p data-i18n-html="userdoc.vmcreate.sched.p">Omit <code>--target-node</code> to let the controller choose a node, or set <code>--target-node &lt;node id&gt;</code> to pin placement.</p>
+            <h2>Scheduling</h2>
+            <p>Omit <code>--target-node</code> to let the controller choose a node, or set <code>--target-node &lt;node id&gt;</code> to pin placement.</p>
 
-        <h2 data-i18n="userdoc.vmcreate.h2.ready">Readiness</h2>
-        <ul>
-            <li data-i18n-html="userdoc.vmcreate.ready1"><code>--wait</code> — wait until the VM reaches running state.</li>
-            <li data-i18n-html="userdoc.vmcreate.ready2"><code>--wait-for-ssh</code> — wait until SSH is reachable from the node (with optional timeout and port).</li>
-        </ul>
+            <h2>Readiness</h2>
+            <ul>
+                <li><code>--wait</code> &mdash; wait until the VM reaches running state.</li>
+                <li><code>--wait-for-ssh</code> &mdash; wait until SSH is reachable from the node (with optional timeout and port).</li>
+            </ul>
 
-        <h2 data-i18n="userdoc.vmcreate.h2.val">Validation rules (summary)</h2>
-        <ul>
-            <li data-i18n-html="userdoc.vmcreate.val1"><code>--image</code> and <code>--image-path</code> are mutually exclusive.</li>
-            <li data-i18n-html="userdoc.vmcreate.val2">URL mode requires HTTPS and a SHA256.</li>
-            <li data-i18n-html="userdoc.vmcreate.val3">Path mode requires <code>--image-format</code> when format cannot be inferred.</li>
-            <li data-i18n-html="userdoc.vmcreate.val4">Password mode requires <code>--username</code>; SSH public key mode requires <code>--username</code>.</li>
-        </ul>
-    </article>
+            <h2>Validation rules (summary)</h2>
+            <ul>
+                <li><code>--image</code> and <code>--image-path</code> are mutually exclusive.</li>
+                <li>URL mode requires HTTPS and a SHA256.</li>
+                <li>Path mode requires <code>--image-format</code> when format cannot be inferred.</li>
+                <li>Password mode requires <code>--username</code>; SSH public key mode requires <code>--username</code>.</li>
+            </ul>
+        </main>
+    </div>
+
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
 </body>
