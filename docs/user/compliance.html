@@ -3,57 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="How kcore supports customer compliance programs: encryption, identity, isolation, and auditability.">
-    <title>Compliance enablement - kcore user documentation</title>
+    <meta name="description" content="kcore compliance: report categories, framework mappings, implemented and planned security features.">
+    <title>Compliance enablement - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
     <style>
-        .doc-hero { padding: 7rem 0 2.5rem; margin-top: 60px; background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); text-align: center; }
-        .post-content { max-width: 860px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-        .post-content h2 { margin-top: 2rem; margin-bottom: 0.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border-primary); }
-        .post-content p, .post-content li { color: var(--text-secondary); line-height: 1.8; font-size: 1.04rem; }
-        .post-content ul { padding-left: 1.25rem; margin-bottom: 1.2rem; }
-        .back-link { color: var(--accent-primary); text-decoration: none; display: inline-block; margin-bottom: 1.5rem; }
-        .back-link:hover { text-decoration: underline; }
-        .note { border-left: 3px solid var(--accent-primary); padding-left: 1rem; color: var(--text-secondary); margin: 1.5rem 0; font-size: 0.95rem; }
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand"><a href="../../index.html" style="color: inherit; text-decoration: none;"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-            <ul class="nav-menu">
-                <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-                <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-                <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-                <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-                <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-                <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+    </div></nav>
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html" class="active">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <h1>Compliance enablement</h1>
+            <p>kcore is infrastructure software. Your organisation owns compliance scope. kcore provides controls, APIs, and isolation properties assessors can test — a compliance-enabling platform.</p>
+            <p class="note">kcore is not a substitute for your own certifications. You inherit platform controls and document your policies on top.</p>
+
+            <h2>Compliance report</h2>
+            <p>Retrieve the compliance report with <code>kctl get compliance-report</code> or <code>kctl describe compliance-report</code>. The report covers the following categories:</p>
+
+            <h3>1. Cryptography</h3>
+            <p>Library: <strong>aws-lc-rs / AWS-LC</strong> (FIPS 140-3 certificate #4816). TLS 1.3 and TLS 1.2 cipher suites, key-exchange groups, and excluded algorithms are enumerated. Maps to <strong>FIPS 140-3</strong>, <strong>PCI DSS 4.2</strong>, <strong>SOC 2 CC6.1</strong>.</p>
+
+            <h3>2. Encryption in transit</h3>
+            <p>mTLS enabled or disabled. gRPC over mTLS with X.509 client certificates. Maps to <strong>SOC 2</strong>, <strong>PCI DSS</strong>, <strong>GDPR Art. 32</strong>.</p>
+
+            <h3>3. Access control</h3>
+            <p>RPC methods mapped to allowed identities (static CN-based authorisation). Maps to <strong>SOC 2 CC6.3</strong>, <strong>PCI 7.1</strong>, <strong>GDPR Art. 32</strong>.</p>
+
+            <h3>4. Node inventory</h3>
+            <p>Total, approved, pending, and rejected node counts. Maps to <strong>SOC 2 CC6.2</strong>, <strong>PCI 2.4</strong>.</p>
+
+            <h3>5. VM inventory</h3>
+            <p>Total, running, and stopped VM counts.</p>
+
+            <h3>6. Network segmentation</h3>
+            <p>Network counts by type (NAT / bridge / VXLAN). Maps to <strong>PCI 1.3</strong>, <strong>SOC 2 CC6.6</strong>.</p>
+
+            <h3>7. Certificate lifecycle</h3>
+            <p>Sub-CA enabled, auto-renewal window (30 days), expiring and unknown certificate counts. Maps to <strong>SOC 2 CC6.1</strong>, <strong>PCI 3.6</strong>.</p>
+
+            <h3>8. Encryption at rest</h3>
+            <p>LUKS2 mandatory. TPM2, key-file, and unknown node counts. Maps to <strong>NIST 800-53 SC-28</strong>, <strong>SOC 2 CC6.1</strong>.</p>
+
+            <h3>9. Infrastructure</h3>
+            <p>NixOS, Cloud Hypervisor (KVM), VM isolation (per-VM TAP + per-network bridge), node approval. Maps to <strong>SOC 2 CC8.1</strong>, <strong>PCI 2.2</strong>.</p>
+
+            <h2>Implemented security features</h2>
+            <ul>
+                <li>mTLS for all management-plane communication</li>
+                <li>CN-based authorisation for gRPC methods</li>
+                <li>Node approval queue</li>
+                <li>LUKS2 + TPM2 disk encryption</li>
+                <li>Automatic certificate renewal</li>
+                <li>Sub-CA rotation</li>
+                <li>Security groups (nftables)</li>
+                <li><code>cargo audit</code> in CI</li>
             </ul>
-        </div>
-    </nav>
-    <header class="doc-hero"><div class="container"><h1 data-i18n="userdoc.compliance.h1">Compliance enablement</h1></div></header>
-    <article class="post-content">
-        <a href="../../docs.html#user-guides" class="back-link" data-i18n="userdoc.back.index">← User documentation</a>
 
-        <p data-i18n-html="userdoc.compliance.intro">kcore is <strong>infrastructure software</strong>. Your organisation owns compliance scope for how you deploy it (GDPR, SOC 2, PCI DSS, sector-specific rules, etc.). kcore is designed to be a <strong>compliance-enabling platform</strong>: it provides controls, APIs, and isolation properties your assessors can test, similar in spirit to shared-responsibility models used by public clouds.</p>
-
-        <p class="note" data-i18n="userdoc.compliance.note">kcore itself is not a substitute for your own certifications. You inherit platform controls and document your policies, processes, and workloads on top.</p>
-
-        <h2 data-i18n="userdoc.compliance.h2.enc">Encryption and identity</h2>
-        <ul>
-            <li data-i18n-html="userdoc.compliance.enc1">Management-plane traffic uses <strong>mutual TLS</strong> between <code>kctl</code>, the controller, and node agents, with cluster-issued client certificates.</li>
-            <li data-i18n-html="userdoc.compliance.enc2">gRPC methods enforce <strong>caller identity</strong> from certificate subject (e.g. operator vs node roles).</li>
-        </ul>
-
-        <h2 data-i18n="userdoc.compliance.h2.iso">Workload isolation</h2>
-        <p data-i18n="userdoc.compliance.iso.p">Each VM runs under Cloud Hypervisor with dedicated KVM context, network interfaces, and disks. This separation is the basis for tenancy and cardholder/workload boundaries in your architecture.</p>
-
-        <h2 data-i18n="userdoc.compliance.h2.decl">Declarative, auditable hosts</h2>
-        <p data-i18n="userdoc.compliance.decl.p">NixOS configurations are reproducible and versioned; system generations support rollback. Changes flow through declared config rather than ad hoc shell edits on production hosts.</p>
-
-        <h2 data-i18n="userdoc.compliance.h2.next">Next steps</h2>
-        <p data-i18n-html="userdoc.compliance.next.p">Map these capabilities to your control framework with your security team. For product-specific security comparisons, see <a href="https://github.com/rtacconi/kcore/blob/main/docs/security-k8s-vs-kcore.md" style="color: var(--accent-primary);">kcore vs Kubernetes (security model)</a> in the repository. Commercial terms and support are described under <a href="licensing.html" style="color: var(--accent-primary);">Licensing</a> and on the <a href="../../pricing.html" style="color: var(--accent-primary);">Pricing</a> page.</p>
-    </article>
+            <h2>In progress</h2>
+            <ul>
+                <li>Audit log of mutating API calls <span class="roadmap-badge">Planned</span></li>
+                <li>RBAC / multiple operator roles <span class="roadmap-badge">Planned</span></li>
+                <li>CRL/OCSP for certificate revocation <span class="roadmap-badge">Planned</span></li>
+                <li>gRPC rate limiting <span class="roadmap-badge">Planned</span></li>
+            </ul>
+        </main>
+    </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
 </body>

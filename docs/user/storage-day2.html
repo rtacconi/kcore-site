@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore storage day-2: add disks, apply disko layouts, management modes, and operational runbook.">
+    <title>Storage day-2 operations - kcore documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body>
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+    </div></nav>
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html" class="active">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <h1>Storage day-2 operations</h1>
+            <p>After initial install, you may need to add data disks, expand storage, or reconfigure layouts. kcore supports day-2 disk operations through disko layouts and NixOS configuration.</p>
+
+            <h2>Management modes</h2>
+            <p>The file <code>/etc/kcore/disko-management-mode</code> on each node controls how disko layouts are managed after the initial install. There are two modes:</p>
+            <table>
+                <thead>
+                    <tr><th>Mode</th><th>Behaviour</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>installer-only</strong> (default)</td>
+                        <td>The disko layout is frozen after install. Day-2 storage changes require manual intervention by an operator.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>controller-managed</strong></td>
+                        <td>The controller can push disko fragments for additive changes (e.g. new data disks). Destructive changes are still blocked.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>To switch modes, write the desired value to the mode file:</p>
+<pre><code>echo "controller-managed" | sudo tee /etc/kcore/disko-management-mode</code></pre>
+
+            <h2>Validate a disko layout</h2>
+            <p>Before applying any layout, validate it with a dry-run. The command parses the Nix expression with <code>nix-instantiate</code> and reports errors without touching disks:</p>
+<pre><code>kctl --node 10.0.0.5:9091 node apply-disko -f layout.nix</code></pre>
+            <p class="note">Dry-run is the default. No <code>--dry-run</code> flag is needed — the command only formats and mounts when you explicitly pass <code>--apply</code>.</p>
+
+            <h2>Apply a disko layout</h2>
+            <p>When you are confident the layout is correct, apply it:</p>
+<pre><code>kctl --node 10.0.0.5:9091 node apply-disko \
+  -f layout.nix \
+  --apply \
+  --timeout-seconds 300</code></pre>
+            <p>This runs <code>disko --mode format,mount</code> on the target node. The server-side hard cap is 3600 seconds.</p>
+            <p class="note">Always validate before applying. Formatting is destructive — it erases data on the targeted devices.</p>
+
+            <h2>Reconcile NixOS configuration</h2>
+            <p>After changing the disko layout you typically need to update the NixOS configuration so the new mounts persist across reboots:</p>
+<pre><code>kctl --node 10.0.0.5:9091 node apply-nix -f config.nix</code></pre>
+            <p>To only write the configuration file without running <code>nixos-rebuild</code>:</p>
+<pre><code>kctl --node 10.0.0.5:9091 node apply-nix -f config.nix --no-rebuild</code></pre>
+
+            <h2>Inventory and health</h2>
+            <p>Check the current disk layout on a node (runs <code>lsblk</code> remotely):</p>
+<pre><code>kctl --node 10.0.0.5:9091 node disks</code></pre>
+            <p>Inspect storage backend and LVM inventory from the controller:</p>
+<pre><code>kctl describe node node-ab12cd34</code></pre>
+            <p>The output includes the storage backend, volume group details (for LVM), pool status (for ZFS), and mount points.</p>
+
+            <h2>Operational runbook</h2>
+            <h3>Preflight checks</h3>
+            <ul>
+                <li>Run <code>lsblk</code> and <code>findmnt</code> to understand the current disk topology.</li>
+                <li>For LVM nodes, check <code>vgs</code> and <code>lvs</code> output.</li>
+                <li>For ZFS nodes, check <code>zpool status</code> and <code>zfs list</code>.</li>
+                <li>Verify no VMs are using the target devices.</li>
+            </ul>
+            <h3>Adding a data disk</h3>
+            <ul>
+                <li>Attach the new disk to the node (physically or via hypervisor).</li>
+                <li>Write a disko layout fragment that adds the new device.</li>
+                <li>Validate: <code>kctl --node &lt;IP&gt;:9091 node apply-disko -f layout.nix</code></li>
+                <li>Apply: <code>kctl --node &lt;IP&gt;:9091 node apply-disko -f layout.nix --apply</code></li>
+                <li>For filesystem backends, the new disk mounts at <code>/var/lib/kcore/volumes1</code>, <code>volumes2</code>, etc.</li>
+                <li>Reconcile NixOS config so mounts survive reboot.</li>
+            </ul>
+            <h3>General guidance</h3>
+            <ul>
+                <li>Always validate before applying.</li>
+                <li>Keep backups of existing disko layouts.</li>
+                <li>Schedule disk operations during maintenance windows when possible.</li>
+            </ul>
+
+            <h2>Out of scope</h2>
+            <p>The following operations are <strong>not</strong> supported by the day-2 tooling:</p>
+            <ul>
+                <li>In-place OS repartitioning (changing the OS disk layout after install).</li>
+                <li>Automatic cross-backend migration (e.g. moving a VM from filesystem to LVM without manual steps).</li>
+                <li>Backend conversion without dedicated migration tooling (e.g. converting a node from LVM to ZFS in place).</li>
+            </ul>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+</body>
+</html>

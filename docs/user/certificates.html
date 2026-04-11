@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore licensing: Apache-2.0 open core, subscriptions, Standard and Premium editions.">
-    <title>Licensing and editions - kcore documentation</title>
+    <meta name="description" content="kcore certificates: mTLS bootstrap, PKI hierarchy, auto-renewal, rotation, LUKS disk encryption.">
+    <title>Certificates and encryption - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
     <style>
         .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
@@ -39,26 +39,57 @@
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
             <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
             <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html" class="active">Certificates &amp; encryption</a></li></ul></div>
             <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html" class="active">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Licensing &amp; editions</h1>
+            <h1>Certificates and encryption</h1>
+            <p>kcore uses mutual TLS (mTLS) for all management-plane communication. Disk encryption with LUKS2 protects data at rest.</p>
 
-            <p>kcore follows an <strong>open-core</strong> model. The Community Edition source is available under the <strong>Apache License 2.0</strong>. Apache-2.0 does not restrict commercial use of the code you build from that tree; always read <code>LICENSE</code> for the exact terms.</p>
+            <h2>PKI hierarchy</h2>
+            <ul>
+                <li><strong>Root CA</strong> — created by <code>kctl create cluster</code></li>
+                <li><strong>Sub-CA</strong> — lives on the controller, signs node leaf certificates</li>
+                <li><strong>Controller cert</strong> — identifies the controller to nodes and clients</li>
+                <li><strong>kctl client cert</strong> — authenticates CLI operations</li>
+                <li><strong>Per-node certs</strong> — generated during <code>kctl node install</code></li>
+            </ul>
 
-            <p><strong>Subscriptions</strong> cover services and artifacts around the project: the official supported distribution, stable production update channel, signed ISO images, tested releases, and commercial support. A subscription does not replace the open-source licence on the public core.</p>
+            <h2>mTLS bootstrap</h2>
+            <p><code>kctl create cluster</code> generates the full PKI (root CA, sub-CA, controller cert, kctl client cert). <code>kctl node install</code> pushes the node certificate, private key, and CA chain to the target node. Controller nodes also receive the sub-CA key pair.</p>
 
-            <table>
-                <tr><th>Context</th><th>Edition</th></tr>
-                <tr><td>Contributors, labs, evaluation</td><td>Community Edition (build from source)</td></tr>
-                <tr><td>Production</td><td>kcore Standard or Premium (per subscribed node)</td></tr>
-            </table>
+            <h2>Certificate auto-renewal</h2>
+            <p>The node-agent checks certificate expiry daily. If a certificate expires within 30 days, the agent calls the <code>RenewNodeCert</code> RPC. The sub-CA signs a new leaf certificate and returns the updated chain.</p>
 
-            <p>Socket-based pricing and tier details are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page. The <a href="https://github.com/rtacconi/kcore/blob/main/PRICING.md" style="color:var(--accent-primary)">PRICING.md</a> file in the repository mirrors billing rules.</p>
+            <h2>Manual rotation</h2>
+<pre><code># Rotate the sub-CA
+kctl rotate sub-ca --certs-dir ~/.kcore/&lt;context&gt;/
 
-            <p><strong>Partner program</strong> (resellers, integrators, providers): <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" style="color:var(--accent-primary)">team@tacconiconsulting.com</a></p>
+# Re-sign the controller cert and trigger TLS reload
+kctl rotate certs --controller &lt;host:port&gt; --certs-dir ~/.kcore/&lt;context&gt;/</code></pre>
+            <p><code>rotate sub-ca</code> generates a new sub-CA and pushes it to the controller. <code>rotate certs</code> re-signs the controller certificate and triggers <code>ReloadTls</code> on the controller.</p>
+
+            <h2>Inspecting certificates</h2>
+            <p><code>kctl get nodes</code> shows <code>cert_expiry_days</code> per node. The compliance report includes a Certificate Lifecycle section with expiring and unknown certificate counts.</p>
+
+            <h2>LUKS2 disk encryption</h2>
+            <p>LUKS2 encryption is mandatory for the OS disk on every node.</p>
+            <ul>
+                <li><strong>TPM2 path</strong> — <code>systemd-cryptenroll</code> seals the LUKS key to the TPM2 device.</li>
+                <li><strong>Key-file path</strong> — passphrase-based unlock using a key file.</li>
+                <li><strong>Recovery key</strong> — stored at <code>/etc/kcore/recovery/luks-recovery-key.txt</code> (root-only, mode 0400).</li>
+            </ul>
+
+            <h2>LUKS reporting</h2>
+            <p>The node-agent detects the LUKS unlock method at registration: <strong>tpm2</strong> if <code>/dev/mapper/cryptroot</code> exists and a TPM device is present, <strong>key-file</strong> otherwise. <code>kctl get compliance-report</code> shows the cluster-wide LUKS breakdown by method.</p>
+
+            <h2>TLS configuration</h2>
+            <ul>
+                <li><strong>Production</strong> — mTLS required (default). All gRPC and API traffic is encrypted and mutually authenticated.</li>
+                <li><strong>Development</strong> — <code>kctl --insecure</code> disables TLS for local testing over plain HTTP.</li>
+            </ul>
+            <p class="note">Never use <code>--insecure</code> in production. Disabling mTLS removes authentication and encryption from the management plane.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

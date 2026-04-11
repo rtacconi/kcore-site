@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore storage: filesystem, LVM, and ZFS backends, day-0 configuration, and storage classes.">
+    <title>Storage backends - kcore documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body>
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+    </div></nav>
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html" class="active">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <h1>Storage backends</h1>
+            <p>kcore supports three VM data-plane storage backends: <strong>filesystem</strong>, <strong>LVM</strong>, and <strong>ZFS</strong>. The backend is chosen at node install time and determines where VM disks are stored.</p>
+
+            <h2>Supported backends</h2>
+            <table>
+                <thead>
+                    <tr><th>Backend</th><th>How it works</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Filesystem</strong></td>
+                        <td>VM images and volumes are stored under <code>/var/lib/kcore/</code>. Single-disk nodes use the OS filesystem directly. Multi-disk nodes get dedicated ext4 mounts at <code>/var/lib/kcore/volumes</code>, <code>/var/lib/kcore/volumes1</code>, etc.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LVM</strong></td>
+                        <td>Disko creates the PV and VG at install time. The node-agent creates and deletes LVs at runtime via <code>lvcreate</code>. The VG name is configurable (default <code>vg_kcore</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ZFS</strong></td>
+                        <td>Disko creates the pool at install time. The node-agent uses it for zvol and dataset operations. The pool name is configurable (default <code>tank0</code>).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Day-0 configuration (install time)</h2>
+            <p>The <code>kctl node install</code> command accepts the following storage-related flags:</p>
+            <table>
+                <thead>
+                    <tr><th>Flag</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>--os-disk</code></td><td>Required. Device path for the OS disk (e.g. <code>/dev/sda</code>).</td></tr>
+                    <tr><td><code>--data-disk</code></td><td>Repeatable. Device path(s) for data disks.</td></tr>
+                    <tr><td><code>--storage-backend</code></td><td>One of <code>filesystem</code>, <code>lvm</code>, or <code>zfs</code>.</td></tr>
+                    <tr><td><code>--lvm-vg-name</code></td><td>LVM volume group name (default <code>vg_kcore</code>).</td></tr>
+                    <tr><td><code>--lvm-lv-prefix</code></td><td>Prefix for LVM logical volume names.</td></tr>
+                    <tr><td><code>--zfs-pool-name</code></td><td>ZFS pool name (default <code>tank0</code>).</td></tr>
+                    <tr><td><code>--zfs-dataset-prefix</code></td><td>Prefix for ZFS dataset names.</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Filesystem example</h3>
+<pre><code>kctl node install \
+  --os-disk /dev/sda \
+  --data-disk /dev/sdb \
+  --storage-backend filesystem</code></pre>
+
+            <h3>LVM example</h3>
+<pre><code>kctl node install \
+  --os-disk /dev/sda \
+  --data-disk /dev/sdb \
+  --storage-backend lvm \
+  --lvm-vg-name vg_kcore \
+  --lvm-lv-prefix kcore-</code></pre>
+
+            <h3>ZFS example</h3>
+<pre><code>kctl node install \
+  --os-disk /dev/sda \
+  --data-disk /dev/sdb --data-disk /dev/sdc \
+  --storage-backend zfs \
+  --zfs-pool-name tank0 \
+  --zfs-dataset-prefix kcore/</code></pre>
+
+            <h2>LUKS disk encryption</h2>
+            <p>The OS disk is always encrypted with <strong>LUKS2</strong>. When <code>/sys/class/tpm/tpm0</code> exists on the node, the key is TPM2-sealed for automatic unlock on boot. Otherwise a key-file is used.</p>
+            <p>The recovery key is written to <code>/etc/kcore/recovery/luks-recovery-key.txt</code> (root-only, mode 0400). Store this key securely — it is the only way to unlock the disk if the TPM is cleared or the key-file is lost.</p>
+
+            <h2>Storage classes</h2>
+            <p>Storage classes in kcore are derived from node registration — they are not a separate API object. Each node reports its configured backend, and the controller aggregates them.</p>
+<pre><code>$ kctl get storage-class
+NAME          NODES
+filesystem    3
+lvm           2
+zfs           1
+unspecified   0</code></pre>
+            <p>To see which nodes use a specific backend:</p>
+<pre><code>$ kctl describe storage-class lvm
+Storage class: lvm
+Nodes (2):
+  - node-ab12cd34
+  - node-ef56gh78</code></pre>
+
+            <h2>Node-agent configuration</h2>
+            <p>The node-agent reads its storage settings from <code>/etc/kcore/node-agent.yaml</code>:</p>
+<pre><code>storage:
+  backend: lvm                          # filesystem | lvm | zfs
+  filesystemVolumeDir: /var/lib/kcore/volumes
+  lvm:
+    vgName: vg_kcore
+    lvPrefix: kcore-
+  zfs:
+    poolName: tank0
+    datasetPrefix: kcore/
+  imageCacheDir: /var/lib/kcore/image-cache</code></pre>
+
+            <h2>VM storage flags</h2>
+            <p>When creating a VM you can specify the storage backend and disk size on the command line:</p>
+<pre><code>kctl create vm \
+  --storage-backend filesystem \
+  --storage-size-bytes 42949672960</code></pre>
+            <p>Or in YAML manifest form:</p>
+<pre><code>apiVersion: kcore/v1
+kind: VirtualMachine
+metadata:
+  name: my-vm
+spec:
+  storageBackend: filesystem
+  storageSizeBytes: 42949672960</code></pre>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+</body>
+</html>

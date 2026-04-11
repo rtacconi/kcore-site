@@ -216,14 +216,60 @@
             <aside class="docs-sidebar">
                 <nav class="docs-nav">
                     <div class="docs-nav-section">
-                        <h4 data-i18n="docs.hub.nav.userguides">User guides</h4>
+                        <h4>Getting started</h4>
                         <ul>
-                            <li><a href="#user-guides" data-i18n="docs.hub.link.userhome">User guides overview</a></li>
-                            <li><a href="docs/user/add-node.html" data-i18n="docs.hub.link.addnode">Add a node</a></li>
-                            <li><a href="docs/user/vm-creation.html" data-i18n="docs.hub.link.vmcreate">VM creation modes</a></li>
-                            <li><a href="docs/user/images.html" data-i18n="docs.hub.link.images">VM images</a></li>
-                            <li><a href="docs/user/licensing.html" data-i18n="docs.hub.link.licensing">Licensing</a></li>
-                            <li><a href="docs/user/compliance.html" data-i18n="docs.hub.link.compliance">Compliance enablement</a></li>
+                            <li><a href="docs/user/installation.html">Installation</a></li>
+                            <li><a href="docs/user/first-cluster.html">First cluster</a></li>
+                            <li><a href="docs/user/add-node.html">Add a node</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-nav-section">
+                        <h4>Virtual machines</h4>
+                        <ul>
+                            <li><a href="docs/user/vm-creation.html">VM creation</a></li>
+                            <li><a href="docs/user/images.html">VM images</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-nav-section">
+                        <h4>Containers</h4>
+                        <ul>
+                            <li><a href="docs/user/containers.html">Container lifecycle</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-nav-section">
+                        <h4>Networking</h4>
+                        <ul>
+                            <li><a href="docs/user/networks.html">Networks</a></li>
+                            <li><a href="docs/user/overlay-vxlan.html">VXLAN overlay</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-nav-section">
+                        <h4>Storage</h4>
+                        <ul>
+                            <li><a href="docs/user/storage.html">Storage backends</a></li>
+                            <li><a href="docs/user/storage-day2.html">Day-2 operations</a></li>
+                            <li><a href="docs/user/storage-vsan.html">vSAN (Ceph)</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-nav-section">
+                        <h4>Security</h4>
+                        <ul>
+                            <li><a href="docs/user/security-groups.html">Security groups</a></li>
+                            <li><a href="docs/user/compliance.html">Compliance</a></li>
+                            <li><a href="docs/user/certificates.html">Certificates &amp; encryption</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-nav-section">
+                        <h4>Reference</h4>
+                        <ul>
+                            <li><a href="docs/user/kctl-reference.html">kctl CLI</a></li>
+                            <li><a href="docs/user/yaml-manifests.html">YAML manifests</a></li>
+                        </ul>
+                    </div>
+                    <div class="docs-nav-section">
+                        <h4>Licensing</h4>
+                        <ul>
+                            <li><a href="docs/user/licensing.html">Editions &amp; pricing</a></li>
                         </ul>
                     </div>
                     <div class="docs-nav-section">
@@ -241,33 +287,106 @@
                     <a href="index.html" data-i18n="docs.hub.breadcrumb.home">Home</a> / <span data-i18n="docs.hub.breadcrumb.docs">Documentation</span>
                 </div>
 
-                <h1 id="user-guides" data-i18n="userdoc.index.title">User documentation</h1>
-                <p data-i18n-html="userdoc.index.lead">Operator-focused guides for joining nodes, creating VMs, handling images, and understanding licensing. Technical architecture notes remain in the <a href="https://github.com/rtacconi/kcore/tree/main/docs" style="color: var(--accent-primary);">kcore repository</a>.</p>
+                <h1 id="user-guides">Documentation</h1>
+                <p>Operator-focused guides for installing kcore, managing clusters, creating VMs and containers, configuring networking and storage, and securing your infrastructure. Technical architecture and contributor docs live in the <a href="https://github.com/rtacconi/kcore/tree/main/docs" style="color: var(--accent-primary);">kcore repository</a>.</p>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0 3rem;">
+                <h2>Getting started</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/installation.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Installation</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">System requirements, create cluster PKI, and connect kctl.</div>
+                    </a>
+                    <a href="docs/user/first-cluster.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">First cluster</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Boot ISO, install to disk, approve the node, create your first VM.</div>
+                    </a>
                     <a href="docs/user/add-node.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
-                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.addnode.title">Add a node</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.addnode.desc">Install kcore on bare metal, join controllers, approve or reject nodes, and understand certificates.</div>
-                    </a>
-                    <a href="docs/user/vm-creation.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
-                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.vmcreate.title">VM creation modes</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.vmcreate.desc">Image URLs, local paths, YAML, SSH keys, cloud-init, readiness waits, and validation rules.</div>
-                    </a>
-                    <a href="docs/user/images.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
-                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.images.title">VM images</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.images.desc">Controller-managed downloads, uploading large images to a node, formats, and SSH readiness checks.</div>
-                    </a>
-                    <a href="docs/user/licensing.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
-                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.licensing.title">Licensing &amp; editions</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.licensing.desc">Open-core model, Community vs Standard vs Premium, and where to read pricing.</div>
-                    </a>
-                    <a href="docs/user/compliance.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
-                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.compliance.title">Compliance enablement</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.compliance.desc">How kcore supports your security and compliance assessments (platform vs customer responsibility).</div>
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Add a node</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Agent nodes, HA controllers, and cross-DC expansion.</div>
                     </a>
                 </div>
 
-                <p style="border-left: 3px solid var(--accent-primary); padding-left: 1rem; color: var(--text-secondary); font-size: 0.95rem;" data-i18n-html="userdoc.index.related"><strong>Related:</strong> the <a href="blog/first-node-debian12-quickstart.html" style="color: var(--accent-primary);">Debian 12 quickstart blog post</a> walks through a full terminal session with an embedded recording.</p>
+                <h2>Virtual machines</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/vm-creation.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">VM creation</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">CLI and YAML creation, images, SSH keys, cloud-init, scheduling.</div>
+                    </a>
+                    <a href="docs/user/images.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">VM images</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Controller downloads, node upload, formats, and readiness checks.</div>
+                    </a>
+                </div>
+
+                <h2>Containers</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/containers.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Container lifecycle</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Create, start, stop, and delete OCI containers alongside VMs.</div>
+                    </a>
+                </div>
+
+                <h2>Networking</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/networks.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Networks</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">NAT, bridge, and VXLAN types, VLAN tagging, and network CRUD.</div>
+                    </a>
+                    <a href="docs/user/overlay-vxlan.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">VXLAN overlay</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Deep dive: VNI derivation, FDB entries, peer discovery, outbound NAT.</div>
+                    </a>
+                </div>
+
+                <h2>Storage</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/storage.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Storage backends</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Filesystem, LVM, and ZFS backends, day-0 configuration.</div>
+                    </a>
+                    <a href="docs/user/storage-day2.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Day-2 operations</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Add disks, apply disko layouts, management modes.</div>
+                    </a>
+                    <a href="docs/user/storage-vsan.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">vSAN (Ceph)</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Upcoming distributed shared storage using Ceph.</div>
+                    </a>
+                </div>
+
+                <h2>Security</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/security-groups.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Security groups</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">YAML manifests, ingress rules, DNAT, VM and network attachment.</div>
+                    </a>
+                    <a href="docs/user/compliance.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Compliance</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Report categories, framework mappings, implemented and planned features.</div>
+                    </a>
+                    <a href="docs/user/certificates.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Certificates &amp; encryption</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">mTLS, PKI hierarchy, auto-renewal, LUKS disk encryption.</div>
+                    </a>
+                </div>
+
+                <h2>Reference</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/kctl-reference.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">kctl CLI</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Complete command reference: every command, subcommand, and flag.</div>
+                    </a>
+                    <a href="docs/user/yaml-manifests.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">YAML manifests</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">VM and SecurityGroup manifest field reference with examples.</div>
+                    </a>
+                    <a href="docs/user/licensing.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Licensing &amp; editions</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Open-core model, Community vs Standard vs Premium.</div>
+                    </a>
+                </div>
+
+                <p style="border-left: 3px solid var(--accent-primary); padding-left: 1rem; color: var(--text-secondary); font-size: 0.95rem;"><strong>Related:</strong> the <a href="blog/first-node-debian12-quickstart.html" style="color: var(--accent-primary);">Debian 12 quickstart blog post</a> walks through a full terminal session with an embedded recording.</p>
 
                 <p style="color: var(--text-secondary); margin-top: 2rem;">Technical architecture, networking, replication, and contributor documentation lives in the <a href="https://github.com/rtacconi/kcore/tree/main/docs" style="color: var(--accent-primary);">docs/ directory</a> of the kcore repository.</p>
             </main>
