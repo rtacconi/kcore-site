@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore licensing: Apache-2.0 open core, subscriptions, Standard and Premium editions.">
-    <title>Licensing and editions - kcore documentation</title>
+    <meta name="description" content="kcore networking: NAT, bridge, and VXLAN network types, VLAN tagging, and network management.">
+    <title>Networks - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
     <style>
         .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
@@ -30,35 +30,83 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
             <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html" class="active">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
             <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
             <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
             <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html" class="active">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Licensing &amp; editions</h1>
+            <h1>Networks</h1>
+            <p>kcore supports three network types for VMs: NAT, bridge, and VXLAN. Each type creates a Linux bridge (<code>kbr-&lt;name&gt;</code>) and optionally provides DHCP, masquerade, or overlay connectivity.</p>
 
-            <p>kcore follows an <strong>open-core</strong> model. The Community Edition source is available under the <strong>Apache License 2.0</strong>. Apache-2.0 does not restrict commercial use of the code you build from that tree; always read <code>LICENSE</code> for the exact terms.</p>
-
-            <p><strong>Subscriptions</strong> cover services and artifacts around the project: the official supported distribution, stable production update channel, signed ISO images, tested releases, and commercial support. A subscription does not replace the open-source licence on the public core.</p>
-
+            <h2>Supported network types</h2>
             <table>
-                <tr><th>Context</th><th>Edition</th></tr>
-                <tr><td>Contributors, labs, evaluation</td><td>Community Edition (build from source)</td></tr>
-                <tr><td>Production</td><td>kcore Standard or Premium (per subscribed node)</td></tr>
+                <thead><tr><th>Type</th><th>Behaviour</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><strong>NAT</strong> (default)</td>
+                        <td>Linux bridge with dnsmasq DHCP (range .100–.199) and nftables masquerade + DNAT from <code>externalIP</code>. Single-node only.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bridge</strong></td>
+                        <td>Physical NIC (or VLAN sub-interface) added as a bridge port. VMs use upstream DHCP. No local DHCP or NAT.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>VXLAN</strong></td>
+                        <td>L2 overlay across nodes. Static IPs assigned by the controller via cloud-init. No local dnsmasq. Optional outbound masquerade. Cross-node.</td>
+                    </tr>
+                </tbody>
             </table>
 
-            <p>Socket-based pricing and tier details are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page. The <a href="https://github.com/rtacconi/kcore/blob/main/PRICING.md" style="color:var(--accent-primary)">PRICING.md</a> file in the repository mirrors billing rules.</p>
+            <h2>Default network</h2>
+            <p>A default network is auto-created on every node during installation. It is always NAT type and cannot be deleted or created via <code>kctl</code>.</p>
 
-            <p><strong>Partner program</strong> (resellers, integrators, providers): <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" style="color:var(--accent-primary)">team@tacconiconsulting.com</a></p>
+            <h2>Create a network</h2>
+            <pre><code>kctl create network private \
+  --external-ip 192.168.40.105 \
+  --gateway-ip 10.250.0.1 \
+  --internal-netmask 255.255.255.0 \
+  --type vxlan</code></pre>
+
+            <h2>List, describe, delete</h2>
+            <pre><code># List all networks
+kctl get networks
+
+# Show details for a specific network
+kctl describe network &lt;name&gt;
+
+# Remove a network
+kctl delete network &lt;name&gt;</code></pre>
+
+            <h2>VLAN tagging</h2>
+            <p>NAT and bridge networks support VLAN tagging via <code>--vlan-id</code>. When specified, kcore creates a VLAN sub-interface (<code>gatewayInterface.&lt;id&gt;</code>) and uses it as the bridge uplink.</p>
+            <pre><code>kctl create network vlan-net \
+  --type nat \
+  --vlan-id 100 \
+  --external-ip 192.168.100.10 \
+  --gateway-ip 10.100.0.1 \
+  --internal-netmask 255.255.255.0</code></pre>
+
+            <h2>Disable VXLAN on a node</h2>
+            <p>If a node should not participate in VXLAN overlays, pass <code>--disable-vxlan</code> during installation:</p>
+            <pre><code>kctl node install ... --disable-vxlan</code></pre>
+            <p>The controller will reject VXLAN network creation requests targeting that node with a <code>FailedPrecondition</code> error.</p>
+
+            <h2>VM network attachment</h2>
+            <p>Attach a VM to a network at creation time with the <code>--network</code> flag:</p>
+            <pre><code>kctl create vm web-01 --network private --image ubuntu-24.04 --cpus 2 --memory 4096</code></pre>
+            <p>VMs on VXLAN networks receive controller-assigned static IPs injected via cloud-init. VMs on NAT networks receive IPs from dnsmasq DHCP.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

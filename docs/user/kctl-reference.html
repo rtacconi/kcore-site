@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete kctl command reference: all commands, subcommands, flags, and aliases.">
+    <title>kctl CLI reference - kcore documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body>
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+    </div></nav>
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html" class="active">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <h1>kctl CLI reference</h1>
+            <p><code>kctl</code> is the command-line interface for managing kcore clusters. Global flags: <code>-s</code> / <code>--controller</code> (controller address, repeatable for HA), <code>-k</code> / <code>--insecure</code> (skip TLS verification), <code>-c</code> / <code>--config</code> (path to config file), <code>--node</code> (node address for direct node commands).</p>
+
+            <h2>create</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>vm</code></td><td>Create a VM from CLI flags or <code>-f</code> YAML manifest</td></tr>
+                <tr><td><code>container</code></td><td>Create a container on a node</td></tr>
+                <tr><td><code>network</code></td><td>Create a network</td></tr>
+                <tr><td><code>cluster</code></td><td>Initialise PKI and mTLS context for a new cluster</td></tr>
+            </table>
+
+            <h2>get</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Aliases</th></tr>
+                <tr><td><code>vms</code></td><td><code>vm</code></td></tr>
+                <tr><td><code>containers</code></td><td><code>container</code></td></tr>
+                <tr><td><code>nodes</code></td><td><code>node</code></td></tr>
+                <tr><td><code>networks</code></td><td><code>network</code></td></tr>
+                <tr><td><code>storage-classes</code></td><td><code>storage-class</code></td></tr>
+                <tr><td><code>compliance-report</code></td><td><code>compliance</code></td></tr>
+                <tr><td><code>conflicts</code></td><td></td></tr>
+                <tr><td><code>replication-status</code></td><td></td></tr>
+            </table>
+
+            <h2>describe</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Aliases</th></tr>
+                <tr><td><code>vm</code></td><td><code>vms</code></td></tr>
+                <tr><td><code>node</code></td><td><code>nodes</code></td></tr>
+                <tr><td><code>network</code></td><td><code>networks</code></td></tr>
+                <tr><td><code>storage-class</code></td><td><code>storage-classes</code></td></tr>
+                <tr><td><code>ssh-key</code></td><td><code>sshkey</code></td></tr>
+                <tr><td><code>compliance-report</code></td><td><code>compliance</code></td></tr>
+            </table>
+
+            <h2>delete</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>vm</code></td><td>Delete a VM</td></tr>
+                <tr><td><code>network</code></td><td>Delete a network</td></tr>
+                <tr><td><code>image</code></td><td>Delete a stored image</td></tr>
+                <tr><td><code>container</code></td><td>Delete a container</td></tr>
+            </table>
+
+            <h2>start / stop</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>vm</code></td><td>Start or stop a VM</td></tr>
+                <tr><td><code>container</code></td><td>Start or stop a container</td></tr>
+            </table>
+
+            <h2>set</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>vm</code></td><td>Set desired state (<code>running</code> / <code>stopped</code>). Supports <code>--target-node</code>.</td></tr>
+            </table>
+
+            <h2>update</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>vm</code></td><td>Resize CPU / memory of a VM. Supports <code>--target-node</code>.</td></tr>
+            </table>
+
+            <h2>node</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>disks</code></td><td>List disks on a node</td></tr>
+                <tr><td><code>nics</code></td><td>List network interfaces on a node</td></tr>
+                <tr><td><code>install</code></td><td>Install kcore on a bare-metal node</td></tr>
+                <tr><td><code>approve</code></td><td>Approve a pending node join request</td></tr>
+                <tr><td><code>reject</code></td><td>Reject a pending node join request</td></tr>
+                <tr><td><code>apply-nix</code></td><td>Apply NixOS configuration to a node</td></tr>
+                <tr><td><code>apply-disko</code></td><td>Apply Disko disk layout to a node</td></tr>
+                <tr><td><code>upload-image</code></td><td>Upload a VM image to a node</td></tr>
+            </table>
+
+            <h2>ssh-key</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>create</code></td><td>Register a new SSH public key</td></tr>
+                <tr><td><code>delete</code></td><td>Remove an SSH key</td></tr>
+                <tr><td><code>list</code></td><td>List all SSH keys</td></tr>
+                <tr><td><code>get</code></td><td>Show details for an SSH key</td></tr>
+            </table>
+
+            <h2>drain</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>node</code></td><td>Live-migrate all VMs off a node. Use <code>--target-node</code> to specify the destination node.</td></tr>
+            </table>
+
+            <h2>rotate</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>certs</code></td><td>Rotate the controller TLS certificate</td></tr>
+                <tr><td><code>sub-ca</code></td><td>Generate a new sub-CA</td></tr>
+            </table>
+
+            <h2>apply</h2>
+            <p>Apply a NixOS configuration to the controller. Flags: <code>-f</code> (config file), <code>--dry-run</code> (preview without applying).</p>
+
+            <h2>workload</h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>create</code></td><td>Create a workload. Use <code>--kind container</code> or <code>--kind vm</code>.</td></tr>
+                <tr><td><code>list</code></td><td>List all workloads</td></tr>
+                <tr><td><code>get</code></td><td>Show workload details</td></tr>
+                <tr><td><code>delete</code></td><td>Delete a workload</td></tr>
+                <tr><td><code>start</code></td><td>Start a workload</td></tr>
+                <tr><td><code>stop</code></td><td>Stop a workload</td></tr>
+            </table>
+
+            <h2>security-group <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias: <code>sg</code>)</span></h2>
+            <table>
+                <tr><th>Subcommand</th><th>Description</th></tr>
+                <tr><td><code>create</code></td><td>Create a security group from <code>-f</code> YAML</td></tr>
+                <tr><td><code>apply</code></td><td>Apply / update a security group from <code>-f</code> YAML</td></tr>
+                <tr><td><code>list</code></td><td>List all security groups</td></tr>
+                <tr><td><code>get</code></td><td>Show security group details</td></tr>
+                <tr><td><code>delete</code></td><td>Delete a security group</td></tr>
+                <tr><td><code>attach</code></td><td>Attach a security group to a VM or network</td></tr>
+                <tr><td><code>detach</code></td><td>Detach a security group from a VM or network</td></tr>
+            </table>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+</body>
+</html>

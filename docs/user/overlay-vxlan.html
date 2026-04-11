@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore licensing: Apache-2.0 open core, subscriptions, Standard and Premium editions.">
-    <title>Licensing and editions - kcore documentation</title>
+    <meta name="description" content="kcore VXLAN overlay: data plane, VNI derivation, FDB entries, peer discovery, and outbound NAT.">
+    <title>VXLAN overlay networking - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
     <style>
         .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
@@ -30,35 +30,59 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
             <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html" class="active">VXLAN overlay</a></li></ul></div>
             <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
             <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
             <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html" class="active">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Licensing &amp; editions</h1>
+            <h1>VXLAN overlay networking</h1>
+            <p>VXLAN overlays provide L2 connectivity across multiple nodes, allowing VMs on different hosts to communicate on the same logical network.</p>
 
-            <p>kcore follows an <strong>open-core</strong> model. The Community Edition source is available under the <strong>Apache License 2.0</strong>. Apache-2.0 does not restrict commercial use of the code you build from that tree; always read <code>LICENSE</code> for the exact terms.</p>
+            <h2>Data plane</h2>
+            <p>Each VXLAN network creates a Linux VXLAN device (<code>vxlan&lt;VNI&gt;</code>) using UDP port 4789. The VXLAN device is attached to a bridge (<code>kbr-&lt;name&gt;</code>), and the gateway IP is assigned to the bridge interface to serve as the subnet gateway.</p>
 
-            <p><strong>Subscriptions</strong> cover services and artifacts around the project: the official supported distribution, stable production update channel, signed ISO images, tested releases, and commercial support. A subscription does not replace the open-source licence on the public core.</p>
+            <h2>VNI derivation</h2>
+            <p>The VXLAN Network Identifier is derived deterministically from the network name using a djb2-style hash:</p>
+            <pre><code>VNI = 10000 + (hash(name) % 6000)   // range 10000–15999</code></pre>
+            <p>The same network name on different nodes produces the same VNI, which means the nodes automatically join the same overlay segment.</p>
 
-            <table>
-                <tr><th>Context</th><th>Edition</th></tr>
-                <tr><td>Contributors, labs, evaluation</td><td>Community Edition (build from source)</td></tr>
-                <tr><td>Production</td><td>kcore Standard or Premium (per subscribed node)</td></tr>
-            </table>
+            <h2>Peer discovery</h2>
+            <p>Peer discovery uses static FDB entries. When the controller pushes a network configuration to a node, it includes the list of peer IPs (<code>vxlanPeers</code>). For each peer, the node adds a forwarding database entry:</p>
+            <pre><code>bridge fdb append 00:00:00:00:00:00 dev vxlan&lt;VNI&gt; dst &lt;peer_ip&gt;</code></pre>
+            <p>This implements head-end replication (flood-to-peers): BUM traffic is replicated to every known peer.</p>
 
-            <p>Socket-based pricing and tier details are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page. The <a href="https://github.com/rtacconi/kcore/blob/main/PRICING.md" style="color:var(--accent-primary)">PRICING.md</a> file in the repository mirrors billing rules.</p>
+            <h2>VM addressing</h2>
+            <p>The controller allocates IPs starting at <code>.2</code> within the subnet, incrementing monotonically. IPs are not reclaimed when a VM is deleted. Addresses are assigned to VMs via cloud-init static network configuration, not DHCP.</p>
 
-            <p><strong>Partner program</strong> (resellers, integrators, providers): <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" style="color:var(--accent-primary)">team@tacconiconsulting.com</a></p>
+            <h2>Outbound NAT</h2>
+            <p>Outbound internet access for VMs on VXLAN networks is optional. Enable it with <code>--enable-outbound-nat</code> (or omit <code>--no-outbound-nat</code>) when creating the network. When enabled, kcore adds an nftables masquerade rule on the gateway interface so that VMs can reach external destinations.</p>
+
+            <h2>Firewall</h2>
+            <p>All <code>kbr-*</code> bridges are treated as trusted interfaces in the node firewall. UDP port 4789 is automatically allowed when any VXLAN network exists on the node.</p>
+
+            <h2>Systemd ordering</h2>
+            <p>VXLAN network services are started in a strict dependency order:</p>
+            <ol>
+                <li><code>kcore-bridge-&lt;net&gt;</code> — creates the bridge and VXLAN device</li>
+                <li><code>kcore-tap-&lt;vm&gt;</code> — creates the TAP device on the bridge</li>
+                <li><code>kcore-vm-&lt;vm&gt;</code> — starts the Cloud Hypervisor VM</li>
+            </ol>
+            <p>NAT networks insert an additional unit between steps 1 and 2: <code>kcore-dhcp-&lt;net&gt;</code> (dnsmasq).</p>
+
+            <h2>Opt-out</h2>
+            <p>Pass <code>--disable-vxlan</code> during node installation to prevent VXLAN network creation on that node. NAT and bridge networks continue to work normally. If a VXLAN network creation is attempted on a node with VXLAN disabled, the controller returns a <code>FailedPrecondition</code> error.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

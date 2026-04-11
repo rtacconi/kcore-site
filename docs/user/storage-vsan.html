@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore licensing: Apache-2.0 open core, subscriptions, Standard and Premium editions.">
-    <title>Licensing and editions - kcore documentation</title>
+    <meta name="description" content="Upcoming kcore vSAN feature: distributed shared storage using Ceph for HA VM storage and live migration.">
+    <title>vSAN with Ceph - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
     <style>
         .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
@@ -38,27 +38,56 @@
             <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
             <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html" class="active">vSAN (Ceph)</a></li></ul></div>
             <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
             <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html" class="active">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Licensing &amp; editions</h1>
+            <h1>vSAN with Ceph <span class="roadmap-badge">Planned</span></h1>
+            <p class="note">This feature is planned and not yet implemented. This page describes the vision and intended integration.</p>
+            <p>kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. vSAN will add distributed shared storage using Ceph, enabling VM disks to be replicated across nodes.</p>
 
-            <p>kcore follows an <strong>open-core</strong> model. The Community Edition source is available under the <strong>Apache License 2.0</strong>. Apache-2.0 does not restrict commercial use of the code you build from that tree; always read <code>LICENSE</code> for the exact terms.</p>
+            <h2>Vision</h2>
+            <ul>
+                <li>Distributed block storage across cluster nodes.</li>
+                <li>Ceph OSDs run on data disks, managed by the controller.</li>
+                <li>RBD (RADOS Block Device) volumes serve as VM disks.</li>
+                <li>Storage is replicated across nodes for redundancy.</li>
+            </ul>
 
-            <p><strong>Subscriptions</strong> cover services and artifacts around the project: the official supported distribution, stable production update channel, signed ISO images, tested releases, and commercial support. A subscription does not replace the open-source licence on the public core.</p>
+            <h2>Planned integration</h2>
+            <ul>
+                <li>Ceph OSDs deployed on data disks at install time using a new <code>--storage-backend ceph</code> flag.</li>
+                <li>Controller manages pool topology and replication factor.</li>
+                <li>RBD volumes created and attached as VM disks transparently.</li>
+                <li>CRUSH map aligned with DC topology (<code>dc_id</code>) so replicas span failure domains.</li>
+            </ul>
 
-            <table>
-                <tr><th>Context</th><th>Edition</th></tr>
-                <tr><td>Contributors, labs, evaluation</td><td>Community Edition (build from source)</td></tr>
-                <tr><td>Production</td><td>kcore Standard or Premium (per subscribed node)</td></tr>
-            </table>
+            <h2>Target use cases</h2>
+            <ul>
+                <li><strong>HA VM storage</strong> — survive single-node failure without data loss.</li>
+                <li><strong>Live migration</strong> — VMs can move between nodes without copying disks.</li>
+                <li><strong>Multi-node data redundancy</strong> — configurable replication factor (e.g. 2 or 3 copies).</li>
+                <li><strong>Shared image cache</strong> — VM base images stored once in Ceph, cloned instantly.</li>
+            </ul>
 
-            <p>Socket-based pricing and tier details are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page. The <a href="https://github.com/rtacconi/kcore/blob/main/PRICING.md" style="color:var(--accent-primary)">PRICING.md</a> file in the repository mirrors billing rules.</p>
+            <h2>How it complements local backends</h2>
+            <p>Local backends (filesystem, LVM, ZFS) remain the right choice for single-node, performance-sensitive workloads where raw I/O throughput matters most. vSAN is designed for workloads that prioritise availability over raw I/O performance.</p>
+            <p>Operators choose per-VM: a database that needs low-latency local NVMe stays on LVM, while a stateless application server uses Ceph-backed storage for easy failover.</p>
 
-            <p><strong>Partner program</strong> (resellers, integrators, providers): <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" style="color:var(--accent-primary)">team@tacconiconsulting.com</a></p>
+            <h2>Relationship to existing storage classes</h2>
+            <p>vSAN will appear as a new storage class (<code>ceph</code>) alongside the existing <code>filesystem</code>, <code>lvm</code>, and <code>zfs</code> classes:</p>
+<pre><code>$ kctl get storage-class
+NAME          NODES
+filesystem    3
+lvm           2
+zfs           1
+ceph          4</code></pre>
+            <p>Nodes with Ceph OSDs will be listed under the <code>ceph</code> storage class. Creating a VM on Ceph storage:</p>
+<pre><code>kctl create vm \
+  --storage-backend ceph \
+  --storage-size-bytes 107374182400</code></pre>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
