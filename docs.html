@@ -218,7 +218,7 @@
                     <div class="docs-nav-section">
                         <h4 data-i18n="docs.hub.nav.userguides">User guides</h4>
                         <ul>
-                            <li><a href="docs/user/index.html" data-i18n="docs.hub.link.userhome">User documentation home</a></li>
+                            <li><a href="#user-guides" data-i18n="docs.hub.link.userhome">User guides overview</a></li>
                             <li><a href="docs/user/add-node.html" data-i18n="docs.hub.link.addnode">Add a node</a></li>
                             <li><a href="docs/user/vm-creation.html" data-i18n="docs.hub.link.vmcreate">VM creation modes</a></li>
                             <li><a href="docs/user/images.html" data-i18n="docs.hub.link.images">VM images</a></li>
@@ -273,15 +273,38 @@
             <!-- Main Content -->
             <main class="docs-content">
                 <div class="breadcrumb">
-                    <a href="index.html" data-i18n="docs.hub.breadcrumb.home">Home</a> / <a href="docs.html" data-i18n="docs.hub.breadcrumb.docs">Documentation</a> / <span data-i18n="docs.hub.breadcrumb.gs">Getting Started</span>
+                    <a href="index.html" data-i18n="docs.hub.breadcrumb.home">Home</a> / <span data-i18n="docs.hub.breadcrumb.docs">Documentation</span>
                 </div>
 
-                <div class="alert alert-info" style="margin-bottom: 2rem;" data-i18n-html="docs.hub.alert.operator">
-                    <strong>Operator guides:</strong> step-by-step user documentation (nodes, VMs, images, licensing) is published under
-                    <a href="docs/user/index.html" style="color: var(--accent-primary);">User guides</a>.
+                <h1 id="user-guides" data-i18n="userdoc.index.title">User documentation</h1>
+                <p data-i18n-html="userdoc.index.lead">Operator-focused guides for joining nodes, creating VMs, handling images, and understanding licensing. Technical architecture notes remain in the <a href="https://github.com/rtacconi/kcore/tree/main/docs" style="color: var(--accent-primary);">kcore repository</a>.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0 3rem;">
+                    <a href="docs/user/add-node.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.addnode.title">Add a node</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.addnode.desc">Install kcore on bare metal, join controllers, approve or reject nodes, and understand certificates.</div>
+                    </a>
+                    <a href="docs/user/vm-creation.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.vmcreate.title">VM creation modes</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.vmcreate.desc">Image URLs, local paths, YAML, SSH keys, cloud-init, readiness waits, and validation rules.</div>
+                    </a>
+                    <a href="docs/user/images.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.images.title">VM images</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.images.desc">Controller-managed downloads, uploading large images to a node, formats, and SSH readiness checks.</div>
+                    </a>
+                    <a href="docs/user/licensing.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.licensing.title">Licensing &amp; editions</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.licensing.desc">Open-core model, Community vs Standard vs Premium, and where to read pricing.</div>
+                    </a>
+                    <a href="docs/user/compliance.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="userdoc.card.compliance.title">Compliance enablement</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="userdoc.card.compliance.desc">How kcore supports your security and compliance assessments (platform vs customer responsibility).</div>
+                    </a>
                 </div>
 
-                <h1 id="introduction" data-i18n="docs.intro.title">Introduction to kcore</h1>
+                <p style="border-left: 3px solid var(--accent-primary); padding-left: 1rem; color: var(--text-secondary); font-size: 0.95rem;" data-i18n-html="userdoc.index.related"><strong>Related:</strong> the <a href="blog/first-node-debian12-quickstart.html" style="color: var(--accent-primary);">Debian 12 quickstart blog post</a> walks through a full terminal session with an embedded recording.</p>
+
+                <h1 id="introduction" style="margin-top: 3rem;" data-i18n="docs.intro.title">Introduction to kcore</h1>
                 
                 <p data-i18n="docs.intro.desc">
                     kcore is a NixOS-based hypervisor for running VMs on bare metal. It gives you a 

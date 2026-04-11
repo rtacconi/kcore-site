@@ -2,109 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore user documentation: clusters, nodes, VMs, images, licensing, and compliance orientation.">
+    <meta http-equiv="refresh" content="0; url=../../docs.html#user-guides">
     <title>User documentation - kcore hypervisor</title>
-    <link rel="stylesheet" href="../../css/styles.css">
-    <style>
-        .doc-hero { padding: 7rem 0 3rem; margin-top: 60px; text-align: center;
-            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); }
-        .doc-hero h1 { margin-bottom: 0.75rem; max-width: 720px; margin-left: auto; margin-right: auto; }
-        .doc-hero p { color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.7; }
-        .doc-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-        .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 2rem; }
-        .doc-card {
-            background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem;
-            padding: 1.5rem; transition: border-color 0.2s ease;
-        }
-        .doc-card:hover { border-color: var(--accent-primary); }
-        .doc-card h2 { font-size: 1.1rem; margin: 0 0 0.5rem 0; }
-        .doc-card h2 a { color: var(--text-primary); text-decoration: none; }
-        .doc-card h2 a:hover { color: var(--accent-primary); }
-        .doc-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin: 0; }
-        .back-link { display: inline-block; color: var(--accent-primary); text-decoration: none; margin-bottom: 1.5rem; }
-        .back-link:hover { text-decoration: underline; }
-        .note { border-left: 3px solid var(--accent-primary); padding-left: 1rem; color: var(--text-secondary); margin-top: 2rem; font-size: 0.95rem; }
-    </style>
+    <link rel="canonical" href="../../docs.html">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <a href="../../index.html" style="color: inherit; text-decoration: none;">
-                    <span class="logo">kcore</span><span class="logo-tag">hypervisor</span>
-                </a>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-                <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-                <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-                <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-                <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-                <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <header class="doc-hero">
-        <div class="container">
-            <h1 data-i18n="userdoc.index.title">User documentation</h1>
-            <p data-i18n-html="userdoc.index.lead">Operator-focused guides for joining nodes, creating VMs, handling images, and understanding licensing. Technical architecture notes remain in the <a href="https://github.com/rtacconi/kcore/tree/main/docs" style="color: var(--accent-primary);">kcore repository</a>.</p>
-        </div>
-    </header>
-
-    <div class="doc-wrap">
-        <a href="../../docs.html" class="back-link" data-i18n="userdoc.back.hub">&larr; Back to documentation hub</a>
-
-        <div class="doc-grid">
-            <article class="doc-card">
-                <h2><a href="add-node.html" data-i18n="userdoc.card.addnode.title">Add a node</a></h2>
-                <p data-i18n="userdoc.card.addnode.desc">Install kcore on bare metal, join controllers, approve or reject nodes, and understand certificates.</p>
-            </article>
-            <article class="doc-card">
-                <h2><a href="vm-creation.html" data-i18n="userdoc.card.vmcreate.title">VM creation modes</a></h2>
-                <p data-i18n="userdoc.card.vmcreate.desc">Image URLs, local paths, YAML, SSH keys, cloud-init, readiness waits, and validation rules.</p>
-            </article>
-            <article class="doc-card">
-                <h2><a href="images.html" data-i18n="userdoc.card.images.title">VM images</a></h2>
-                <p data-i18n="userdoc.card.images.desc">Controller-managed downloads, uploading large images to a node, formats, and SSH readiness checks.</p>
-            </article>
-            <article class="doc-card">
-                <h2><a href="licensing.html" data-i18n="userdoc.card.licensing.title">Licensing &amp; editions</a></h2>
-                <p data-i18n="userdoc.card.licensing.desc">Open-core model, Community vs Standard vs Premium, and where to read pricing.</p>
-            </article>
-            <article class="doc-card">
-                <h2><a href="compliance.html" data-i18n="userdoc.card.compliance.title">Compliance enablement</a></h2>
-                <p data-i18n="userdoc.card.compliance.desc">How kcore supports your security and compliance assessments (platform vs customer responsibility).</p>
-            </article>
-        </div>
-
-        <p class="note" data-i18n-html="userdoc.index.related"><strong>Related:</strong> the <a href="../../blog/first-node-debian12-quickstart.html" style="color: var(--accent-primary);">Debian 12 quickstart blog post</a> walks through a full terminal session with an embedded recording.</p>
-    </div>
-
-    <footer class="footer" style="margin-top: 2rem;">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section"><h4>kcore</h4><p>Declarative virtualization for edge and datacenters</p></div>
-                <div class="footer-section"><h4>Product</h4><ul>
-                    <li><a href="../../features.html">Features</a></li>
-                    <li><a href="../../pricing.html">Pricing</a></li>
-                    <li><a href="../../roadmap.html">Roadmap</a></li>
-                </ul></div>
-                <div class="footer-section"><h4>Resources</h4><ul>
-                    <li><a href="../../docs.html">Documentation</a></li>
-                </ul></div>
-                <div class="footer-section"><h4>Company</h4><ul>
-                    <li><a href="../../about.html">About</a></li>
-                    <li><a href="../../blog.html">Blog</a></li>
-                    <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
-                    <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
-                </ul></div>
-            </div>
-            <div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p></div>
-        </div>
-    </footer>
-    <script src="../../js/i18n.js"></script>
-    <script src="../../js/main.js"></script>
+    <p>Redirecting to <a href="../../docs.html#user-guides">documentation hub</a>…</p>
 </body>
 </html>
