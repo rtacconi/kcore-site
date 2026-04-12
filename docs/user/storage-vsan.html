@@ -30,61 +30,93 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html" class="active">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" class="active" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>vSAN with Ceph <span class="roadmap-badge">Planned</span></h1>
-            <p class="note">This feature is planned and not yet implemented. This page describes the vision and intended integration.</p>
-            <p>kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. vSAN will add distributed shared storage using Ceph, enabling VM disks to be replicated across nodes.</p>
+            <h1 data-i18n-html="userdoc.storagevsan.title">vSAN with Ceph <span class="roadmap-badge">Planned</span></h1>
+            <p class="note" data-i18n="userdoc.storagevsan.notePlanned">This feature is planned and not yet implemented. This page describes the vision and intended integration.</p>
+            <p data-i18n="userdoc.storagevsan.intro">kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. vSAN will add distributed shared storage using Ceph, enabling VM disks to be replicated across nodes.</p>
 
-            <h2>Vision</h2>
+            <h2 data-i18n="userdoc.storagevsan.vision">Vision</h2>
             <ul>
-                <li>Distributed block storage across cluster nodes.</li>
-                <li>Ceph OSDs run on data disks, managed by the controller.</li>
-                <li>RBD (RADOS Block Device) volumes serve as VM disks.</li>
-                <li>Storage is replicated across nodes for redundancy.</li>
+                <li data-i18n="userdoc.storagevsan.visionLi1">Distributed block storage across cluster nodes.</li>
+                <li data-i18n="userdoc.storagevsan.visionLi2">Ceph OSDs run on data disks, managed by the controller.</li>
+                <li data-i18n="userdoc.storagevsan.visionLi3">RBD (RADOS Block Device) volumes serve as VM disks.</li>
+                <li data-i18n="userdoc.storagevsan.visionLi4">Storage is replicated across nodes for redundancy.</li>
             </ul>
 
-            <h2>Planned integration</h2>
+            <h2 data-i18n="userdoc.storagevsan.plannedIntegration">Planned integration</h2>
             <ul>
-                <li>Ceph OSDs deployed on data disks at install time using a new <code>--storage-backend ceph</code> flag.</li>
-                <li>Controller manages pool topology and replication factor.</li>
-                <li>RBD volumes created and attached as VM disks transparently.</li>
-                <li>CRUSH map aligned with DC topology (<code>dc_id</code>) so replicas span failure domains.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi1">Ceph OSDs deployed on data disks at install time using a new <code>--storage-backend ceph</code> flag.</li>
+                <li data-i18n="userdoc.storagevsan.integrationLi2">Controller manages pool topology and replication factor.</li>
+                <li data-i18n="userdoc.storagevsan.integrationLi3">RBD volumes created and attached as VM disks transparently.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi4">CRUSH map aligned with DC topology (<code>dc_id</code>) so replicas span failure domains.</li>
             </ul>
 
-            <h2>Target use cases</h2>
+            <h2 data-i18n="userdoc.storagevsan.targetUseCases">Target use cases</h2>
             <ul>
-                <li><strong>HA VM storage</strong> — survive single-node failure without data loss.</li>
-                <li><strong>Live migration</strong> — VMs can move between nodes without copying disks.</li>
-                <li><strong>Multi-node data redundancy</strong> — configurable replication factor (e.g. 2 or 3 copies).</li>
-                <li><strong>Shared image cache</strong> — VM base images stored once in Ceph, cloned instantly.</li>
+                <li data-i18n-html="userdoc.storagevsan.useCaseLi1"><strong>HA VM storage</strong> — survive single-node failure without data loss.</li>
+                <li data-i18n-html="userdoc.storagevsan.useCaseLi2"><strong>Live migration</strong> — VMs can move between nodes without copying disks.</li>
+                <li data-i18n-html="userdoc.storagevsan.useCaseLi3"><strong>Multi-node data redundancy</strong> — configurable replication factor (e.g. 2 or 3 copies).</li>
+                <li data-i18n-html="userdoc.storagevsan.useCaseLi4"><strong>Shared image cache</strong> — VM base images stored once in Ceph, cloned instantly.</li>
             </ul>
 
-            <h2>How it complements local backends</h2>
-            <p>Local backends (filesystem, LVM, ZFS) remain the right choice for single-node, performance-sensitive workloads where raw I/O throughput matters most. vSAN is designed for workloads that prioritise availability over raw I/O performance.</p>
-            <p>Operators choose per-VM: a database that needs low-latency local NVMe stays on LVM, while a stateless application server uses Ceph-backed storage for easy failover.</p>
+            <h2 data-i18n="userdoc.storagevsan.complementsLocal">How it complements local backends</h2>
+            <p data-i18n="userdoc.storagevsan.complementsLocalP1">Local backends (filesystem, LVM, ZFS) remain the right choice for single-node, performance-sensitive workloads where raw I/O throughput matters most. vSAN is designed for workloads that prioritise availability over raw I/O performance.</p>
+            <p data-i18n="userdoc.storagevsan.complementsLocalP2">Operators choose per-VM: a database that needs low-latency local NVMe stays on LVM, while a stateless application server uses Ceph-backed storage for easy failover.</p>
 
-            <h2>Relationship to existing storage classes</h2>
-            <p>vSAN will appear as a new storage class (<code>ceph</code>) alongside the existing <code>filesystem</code>, <code>lvm</code>, and <code>zfs</code> classes:</p>
+            <h2 data-i18n="userdoc.storagevsan.relationshipClasses">Relationship to existing storage classes</h2>
+            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP1">vSAN will appear as a new storage class (<code>ceph</code>) alongside the existing <code>filesystem</code>, <code>lvm</code>, and <code>zfs</code> classes:</p>
 <pre><code>$ kctl get storage-class
 NAME          NODES
 filesystem    3
 lvm           2
 zfs           1
 ceph          4</code></pre>
-            <p>Nodes with Ceph OSDs will be listed under the <code>ceph</code> storage class. Creating a VM on Ceph storage:</p>
+            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP2">Nodes with Ceph OSDs will be listed under the <code>ceph</code> storage class. Creating a VM on Ceph storage:</p>
 <pre><code>kctl create vm \
   --storage-backend ceph \
   --storage-size-bytes 107374182400</code></pre>

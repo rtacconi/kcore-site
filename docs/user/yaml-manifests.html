@@ -30,44 +30,76 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html" class="active">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" class="active" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>YAML manifest reference</h1>
-            <p>kcore supports declarative resource creation via YAML manifests. Manifests are applied with <code>kctl create &lt;resource&gt; -f &lt;file&gt;</code> or <code>kctl apply -f &lt;file&gt;</code>.</p>
+            <h1 data-i18n="userdoc.manifests.h1">YAML manifest reference</h1>
+            <p data-i18n-html="userdoc.manifests.intro">kcore supports declarative resource creation via YAML manifests. Manifests are applied with <code>kctl create &lt;resource&gt; -f &lt;file&gt;</code> or <code>kctl apply -f &lt;file&gt;</code>.</p>
 
-            <h2>VM manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: VM)</span></h2>
+            <h2 data-i18n-html="userdoc.manifests.h2.vm">VM manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: VM)</span></h2>
             <table>
-                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"VM"</code></td></tr>
-                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of the VM</td></tr>
-                <tr><td><code>spec.cpu</code></td><td>integer</td><td>Number of vCPUs (default 2)</td></tr>
-                <tr><td><code>spec.memoryBytes</code></td><td>string | integer</td><td>RAM size, e.g. <code>"4G"</code> or raw bytes</td></tr>
-                <tr><td><code>spec.storageBackend</code></td><td>string</td><td><code>filesystem</code> | <code>lvm</code> | <code>zfs</code></td></tr>
-                <tr><td><code>spec.storageSizeBytes</code></td><td>integer | string</td><td>Root disk size in bytes or human-readable string</td></tr>
-                <tr><td><code>spec.disks[]</code></td><td>array</td><td>List of disk objects</td></tr>
-                <tr><td><code>spec.disks[].backendHandle</code></td><td>string</td><td>URL or local path to disk image</td></tr>
-                <tr><td><code>spec.disks[].sha256</code></td><td>string</td><td>Hex-encoded SHA-256 checksum</td></tr>
-                <tr><td><code>spec.disks[].format</code></td><td>string</td><td><code>qcow2</code> | <code>raw</code></td></tr>
-                <tr><td><code>spec.nics[]</code></td><td>array</td><td>List of network interfaces</td></tr>
-                <tr><td><code>spec.nics[].network</code></td><td>string</td><td>Network name (default <code>"default"</code>)</td></tr>
-                <tr><td><code>spec.nics[].model</code></td><td>string</td><td>NIC model (default <code>"virtio"</code>)</td></tr>
-                <tr><td><code>spec.imageSha256</code></td><td>string</td><td>Top-level alternative to <code>disks[].sha256</code></td></tr>
-                <tr><td><code>spec.imageFormat</code></td><td>string</td><td>Top-level alternative to <code>disks[].format</code></td></tr>
+                <tr><th data-i18n="userdoc.manifests.th.field">Field</th><th data-i18n="userdoc.manifests.th.type">Type</th><th data-i18n="userdoc.manifests.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.kind.field"><code>kind</code></td><td data-i18n="userdoc.manifests.vm.kind.type">string</td><td data-i18n-html="userdoc.manifests.vm.kind.desc">Must be <code>"VM"</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.name.field"><code>metadata.name</code></td><td data-i18n="userdoc.manifests.vm.name.type">string</td><td data-i18n="userdoc.manifests.vm.name.desc">Name of the VM</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.cpu.field"><code>spec.cpu</code></td><td data-i18n="userdoc.manifests.vm.cpu.type">integer</td><td data-i18n="userdoc.manifests.vm.cpu.desc">Number of vCPUs (default 2)</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.memory.field"><code>spec.memoryBytes</code></td><td data-i18n="userdoc.manifests.vm.memory.type">string | integer</td><td data-i18n-html="userdoc.manifests.vm.memory.desc">RAM size, e.g. <code>"4G"</code> or raw bytes</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.storagebackend.field"><code>spec.storageBackend</code></td><td data-i18n="userdoc.manifests.vm.storagebackend.type">string</td><td data-i18n-html="userdoc.manifests.vm.storagebackend.desc"><code>filesystem</code> | <code>lvm</code> | <code>zfs</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.storagesize.field"><code>spec.storageSizeBytes</code></td><td data-i18n="userdoc.manifests.vm.storagesize.type">integer | string</td><td data-i18n="userdoc.manifests.vm.storagesize.desc">Root disk size in bytes or human-readable string</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.disks.field"><code>spec.disks[]</code></td><td data-i18n="userdoc.manifests.vm.disks.type">array</td><td data-i18n="userdoc.manifests.vm.disks.desc">List of disk objects</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.backendhandle.field"><code>spec.disks[].backendHandle</code></td><td data-i18n="userdoc.manifests.vm.backendhandle.type">string</td><td data-i18n="userdoc.manifests.vm.backendhandle.desc">URL or local path to disk image</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.sha256.field"><code>spec.disks[].sha256</code></td><td data-i18n="userdoc.manifests.vm.sha256.type">string</td><td data-i18n="userdoc.manifests.vm.sha256.desc">Hex-encoded SHA-256 checksum</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.format.field"><code>spec.disks[].format</code></td><td data-i18n="userdoc.manifests.vm.format.type">string</td><td data-i18n-html="userdoc.manifests.vm.format.desc"><code>qcow2</code> | <code>raw</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.nics.field"><code>spec.nics[]</code></td><td data-i18n="userdoc.manifests.vm.nics.type">array</td><td data-i18n="userdoc.manifests.vm.nics.desc">List of network interfaces</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.nicsnetwork.field"><code>spec.nics[].network</code></td><td data-i18n="userdoc.manifests.vm.nicsnetwork.type">string</td><td data-i18n-html="userdoc.manifests.vm.nicsnetwork.desc">Network name (default <code>"default"</code>)</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.nicsmodel.field"><code>spec.nics[].model</code></td><td data-i18n="userdoc.manifests.vm.nicsmodel.type">string</td><td data-i18n-html="userdoc.manifests.vm.nicsmodel.desc">NIC model (default <code>"virtio"</code>)</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.imagesha256.field"><code>spec.imageSha256</code></td><td data-i18n="userdoc.manifests.vm.imagesha256.type">string</td><td data-i18n-html="userdoc.manifests.vm.imagesha256.desc">Top-level alternative to <code>disks[].sha256</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.vm.imageformat.field"><code>spec.imageFormat</code></td><td data-i18n="userdoc.manifests.vm.imageformat.type">string</td><td data-i18n-html="userdoc.manifests.vm.imageformat.desc">Top-level alternative to <code>disks[].format</code></td></tr>
             </table>
 
-            <h3>Example</h3>
+            <h3 data-i18n="userdoc.manifests.h3.vmexample">Example</h3>
 <pre><code>kind: VM
 metadata:
   name: web-01
@@ -83,26 +115,26 @@ spec:
   nics:
     - network: default</code></pre>
 
-            <h2>SecurityGroup manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: SecurityGroup)</span></h2>
+            <h2 data-i18n-html="userdoc.manifests.h2.sg">SecurityGroup manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: SecurityGroup)</span></h2>
             <table>
-                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"SecurityGroup"</code></td></tr>
-                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of the security group</td></tr>
-                <tr><td><code>spec.description</code></td><td>string</td><td>Human-readable description</td></tr>
-                <tr><td><code>spec.rules[]</code></td><td>array</td><td>List of firewall rules</td></tr>
-                <tr><td><code>spec.rules[].protocol</code></td><td>string</td><td><code>tcp</code> | <code>udp</code></td></tr>
-                <tr><td><code>spec.rules[].hostPort</code></td><td>integer</td><td>Port on the host side</td></tr>
-                <tr><td><code>spec.rules[].targetPort</code></td><td>integer</td><td>Port inside the VM/container (optional, defaults to hostPort)</td></tr>
-                <tr><td><code>spec.rules[].sourceCidr</code></td><td>string</td><td>Allowed source CIDR (default <code>"0.0.0.0/0"</code>)</td></tr>
-                <tr><td><code>spec.rules[].targetVm</code></td><td>string</td><td>Target VM name (optional)</td></tr>
-                <tr><td><code>spec.rules[].enableDnat</code></td><td>boolean</td><td>Enable DNAT for this rule</td></tr>
-                <tr><td><code>spec.attachments[]</code></td><td>array</td><td>Resources this group is attached to</td></tr>
-                <tr><td><code>spec.attachments[].kind</code></td><td>string</td><td><code>vm</code> | <code>network</code></td></tr>
-                <tr><td><code>spec.attachments[].target</code></td><td>string</td><td>Name or ID of the target resource</td></tr>
-                <tr><td><code>spec.attachments[].targetNode</code></td><td>string</td><td>Node name (required when kind is <code>network</code>)</td></tr>
+                <tr><th data-i18n="userdoc.manifests.th.field">Field</th><th data-i18n="userdoc.manifests.th.type">Type</th><th data-i18n="userdoc.manifests.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.kind.field"><code>kind</code></td><td data-i18n="userdoc.manifests.sg.kind.type">string</td><td data-i18n-html="userdoc.manifests.sg.kind.desc">Must be <code>"SecurityGroup"</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.name.field"><code>metadata.name</code></td><td data-i18n="userdoc.manifests.sg.name.type">string</td><td data-i18n="userdoc.manifests.sg.name.desc">Name of the security group</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.description.field"><code>spec.description</code></td><td data-i18n="userdoc.manifests.sg.description.type">string</td><td data-i18n="userdoc.manifests.sg.description.desc">Human-readable description</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.rules.field"><code>spec.rules[]</code></td><td data-i18n="userdoc.manifests.sg.rules.type">array</td><td data-i18n="userdoc.manifests.sg.rules.desc">List of firewall rules</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.protocol.field"><code>spec.rules[].protocol</code></td><td data-i18n="userdoc.manifests.sg.protocol.type">string</td><td data-i18n-html="userdoc.manifests.sg.protocol.desc"><code>tcp</code> | <code>udp</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.hostport.field"><code>spec.rules[].hostPort</code></td><td data-i18n="userdoc.manifests.sg.hostport.type">integer</td><td data-i18n="userdoc.manifests.sg.hostport.desc">Port on the host side</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.targetport.field"><code>spec.rules[].targetPort</code></td><td data-i18n="userdoc.manifests.sg.targetport.type">integer</td><td data-i18n="userdoc.manifests.sg.targetport.desc">Port inside the VM/container (optional, defaults to hostPort)</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.sourcecidr.field"><code>spec.rules[].sourceCidr</code></td><td data-i18n="userdoc.manifests.sg.sourcecidr.type">string</td><td data-i18n-html="userdoc.manifests.sg.sourcecidr.desc">Allowed source CIDR (default <code>"0.0.0.0/0"</code>)</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.targetvm.field"><code>spec.rules[].targetVm</code></td><td data-i18n="userdoc.manifests.sg.targetvm.type">string</td><td data-i18n="userdoc.manifests.sg.targetvm.desc">Target VM name (optional)</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.enablednat.field"><code>spec.rules[].enableDnat</code></td><td data-i18n="userdoc.manifests.sg.enablednat.type">boolean</td><td data-i18n="userdoc.manifests.sg.enablednat.desc">Enable DNAT for this rule</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.attachments.field"><code>spec.attachments[]</code></td><td data-i18n="userdoc.manifests.sg.attachments.type">array</td><td data-i18n="userdoc.manifests.sg.attachments.desc">Resources this group is attached to</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.attachkind.field"><code>spec.attachments[].kind</code></td><td data-i18n="userdoc.manifests.sg.attachkind.type">string</td><td data-i18n-html="userdoc.manifests.sg.attachkind.desc"><code>vm</code> | <code>network</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.attachtarget.field"><code>spec.attachments[].target</code></td><td data-i18n="userdoc.manifests.sg.attachtarget.type">string</td><td data-i18n="userdoc.manifests.sg.attachtarget.desc">Name or ID of the target resource</td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.sg.attachnode.field"><code>spec.attachments[].targetNode</code></td><td data-i18n="userdoc.manifests.sg.attachnode.type">string</td><td data-i18n-html="userdoc.manifests.sg.attachnode.desc">Node name (required when kind is <code>network</code>)</td></tr>
             </table>
 
-            <h3>Example</h3>
+            <h3 data-i18n="userdoc.manifests.h3.sgexample">Example</h3>
 <pre><code>kind: SecurityGroup
 metadata:
   name: web-sg
@@ -123,18 +155,18 @@ spec:
     - kind: vm
       target: web-01</code></pre>
 
-            <h2>Field naming</h2>
-            <p>Both <strong>camelCase</strong> (recommended) and <strong>snake_case</strong> are accepted for most fields:</p>
+            <h2 data-i18n="userdoc.manifests.h2.fieldnaming">Field naming</h2>
+            <p data-i18n-html="userdoc.manifests.fieldnaming.p">Both <strong>camelCase</strong> (recommended) and <strong>snake_case</strong> are accepted for most fields:</p>
             <table>
-                <tr><th>camelCase (preferred)</th><th>snake_case alternative</th></tr>
-                <tr><td><code>storageBackend</code></td><td><code>storage_backend</code></td></tr>
-                <tr><td><code>storageSizeBytes</code></td><td><code>storage_size_bytes</code></td></tr>
-                <tr><td><code>backendHandle</code></td><td><code>backend_handle</code></td></tr>
-                <tr><td><code>imageSha256</code></td><td><code>image_sha256</code></td></tr>
-                <tr><td><code>imageFormat</code></td><td><code>image_format</code></td></tr>
+                <tr><th data-i18n="userdoc.manifests.fieldnaming.th.camel">camelCase (preferred)</th><th data-i18n="userdoc.manifests.fieldnaming.th.snake">snake_case alternative</th></tr>
+                <tr><td data-i18n-html="userdoc.manifests.fieldnaming.storagebackend.camel"><code>storageBackend</code></td><td data-i18n-html="userdoc.manifests.fieldnaming.storagebackend.snake"><code>storage_backend</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.fieldnaming.storagesize.camel"><code>storageSizeBytes</code></td><td data-i18n-html="userdoc.manifests.fieldnaming.storagesize.snake"><code>storage_size_bytes</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.fieldnaming.backendhandle.camel"><code>backendHandle</code></td><td data-i18n-html="userdoc.manifests.fieldnaming.backendhandle.snake"><code>backend_handle</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.fieldnaming.imagesha.camel"><code>imageSha256</code></td><td data-i18n-html="userdoc.manifests.fieldnaming.imagesha.snake"><code>image_sha256</code></td></tr>
+                <tr><td data-i18n-html="userdoc.manifests.fieldnaming.imageformat.camel"><code>imageFormat</code></td><td data-i18n-html="userdoc.manifests.fieldnaming.imageformat.snake"><code>image_format</code></td></tr>
             </table>
 
-            <h2>Applying manifests</h2>
+            <h2 data-i18n="userdoc.manifests.h2.applying">Applying manifests</h2>
 <pre><code># Create a VM from a manifest
 kctl create vm -f vm.yaml
 

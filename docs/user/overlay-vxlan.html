@@ -31,58 +31,87 @@
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
         </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html" class="active">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" class="active" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>VXLAN overlay networking</h1>
-            <p>VXLAN overlays provide L2 connectivity across multiple nodes, allowing VMs on different hosts to communicate on the same logical network.</p>
+            <h1 data-i18n="userdoc.vxlan.h1">VXLAN overlay networking</h1>
+            <p data-i18n="userdoc.vxlan.intro">VXLAN overlays provide L2 connectivity across multiple nodes, allowing VMs on different hosts to communicate on the same logical network.</p>
 
-            <h2>Data plane</h2>
-            <p>Each VXLAN network creates a Linux VXLAN device (<code>vxlan&lt;VNI&gt;</code>) using UDP port 4789. The VXLAN device is attached to a bridge (<code>kbr-&lt;name&gt;</code>), and the gateway IP is assigned to the bridge interface to serve as the subnet gateway.</p>
+            <h2 data-i18n="userdoc.vxlan.h2.dataplane">Data plane</h2>
+            <p data-i18n-html="userdoc.vxlan.dataplane.p">Each VXLAN network creates a Linux VXLAN device (<code>vxlan&lt;VNI&gt;</code>) using UDP port 4789. The VXLAN device is attached to a bridge (<code>kbr-&lt;name&gt;</code>), and the gateway IP is assigned to the bridge interface to serve as the subnet gateway.</p>
 
-            <h2>VNI derivation</h2>
-            <p>The VXLAN Network Identifier is derived deterministically from the network name using a djb2-style hash:</p>
+            <h2 data-i18n="userdoc.vxlan.h2.vni">VNI derivation</h2>
+            <p data-i18n="userdoc.vxlan.vni.p">The VXLAN Network Identifier is derived deterministically from the network name using a djb2-style hash:</p>
             <pre><code>VNI = 10000 + (hash(name) % 6000)   // range 10000–15999</code></pre>
-            <p>The same network name on different nodes produces the same VNI, which means the nodes automatically join the same overlay segment.</p>
+            <p data-i18n="userdoc.vxlan.vni.p2">The same network name on different nodes produces the same VNI, which means the nodes automatically join the same overlay segment.</p>
 
-            <h2>Peer discovery</h2>
-            <p>Peer discovery uses static FDB entries. When the controller pushes a network configuration to a node, it includes the list of peer IPs (<code>vxlanPeers</code>). For each peer, the node adds a forwarding database entry:</p>
+            <h2 data-i18n="userdoc.vxlan.h2.peers">Peer discovery</h2>
+            <p data-i18n-html="userdoc.vxlan.peers.p">Peer discovery uses static FDB entries. When the controller pushes a network configuration to a node, it includes the list of peer IPs (<code>vxlanPeers</code>). For each peer, the node adds a forwarding database entry:</p>
             <pre><code>bridge fdb append 00:00:00:00:00:00 dev vxlan&lt;VNI&gt; dst &lt;peer_ip&gt;</code></pre>
-            <p>This implements head-end replication (flood-to-peers): BUM traffic is replicated to every known peer.</p>
+            <p data-i18n="userdoc.vxlan.peers.p2">This implements head-end replication (flood-to-peers): BUM traffic is replicated to every known peer.</p>
 
-            <h2>VM addressing</h2>
-            <p>The controller allocates IPs starting at <code>.2</code> within the subnet, incrementing monotonically. IPs are not reclaimed when a VM is deleted. Addresses are assigned to VMs via cloud-init static network configuration, not DHCP.</p>
+            <h2 data-i18n="userdoc.vxlan.h2.addressing">VM addressing</h2>
+            <p data-i18n-html="userdoc.vxlan.addressing.p">The controller allocates IPs starting at <code>.2</code> within the subnet, incrementing monotonically. IPs are not reclaimed when a VM is deleted. Addresses are assigned to VMs via cloud-init static network configuration, not DHCP.</p>
 
-            <h2>Outbound NAT</h2>
-            <p>Outbound internet access for VMs on VXLAN networks is optional. Enable it with <code>--enable-outbound-nat</code> (or omit <code>--no-outbound-nat</code>) when creating the network. When enabled, kcore adds an nftables masquerade rule on the gateway interface so that VMs can reach external destinations.</p>
+            <h2 data-i18n="userdoc.vxlan.h2.nat">Outbound NAT</h2>
+            <p data-i18n-html="userdoc.vxlan.nat.p">Outbound internet access for VMs on VXLAN networks is optional. Enable it with <code>--enable-outbound-nat</code> (or omit <code>--no-outbound-nat</code>) when creating the network. When enabled, kcore adds an nftables masquerade rule on the gateway interface so that VMs can reach external destinations.</p>
 
-            <h2>Firewall</h2>
-            <p>All <code>kbr-*</code> bridges are treated as trusted interfaces in the node firewall. UDP port 4789 is automatically allowed when any VXLAN network exists on the node.</p>
+            <h2 data-i18n="userdoc.vxlan.h2.firewall">Firewall</h2>
+            <p data-i18n-html="userdoc.vxlan.firewall.p">All <code>kbr-*</code> bridges are treated as trusted interfaces in the node firewall. UDP port 4789 is automatically allowed when any VXLAN network exists on the node.</p>
 
-            <h2>Systemd ordering</h2>
-            <p>VXLAN network services are started in a strict dependency order:</p>
+            <h2 data-i18n="userdoc.vxlan.h2.systemd">Systemd ordering</h2>
+            <p data-i18n="userdoc.vxlan.systemd.p">VXLAN network services are started in a strict dependency order:</p>
             <ol>
-                <li><code>kcore-bridge-&lt;net&gt;</code> — creates the bridge and VXLAN device</li>
-                <li><code>kcore-tap-&lt;vm&gt;</code> — creates the TAP device on the bridge</li>
-                <li><code>kcore-vm-&lt;vm&gt;</code> — starts the Cloud Hypervisor VM</li>
+                <li data-i18n-html="userdoc.vxlan.systemd.li1"><code>kcore-bridge-&lt;net&gt;</code> — creates the bridge and VXLAN device</li>
+                <li data-i18n-html="userdoc.vxlan.systemd.li2"><code>kcore-tap-&lt;vm&gt;</code> — creates the TAP device on the bridge</li>
+                <li data-i18n-html="userdoc.vxlan.systemd.li3"><code>kcore-vm-&lt;vm&gt;</code> — starts the Cloud Hypervisor VM</li>
             </ol>
-            <p>NAT networks insert an additional unit between steps 1 and 2: <code>kcore-dhcp-&lt;net&gt;</code> (dnsmasq).</p>
+            <p data-i18n-html="userdoc.vxlan.systemd.p2">NAT networks insert an additional unit between steps 1 and 2: <code>kcore-dhcp-&lt;net&gt;</code> (dnsmasq).</p>
 
-            <h2>Opt-out</h2>
-            <p>Pass <code>--disable-vxlan</code> during node installation to prevent VXLAN network creation on that node. NAT and bridge networks continue to work normally. If a VXLAN network creation is attempted on a node with VXLAN disabled, the controller returns a <code>FailedPrecondition</code> error.</p>
+            <h2 data-i18n="userdoc.vxlan.h2.optout">Opt-out</h2>
+            <p data-i18n-html="userdoc.vxlan.optout.p">Pass <code>--disable-vxlan</code> during node installation to prevent VXLAN network creation on that node. NAT and bridge networks continue to work normally. If a VXLAN network creation is attempted on a node with VXLAN disabled, the controller returns a <code>FailedPrecondition</code> error.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

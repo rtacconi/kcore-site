@@ -30,72 +30,104 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html" class="active">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" class="active" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Compliance enablement</h1>
-            <p>kcore is infrastructure software. Your organisation owns compliance scope. kcore provides controls, APIs, and isolation properties assessors can test — a compliance-enabling platform.</p>
-            <p class="note">kcore is not a substitute for your own certifications. You inherit platform controls and document your policies on top.</p>
+            <h1 data-i18n="userdoc.compliance.h1">Compliance enablement</h1>
+            <p data-i18n="userdoc.compliance.intro">kcore is infrastructure software. Your organisation owns compliance scope. kcore provides controls, APIs, and isolation properties assessors can test — a compliance-enabling platform.</p>
+            <p class="note" data-i18n="userdoc.compliance.note">kcore is not a substitute for your own certifications. You inherit platform controls and document your policies on top.</p>
 
-            <h2>Compliance report</h2>
-            <p>Retrieve the compliance report with <code>kctl get compliance-report</code> or <code>kctl describe compliance-report</code>. The report covers the following categories:</p>
+            <h2 data-i18n="userdoc.compliance.h2.report">Compliance report</h2>
+            <p data-i18n-html="userdoc.compliance.report.p">Retrieve the compliance report with <code>kctl get compliance-report</code> or <code>kctl describe compliance-report</code>. The report covers the following categories:</p>
 
-            <h3>1. Cryptography</h3>
-            <p>Library: <strong>aws-lc-rs / AWS-LC</strong> (FIPS 140-3 certificate #4816). TLS 1.3 and TLS 1.2 cipher suites, key-exchange groups, and excluded algorithms are enumerated. Maps to <strong>FIPS 140-3</strong>, <strong>PCI DSS 4.2</strong>, <strong>SOC 2 CC6.1</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h3.crypto">1. Cryptography</h3>
+            <p data-i18n-html="userdoc.compliance.crypto.p">Library: <strong>aws-lc-rs / AWS-LC</strong> (FIPS 140-3 certificate #4816). TLS 1.3 and TLS 1.2 cipher suites, key-exchange groups, and excluded algorithms are enumerated. Maps to <strong>FIPS 140-3</strong>, <strong>PCI DSS 4.2</strong>, <strong>SOC 2 CC6.1</strong>.</p>
 
-            <h3>2. Encryption in transit</h3>
-            <p>mTLS enabled or disabled. gRPC over mTLS with X.509 client certificates. Maps to <strong>SOC 2</strong>, <strong>PCI DSS</strong>, <strong>GDPR Art. 32</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h2.enc">2. Encryption in transit</h3>
+            <p data-i18n-html="userdoc.compliance.enc1">mTLS enabled or disabled. gRPC over mTLS with X.509 client certificates. Maps to <strong>SOC 2</strong>, <strong>PCI DSS</strong>, <strong>GDPR Art. 32</strong>.</p>
 
-            <h3>3. Access control</h3>
-            <p>RPC methods mapped to allowed identities (static CN-based authorisation). Maps to <strong>SOC 2 CC6.3</strong>, <strong>PCI 7.1</strong>, <strong>GDPR Art. 32</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h3.access">3. Access control</h3>
+            <p data-i18n-html="userdoc.compliance.access.p">RPC methods mapped to allowed identities (static CN-based authorisation). Maps to <strong>SOC 2 CC6.3</strong>, <strong>PCI 7.1</strong>, <strong>GDPR Art. 32</strong>.</p>
 
-            <h3>4. Node inventory</h3>
-            <p>Total, approved, pending, and rejected node counts. Maps to <strong>SOC 2 CC6.2</strong>, <strong>PCI 2.4</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h3.nodeinv">4. Node inventory</h3>
+            <p data-i18n-html="userdoc.compliance.nodeinv.p">Total, approved, pending, and rejected node counts. Maps to <strong>SOC 2 CC6.2</strong>, <strong>PCI 2.4</strong>.</p>
 
-            <h3>5. VM inventory</h3>
-            <p>Total, running, and stopped VM counts.</p>
+            <h3 data-i18n="userdoc.compliance.h3.vminv">5. VM inventory</h3>
+            <p data-i18n="userdoc.compliance.vminv.p">Total, running, and stopped VM counts.</p>
 
-            <h3>6. Network segmentation</h3>
-            <p>Network counts by type (NAT / bridge / VXLAN). Maps to <strong>PCI 1.3</strong>, <strong>SOC 2 CC6.6</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h3.netseg">6. Network segmentation</h3>
+            <p data-i18n-html="userdoc.compliance.netseg.p">Network counts by type (NAT / bridge / VXLAN). Maps to <strong>PCI 1.3</strong>, <strong>SOC 2 CC6.6</strong>.</p>
 
-            <h3>7. Certificate lifecycle</h3>
-            <p>Sub-CA enabled, auto-renewal window (30 days), expiring and unknown certificate counts. Maps to <strong>SOC 2 CC6.1</strong>, <strong>PCI 3.6</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h3.certlife">7. Certificate lifecycle</h3>
+            <p data-i18n-html="userdoc.compliance.certlife.p">Sub-CA enabled, auto-renewal window (30 days), expiring and unknown certificate counts. Maps to <strong>SOC 2 CC6.1</strong>, <strong>PCI 3.6</strong>.</p>
 
-            <h3>8. Encryption at rest</h3>
-            <p>LUKS2 mandatory. TPM2, key-file, and unknown node counts. Maps to <strong>NIST 800-53 SC-28</strong>, <strong>SOC 2 CC6.1</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h3.ear">8. Encryption at rest</h3>
+            <p data-i18n-html="userdoc.compliance.enc2">LUKS2 mandatory. TPM2, key-file, and unknown node counts. Maps to <strong>NIST 800-53 SC-28</strong>, <strong>SOC 2 CC6.1</strong>.</p>
 
-            <h3>9. Infrastructure</h3>
-            <p>NixOS, Cloud Hypervisor (KVM), VM isolation (per-VM TAP + per-network bridge), node approval. Maps to <strong>SOC 2 CC8.1</strong>, <strong>PCI 2.2</strong>.</p>
+            <h3 data-i18n="userdoc.compliance.h2.iso">9. Infrastructure</h3>
+            <p data-i18n-html="userdoc.compliance.iso.p">NixOS, Cloud Hypervisor (KVM), VM isolation (per-VM TAP + per-network bridge), node approval. Maps to <strong>SOC 2 CC8.1</strong>, <strong>PCI 2.2</strong>.</p>
 
-            <h2>Implemented security features</h2>
+            <h2 data-i18n="userdoc.compliance.h2.decl">Implemented security features</h2>
             <ul>
-                <li>mTLS for all management-plane communication</li>
-                <li>CN-based authorisation for gRPC methods</li>
-                <li>Node approval queue</li>
-                <li>LUKS2 + TPM2 disk encryption</li>
-                <li>Automatic certificate renewal</li>
-                <li>Sub-CA rotation</li>
-                <li>Security groups (nftables)</li>
-                <li><code>cargo audit</code> in CI</li>
+                <li data-i18n="userdoc.compliance.impl.li1">mTLS for all management-plane communication</li>
+                <li data-i18n="userdoc.compliance.impl.li2">CN-based authorisation for gRPC methods</li>
+                <li data-i18n="userdoc.compliance.impl.li3">Node approval queue</li>
+                <li data-i18n="userdoc.compliance.impl.li4">LUKS2 + TPM2 disk encryption</li>
+                <li data-i18n="userdoc.compliance.impl.li5">Automatic certificate renewal</li>
+                <li data-i18n="userdoc.compliance.impl.li6">Sub-CA rotation</li>
+                <li data-i18n="userdoc.compliance.impl.li7">Security groups (nftables)</li>
+                <li data-i18n-html="userdoc.compliance.impl.li8"><code>cargo audit</code> in CI</li>
             </ul>
 
-            <h2>In progress</h2>
+            <h2 data-i18n="userdoc.compliance.h2.inprog">In progress</h2>
             <ul>
-                <li>Audit log of mutating API calls <span class="roadmap-badge">Planned</span></li>
-                <li>RBAC / multiple operator roles <span class="roadmap-badge">Planned</span></li>
-                <li>CRL/OCSP for certificate revocation <span class="roadmap-badge">Planned</span></li>
-                <li>gRPC rate limiting <span class="roadmap-badge">Planned</span></li>
+                <li data-i18n-html="userdoc.compliance.inprog.li1">Audit log of mutating API calls <span class="roadmap-badge">Planned</span></li>
+                <li data-i18n-html="userdoc.compliance.inprog.li2">RBAC / multiple operator roles <span class="roadmap-badge">Planned</span></li>
+                <li data-i18n-html="userdoc.compliance.inprog.li3">CRL/OCSP for certificate revocation <span class="roadmap-badge">Planned</span></li>
+                <li data-i18n-html="userdoc.compliance.inprog.li4">gRPC rate limiting <span class="roadmap-badge">Planned</span></li>
             </ul>
         </main>
     </div>

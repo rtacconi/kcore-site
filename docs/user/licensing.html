@@ -30,35 +30,67 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html" class="active">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" class="active" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Licensing &amp; editions</h1>
+            <h1 data-i18n="userdoc.licensing.h1">Licensing &amp; editions</h1>
 
-            <p>kcore follows an <strong>open-core</strong> model. The Community Edition source is available under the <strong>Apache License 2.0</strong>. Apache-2.0 does not restrict commercial use of the code you build from that tree; always read <code>LICENSE</code> for the exact terms.</p>
+            <p data-i18n-html="userdoc.licensing.p1">kcore follows an <strong>open-core</strong> model. The Community Edition source is available under the <strong>Apache License 2.0</strong>. Apache-2.0 does not restrict commercial use of the code you build from that tree; always read <code>LICENSE</code> for the exact terms.</p>
 
-            <p><strong>Subscriptions</strong> cover services and artifacts around the project: the official supported distribution, stable production update channel, signed ISO images, tested releases, and commercial support. A subscription does not replace the open-source licence on the public core.</p>
+            <p data-i18n-html="userdoc.licensing.p2"><strong>Subscriptions</strong> cover services and artifacts around the project: the official supported distribution, stable production update channel, signed ISO images, tested releases, and commercial support. A subscription does not replace the open-source licence on the public core.</p>
 
             <table>
-                <tr><th>Context</th><th>Edition</th></tr>
-                <tr><td>Contributors, labs, evaluation</td><td>Community Edition (build from source)</td></tr>
-                <tr><td>Production</td><td>kcore Standard or Premium (per subscribed node)</td></tr>
+                <tr><th data-i18n="userdoc.licensing.th.context">Context</th><th data-i18n="userdoc.licensing.th.edition">Edition</th></tr>
+                <tr><td data-i18n="userdoc.licensing.tr.community">Contributors, labs, evaluation</td><td data-i18n="userdoc.licensing.tr.community.ed">Community Edition (build from source)</td></tr>
+                <tr><td data-i18n="userdoc.licensing.tr.prod">Production</td><td data-i18n="userdoc.licensing.tr.prod.ed">kcore Standard or Premium (per subscribed node)</td></tr>
             </table>
 
-            <p>Socket-based pricing and tier details are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page. The <a href="https://github.com/rtacconi/kcore/blob/main/PRICING.md" style="color:var(--accent-primary)">PRICING.md</a> file in the repository mirrors billing rules.</p>
+            <p data-i18n-html="userdoc.licensing.p3">Socket-based pricing and tier details are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page. The <a href="https://github.com/rtacconi/kcore/blob/main/PRICING.md" style="color:var(--accent-primary)">PRICING.md</a> file in the repository mirrors billing rules.</p>
 
-            <p><strong>Partner program</strong> (resellers, integrators, providers): <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" style="color:var(--accent-primary)">team@tacconiconsulting.com</a></p>
+            <p data-i18n-html="userdoc.licensing.p4"><strong>Partner program</strong> (resellers, integrators, providers): <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" style="color:var(--accent-primary)">team@tacconiconsulting.com</a></p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
