@@ -30,66 +30,98 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html" class="active">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Certificates and encryption</h1>
-            <p>kcore uses mutual TLS (mTLS) for all management-plane communication. Disk encryption with LUKS2 protects data at rest.</p>
+            <h1 data-i18n="userdoc.certs.h1">Certificates and encryption</h1>
+            <p data-i18n="userdoc.certs.intro">kcore uses mutual TLS (mTLS) for all management-plane communication. Disk encryption with LUKS2 protects data at rest.</p>
 
-            <h2>PKI hierarchy</h2>
+            <h2 data-i18n="userdoc.certs.h2.pki">PKI hierarchy</h2>
             <ul>
-                <li><strong>Root CA</strong> — created by <code>kctl create cluster</code></li>
-                <li><strong>Sub-CA</strong> — lives on the controller, signs node leaf certificates</li>
-                <li><strong>Controller cert</strong> — identifies the controller to nodes and clients</li>
-                <li><strong>kctl client cert</strong> — authenticates CLI operations</li>
-                <li><strong>Per-node certs</strong> — generated during <code>kctl node install</code></li>
+                <li data-i18n-html="userdoc.certs.pki.li1"><strong>Root CA</strong> — created by <code>kctl create cluster</code></li>
+                <li data-i18n-html="userdoc.certs.pki.li2"><strong>Sub-CA</strong> — lives on the controller, signs node leaf certificates</li>
+                <li data-i18n-html="userdoc.certs.pki.li3"><strong>Controller cert</strong> — identifies the controller to nodes and clients</li>
+                <li data-i18n-html="userdoc.certs.pki.li4"><strong>kctl client cert</strong> — authenticates CLI operations</li>
+                <li data-i18n-html="userdoc.certs.pki.li5"><strong>Per-node certs</strong> — generated during <code>kctl node install</code></li>
             </ul>
 
-            <h2>mTLS bootstrap</h2>
-            <p><code>kctl create cluster</code> generates the full PKI (root CA, sub-CA, controller cert, kctl client cert). <code>kctl node install</code> pushes the node certificate, private key, and CA chain to the target node. Controller nodes also receive the sub-CA key pair.</p>
+            <h2 data-i18n="userdoc.certs.h2.bootstrap">mTLS bootstrap</h2>
+            <p data-i18n-html="userdoc.certs.bootstrap.p"><code>kctl create cluster</code> generates the full PKI (root CA, sub-CA, controller cert, kctl client cert). <code>kctl node install</code> pushes the node certificate, private key, and CA chain to the target node. Controller nodes also receive the sub-CA key pair.</p>
 
-            <h2>Certificate auto-renewal</h2>
-            <p>The node-agent checks certificate expiry daily. If a certificate expires within 30 days, the agent calls the <code>RenewNodeCert</code> RPC. The sub-CA signs a new leaf certificate and returns the updated chain.</p>
+            <h2 data-i18n="userdoc.certs.h2.renewal">Certificate auto-renewal</h2>
+            <p data-i18n-html="userdoc.certs.renewal.p">The node-agent checks certificate expiry daily. If a certificate expires within 30 days, the agent calls the <code>RenewNodeCert</code> RPC. The sub-CA signs a new leaf certificate and returns the updated chain.</p>
 
-            <h2>Manual rotation</h2>
+            <h2 data-i18n="userdoc.certs.h2.rotation">Manual rotation</h2>
 <pre><code># Rotate the sub-CA
 kctl rotate sub-ca --certs-dir ~/.kcore/&lt;context&gt;/
 
 # Re-sign the controller cert and trigger TLS reload
 kctl rotate certs --controller &lt;host:port&gt; --certs-dir ~/.kcore/&lt;context&gt;/</code></pre>
-            <p><code>rotate sub-ca</code> generates a new sub-CA and pushes it to the controller. <code>rotate certs</code> re-signs the controller certificate and triggers <code>ReloadTls</code> on the controller.</p>
+            <p data-i18n-html="userdoc.certs.rotation.p"><code>rotate sub-ca</code> generates a new sub-CA and pushes it to the controller. <code>rotate certs</code> re-signs the controller certificate and triggers <code>ReloadTls</code> on the controller.</p>
 
-            <h2>Inspecting certificates</h2>
-            <p><code>kctl get nodes</code> shows <code>cert_expiry_days</code> per node. The compliance report includes a Certificate Lifecycle section with expiring and unknown certificate counts.</p>
+            <h2 data-i18n="userdoc.certs.h2.inspect">Inspecting certificates</h2>
+            <p data-i18n-html="userdoc.certs.inspect.p"><code>kctl get nodes</code> shows <code>cert_expiry_days</code> per node. The compliance report includes a Certificate Lifecycle section with expiring and unknown certificate counts.</p>
 
-            <h2>LUKS2 disk encryption</h2>
-            <p>LUKS2 encryption is mandatory for the OS disk on every node.</p>
+            <h2 data-i18n="userdoc.certs.h2.luks">LUKS2 disk encryption</h2>
+            <p data-i18n="userdoc.certs.luks.p">LUKS2 encryption is mandatory for the OS disk on every node.</p>
             <ul>
-                <li><strong>TPM2 path</strong> — <code>systemd-cryptenroll</code> seals the LUKS key to the TPM2 device.</li>
-                <li><strong>Key-file path</strong> — passphrase-based unlock using a key file.</li>
-                <li><strong>Recovery key</strong> — stored at <code>/etc/kcore/recovery/luks-recovery-key.txt</code> (root-only, mode 0400).</li>
+                <li data-i18n-html="userdoc.certs.luks.li1"><strong>TPM2 path</strong> — <code>systemd-cryptenroll</code> seals the LUKS key to the TPM2 device.</li>
+                <li data-i18n-html="userdoc.certs.luks.li2"><strong>Key-file path</strong> — passphrase-based unlock using a key file.</li>
+                <li data-i18n-html="userdoc.certs.luks.li3"><strong>Recovery key</strong> — stored at <code>/etc/kcore/recovery/luks-recovery-key.txt</code> (root-only, mode 0400).</li>
             </ul>
 
-            <h2>LUKS reporting</h2>
-            <p>The node-agent detects the LUKS unlock method at registration: <strong>tpm2</strong> if <code>/dev/mapper/cryptroot</code> exists and a TPM device is present, <strong>key-file</strong> otherwise. <code>kctl get compliance-report</code> shows the cluster-wide LUKS breakdown by method.</p>
+            <h2 data-i18n="userdoc.certs.h2.luksreport">LUKS reporting</h2>
+            <p data-i18n-html="userdoc.certs.luksreport.p">The node-agent detects the LUKS unlock method at registration: <strong>tpm2</strong> if <code>/dev/mapper/cryptroot</code> exists and a TPM device is present, <strong>key-file</strong> otherwise. <code>kctl get compliance-report</code> shows the cluster-wide LUKS breakdown by method.</p>
 
-            <h2>TLS configuration</h2>
+            <h2 data-i18n="userdoc.certs.h2.tlsconfig">TLS configuration</h2>
             <ul>
-                <li><strong>Production</strong> — mTLS required (default). All gRPC and API traffic is encrypted and mutually authenticated.</li>
-                <li><strong>Development</strong> — <code>kctl --insecure</code> disables TLS for local testing over plain HTTP.</li>
+                <li data-i18n-html="userdoc.certs.tls.li1"><strong>Production</strong> — mTLS required (default). All gRPC and API traffic is encrypted and mutually authenticated.</li>
+                <li data-i18n-html="userdoc.certs.tls.li2"><strong>Development</strong> — <code>kctl --insecure</code> disables TLS for local testing over plain HTTP.</li>
             </ul>
-            <p class="note">Never use <code>--insecure</code> in production. Disabling mTLS removes authentication and encryption from the management plane.</p>
+            <p class="note" data-i18n-html="userdoc.certs.tls.note">Never use <code>--insecure</code> in production. Disabling mTLS removes authentication and encryption from the management plane.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

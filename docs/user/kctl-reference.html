@@ -30,143 +30,175 @@
 <body>
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html" class="active">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" class="active" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>kctl CLI reference</h1>
-            <p><code>kctl</code> is the command-line interface for managing kcore clusters. Global flags: <code>-s</code> / <code>--controller</code> (controller address, repeatable for HA), <code>-k</code> / <code>--insecure</code> (skip TLS verification), <code>-c</code> / <code>--config</code> (path to config file), <code>--node</code> (node address for direct node commands).</p>
+            <h1 data-i18n="userdoc.kctlref.h1">kctl CLI reference</h1>
+            <p data-i18n-html="userdoc.kctlref.intro"><code>kctl</code> is the command-line interface for managing kcore clusters. Global flags: <code>-s</code> / <code>--controller</code> (controller address, repeatable for HA), <code>-k</code> / <code>--insecure</code> (skip TLS verification), <code>-c</code> / <code>--config</code> (path to config file), <code>--node</code> (node address for direct node commands).</p>
 
-            <h2>create</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.create">create</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>vm</code></td><td>Create a VM from CLI flags or <code>-f</code> YAML manifest</td></tr>
-                <tr><td><code>container</code></td><td>Create a container on a node</td></tr>
-                <tr><td><code>network</code></td><td>Create a network</td></tr>
-                <tr><td><code>cluster</code></td><td>Initialise PKI and mTLS context for a new cluster</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.create.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.create.vm.desc">Create a VM from CLI flags or <code>-f</code> YAML manifest</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.create.container.cmd"><code>container</code></td><td data-i18n="userdoc.kctlref.create.container.desc">Create a container on a node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.create.network.cmd"><code>network</code></td><td data-i18n="userdoc.kctlref.create.network.desc">Create a network</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.create.cluster.cmd"><code>cluster</code></td><td data-i18n="userdoc.kctlref.create.cluster.desc">Initialise PKI and mTLS context for a new cluster</td></tr>
             </table>
 
-            <h2>get</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.get">get</h2>
             <table>
-                <tr><th>Subcommand</th><th>Aliases</th></tr>
-                <tr><td><code>vms</code></td><td><code>vm</code></td></tr>
-                <tr><td><code>containers</code></td><td><code>container</code></td></tr>
-                <tr><td><code>nodes</code></td><td><code>node</code></td></tr>
-                <tr><td><code>networks</code></td><td><code>network</code></td></tr>
-                <tr><td><code>storage-classes</code></td><td><code>storage-class</code></td></tr>
-                <tr><td><code>compliance-report</code></td><td><code>compliance</code></td></tr>
-                <tr><td><code>conflicts</code></td><td></td></tr>
-                <tr><td><code>replication-status</code></td><td></td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.aliases">Aliases</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.vms.cmd"><code>vms</code></td><td data-i18n-html="userdoc.kctlref.get.vms.alias"><code>vm</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.containers.cmd"><code>containers</code></td><td data-i18n-html="userdoc.kctlref.get.containers.alias"><code>container</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.nodes.cmd"><code>nodes</code></td><td data-i18n-html="userdoc.kctlref.get.nodes.alias"><code>node</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.networks.cmd"><code>networks</code></td><td data-i18n-html="userdoc.kctlref.get.networks.alias"><code>network</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.storageclasses.cmd"><code>storage-classes</code></td><td data-i18n-html="userdoc.kctlref.get.storageclasses.alias"><code>storage-class</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.get.compliance.alias"><code>compliance</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.conflicts.cmd"><code>conflicts</code></td><td></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.replstatus.cmd"><code>replication-status</code></td><td></td></tr>
             </table>
 
-            <h2>describe</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.describe">describe</h2>
             <table>
-                <tr><th>Subcommand</th><th>Aliases</th></tr>
-                <tr><td><code>vm</code></td><td><code>vms</code></td></tr>
-                <tr><td><code>node</code></td><td><code>nodes</code></td></tr>
-                <tr><td><code>network</code></td><td><code>networks</code></td></tr>
-                <tr><td><code>storage-class</code></td><td><code>storage-classes</code></td></tr>
-                <tr><td><code>ssh-key</code></td><td><code>sshkey</code></td></tr>
-                <tr><td><code>compliance-report</code></td><td><code>compliance</code></td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.aliases">Aliases</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.describe.vm.alias"><code>vms</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.node.cmd"><code>node</code></td><td data-i18n-html="userdoc.kctlref.describe.node.alias"><code>nodes</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.network.cmd"><code>network</code></td><td data-i18n-html="userdoc.kctlref.describe.network.alias"><code>networks</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.storageclass.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.describe.storageclass.alias"><code>storage-classes</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.sshkey.cmd"><code>ssh-key</code></td><td data-i18n-html="userdoc.kctlref.describe.sshkey.alias"><code>sshkey</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.describe.compliance.alias"><code>compliance</code></td></tr>
             </table>
 
-            <h2>delete</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.delete">delete</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>vm</code></td><td>Delete a VM</td></tr>
-                <tr><td><code>network</code></td><td>Delete a network</td></tr>
-                <tr><td><code>image</code></td><td>Delete a stored image</td></tr>
-                <tr><td><code>container</code></td><td>Delete a container</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.delete.vm.cmd"><code>vm</code></td><td data-i18n="userdoc.kctlref.delete.vm.desc">Delete a VM</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.delete.network.cmd"><code>network</code></td><td data-i18n="userdoc.kctlref.delete.network.desc">Delete a network</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.delete.image.cmd"><code>image</code></td><td data-i18n="userdoc.kctlref.delete.image.desc">Delete a stored image</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.delete.container.cmd"><code>container</code></td><td data-i18n="userdoc.kctlref.delete.container.desc">Delete a container</td></tr>
             </table>
 
-            <h2>start / stop</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.startstop">start / stop</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>vm</code></td><td>Start or stop a VM</td></tr>
-                <tr><td><code>container</code></td><td>Start or stop a container</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.startstop.vm.cmd"><code>vm</code></td><td data-i18n="userdoc.kctlref.startstop.vm.desc">Start or stop a VM</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.startstop.container.cmd"><code>container</code></td><td data-i18n="userdoc.kctlref.startstop.container.desc">Start or stop a container</td></tr>
             </table>
 
-            <h2>set</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.set">set</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>vm</code></td><td>Set desired state (<code>running</code> / <code>stopped</code>). Supports <code>--target-node</code>.</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.set.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.set.vm.desc">Set desired state (<code>running</code> / <code>stopped</code>). Supports <code>--target-node</code>.</td></tr>
             </table>
 
-            <h2>update</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.update">update</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>vm</code></td><td>Resize CPU / memory of a VM. Supports <code>--target-node</code>.</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.update.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.update.vm.desc">Resize CPU / memory of a VM. Supports <code>--target-node</code>.</td></tr>
             </table>
 
-            <h2>node</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.node">node</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>disks</code></td><td>List disks on a node</td></tr>
-                <tr><td><code>nics</code></td><td>List network interfaces on a node</td></tr>
-                <tr><td><code>install</code></td><td>Install kcore on a bare-metal node</td></tr>
-                <tr><td><code>approve</code></td><td>Approve a pending node join request</td></tr>
-                <tr><td><code>reject</code></td><td>Reject a pending node join request</td></tr>
-                <tr><td><code>apply-nix</code></td><td>Apply NixOS configuration to a node</td></tr>
-                <tr><td><code>apply-disko</code></td><td>Apply Disko disk layout to a node</td></tr>
-                <tr><td><code>upload-image</code></td><td>Upload a VM image to a node</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.disks.cmd"><code>disks</code></td><td data-i18n="userdoc.kctlref.node.disks.desc">List disks on a node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.nics.cmd"><code>nics</code></td><td data-i18n="userdoc.kctlref.node.nics.desc">List network interfaces on a node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.install.cmd"><code>install</code></td><td data-i18n="userdoc.kctlref.node.install.desc">Install kcore on a bare-metal node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.approve.cmd"><code>approve</code></td><td data-i18n="userdoc.kctlref.node.approve.desc">Approve a pending node join request</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.reject.cmd"><code>reject</code></td><td data-i18n="userdoc.kctlref.node.reject.desc">Reject a pending node join request</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.applynix.cmd"><code>apply-nix</code></td><td data-i18n="userdoc.kctlref.node.applynix.desc">Apply NixOS configuration to a node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.applydisko.cmd"><code>apply-disko</code></td><td data-i18n="userdoc.kctlref.node.applydisko.desc">Apply Disko disk layout to a node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.uploadimage.cmd"><code>upload-image</code></td><td data-i18n="userdoc.kctlref.node.uploadimage.desc">Upload a VM image to a node</td></tr>
             </table>
 
-            <h2>ssh-key</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.sshkey">ssh-key</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>create</code></td><td>Register a new SSH public key</td></tr>
-                <tr><td><code>delete</code></td><td>Remove an SSH key</td></tr>
-                <tr><td><code>list</code></td><td>List all SSH keys</td></tr>
-                <tr><td><code>get</code></td><td>Show details for an SSH key</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sshkey.create.cmd"><code>create</code></td><td data-i18n="userdoc.kctlref.sshkey.create.desc">Register a new SSH public key</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sshkey.delete.cmd"><code>delete</code></td><td data-i18n="userdoc.kctlref.sshkey.delete.desc">Remove an SSH key</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sshkey.list.cmd"><code>list</code></td><td data-i18n="userdoc.kctlref.sshkey.list.desc">List all SSH keys</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sshkey.get.cmd"><code>get</code></td><td data-i18n="userdoc.kctlref.sshkey.get.desc">Show details for an SSH key</td></tr>
             </table>
 
-            <h2>drain</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.drain">drain</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>node</code></td><td>Live-migrate all VMs off a node. Use <code>--target-node</code> to specify the destination node.</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.drain.node.cmd"><code>node</code></td><td data-i18n-html="userdoc.kctlref.drain.node.desc">Live-migrate all VMs off a node. Use <code>--target-node</code> to specify the destination node.</td></tr>
             </table>
 
-            <h2>rotate</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.rotate">rotate</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>certs</code></td><td>Rotate the controller TLS certificate</td></tr>
-                <tr><td><code>sub-ca</code></td><td>Generate a new sub-CA</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.rotate.certs.cmd"><code>certs</code></td><td data-i18n="userdoc.kctlref.rotate.certs.desc">Rotate the controller TLS certificate</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.rotate.subca.cmd"><code>sub-ca</code></td><td data-i18n="userdoc.kctlref.rotate.subca.desc">Generate a new sub-CA</td></tr>
             </table>
 
-            <h2>apply</h2>
-            <p>Apply a NixOS configuration to the controller. Flags: <code>-f</code> (config file), <code>--dry-run</code> (preview without applying).</p>
+            <h2 data-i18n="userdoc.kctlref.h2.apply">apply</h2>
+            <p data-i18n-html="userdoc.kctlref.apply.p">Apply a NixOS configuration to the controller. Flags: <code>-f</code> (config file), <code>--dry-run</code> (preview without applying).</p>
 
-            <h2>workload</h2>
+            <h2 data-i18n="userdoc.kctlref.h2.workload">workload</h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>create</code></td><td>Create a workload. Use <code>--kind container</code> or <code>--kind vm</code>.</td></tr>
-                <tr><td><code>list</code></td><td>List all workloads</td></tr>
-                <tr><td><code>get</code></td><td>Show workload details</td></tr>
-                <tr><td><code>delete</code></td><td>Delete a workload</td></tr>
-                <tr><td><code>start</code></td><td>Start a workload</td></tr>
-                <tr><td><code>stop</code></td><td>Stop a workload</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.workload.create.cmd"><code>create</code></td><td data-i18n-html="userdoc.kctlref.workload.create.desc">Create a workload. Use <code>--kind container</code> or <code>--kind vm</code>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.workload.list.cmd"><code>list</code></td><td data-i18n="userdoc.kctlref.workload.list.desc">List all workloads</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.workload.get.cmd"><code>get</code></td><td data-i18n="userdoc.kctlref.workload.get.desc">Show workload details</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.workload.delete.cmd"><code>delete</code></td><td data-i18n="userdoc.kctlref.workload.delete.desc">Delete a workload</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.workload.start.cmd"><code>start</code></td><td data-i18n="userdoc.kctlref.workload.start.desc">Start a workload</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.workload.stop.cmd"><code>stop</code></td><td data-i18n="userdoc.kctlref.workload.stop.desc">Stop a workload</td></tr>
             </table>
 
-            <h2>security-group <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias: <code>sg</code>)</span></h2>
+            <h2 data-i18n-html="userdoc.kctlref.h2.sg">security-group <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias: <code>sg</code>)</span></h2>
             <table>
-                <tr><th>Subcommand</th><th>Description</th></tr>
-                <tr><td><code>create</code></td><td>Create a security group from <code>-f</code> YAML</td></tr>
-                <tr><td><code>apply</code></td><td>Apply / update a security group from <code>-f</code> YAML</td></tr>
-                <tr><td><code>list</code></td><td>List all security groups</td></tr>
-                <tr><td><code>get</code></td><td>Show security group details</td></tr>
-                <tr><td><code>delete</code></td><td>Delete a security group</td></tr>
-                <tr><td><code>attach</code></td><td>Attach a security group to a VM or network</td></tr>
-                <tr><td><code>detach</code></td><td>Detach a security group from a VM or network</td></tr>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sg.create.cmd"><code>create</code></td><td data-i18n-html="userdoc.kctlref.sg.create.desc">Create a security group from <code>-f</code> YAML</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sg.apply.cmd"><code>apply</code></td><td data-i18n-html="userdoc.kctlref.sg.apply.desc">Apply / update a security group from <code>-f</code> YAML</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sg.list.cmd"><code>list</code></td><td data-i18n="userdoc.kctlref.sg.list.desc">List all security groups</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sg.get.cmd"><code>get</code></td><td data-i18n="userdoc.kctlref.sg.get.desc">Show security group details</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sg.delete.cmd"><code>delete</code></td><td data-i18n="userdoc.kctlref.sg.delete.desc">Delete a security group</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sg.attach.cmd"><code>attach</code></td><td data-i18n="userdoc.kctlref.sg.attach.desc">Attach a security group to a VM or network</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.sg.detach.cmd"><code>detach</code></td><td data-i18n="userdoc.kctlref.sg.detach.desc">Detach a security group from a VM or network</td></tr>
             </table>
         </main>
     </div>

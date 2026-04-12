@@ -31,69 +31,98 @@
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
         </ul>
     </div></nav>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html" class="active">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">vSAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" class="active" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Container lifecycle</h1>
-            <p>kcore supports running OCI containers alongside VMs. Container support uses nerdctl (preferred) or docker as the runtime backend.</p>
-            <p class="note">Container support is in early phase. Treat it as an operator workflow for labs and controlled environments, not a full orchestration platform.</p>
+            <h1 data-i18n="userdoc.containers.h1">Container lifecycle</h1>
+            <p data-i18n="userdoc.containers.intro">kcore supports running OCI containers alongside VMs. Container support uses nerdctl (preferred) or docker as the runtime backend.</p>
+            <p class="note" data-i18n="userdoc.containers.note">Container support is in early phase. Treat it as an operator workflow for labs and controlled environments, not a full orchestration platform.</p>
 
-            <h2>Create a container (direct node API)</h2>
-            <p>Send a container creation request directly to a specific node agent:</p>
+            <h2 data-i18n="userdoc.containers.h2.direct">Create a container (direct node API)</h2>
+            <p data-i18n="userdoc.containers.direct.p">Send a container creation request directly to a specific node agent:</p>
             <pre><code>kctl --node &lt;IP&gt;:9091 create container my-app \
   --image nginx:latest \
   --network default \
   --port 8080:80 \
   --env MY_VAR=hello</code></pre>
 
-            <h2>Controller workload API</h2>
-            <p>Alternatively, create a container workload through the controller:</p>
+            <h2 data-i18n="userdoc.containers.h2.workload">Controller workload API</h2>
+            <p data-i18n="userdoc.containers.workload.p1">Alternatively, create a container workload through the controller:</p>
             <pre><code>kctl workload create my-app \
   --kind container \
   --image nginx:latest \
   --network default \
   --target-node &lt;NODE_ID&gt;</code></pre>
-            <p>The direct node path (<code>--node</code>) sends the request straight to the node agent. The workload path goes through the controller, which handles scheduling, records the workload in its state, and pushes the desired configuration to the target node.</p>
+            <p data-i18n-html="userdoc.containers.workload.p2">The direct node path (<code>--node</code>) sends the request straight to the node agent. The workload path goes through the controller, which handles scheduling, records the workload in its state, and pushes the desired configuration to the target node.</p>
 
-            <h2>Lifecycle operations</h2>
+            <h2 data-i18n="userdoc.containers.h2.lifecycle">Lifecycle operations</h2>
             <table>
-                <thead><tr><th>Operation</th><th>Command</th></tr></thead>
+                <thead><tr><th data-i18n="userdoc.containers.lifecycle.th.op">Operation</th><th data-i18n="userdoc.containers.lifecycle.th.cmd">Command</th></tr></thead>
                 <tbody>
-                    <tr><td>Start</td><td><code>kctl start container &lt;name&gt;</code></td></tr>
-                    <tr><td>Stop</td><td><code>kctl stop container &lt;name&gt;</code></td></tr>
-                    <tr><td>Delete</td><td><code>kctl delete container &lt;name&gt;</code></td></tr>
-                    <tr><td>Get</td><td><code>kctl get container &lt;name&gt;</code></td></tr>
-                    <tr><td>List</td><td><code>kctl get containers</code></td></tr>
+                    <tr><td data-i18n="userdoc.containers.lifecycle.start.op">Start</td><td data-i18n-html="userdoc.containers.lifecycle.start.cmd"><code>kctl start container &lt;name&gt;</code></td></tr>
+                    <tr><td data-i18n="userdoc.containers.lifecycle.stop.op">Stop</td><td data-i18n-html="userdoc.containers.lifecycle.stop.cmd"><code>kctl stop container &lt;name&gt;</code></td></tr>
+                    <tr><td data-i18n="userdoc.containers.lifecycle.delete.op">Delete</td><td data-i18n-html="userdoc.containers.lifecycle.delete.cmd"><code>kctl delete container &lt;name&gt;</code></td></tr>
+                    <tr><td data-i18n="userdoc.containers.lifecycle.get.op">Get</td><td data-i18n-html="userdoc.containers.lifecycle.get.cmd"><code>kctl get container &lt;name&gt;</code></td></tr>
+                    <tr><td data-i18n="userdoc.containers.lifecycle.list.op">List</td><td data-i18n-html="userdoc.containers.lifecycle.list.cmd"><code>kctl get containers</code></td></tr>
                 </tbody>
             </table>
 
-            <h2>Container spec options</h2>
+            <h2 data-i18n="userdoc.containers.h2.spec">Container spec options</h2>
             <table>
-                <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+                <thead><tr><th data-i18n="userdoc.containers.spec.th.flag">Flag</th><th data-i18n="userdoc.containers.spec.th.desc">Description</th></tr></thead>
                 <tbody>
-                    <tr><td><code>--image</code></td><td>OCI image reference (e.g. <code>nginx:latest</code>)</td></tr>
-                    <tr><td><code>--network</code></td><td>Bridge name to attach the container to</td></tr>
-                    <tr><td><code>--port</code></td><td>Port mapping in <code>host:container</code> format</td></tr>
-                    <tr><td><code>--env</code></td><td>Environment variable in <code>KEY=VALUE</code> format</td></tr>
-                    <tr><td><code>--cmd</code></td><td>Override the image entrypoint command</td></tr>
+                    <tr><td data-i18n-html="userdoc.containers.spec.image.flag"><code>--image</code></td><td data-i18n-html="userdoc.containers.spec.image.desc">OCI image reference (e.g. <code>nginx:latest</code>)</td></tr>
+                    <tr><td data-i18n-html="userdoc.containers.spec.network.flag"><code>--network</code></td><td data-i18n="userdoc.containers.spec.network.desc">Bridge name to attach the container to</td></tr>
+                    <tr><td data-i18n-html="userdoc.containers.spec.port.flag"><code>--port</code></td><td data-i18n-html="userdoc.containers.spec.port.desc">Port mapping in <code>host:container</code> format</td></tr>
+                    <tr><td data-i18n-html="userdoc.containers.spec.env.flag"><code>--env</code></td><td data-i18n-html="userdoc.containers.spec.env.desc">Environment variable in <code>KEY=VALUE</code> format</td></tr>
+                    <tr><td data-i18n-html="userdoc.containers.spec.cmd.flag"><code>--cmd</code></td><td data-i18n="userdoc.containers.spec.cmd.desc">Override the image entrypoint command</td></tr>
                 </tbody>
             </table>
 
-            <h2>Storage</h2>
-            <p>Containers can optionally mount a volume at <code>/data</code>. When using the controller workload path, specify the storage backend and size:</p>
+            <h2 data-i18n="userdoc.containers.h2.storage">Storage</h2>
+            <p data-i18n-html="userdoc.containers.storage.p">Containers can optionally mount a volume at <code>/data</code>. When using the controller workload path, specify the storage backend and size:</p>
             <pre><code>kctl workload create my-app \
   --kind container \
   --image nginx:latest \
@@ -102,12 +131,12 @@
   --storage-backend local \
   --storage-size-bytes 10737418240</code></pre>
 
-            <h2>Current limitations</h2>
+            <h2 data-i18n="userdoc.containers.h2.limitations">Current limitations</h2>
             <ul>
-                <li>Runtime is a nerdctl/docker CLI wrapper, not a native containerd gRPC integration.</li>
-                <li>No <code>pause</code>, <code>exec</code>, or <code>logs</code> operations are supported yet.</li>
-                <li>Image pull is not exposed as a separate operation; images are pulled on container creation.</li>
-                <li>This is Phase 1 scope — expect the API surface to evolve.</li>
+                <li data-i18n="userdoc.containers.lim1">Runtime is a nerdctl/docker CLI wrapper, not a native containerd gRPC integration.</li>
+                <li data-i18n-html="userdoc.containers.lim2">No <code>pause</code>, <code>exec</code>, or <code>logs</code> operations are supported yet.</li>
+                <li data-i18n="userdoc.containers.lim3">Image pull is not exposed as a separate operation; images are pulled on container creation.</li>
+                <li data-i18n="userdoc.containers.lim4">This is Phase 1 scope — expect the API surface to evolve.</li>
             </ul>
         </main>
     </div>
