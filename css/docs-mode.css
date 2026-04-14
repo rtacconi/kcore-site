@@ -1,0 +1,119 @@
+/**
+ * Docs “example format” toggle: CLI vs YAML.
+ * Persisted in localStorage under kcoreDocsExampleMode (cli | yaml).
+ * Mark blocks with .docs-cli-only or .docs-yaml-only to show/hide by mode.
+ */
+
+:root {
+    --docs-navbar-offset: 80px;
+}
+
+body.docs-user-page {
+    padding-top: var(--docs-navbar-offset);
+}
+
+/* Override per-page inline .docs-layout margin-top when using the mode strip */
+body.docs-user-page .docs-layout {
+    margin-top: 0 !important;
+}
+
+/* Hub: fixed navbar leaves content underneath unless we offset the body */
+body.docs-hub-page {
+    padding-top: var(--docs-navbar-offset);
+}
+
+body.docs-hub-page .docs-layout {
+    margin-top: 0 !important;
+}
+
+/* --- Mode strip (below fixed navbar) --- */
+.docs-mode-strip {
+    position: sticky;
+    top: var(--docs-navbar-offset);
+    z-index: 900;
+    background: var(--bg-secondary, rgba(18, 18, 22, 0.95));
+    border-bottom: 1px solid var(--border-primary);
+    backdrop-filter: blur(8px);
+}
+
+.docs-mode-strip-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding: 0.55rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.docs-mode-strip-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.docs-mode-toggle {
+    display: inline-flex;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-primary);
+    overflow: hidden;
+    background: var(--bg-card, #141418);
+}
+
+.docs-mode-tab {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-sans, system-ui, sans-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.45rem 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.docs-mode-tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.docs-mode-tab[aria-pressed="true"] {
+    background: var(--accent-primary, #6366f1);
+    color: #0b0b0f;
+}
+
+.docs-mode-tab:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+.docs-mode-tab + .docs-mode-tab {
+    border-left: 1px solid var(--border-primary);
+}
+
+/* Toggle CLI vs YAML blocks (requires data-docs-example-mode on <html>, set by docs-mode.js) */
+html[data-docs-example-mode="cli"] .docs-yaml-only {
+    display: none !important;
+}
+
+html[data-docs-example-mode="yaml"] .docs-cli-only {
+    display: none !important;
+}
+
+/* Hints under H1 (optional) */
+.docs-mode-hint {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--border-secondary);
+    padding: 0.5rem 0 0.5rem 1rem;
+    margin: 0 0 1.25rem;
+}
+
+@media (max-width: 868px) {
+    .docs-mode-strip-inner {
+        justify-content: center;
+    }
+}

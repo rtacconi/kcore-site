@@ -6,6 +6,8 @@
     <meta name="description" content="kcore VM creation: CLI, YAML manifests, images, SSH keys, cloud-init, scheduling.">
     <title>VM creation modes - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
     <style>
         .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
         .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
@@ -27,59 +29,71 @@
         @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
     </style>
 </head>
-<body>
+<body class="docs-user-page">
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            <li><a href="../../features.html">Features</a></li>
+            <li><a href="../../pricing.html">Pricing</a></li>
+            <li><a href="../../docs.html">Docs</a></li>
+            <li><a href="../../roadmap.html">Roadmap</a></li>
+            <li><a href="../../blog.html">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
         </ul>
     </div></nav>
 
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
-                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
-                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
-                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+            <div class="docs-nav-section"><h4>Getting started</h4><ul>
+                <li><a href="installation.html">Installation</a></li>
+                <li><a href="first-cluster.html">First cluster</a></li>
+                <li><a href="add-node.html">Add a node</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
-                <li><a href="vm-creation.html" class="active" data-i18n="docs.nav.vmcreation">VM creation</a></li>
-                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            <div class="docs-nav-section"><h4>Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" class="active">VM creation</a></li>
+                <li><a href="images.html">VM images</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
-                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            <div class="docs-nav-section"><h4>Containers</h4><ul>
+                <li><a href="containers.html">Container lifecycle</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
-                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
-                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            <div class="docs-nav-section"><h4>Networking</h4><ul>
+                <li><a href="networks.html">Networks</a></li>
+                <li><a href="overlay-vxlan.html">VXLAN overlay</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
-                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
-                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
-                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            <div class="docs-nav-section"><h4>Storage</h4><ul>
+                <li><a href="storage.html">Storage backends</a></li>
+                <li><a href="storage-day2.html">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html">vSAN (Ceph)</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
-                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
-                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
-                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            <div class="docs-nav-section"><h4>Security</h4><ul>
+                <li><a href="security-groups.html">Security groups</a></li>
+                <li><a href="compliance.html">Compliance</a></li>
+                <li><a href="certificates.html">Certificates &amp; encryption</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
-                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
-                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            <div class="docs-nav-section"><h4>Reference</h4><ul>
+                <li><a href="kctl-reference.html">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html">YAML manifests</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
-                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            <div class="docs-nav-section"><h4>Licensing</h4><ul>
+                <li><a href="licensing.html">Editions &amp; pricing</a></li>
             </ul></div>
         </nav></aside>
 
         <main class="docs-content">
             <h1 data-i18n="userdoc.vmcreate.h1">VM creation modes</h1>
             <p data-i18n-html="userdoc.vmcreate.intro">VMs are created through the controller API. Below are the main patterns supported by <code>kcore-kctl create vm</code> (and equivalent YAML).</p>
+            <p class="docs-mode-hint docs-cli-only">Showing <strong>CLI</strong> examples below. Use the toggle above to switch to YAML manifests.</p>
+            <p class="docs-mode-hint docs-yaml-only">Showing <strong>YAML</strong> examples below. Use the toggle above for raw <code>kctl</code> commands.</p>
 
             <h2 data-i18n="userdoc.vmcreate.h2.req">Requirements</h2>
             <ul>
@@ -87,6 +101,7 @@
                 <li data-i18n-html="userdoc.vmcreate.req2">Storage flags: <code>--storage-backend</code> (<code>filesystem</code>, <code>lvm</code>, or <code>zfs</code>) and <code>--storage-size-bytes</code>.</li>
             </ul>
 
+            <div class="docs-cli-only">
             <h2 data-i18n="userdoc.vmcreate.h2.https">HTTPS image + SHA256</h2>
             <p data-i18n-html="userdoc.vmcreate.https.p">Recommended when you want deterministic verification and node-side caching. Provide an <code>https://</code> URL and <code>--image-sha256</code>.</p>
 <pre><code>kcore-kctl create vm web-01 \
@@ -104,9 +119,11 @@
   --network default \
   --storage-backend filesystem \
   --storage-size-bytes 42949672960</code></pre>
+            </div>
 
+            <div class="docs-yaml-only">
             <h2 data-i18n="userdoc.vmcreate.h2.yaml">YAML manifest</h2>
-            <p data-i18n-html="userdoc.vmcreate.yaml.p">Declarative definitions can be applied with <code>kcore-kctl create vm -f vm.yaml</code>. Use <code>kind: VM</code>, image reference under <code>spec.disks</code>, and NICs under <code>spec.nics</code>.</p>
+            <p data-i18n-html="userdoc.vmcreate.yaml.p">Declarative definitions can be applied with <code>kctl apply -f vm.yaml</code> or <code>kcore-kctl create vm -f vm.yaml</code>. Use <code>kind: VM</code>, image reference under <code>spec.disks</code>, and NICs under <code>spec.nics</code>.</p>
 <pre><code># vm.yaml
 kind: VM
 metadata:
@@ -123,8 +140,9 @@ spec:
   nics:
     - network: default</code></pre>
             <p data-i18n="userdoc.vmcreate.yaml.apply">Apply the manifest:</p>
-<pre><code>kcore-kctl create vm -f vm.yaml</code></pre>
+<pre><code>kctl apply -f vm.yaml</code></pre>
             <p data-i18n-html="userdoc.vmcreate.yaml.override">CLI flags (<code>--storage-backend</code>, <code>--storage-size-bytes</code>) override the YAML values when both are provided.</p>
+            </div>
 
             <h2 data-i18n="userdoc.vmcreate.h2.ssh">SSH access patterns</h2>
             <ul>

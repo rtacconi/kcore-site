@@ -6,6 +6,7 @@
     <meta name="description" content="kcore Documentation - Get started with the declarative virtualization platform">
     <title>Documentation - kcore hypervisor</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/docs-mode.css">
     <style>
         .docs-container {
             max-width: 1400px;
@@ -189,7 +190,7 @@
         }
     </style>
 </head>
-<body>
+<body class="docs-hub-page">
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
@@ -209,6 +210,16 @@
             </ul>
         </div>
     </nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
 
     <div class="docs-container">
         <div class="docs-layout">
@@ -288,6 +299,8 @@
                 </div>
 
                 <h1 id="user-guides" data-i18n="docs.hub.pageTitle">Documentation</h1>
+                <p class="docs-mode-hint docs-cli-only">Example preference: <strong>CLI</strong> — guides below emphasize <code>kctl</code> commands. Switch the toggle in the bar above to prioritize YAML manifests.</p>
+                <p class="docs-mode-hint docs-yaml-only">Example preference: <strong>YAML</strong> — use declarative manifests (<code>kctl apply -f</code>) wherever possible. Switch the toggle above for raw CLI command tables.</p>
                 <p data-i18n-html="docs.hub.lead">Operator-focused guides for installing kcore, managing clusters, creating VMs and containers, configuring networking and storage, and securing your infrastructure. Technical architecture and contributor docs live in the <a href="https://github.com/rtacconi/kcore/tree/main/docs" style="color: var(--accent-primary);">kcore repository</a>.</p>
 
                 <h2 data-i18n="docs.hub.h2.gettingstarted">Getting started</h2>
@@ -378,7 +391,7 @@
                     </a>
                     <a href="docs/user/yaml-manifests.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.yaml.title">YAML manifests</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.yaml.desc">VM and SecurityGroup manifest field reference with examples.</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.yaml.desc">VM, Network, SshKey, Container, and SecurityGroup manifest reference with examples.</div>
                     </a>
                     <a href="docs/user/licensing.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.licensing.title">Licensing &amp; editions</div>
@@ -431,6 +444,7 @@
         </div>
     </footer>
 
+    <script src="js/docs-mode.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
     <script>

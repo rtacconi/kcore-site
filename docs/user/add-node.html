@@ -6,6 +6,8 @@
     <meta name="description" content="Add agent nodes, HA controllers, and cross-DC nodes to a kcore cluster.">
     <title>Add nodes to the cluster - kcore documentation</title>
     <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
     <style>
         .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
         .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
@@ -27,7 +29,7 @@
         @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
     </style>
 </head>
-<body>
+<body class="docs-user-page">
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
@@ -39,6 +41,16 @@
             <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
         </ul>
     </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
 
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
