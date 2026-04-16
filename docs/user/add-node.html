@@ -92,10 +92,11 @@
         <main class="docs-content">
             <h1 data-i18n="userdoc.addnode.h1">Add nodes to the cluster</h1>
             <p data-i18n="userdoc.addnode.p.intro">A single-node kcore deployment is useful for evaluation, but production workloads benefit from multiple nodes for scheduling headroom, high-availability controllers, and cross-datacenter replication. This page walks through expanding your cluster from one node to many.</p>
-            <p>Every <code>kctl node install</code> below requires the <code>-k</code> flag because the live ISO node-agent runs without TLS. After reboot all traffic switches to mTLS automatically.</p>
+            <p>Every install below requires <code>-k</code> (CLI) or <code>insecure: true</code> (YAML) because the live ISO node-agent runs without TLS. After reboot all traffic switches to mTLS automatically.</p>
 
             <h2 data-i18n="userdoc.addnode.h2.agent">Add a worker node (agent only)</h2>
             <p data-i18n="userdoc.addnode.p.agent1">Boot the new machine from the kcore ISO. Once the live environment is up, install it as an agent-only node pointing to your existing controllers:</p>
+            <div class="docs-cli-only">
 <pre><code>kctl node install \
   --node 192.168.40.151:9091 \
   --os-disk /dev/sda \
@@ -103,12 +104,29 @@
   --join-controller 192.168.40.105:9090 \
   --dc-id DC1 \
   -k</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># worker-node.yaml
+kind: NodeInstall
+metadata:
+  name: kvm-node-151
+spec:
+  node: 192.168.40.151:9091
+  osDisk: /dev/sda
+  joinControllers:
+    - 192.168.40.107:9090
+    - 192.168.40.105:9090
+  dcId: DC1
+  insecure: true</code></pre>
+            <p>Apply: <code>kctl apply -f worker-node.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.addnode.p.agent2">You can specify multiple <code>--join-controller</code> flags so the node agent knows about all controllers for failover. This node runs the node agent only&mdash;no controller process.</p>
             <p data-i18n-html="userdoc.addnode.p.agent3">After reboot the node registers with the controller and is <strong>auto-approved</strong> by default. Verify with:</p>
 <pre><code>kctl get nodes</code></pre>
 
             <h2 data-i18n="userdoc.addnode.h2.ha">Add a second controller (HA)</h2>
-            <p data-i18n-html="userdoc.addnode.p.ha1">For HA you want at least two controllers. Add both <code>--run-controller</code> and <code>--join-controller</code> so the new node starts its own controller and joins the existing one:</p>
+            <p data-i18n-html="userdoc.addnode.p.ha1">For HA you want at least two controllers. The new node starts its own controller and joins the existing one:</p>
+            <div class="docs-cli-only">
 <pre><code>kctl node install \
   --node 192.168.40.105:9091 \
   --os-disk /dev/sda \
@@ -116,6 +134,22 @@
   --join-controller 192.168.40.107:9090 \
   --dc-id DC1 \
   -k</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># ha-controller.yaml
+kind: NodeInstall
+metadata:
+  name: kvm-node-105
+spec:
+  node: 192.168.40.105:9091
+  osDisk: /dev/sda
+  runController: true
+  joinControllers:
+    - 192.168.40.107:9090
+  dcId: DC1
+  insecure: true</code></pre>
+            <p>Apply: <code>kctl apply -f ha-controller.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.addnode.p.ha2">After reboot, the two controllers automatically discover each other and begin CRDT replication. Your <code>kctl</code> config is <strong>auto-updated</strong> to include the new controller endpoint, so <code>kctl</code> can fail over transparently:</p>
 <pre><code>kctl get nodes</code></pre>
             <p>Both controllers will show an identical view of the cluster. You can also verify from a specific controller:</p>
@@ -123,7 +157,8 @@
 kctl -s 192.168.40.107:9090 get nodes</code></pre>
 
             <h2 data-i18n="userdoc.addnode.h2.crossdc">Cross-DC: add a node in DC2</h2>
-            <p data-i18n-html="userdoc.addnode.p.crossdc1">Multi-datacenter deployments tag each node with a datacenter identifier. Install the node with <code>--dc-id DC2</code> and <code>--run-controller</code> so it brings up a controller in the second site:</p>
+            <p data-i18n-html="userdoc.addnode.p.crossdc1">Multi-datacenter deployments tag each node with a datacenter identifier:</p>
+            <div class="docs-cli-only">
 <pre><code>kctl node install \
   --node &lt;NEW_NODE_IP&gt;:9091 \
   --os-disk /dev/sda \
@@ -131,6 +166,20 @@ kctl -s 192.168.40.107:9090 get nodes</code></pre>
   --join-controller 192.168.40.107:9090 \
   --dc-id DC2 \
   -k</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># dc2-controller.yaml
+kind: NodeInstall
+spec:
+  node: &lt;NEW_NODE_IP&gt;:9091
+  osDisk: /dev/sda
+  runController: true
+  joinControllers:
+    - 192.168.40.107:9090
+  dcId: DC2
+  insecure: true</code></pre>
+            <p>Apply: <code>kctl apply -f dc2-controller.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.addnode.p.crossdc2">Resources created on this node are tagged with <code>DC2</code>. Controllers across datacenters replicate state via conflict-free replicated data types (CRDTs) with adaptive cross-DC timeouts, so each site maintains an eventually-consistent view of the cluster.</p>
             <p data-i18n-html="userdoc.addnode.p.crossdc3">You can target a specific datacenter when creating VMs:</p>
 <pre><code>kctl create vm db-replica --dc DC2 \
@@ -190,7 +239,8 @@ kctl node approve &lt;NODE_ID&gt;</code></pre>
             </table>
 
             <h2>Example: 3-node cluster walkthrough</h2>
-            <p>Starting from zero, a full 3-node cluster with 2 controllers takes four commands:</p>
+            <p>Starting from zero, a full 3-node cluster with 2 controllers takes four manifests (or commands):</p>
+            <div class="docs-cli-only">
 <pre><code># 1. Create cluster PKI (one-time)
 kctl create cluster --controller 192.168.40.107:9090 --context prod
 
@@ -208,6 +258,53 @@ kctl node install --node 192.168.40.151:9091 \
   --os-disk /dev/sda \
   --join-controller 192.168.40.107:9090 \
   --join-controller 192.168.40.105:9090 --dc-id DC1 -k</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># 1. cluster.yaml — create cluster PKI (one-time)
+kind: Cluster
+metadata:
+  name: prod
+spec:
+  controller: 192.168.40.107:9090
+---
+# 2. node-controller-1.yaml — first controller
+kind: NodeInstall
+metadata:
+  name: kvm-node-107
+spec:
+  node: 192.168.40.107:9091
+  osDisk: /dev/sda
+  runController: true
+  dcId: DC1
+  insecure: true
+---
+# 3. ha-controller.yaml — second controller
+kind: NodeInstall
+metadata:
+  name: kvm-node-105
+spec:
+  node: 192.168.40.105:9091
+  osDisk: /dev/sda
+  runController: true
+  joinControllers:
+    - 192.168.40.107:9090
+  dcId: DC1
+  insecure: true
+---
+# 4. worker.yaml — agent-only node
+kind: NodeInstall
+metadata:
+  name: kvm-node-151
+spec:
+  node: 192.168.40.151:9091
+  osDisk: /dev/sda
+  joinControllers:
+    - 192.168.40.107:9090
+    - 192.168.40.105:9090
+  dcId: DC1
+  insecure: true</code></pre>
+            <p>Apply each file in order: <code>kctl apply -f cluster.yaml</code>, then each node file after the previous node has rebooted.</p>
+            </div>
             <p>After each node reboots, it auto-registers and auto-approves. Controllers auto-discover each other and replicate state via CRDTs. Run <code>kctl get nodes</code> to verify the full cluster.</p>
         </main>
     </div>

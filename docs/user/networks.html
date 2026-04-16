@@ -96,11 +96,24 @@
             <p data-i18n-html="userdoc.networks.default.p">A default network is auto-created on every node during installation. It is always NAT type and cannot be deleted or created via <code>kctl</code>.</p>
 
             <h2 data-i18n="userdoc.networks.h2.create">Create a network</h2>
+            <div class="docs-cli-only">
             <pre><code>kctl create network private \
   --external-ip 192.168.40.105 \
   --gateway-ip 10.250.0.1 \
   --internal-netmask 255.255.255.0 \
   --type vxlan</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+            <pre><code>kind: Network
+metadata:
+  name: private
+spec:
+  type: vxlan
+  externalIp: 192.168.40.105
+  gatewayIp: 10.250.0.1
+  internalNetmask: "255.255.255.0"</code></pre>
+            <p>Apply: <code>kctl apply -f network.yaml</code></p>
+            </div>
 
             <h2 data-i18n="userdoc.networks.h2.manage">List, describe, delete</h2>
             <p data-i18n-html="userdoc.networks.manage.p1"></p>
@@ -118,12 +131,26 @@ kctl delete network prod</code></pre>
 
             <h2 data-i18n="userdoc.networks.h2.vlan">VLAN tagging</h2>
             <p data-i18n-html="userdoc.networks.vlan.p">NAT and bridge networks support VLAN tagging via <code>--vlan-id</code>. When specified, kcore creates a VLAN sub-interface (<code>gatewayInterface.&lt;id&gt;</code>) and uses it as the bridge uplink.</p>
+            <div class="docs-cli-only">
             <pre><code>kctl create network vlan-net \
   --type nat \
   --vlan-id 100 \
   --external-ip 192.168.100.10 \
   --gateway-ip 10.100.0.1 \
   --internal-netmask 255.255.255.0</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+            <pre><code>kind: Network
+metadata:
+  name: vlan-net
+spec:
+  type: nat
+  vlanId: 100
+  externalIp: 192.168.100.10
+  gatewayIp: 10.100.0.1
+  internalNetmask: "255.255.255.0"</code></pre>
+            <p>Apply: <code>kctl apply -f network.yaml</code></p>
+            </div>
 
             <h2 data-i18n="userdoc.networks.h2.disablevxlan">Disable VXLAN on a node</h2>
             <p data-i18n-html="userdoc.networks.disablevxlan.p1">If a node should not participate in VXLAN overlays, pass <code>--disable-vxlan</code> during installation:</p>
@@ -131,8 +158,27 @@ kctl delete network prod</code></pre>
             <p data-i18n-html="userdoc.networks.disablevxlan.p2">The controller will reject VXLAN network creation requests targeting that node with a <code>FailedPrecondition</code> error.</p>
 
             <h2 data-i18n="userdoc.networks.h2.vmattach">VM network attachment</h2>
-            <p data-i18n-html="userdoc.networks.vmattach.p1">Attach a VM to a network at creation time with the <code>--network</code> flag:</p>
+            <p data-i18n-html="userdoc.networks.vmattach.p1">Attach a VM to a network at creation time:</p>
+            <div class="docs-cli-only">
             <pre><code>kctl create vm web-01 --network private --image ubuntu-24.04 --cpus 2 --memory 4096</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+            <pre><code>kind: VM
+metadata:
+  name: web-01
+spec:
+  cpu: 2
+  memoryBytes: "4G"
+  storageBackend: filesystem
+  storageSizeBytes: "40G"
+  nics:
+    - network: private
+  disks:
+    - image: https://...
+      sha256: "&lt;sha256&gt;"
+      format: qcow2</code></pre>
+            <p>Apply: <code>kctl apply -f vm.yaml</code></p>
+            </div>
             <p data-i18n="userdoc.networks.vmattach.p2">VMs on VXLAN networks receive controller-assigned static IPs (unique across the cluster for that overlay name) via cloud-init. VMs on NAT networks receive IPs from dnsmasq DHCP.</p>
         </main>
     </div>

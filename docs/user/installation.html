@@ -111,21 +111,47 @@
             <p data-i18n-html="userdoc.install.p.boot">Download the kcore NixOS ISO and write it to a USB drive. Boot the target machine from it. The live environment starts a <strong>node-agent</strong> on port <code>9091</code> that accepts install commands from <code>kctl</code>. The default root password is <code>kcore</code>.</p>
 
             <h2 data-i18n="userdoc.install.h2.pki">Step 1 &mdash; Create the cluster PKI</h2>
-            <p data-i18n-html="userdoc.install.p.pki1">On your operator workstation (where <code>kctl</code> is installed), initialise the cluster trust material. This generates a root CA, sub-CA, controller certificate, and <code>kctl</code> client certificate. The <code>--controller</code> flag sets the address of the first controller node you will install.</p>
+            <p data-i18n-html="userdoc.install.p.pki1">On your operator workstation (where <code>kctl</code> is installed), initialise the cluster trust material. This generates a root CA, sub-CA, controller certificate, and <code>kctl</code> client certificate.</p>
+            <div class="docs-cli-only">
 <pre><code>kctl create cluster \
   --controller 192.168.40.107:9090 \
   --context my-cluster</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># cluster.yaml
+kind: Cluster
+metadata:
+  name: my-cluster
+spec:
+  controller: 192.168.40.107:9090</code></pre>
+            <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.install.p.pki2">This is a <strong>one-time operation</strong> per cluster. Certificate material is saved under <code>~/.kcore/certs/</code> and the mTLS context is written to <code>~/.kcore/config</code> with all certificate data embedded inline. Every subsequent <code>kctl</code> command and every <code>kctl node install</code> call uses this context automatically.</p>
-            <p class="note">If you already have a config file from a previous cluster, add <code>--force</code> to overwrite the existing certificate files.</p>
+            <p class="note">If you already have a config file from a previous cluster, add <code>--force</code> (CLI) or <code>force: true</code> (YAML) to overwrite the existing certificate files.</p>
 
             <h2 data-i18n="userdoc.install.h2.install">Step 2 &mdash; Install the first node</h2>
-            <p data-i18n-html="userdoc.install.p.install1">With the target machine booted from the ISO, install kcore to disk. Use <code>--run-controller</code> to start a controller on this node. The <code>-k</code> flag is required because the live ISO does not have mTLS configured yet.</p>
+            <p data-i18n-html="userdoc.install.p.install1">With the target machine booted from the ISO, install kcore to disk. Use <code>--run-controller</code> / <code>runController</code> to start a controller on this node.</p>
+            <div class="docs-cli-only">
 <pre><code>kctl node install \
   --node 192.168.40.107:9091 \
   --os-disk /dev/sda \
   --run-controller \
   --dc-id DC1 \
   -k</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># node-controller.yaml
+kind: NodeInstall
+metadata:
+  name: kvm-node-107
+spec:
+  node: 192.168.40.107:9091
+  osDisk: /dev/sda
+  runController: true
+  dcId: DC1
+  insecure: true</code></pre>
+            <p>Apply: <code>kctl apply -f node-controller.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.install.p.install2">The installer partitions the disk with LUKS encryption (TPM2-sealed when available), deploys NixOS, configures the controller and node-agent services, provisions mTLS certificates, and reboots. After reboot, the controller listens on <code>:9090</code>, the node-agent on <code>:9091</code>, and the dashboard on <code>:8080</code>.</p>
             <p data-i18n-html="userdoc.install.p.install3">The node registers with its own controller and is <strong>auto-approved</strong> by default.</p>
 

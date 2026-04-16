@@ -93,10 +93,21 @@
             <p data-i18n="userdoc.firstcluster.p.intro">This walkthrough creates a single-node kcore cluster: one machine running both the controller and the node agent, ready to schedule VMs. The entire process takes two commands from your operator workstation.</p>
 
             <h2 data-i18n="userdoc.firstcluster.h2.pki">1. Create the cluster PKI</h2>
-            <p data-i18n-html="userdoc.firstcluster.p.pki1">On your operator workstation (where <code>kctl</code> is installed), create the cluster trust material. The <code>--controller</code> flag specifies the address of the first controller you are about to install:</p>
+            <p data-i18n-html="userdoc.firstcluster.p.pki1">On your operator workstation (where <code>kctl</code> is installed), create the cluster trust material:</p>
+            <div class="docs-cli-only">
 <pre><code>kctl create cluster \
   --controller 192.168.40.107:9090 \
   --context prod</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># cluster.yaml
+kind: Cluster
+metadata:
+  name: prod
+spec:
+  controller: 192.168.40.107:9090</code></pre>
+            <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.firstcluster.p.pki2">This generates the root CA, sub-CA, controller certificate, and <code>kctl</code> client certificate. All certificate data is embedded inline in <code>~/.kcore/config</code> and the PEM files are saved to <code>~/.kcore/certs/</code>.</p>
             <p class="note">This is a one-time operation per cluster. The context name (<code>prod</code>) is how <code>kctl</code> identifies this cluster in multi-cluster setups. If you omit <code>--context</code>, it defaults to <code>default</code>.</p>
 
@@ -107,13 +118,28 @@ kctl --node 192.168.40.107:9091 -k node nics</code></pre>
             <p data-i18n-html="userdoc.firstcluster.p.discover">Identify the OS disk (e.g. <code>/dev/sda</code>) and any data disks.</p>
 
             <h2 data-i18n="userdoc.firstcluster.h2.install">3. Install to disk</h2>
-            <p data-i18n-html="userdoc.firstcluster.p.install1">Install kcore to disk with <code>--run-controller</code> to start a controller on this node. The <code>-k</code> flag is required because the live ISO node-agent runs without TLS.</p>
+            <p data-i18n-html="userdoc.firstcluster.p.install1">Install kcore to disk with a controller on this node:</p>
+            <div class="docs-cli-only">
 <pre><code>kctl node install \
   --node 192.168.40.107:9091 \
   --os-disk /dev/sda \
   --run-controller \
   --dc-id DC1 \
   -k</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># node-controller.yaml
+kind: NodeInstall
+metadata:
+  name: kvm-node-107
+spec:
+  node: 192.168.40.107:9091
+  osDisk: /dev/sda
+  runController: true
+  dcId: DC1
+  insecure: true</code></pre>
+            <p>Apply: <code>kctl apply -f node-controller.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.firstcluster.p.install2">The installer wipes the disk, creates a LUKS-encrypted root partition (TPM2-sealed when available), deploys NixOS, provisions mTLS certificates, and reboots. After reboot:</p>
             <ul>
                 <li>Controller listens on <code>:9090</code> with mTLS</li>
@@ -132,6 +158,7 @@ kvm-node-192-168-40-107    192.168.40.107:9091  DC1   ready   approved       364
             <p data-i18n-html="userdoc.firstcluster.p.verify3">The node shows status <strong>ready</strong> and approval <strong>approved</strong>. Your single-node cluster is operational.</p>
 
             <h2 data-i18n="userdoc.firstcluster.h2.createvm">5. Create your first VM</h2>
+            <div class="docs-cli-only">
 <pre><code>kctl create vm web-01 \
   --image https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2 \
   --image-sha256 &lt;sha256&gt; \
@@ -139,6 +166,26 @@ kvm-node-192-168-40-107    192.168.40.107:9091  DC1   ready   approved       364
   --storage-backend filesystem \
   --storage-size-bytes 42949672960 \
   --wait-for-ssh</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code>kind: VM
+metadata:
+  name: web-01
+spec:
+  cpu: 2
+  memoryBytes: "4G"
+  storageBackend: filesystem
+  storageSizeBytes: "40G"
+  sshKeys:
+    - my-key
+  nics:
+    - network: default
+  disks:
+    - image: https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2
+      sha256: "&lt;sha256&gt;"
+      format: qcow2</code></pre>
+            <p>Apply: <code>kctl apply -f web-01.yaml</code></p>
+            </div>
             <p data-i18n-html="userdoc.firstcluster.p.createvm">See <a href="vm-creation.html" style="color:var(--accent-primary)">VM creation</a> for all options including YAML manifests, SSH keys, and cloud-init.</p>
 
             <h2 data-i18n="userdoc.firstcluster.h2.next">Next steps</h2>
