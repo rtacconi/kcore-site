@@ -60,6 +60,7 @@
             <p class="docs-mode-hint docs-yaml-only">You are browsing in <strong>YAML</strong> mode. This page lists CLI commands; for manifest kinds and fields see the <a href="yaml-manifests.html">YAML manifest reference</a>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.create">create</h2>
+            <p><code>kctl create</code> is idempotent. Re-running the same command (or re-applying the same manifest with <code>-f</code>) performs a server-side upsert: it creates the resource if missing, updates mutable fields if they drifted, rejects changes to immutable fields with <code>InvalidArgument</code>, or prints <code>unchanged</code> when the stored state already matches. See <a href="yaml-manifests.html#idempotency-and-upsert">Idempotency and upsert</a> for the mutable/immutable field tables.</p>
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.create.vm.desc">Create a VM from CLI flags or <code>-f</code> YAML manifest</td></tr>
