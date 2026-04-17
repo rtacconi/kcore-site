@@ -422,13 +422,14 @@ unchanged VM 'web-01'</code></pre>
             <p>A change to an immutable field is rejected with <code>InvalidArgument</code>. The fix is always: <code>kctl delete …</code> then re-apply.</p>
             <table>
                 <tr><th>Kind</th><th>Mutable</th><th>Immutable (rejects with <code>InvalidArgument</code>)</th></tr>
-                <tr><td><code>VM</code></td><td><code>cpu</code>, <code>memoryBytes</code>, <code>desiredState</code></td><td><code>disks</code>, <code>nics</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>targetNode</code>, <code>targetDc</code>, <code>sshKeys</code>, <code>cloudInitUserData</code>, <code>image_*</code></td></tr>
+                <tr><td><code>VM</code></td><td><code>cpu</code>, <code>memoryBytes</code>, <code>desiredState</code></td><td><code>disks</code>, <code>nics</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>targetNode</code>, <code>sshKeys</code>, <code>cloudInitUserData</code>, <code>image_*</code></td></tr>
                 <tr><td><code>Container</code></td><td><code>desiredState</code></td><td><code>image</code>, <code>command</code>, <code>network</code>, <code>env</code>, <code>ports</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>mountTarget</code></td></tr>
                 <tr><td><code>Network</code></td><td>— (none in v1)</td><td>all fields</td></tr>
                 <tr><td><code>SshKey</code></td><td>— (public key immutable)</td><td><code>publicKey</code></td></tr>
                 <tr><td><code>SecurityGroup</code></td><td><code>description</code>, <code>rules</code>, attachments</td><td><code>name</code></td></tr>
             </table>
             <p class="note">Rationale: v1 rejects any change that would require recreating the workload or re-provisioning a disk, so reconciliation stays predictable. Future versions can promote more fields to mutable as controlled rebuild paths are added.</p>
+            <p class="note"><strong>Note:</strong> <code>targetDc</code> is <em>not</em> rejected by the diff today — the controller has no per-VM DC field to compare against. Placement is enforced once at create time via the placement preflight; changing <code>targetDc</code> on an existing VM is silently a no-op (the VM stays where it was originally placed).</p>
 
             <h3>Terraform and Crossplane</h3>
             <p>Because every <code>Create*</code> RPC is already a declarative upsert, a Terraform provider or Crossplane composition only needs <strong>one verb</strong> per resource:</p>
