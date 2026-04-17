@@ -457,17 +457,21 @@
                 </div>
 
                 <!-- =============================== -->
-                <!-- NOW: DISKO -->
+                <!-- APRIL 2026: DISKO -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot in-progress"></div>
-                    <div class="timeline-date in-progress">Now &mdash; April 2026</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">April 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon in-progress">&#9881;</span> Declarative Disk Partitioning</h3>
+                        <h3><span class="card-icon shipped">&#9881;</span> Declarative Disk Partitioning</h3>
                         <p>
-                            Extending disko from install-time layout to full declarative disk management.
-                            Controller-side disko fragments, day-2 partition changes, and tighter
-                            integration between <code>kctl node install</code> and the generated Nix config.
+                            Disko-based layouts from install through day-2: the live ISO generates
+                            <code>disko-config.nix</code> and runs <code>disko --mode format,mount</code>;
+                            the <code>kcore.disko</code> NixOS module expresses OS and data disks with optional
+                            merged fragments; nodes default to <code>installer-only</code> ownership and can be
+                            moved to <code>controller-managed</code> for <code>kctl node apply-disko</code>.
+                            Fleet-wide rollout from the controller service is still evolving; operators use
+                            <code>kctl</code> per node today.
                         </p>
                         <ul class="detail-list">
                             <li>
@@ -476,19 +480,19 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span><code>modules/kcore-disko.nix</code> with <code>kcore.disko.*</code> option interface</span>
+                                <span><code>modules/kcore-disko.nix</code> with <code>kcore.disko.*</code> (including <code>managementMode</code> and <code>controllerFragments</code>)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Ownership split: <code>/etc/kcore/disko-management-mode</code> &mdash; default <code>installer-only</code>; <code>controller-managed</code> unlocks <code>apply-disko --apply</code></span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Day-2 <code>kctl node apply-disko -f … [--apply]</code> &rarr; node agent <code>ApplyDiskoLayout</code> (validate via <code>nix-instantiate --parse</code>, apply via <code>disko --mode format,mount</code>)</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
-                                <span>Declarative disk partitioning layout via disko for day-2 operations</span>
-                            </li>
-                            <li>
-                                <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
-                                <span>Controller-side disko config fragments for consistent multi-node layouts</span>
-                            </li>
-                            <li>
-                                <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
-                                <span>Safe split between installer and optional controller-side disko config</span>
+                                <span>Controller-orchestrated / fleet rollout of disko fragments and tighter automation into persisted <code>disko-config.nix</code> + <code>nixos-rebuild</code> workflows</span>
                             </li>
                         </ul>
                     </div>
