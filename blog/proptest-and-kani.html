@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why kcore uses proptest (property-based testing) and Kani (bounded model checking) to reduce bugs and security vulnerabilities in pure Rust code paths.">
+    <title>Why we use proptest and Kani in kcore - kcore hypervisor</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.4rem; }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin-bottom: 1.4rem;
+        }
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html">Features</a></li>
+                <li><a href="../pricing.html">Pricing</a></li>
+                <li><a href="../docs.html">Docs</a></li>
+                <li><a href="../roadmap.html">Roadmap</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1>Why we use proptest and Kani in kcore</h1>
+            <p class="post-meta">17 April 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link">← Back to blog</a>
+
+        <p>
+            Unit tests catch the cases you thought of. The bugs that hurt in production are
+            the ones you didn't. In kcore we run two extra layers on top of normal tests to
+            close that gap on the code paths where a single missed case can corrupt a
+            controller database, generate an unsafe Nix expression, or accept a path that
+            escapes its root directory: <strong>proptest</strong> for property-based
+            (generative) testing, and <strong>Kani</strong> for bounded model checking. Both
+            are wired into CI and run on every pull request.
+        </p>
+
+        <h2>What Rust already gives us</h2>
+        <p>
+            kcore is written in safe Rust with no <code>unsafe</code> blocks. The compiler
+            already eliminates whole classes of bugs: data races, use-after-free, null
+            dereferences, buffer overflows. Every <code>cargo build</code> is, in effect, a
+            small proof run. proptest and Kani are about the bugs Rust does not catch:
+            logic errors, missed escape sequences, invalid state transitions, and inputs
+            the author never imagined.
+        </p>
+
+        <h2>proptest: property-based testing</h2>
+        <p>
+            <a href="https://github.com/proptest-rs/proptest">proptest</a> generates random
+            inputs guided by a strategy (any string, any integer, any struct of these) and
+            checks that a property holds across hundreds of cases. When it finds a
+            counterexample, it shrinks the input to the smallest failing case and prints it
+            so you can write a unit test directly from the failure.
+        </p>
+        <p>
+            We use it in two places where the cost of being wrong is high:
+        </p>
+        <ul>
+            <li>
+                <strong>Nix string generation</strong> in
+                <code>crates/controller/src/nixgen.rs</code>. The output of these functions
+                runs as root during <code>nixos-rebuild switch</code>. A missed escape on
+                <code>"</code>, <code>\</code>, or <code>${</code> is not a typo, it is a
+                privilege escalation. Properties we check: escape never produces an
+                unescaped <code>${</code>, sanitised attribute keys only contain
+                <code>[a-zA-Z0-9_-]</code>, generated configs always have balanced braces.
+            </li>
+            <li>
+                <strong>Database CRUD</strong> in <code>crates/controller/src/db.rs</code>.
+                The controller's SQLite is the source of truth for the whole system. We run
+                ~256 randomised cases per property against an in-memory database and assert
+                round-trip equality, upsert idempotence, foreign-key integrity (a VM cannot
+                reference a node that does not exist), delete consistency across every
+                read path, and heartbeat idempotence modulo timestamp.
+            </li>
+        </ul>
+        <p>
+            proptest is probabilistic. It cannot prove the absence of bugs. But it
+            consistently finds the inputs a human would not have tried: empty strings,
+            embedded NULs, very long names, characters in surrogate ranges, the exact
+            byte that triggers an off-by-one. It is cheap to add and runs in milliseconds
+            per property.
+        </p>
+
+        <h2>Kani: bounded model checking</h2>
+        <p>
+            <a href="https://github.com/model-checking/kani">Kani</a> is Amazon's model
+            checker for Rust. A Kani harness looks like a test, but instead of running one
+            concrete input it explores <em>every</em> possible input within declared bounds
+            and proves the assertions hold for all of them. Where proptest says "we tried
+            many cases and none failed", Kani says "no input within these bounds can make
+            this assertion fail".
+        </p>
+        <p>
+            We use Kani on small, pure functions where exhaustive proof is feasible:
+        </p>
+        <ul>
+            <li>
+                <code>nix_escape</code> and <code>sanitize_nix_attr_key</code> in
+                <code>crates/controller/src/nixgen.rs</code> &mdash; proven not to panic
+                and proven to produce safely escaped output for all ASCII inputs up to the
+                current bound.
+            </li>
+            <li>
+                <code>path_segments_include_dot_dot</code> and <code>assert_safe_path</code>
+                in <code>crates/controller/src/path_safety.rs</code> and
+                <code>crates/kctl/src/path_safety.rs</code> &mdash; proven total (no panic
+                on any bounded input), and proven sound: any accepted path is non-empty,
+                NUL-free, and contains no <code>..</code> segment under either separator.
+            </li>
+        </ul>
+        <p>
+            All harnesses are gated behind <code>#[cfg(kani)]</code>, so they have zero
+            impact on <code>cargo build</code>, <code>cargo test</code>, or
+            <code>cargo clippy</code> on the stable toolchain. They run only via
+            <code>cargo kani</code>, locally and in the <code>kani</code> CI job in
+            <code>.github/workflows/formal-checks.yml</code>.
+        </p>
+
+        <h2>An example</h2>
+        <p>
+            A typical Kani harness in kcore looks like this:
+        </p>
+<pre><code>#[cfg(kani)]
+mod kani_proofs {
+    use super::*;
+
+    const MAX_INPUT_LEN: usize = 8;
+
+    fn any_ascii_str(buf: &mut [u8; MAX_INPUT_LEN]) -> &str {
+        let len: usize = kani::any();
+        kani::assume(len &lt;= MAX_INPUT_LEN);
+        for slot in buf.iter_mut() {
+            let b: u8 = kani::any();
+            kani::assume(b &lt; 128);
+            *slot = b;
+        }
+        std::str::from_utf8(&buf[..len]).unwrap()
+    }
+
+    #[kani::proof]
+    #[kani::unwind(17)]
+    fn nix_escape_output_is_always_safe() {
+        let mut buf = [0u8; MAX_INPUT_LEN];
+        let s = any_ascii_str(&mut buf);
+        let escaped = nix_escape(s);
+        assert!(is_safely_escaped(&escaped));
+    }
+}</code></pre>
+        <p>
+            That harness is short, but it replaces an unbounded number of unit tests for
+            the same security property: every possible ASCII input within the bound is
+            checked.
+        </p>
+
+        <h2>Why both, not one</h2>
+        <p>
+            They cover different ground:
+        </p>
+        <ul>
+            <li>
+                <strong>proptest</strong> scales to bigger inputs and stateful code (like
+                a real SQLite database) and gives fast feedback. It is the right tool when
+                you cannot afford the symbolic state space of exhaustive checking.
+            </li>
+            <li>
+                <strong>Kani</strong> gives an actual proof within bounds. For the
+                security boundary functions &mdash; Nix escaping, path validation &mdash;
+                "we tried 2,000 random inputs" is not the same answer as "no bounded input
+                can break this".
+            </li>
+        </ul>
+        <p>
+            In practice, proptest finds the bug, you fix it, and then you write a Kani
+            harness so the same class of bug cannot come back.
+        </p>
+
+        <h2>What this means for operators</h2>
+        <p>
+            The user-visible result is fewer of the worst kinds of bug: a controller that
+            generates a broken or unsafe Nix config, a database that ends up with dangling
+            VM rows, a path traversal in disk validation. These are bugs that would not
+            show up in a happy-path integration test and that would be expensive to debug
+            in a real cluster. Pushing them out at PR time is much cheaper than catching
+            them in production, and it is one of the reasons every PR in kcore has to pass
+            <code>make check</code>, <code>cargo test --workspace</code>,
+            <code>cargo kani</code>, and the TLA+ model checks before it can merge.
+        </p>
+        <p>
+            For the deeper write-up, including the full roadmap and the four phases
+            (proptest on Nix generation, Kani on escaping and path safety, proptest on
+            database invariants, TLA+ on the reconciliation protocol), see
+            <a href="https://github.com/rtacconi/kcore/blob/main/docs/formal-methods-and-verification.md">docs/formal-methods-and-verification.md</a>
+            in the kcore repo.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p>Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="../features.html">Features</a></li>
+                        <li><a href="../pricing.html">Pricing</a></li>
+                        <li><a href="../roadmap.html">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="../about.html">About</a></li>
+                        <li><a href="../blog.html">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
