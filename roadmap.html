@@ -581,6 +581,45 @@
                 </div>
 
                 <!-- =============================== -->
+                <!-- APRIL 2026: KANI + PROPTEST -->
+                <!-- =============================== -->
+                <div class="timeline-entry">
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">April 2026 &mdash; Shipped</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon shipped">&#128300;</span> Property-Based Testing &amp; Bounded Model Checking</h3>
+                        <p>
+                            The remaining three phases of the formal-methods plan landed alongside TLA+:
+                            generative property tests across every Rust crate, Kani bounded proofs on the
+                            security-critical sanitisers, and proptest coverage of database CRUD invariants.
+                            All four phases (proptest, Kani, DB invariants, TLA+) are now required CI gates.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>proptest on Nix generation: escape round-trip, attribute-key sanitisation, structural validity (controller, node-agent, kctl, dashboard)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Kani harnesses for path traversal, NUL injection, segment validation, and Nix string escaping in the dedicated <code>kcore-sanitize</code> leaf crate (zero non-std deps, so proofs compile in seconds)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Per-harness CI matrix &mdash; each <code>#[kani::proof]</code> runs on its own GitHub Actions runner with shared toolchain cache, completing the gate in ~1&ndash;2 min on warm cache</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>proptest on database CRUD invariants: VM, node, network, security-group, SSH-key round-trips and replication outbox state transitions</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>552 workspace tests (incl. proptest fuzzers) + Kani matrix + TLA+ trace bridge run on every pull request</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- =============================== -->
                 <!-- Q3 2026: SECURITY -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
@@ -706,28 +745,34 @@
                 </div>
 
                 <!-- =============================== -->
-                <!-- 2027: FORMAL + OPERATIONS -->
+                <!-- 2027: OPERATIONS + FORMAL FOLLOW-UPS -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
                     <div class="timeline-dot planned"></div>
                     <div class="timeline-date planned">2027</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128300;</span> Formal Verification</h3>
+                        <h3><span class="card-icon planned">&#128300;</span> Formal Verification &mdash; Next Iteration</h3>
                         <p>
-                            Property-based testing and model checking across safety-critical paths.
+                            Building on the four shipped phases (proptest, Kani, DB invariants, TLA+),
+                            extending depth and coverage in places where the current bounds or fuzz
+                            domains leave room for higher-confidence guarantees.
                         </p>
                         <ul class="detail-list">
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>proptest on Nix generation (escape round-trip, sanitisation, structural validity)</span>
+                                <span>Raise Kani <code>MAX_INPUT_LEN</code> bound once the per-harness matrix budget allows it</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Kani harnesses for nixgen and disk path validation</span>
+                                <span>Kani harness for <code>validate_path_under_root</code> alongside the already-shipped segment validator</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>proptest on database invariants</span>
+                                <span>TLA+ invariants for the compensation executor and replication reservations</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span>Extend proptest coverage to security-group rule rendering and replication outbox state machines</span>
                             </li>
                         </ul>
                     </div>
