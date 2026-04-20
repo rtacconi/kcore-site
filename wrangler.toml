@@ -1,0 +1,5 @@
+# Optional: wrangler pages dev / project binding
+# Connect the Git repo in the Cloudflare dashboard; build command empty; output dir "."
+name = "kcorehypervisor-site"
+compatibility_date = "2024-12-01"
+pages_build_output_dir = "."
