@@ -575,6 +575,32 @@ Created:     2026-03-10 14:23:45</span>
     </script>
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        (function () {
+            var mc = typeof navigator !== "undefined" && navigator.modelContext;
+            if (!mc || typeof mc.provideContext !== "function") return;
+            try {
+                mc.provideContext({
+                    tools: [
+                        {
+                            name: "open_kcore_documentation",
+                            description: "Return the documentation hub URL for kcore (declarative virtualization on NixOS).",
+                            inputSchema: {
+                                type: "object",
+                                properties: {},
+                                additionalProperties: false,
+                            },
+                            execute: async function () {
+                                return {
+                                    url: "https://kcorehypervisor.com/docs.html",
+                                };
+                            },
+                        },
+                    ],
+                });
+            } catch (e) {}
+        })();
+    </script>
 </body>
 </html>
 

@@ -72,8 +72,10 @@ git push -u origin gh-pages
 2. Connect your Git repository
 3. Configure build settings:
    - Build command: (leave empty)
-   - Build output directory: `/kcore-site`
+   - Build output directory: `.` if this repo is the site root, or `kcore-site` if you deploy from a monorepo subdirectory
 4. Deploy
+
+**Agent discovery (recommended for isitagentready-style checks):** GitHub Pages cannot set arbitrary response headers or negotiate `Accept: text/markdown` on `/`. This repo includes `functions/_middleware.js` for **Cloudflare Pages**, which adds `Link` on the homepage, serves `text/markdown` for `/` when clients prefer markdown over HTML, and sets `Content-Type` on `/.well-known/api-catalog` to `application/linkset+json`. Netlify honours `_headers` for some of that; raw GitHub Pages does not.
 
 ## Self-Hosted Options
 
