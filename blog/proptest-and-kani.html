@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Why kcore uses proptest (property-based testing) and Kani (bounded model checking) to reduce bugs and security vulnerabilities in pure Rust code paths.">
-    <title>Why we use proptest and Kani in kcore - kcore hypervisor</title>
+    <meta name="description" content="Why kcore uses proptest (property-based testing) and Kani (bounded model checking) to reduce bugs and security vulnerabilities in pure Rust code paths." data-i18n-content="bp.pk.metaDesc">
+    <title data-i18n="bp.pk.pageTitle">Why we use proptest and Kani in kcore - kcore hypervisor</title>
     <link rel="stylesheet" href="../css/styles.css">
     <style>
         .post-hero {
@@ -85,27 +85,27 @@
                 </a>
             </div>
             <ul class="nav-menu">
-                <li><a href="../features.html">Features</a></li>
-                <li><a href="../pricing.html">Pricing</a></li>
-                <li><a href="../docs.html">Docs</a></li>
-                <li><a href="../roadmap.html">Roadmap</a></li>
-                <li><a href="../blog.html">Blog</a></li>
-                <li><a href="../index.html#get-started" class="btn-primary">Get Started</a></li>
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
             </ul>
         </div>
     </nav>
 
     <section class="post-hero">
         <div class="container">
-            <h1>Why we use proptest and Kani in kcore</h1>
-            <p class="post-meta">17 April 2026</p>
+            <h1 data-i18n="bp.pk.title">Why we use proptest and Kani in kcore</h1>
+            <p class="post-meta" data-i18n="bp.pk.date">17 April 2026</p>
         </div>
     </section>
 
     <article class="post-content">
-        <a href="../blog.html" class="back-link">← Back to blog</a>
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.pk.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n-html="bp.pk.intro">
             Unit tests catch the cases you thought of. The bugs that hurt in production are
             the ones you didn't. In kcore we run two extra layers on top of normal tests to
             close that gap on the code paths where a single missed case can corrupt a
@@ -115,8 +115,8 @@
             are wired into CI and run on every pull request.
         </p>
 
-        <h2>What Rust already gives us</h2>
-        <p>
+        <h2 data-i18n="bp.pk.h2rust">What Rust already gives us</h2>
+        <p data-i18n-html="bp.pk.rust">
             kcore is written in safe Rust with no <code>unsafe</code> blocks. The compiler
             already eliminates whole classes of bugs: data races, use-after-free, null
             dereferences, buffer overflows. Every <code>cargo build</code> is, in effect, a
@@ -125,19 +125,19 @@
             the author never imagined.
         </p>
 
-        <h2>proptest: property-based testing</h2>
-        <p>
+        <h2 data-i18n="bp.pk.h2prop">proptest: property-based testing</h2>
+        <p data-i18n-html="bp.pk.prop.p1">
             <a href="https://github.com/proptest-rs/proptest">proptest</a> generates random
             inputs guided by a strategy (any string, any integer, any struct of these) and
             checks that a property holds across hundreds of cases. When it finds a
             counterexample, it shrinks the input to the smallest failing case and prints it
             so you can write a unit test directly from the failure.
         </p>
-        <p>
+        <p data-i18n="bp.pk.prop.p2">
             We use it in two places where the cost of being wrong is high:
         </p>
         <ul>
-            <li>
+            <li data-i18n-html="bp.pk.prop.li1">
                 <strong>Nix string generation</strong> in
                 <code>crates/controller/src/nixgen.rs</code>. The output of these functions
                 runs as root during <code>nixos-rebuild switch</code>. A missed escape on
@@ -146,7 +146,7 @@
                 unescaped <code>${</code>, sanitised attribute keys only contain
                 <code>[a-zA-Z0-9_-]</code>, generated configs always have balanced braces.
             </li>
-            <li>
+            <li data-i18n-html="bp.pk.prop.li2">
                 <strong>Database CRUD</strong> in <code>crates/controller/src/db.rs</code>.
                 The controller's SQLite is the source of truth for the whole system. We run
                 ~256 randomised cases per property against an in-memory database and assert
@@ -155,7 +155,7 @@
                 read path, and heartbeat idempotence modulo timestamp.
             </li>
         </ul>
-        <p>
+        <p data-i18n="bp.pk.prop.p3">
             proptest is probabilistic. It cannot prove the absence of bugs. But it
             consistently finds the inputs a human would not have tried: empty strings,
             embedded NULs, very long names, characters in surrogate ranges, the exact
@@ -163,8 +163,8 @@
             per property.
         </p>
 
-        <h2>Kani: bounded model checking</h2>
-        <p>
+        <h2 data-i18n="bp.pk.h2kani">Kani: bounded model checking</h2>
+        <p data-i18n-html="bp.pk.kani.p1">
             <a href="https://github.com/model-checking/kani">Kani</a> is Amazon's model
             checker for Rust. A Kani harness looks like a test, but instead of running one
             concrete input it explores <em>every</em> possible input within declared bounds
@@ -172,17 +172,17 @@
             many cases and none failed", Kani says "no input within these bounds can make
             this assertion fail".
         </p>
-        <p>
+        <p data-i18n="bp.pk.kani.p2">
             We use Kani on small, pure functions where exhaustive proof is feasible:
         </p>
         <ul>
-            <li>
+            <li data-i18n-html="bp.pk.kani.li1">
                 <code>nix_escape</code> and <code>sanitize_nix_attr_key</code> in
                 <code>crates/controller/src/nixgen.rs</code> &mdash; proven not to panic
                 and proven to produce safely escaped output for all ASCII inputs up to the
                 current bound.
             </li>
-            <li>
+            <li data-i18n-html="bp.pk.kani.li2">
                 <code>path_segments_include_dot_dot</code> and <code>assert_safe_path</code>
                 in <code>crates/controller/src/path_safety.rs</code> and
                 <code>crates/kctl/src/path_safety.rs</code> &mdash; proven total (no panic
@@ -190,7 +190,7 @@
                 NUL-free, and contains no <code>..</code> segment under either separator.
             </li>
         </ul>
-        <p>
+        <p data-i18n-html="bp.pk.kani.p3">
             All harnesses are gated behind <code>#[cfg(kani)]</code>, so they have zero
             impact on <code>cargo build</code>, <code>cargo test</code>, or
             <code>cargo clippy</code> on the stable toolchain. They run only via
@@ -198,8 +198,8 @@
             <code>.github/workflows/formal-checks.yml</code>.
         </p>
 
-        <h2>An example</h2>
-        <p>
+        <h2 data-i18n="bp.pk.h2example">An example</h2>
+        <p data-i18n="bp.pk.example.p1">
             A typical Kani harness in kcore looks like this:
         </p>
 <pre><code>#[cfg(kani)]
@@ -228,36 +228,36 @@ mod kani_proofs {
         assert!(is_safely_escaped(&escaped));
     }
 }</code></pre>
-        <p>
+        <p data-i18n="bp.pk.example.p2">
             That harness is short, but it replaces an unbounded number of unit tests for
             the same security property: every possible ASCII input within the bound is
             checked.
         </p>
 
-        <h2>Why both, not one</h2>
-        <p>
+        <h2 data-i18n="bp.pk.h2both">Why both, not one</h2>
+        <p data-i18n="bp.pk.both.p1">
             They cover different ground:
         </p>
         <ul>
-            <li>
+            <li data-i18n-html="bp.pk.both.li1">
                 <strong>proptest</strong> scales to bigger inputs and stateful code (like
                 a real SQLite database) and gives fast feedback. It is the right tool when
                 you cannot afford the symbolic state space of exhaustive checking.
             </li>
-            <li>
+            <li data-i18n-html="bp.pk.both.li2">
                 <strong>Kani</strong> gives an actual proof within bounds. For the
                 security boundary functions &mdash; Nix escaping, path validation &mdash;
                 "we tried 2,000 random inputs" is not the same answer as "no bounded input
                 can break this".
             </li>
         </ul>
-        <p>
+        <p data-i18n="bp.pk.both.p2">
             In practice, proptest finds the bug, you fix it, and then you write a Kani
             harness so the same class of bug cannot come back.
         </p>
 
-        <h2>What this means for operators</h2>
-        <p>
+        <h2 data-i18n="bp.pk.h2ops">What this means for operators</h2>
+        <p data-i18n-html="bp.pk.ops.p1">
             The user-visible result is fewer of the worst kinds of bug: a controller that
             generates a broken or unsafe Nix config, a database that ends up with dangling
             VM rows, a path traversal in disk validation. These are bugs that would not
@@ -267,7 +267,7 @@ mod kani_proofs {
             <code>make check</code>, <code>cargo test --workspace</code>,
             <code>cargo kani</code>, and the TLA+ model checks before it can merge.
         </p>
-        <p>
+        <p data-i18n-html="bp.pk.ops.p2">
             For the deeper write-up, including the full roadmap and the four phases
             (proptest on Nix generation, Kani on escaping and path safety, proptest on
             database invariants, TLA+ on the reconciliation protocol), see
