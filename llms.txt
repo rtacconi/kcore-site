@@ -1,0 +1,19 @@
+# kcore hypervisor
+
+> Declarative virtualization on NixOS: VMs as code, gRPC API, Terraform provider, optional MCP server with the product (not hosted on this domain).
+
+## Read first
+
+- [Documentation hub](https://kcorehypervisor.com/docs.html)
+- [User guides](https://kcorehypervisor.com/docs/user/index.html)
+- [Product repository](https://github.com/rtacconi/kcore)
+
+## Machine-readable
+
+- [Sitemap](https://kcorehypervisor.com/sitemap.xml)
+- [API catalog (RFC 9727)](https://kcorehypervisor.com/.well-known/api-catalog)
+- [Agent skills index](https://kcorehypervisor.com/.well-known/agent-skills/index.json)
+
+## API note
+
+Management plane is gRPC to your controller, not public REST on kcorehypervisor.com. See the repo for `.proto` and design docs.

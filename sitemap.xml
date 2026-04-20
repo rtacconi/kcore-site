@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://kcorehypervisor.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://kcorehypervisor.com/features.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kcorehypervisor.com/pricing.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs.html</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://kcorehypervisor.com/roadmap.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/why-i-built-kcore.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/march-25-2026-update.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/crdt-replication.html</loc><changefreq>yearly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/first-node-debian12-quickstart.html</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/containerd-initial-operations.html</loc><changefreq>yearly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/security-groups-nginx-nat.html</loc><changefreq>yearly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/testing-replication-with-tlaplus.html</loc><changefreq>yearly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/index.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/installation.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/first-cluster.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/add-node.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/vm-creation.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/images.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/networks.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/overlay-vxlan.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/security-groups.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/storage.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/storage-day2.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/storage-vsan.html</loc><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/containers.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/certificates.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/kctl-reference.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/yaml-manifests.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/licensing.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/compliance.html</loc><changefreq>monthly</changefreq><priority>0.65</priority></url>
+</urlset>

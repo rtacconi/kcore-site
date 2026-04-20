@@ -1,0 +1,11 @@
+/* TEAM */
+Project: kcore hypervisor
+Site: https://kcorehypervisor.com/
+Product docs: https://github.com/rtacconi/kcore
+
+/* THANKS */
+NixOS, Cloud Hypervisor, and open-source contributors.
+
+/* SITE */
+Standards: HTML, CSS, JSON (RFC 9727 api-catalog, sitemaps.org)
+Last update: 2026-04

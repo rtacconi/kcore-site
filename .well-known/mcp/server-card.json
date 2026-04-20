@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1",
+  "serverInfo": {
+    "name": "kcore",
+    "title": "kcore MCP server",
+    "version": "0.1.0",
+    "description": "kcore ships an MCP (Model Context Protocol) server with the controller for VM and node management. It is not exposed as a public HTTPS endpoint on kcorehypervisor.com; run it on your own cluster and point your MCP client at that deployment. See documentation for installation and configuration."
+  },
+  "repository": {
+    "url": "https://github.com/rtacconi/kcore",
+    "type": "git"
+  },
+  "documentation": {
+    "homepage": "https://kcorehypervisor.com/docs.html",
+    "user_guides": "https://kcorehypervisor.com/docs/user/index.html"
+  },
+  "transports": {
+    "note": "stdio or configured streamable HTTP per your kcore release; see product docs."
+  }
+}
