@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agentskills.io/schemas/discovery/v0.2.0.json",
+  "version": "0.2.0",
+  "publisher": {
+    "name": "kcore",
+    "url": "https://kcorehypervisor.com/"
+  },
+  "skills": [
+    {
+      "name": "kcore-site-overview",
+      "type": "documentation",
+      "description": "Short orientation for AI agents: canonical URLs, docs layout, and where gRPC/MCP live relative to this marketing site.",
+      "url": "https://kcorehypervisor.com/.well-known/agent-skills/kcore-site-overview.md",
+      "sha256": "473efc950571d656f9e86a1ca99ae1b823d514fbc4ba5b9fc10cd64a0f25ec7c"
+    }
+  ]
+}

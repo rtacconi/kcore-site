@@ -1,0 +1,23 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://kcorehypervisor.com/.well-known/api-catalog",
+      "item": [
+        { "href": "https://github.com/rtacconi/kcore" }
+      ]
+    },
+    {
+      "anchor": "https://github.com/rtacconi/kcore",
+      "service-doc": [
+        {
+          "href": "https://kcorehypervisor.com/docs.html",
+          "type": "text/html"
+        },
+        {
+          "href": "https://github.com/rtacconi/kcore/tree/main/docs",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

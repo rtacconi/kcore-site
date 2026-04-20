@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="kcore hypervisor blog - updates, architecture notes, and release announcements">
     <title>Blog - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Blog - kcore hypervisor">
+    <meta property="og:description" content="kcore hypervisor blog - updates, architecture notes, and release announcements">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog.html">
+    <meta name="twitter:card" content="summary">
     <link rel="stylesheet" href="css/styles.css">
     <style>
         .blog-hero {
@@ -116,6 +124,15 @@
     <section class="blog-section">
         <div class="container">
             <div class="blog-list">
+                <div class="blog-post">
+                    <h2><a href="blog/proptest-and-kani.html" data-i18n="blog.post9.title">Why we use proptest and Kani in kcore</a></h2>
+                    <span class="blog-date" data-i18n="blog.post9.date">17 April 2026</span>
+                    <p data-i18n="blog.post9.summary">
+                        Two extra layers on top of normal tests: property-based testing with proptest,
+                        and bounded model checking with Kani. Where they apply in kcore (Nix escaping,
+                        path safety, controller database CRUD) and why we run both.
+                    </p>
+                </div>
                 <div class="blog-post">
                     <h2><a href="blog/security-groups-nginx-nat.html" data-i18n="blog.post7.title">Security groups: nginx on a NAT network (before and after)</a></h2>
                     <span class="blog-date" data-i18n="blog.post7.date">11 April 2026</span>
