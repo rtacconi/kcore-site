@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore storage day-2: add disks, apply disko layouts, management modes, and operational runbook.">
+    <meta name="description" content="kcore storage day-2: declarative DiskLayout resources, safe/dangerous classifier, per-node apply-disk push, and operational runbook.">
     <title>Storage day-2 operations - kcore documentation</title>
     <link rel="canonical" href="https://kcorehypervisor.com/docs/user/storage-day2.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="Storage day-2 operations - kcore documentation">
-    <meta property="og:description" content="kcore storage day-2: add disks, apply disko layouts, management modes, and operational runbook.">
+    <meta property="og:description" content="kcore storage day-2: declarative DiskLayout resources, safe/dangerous classifier, per-node apply-disk push, and operational runbook.">
     <meta property="og:url" content="https://kcorehypervisor.com/docs/user/storage-day2.html">
     <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
@@ -100,86 +100,159 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1 data-i18n="userdoc.storageday2.title">Storage day-2 operations</h1>
-            <p data-i18n="userdoc.storageday2.intro">After initial install, you may need to add data disks, expand storage, or reconfigure layouts. kcore supports day-2 disk operations through disko layouts and NixOS configuration.</p>
+            <h1>Storage day-2 operations</h1>
+            <p>After initial install you may need to add data disks, expand storage, or reconfigure layouts. kcore exposes day-2 disk changes as declarative <strong><code>DiskLayout</code></strong> resources owned by the controller, with a per-node <code>kctl node apply-disk</code> escape hatch for one-off pushes and validation.</p>
+            <p class="note"><strong>Naming:</strong> the operator surface uses the plain word <em>disk</em> (<code>DiskLayout</code>, <code>kctl … disk-layout</code>, <code>/etc/kcore/disk-management-mode</code>). The underlying partitioning tool is still <a href="https://github.com/nix-community/disko">disko</a> and is referenced as such in logs and the <code>kcore.disko.*</code> NixOS module — only the user-facing names changed.</p>
 
-            <h2 data-i18n="userdoc.storageday2.managementModes">Management modes</h2>
-            <p data-i18n-html="userdoc.storageday2.managementModesIntro">The file <code>/etc/kcore/disko-management-mode</code> on each node controls how disko layouts are managed after the initial install. There are two modes:</p>
+            <h2>Safety contract</h2>
+            <p>The controller never touches running VMs. It does not drain, stop, migrate, or reboot workloads. The operator empties the node (manually today; via live migration once that lands) <em>before</em> submitting a <code>DiskLayout</code> that would touch a disk currently in use.</p>
+            <p>Every apply runs through a two-stage classifier:</p>
+            <ul>
+                <li><strong>Controller pre-flight</strong> — fast structural check on the submitted layout (extracts target devices from the Nix body, rejects empty/malformed layouts). Used by <code>kctl diff</code> and on <code>kctl apply</code>.</li>
+                <li><strong>Node-agent authoritative gate</strong> — runs <code>lsblk</code> on the target node and refuses any layout whose target device (or any descendant partition) currently hosts active state. The node-agent always has the final say.</li>
+            </ul>
+            <p>When the node-agent refuses, it surfaces a stable, machine-readable code on <code>status.refusalReason</code> so <code>kctl</code> and dashboards can key UX off it instead of parsing prose:</p>
+            <table>
+                <thead><tr><th>Refusal code</th><th>Meaning</th></tr></thead>
+                <tbody>
+                    <tr><td><code>target_device_has_active_kcore_volume</code></td><td>A partition under the target device is mounted at <code>/var/lib/kcore/volumes</code> (or <code>/var/lib/kcore/images</code>) — i.e. it currently backs a VM volume or image cache.</td></tr>
+                    <tr><td><code>target_device_has_active_system_mount</code></td><td>A partition under the target device hosts <code>/</code>, <code>/boot</code>, <code>/boot/efi</code>, <code>/nix</code>, or <code>/nix/store</code>.</td></tr>
+                    <tr><td><code>target_device_is_active_lvm_pv</code></td><td>The target device is an active LVM physical volume (<code>fstype = LVM2_member</code>).</td></tr>
+                    <tr><td><code>target_device_is_active_zpool_member</code></td><td>The target device is a member of an active ZFS pool (<code>fstype = zfs_member</code>).</td></tr>
+                    <tr><td><code>no_target_devices</code></td><td>The submitted layout did not declare any <code>/dev/*</code> target devices.</td></tr>
+                    <tr><td><code>lsblk_probe_failed</code></td><td>The node-agent could not snapshot live disk state. Fail-closed by design.</td></tr>
+                </tbody>
+            </table>
+            <p>There is no <code>--force</code> override. To clear a refusal the operator quiesces the affected workloads and resubmits the same manifest — the reconciler retries on the next tick.</p>
+
+            <h2>Management modes</h2>
+            <p>The file <code>/etc/kcore/disk-management-mode</code> on each node gates day-2 disk apply. The legacy path <code>/etc/kcore/disko-management-mode</code> is still read as a fallback for one release; <code>node install</code> writes the new path and a compatibility symlink so existing setups keep working.</p>
             <table>
                 <thead>
-                    <tr><th data-i18n="userdoc.storageday2.thMode">Mode</th><th data-i18n="userdoc.storageday2.thBehaviour">Behaviour</th></tr>
+                    <tr><th>Mode</th><th>Behaviour</th></tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td data-i18n-html="userdoc.storageday2.tdInstallerOnly"><strong>installer-only</strong> (default)</td>
-                        <td data-i18n="userdoc.storageday2.tdInstallerOnlyDesc">The disko layout is frozen after install. Day-2 storage changes require manual intervention by an operator.</td>
+                        <td><strong>installer-only</strong> (default)</td>
+                        <td>Validation-only flows are allowed; <code>--apply</code> is rejected with a clear error reporting the active mode. This is the default after <code>node install</code> so freshly installed nodes cannot be re-partitioned by accident.</td>
                     </tr>
                     <tr>
-                        <td data-i18n-html="userdoc.storageday2.tdControllerManaged"><strong>controller-managed</strong></td>
-                        <td data-i18n="userdoc.storageday2.tdControllerManagedDesc">The controller can push disko fragments for additive changes (e.g. new data disks). Destructive changes are still blocked.</td>
+                        <td><strong>controller-managed</strong></td>
+                        <td>The controller's reconciler may dispatch <code>ApplyDiskLayout</code> RPCs to the node-agent. The classifier still has to declare each apply safe; promotion does not lower the safety bar.</td>
                     </tr>
                 </tbody>
             </table>
-            <p data-i18n="userdoc.storageday2.switchModes">To switch modes, write the desired value to the mode file:</p>
-<pre><code>echo "controller-managed" | sudo tee /etc/kcore/disko-management-mode</code></pre>
+            <p>Promote a node to controller-managed mode explicitly when the runbook and maintenance window are in place:</p>
+<pre><code>echo controller-managed | sudo tee /etc/kcore/disk-management-mode</code></pre>
 
-            <h2 data-i18n="userdoc.storageday2.validateLayout">Validate a disko layout</h2>
-            <p data-i18n-html="userdoc.storageday2.validateLayoutIntro">Before applying any layout, validate it with a dry-run. The command parses the Nix expression with <code>nix-instantiate</code> and reports errors without touching disks:</p>
-<pre><code>kctl --node 10.0.0.5:9091 node apply-disko -f layout.nix</code></pre>
-            <p class="note" data-i18n-html="userdoc.storageday2.noteDryRun">Dry-run is the default. No <code>--dry-run</code> flag is needed — the command only formats and mounts when you explicitly pass <code>--apply</code>.</p>
+            <h2>Recommended workflow: declarative <code>DiskLayout</code></h2>
+            <p>Submit a <code>kind: DiskLayout</code> manifest to the controller. The controller persists it in its replicated DB, runs the pre-flight, and the controller-side reconciler dispatches it to the target node, writing the outcome back to <code>status</code>.</p>
+            <div class="docs-yaml-only">
+<pre><code>kind: DiskLayout
+metadata:
+  name: prod-data-pool
+spec:
+  nodeId: node-prod-01
+  layoutNixFile: ./day2-disk.nix      # or inline `layoutNix: |`</code></pre>
+            </div>
+            <p>The Nix body is exactly what disko expects today (a <code>disko.devices</code> attribute set). Each manifest targets <strong>one</strong> node — heterogeneous fleets get one manifest per node, applied with <code>kctl apply -f ./disk-layouts/</code> or as a multi-document YAML.</p>
+            <div class="docs-cli-only">
+<pre><code># Pre-flight (no writes): controller extracts target devices and runs the structural classifier
+kctl diff -f day2-disk-layout.yaml
 
-            <h2 data-i18n="userdoc.storageday2.applyLayout">Apply a disko layout</h2>
-            <p data-i18n="userdoc.storageday2.applyLayoutIntro">When you are confident the layout is correct, apply it:</p>
-<pre><code>kctl --node 10.0.0.5:9091 node apply-disko \
-  -f layout.nix \
+# Create / update the DiskLayout in the controller (reconciler picks it up on the next tick)
+kctl apply -f day2-disk-layout.yaml
+
+# List all DiskLayouts with their phase and refusalReason
+kctl get disk-layouts
+
+# Filter by node
+kctl get disk-layouts --node node-prod-01
+
+# Full body + status
+kctl describe disk-layout prod-data-pool
+
+# Remove from the controller (does NOT touch the node — the persisted layout stays in place)
+kctl delete disk-layout prod-data-pool</code></pre>
+            </div>
+            <p>The status block carries the lifecycle:</p>
+            <table>
+                <thead><tr><th>Phase</th><th>Meaning</th></tr></thead>
+                <tbody>
+                    <tr><td><code>pending</code></td><td>Created or updated; the reconciler has not yet dispatched it.</td></tr>
+                    <tr><td><code>applied</code></td><td>Node-agent applied the layout, persisted it, and ran <code>nixos-rebuild test</code> + <code>switch</code>.</td></tr>
+                    <tr><td><code>refused</code></td><td>Classifier rejected it. <code>refusalReason</code> tells you which guard fired. The reconciler will retry the same generation on every tick.</td></tr>
+                    <tr><td><code>failed</code></td><td>Classifier accepted it but disko or <code>nixos-rebuild</code> errored. Re-check <code>describe</code> for the message; resubmitting bumps the generation only if the body changed.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>What the node-agent does on a successful apply</h2>
+            <ol>
+                <li>Snapshots <code>lsblk -J -p -o NAME,PATH,FSTYPE,MOUNTPOINTS,PKNAME,TYPE</code> and runs the safe/dangerous classifier.</li>
+                <li>Stages the layout under <code>/etc/kcore/disk/</code> and runs <code>disko --mode format,mount</code> with a bounded <code>timeout</code>.</li>
+                <li>Atomically promotes the staged file to <code>/etc/kcore/disk/current.nix</code> on success — this is the path that the shipped <code>modules/kcore-disko.nix</code> imports, so subsequent NixOS evaluations see the realised layout.</li>
+                <li>Chains <code>nixos-rebuild test</code> followed by <code>nixos-rebuild switch</code> via a transient <code>kcore-nix-rebuild.service</code> systemd unit. Pass <code>rebuild = false</code> in the RPC (or <code>--no-rebuild</code> on <code>kctl node apply-disk</code>) only for validation flows.</li>
+            </ol>
+            <p>There is no separate manual <code>kctl node apply-nix</code> step in the day-2 disk runbook any more.</p>
+
+            <h2>One-off per-node push (<code>kctl node apply-disk</code>)</h2>
+            <p>Use the direct push when you want to validate a layout without going through the controller, when the node is not yet a registered <code>DiskLayout</code> target, or for local install/repair flows.</p>
+            <div class="docs-cli-only">
+<pre><code># Validation only (default — no --apply, no writes to disks)
+kctl --node 10.0.0.5:9091 node apply-disk -f day2-disk.nix
+
+# Apply with a bounded timeout; controller-managed mode required
+kctl --node 10.0.0.5:9091 node apply-disk \
+  -f day2-disk.nix \
   --apply \
-  --timeout-seconds 300</code></pre>
-            <p data-i18n-html="userdoc.storageday2.applyLayoutP1">This runs <code>disko --mode format,mount</code> on the target node. The server-side hard cap is 3600 seconds.</p>
-            <p class="note" data-i18n="userdoc.storageday2.noteDestructive">Always validate before applying. Formatting is destructive — it erases data on the targeted devices.</p>
+  --timeout-seconds 600
 
-            <h2 data-i18n="userdoc.storageday2.reconcileNixos">Reconcile NixOS configuration</h2>
-            <p data-i18n="userdoc.storageday2.reconcileNixosIntro">After changing the disko layout you typically need to update the NixOS configuration so the new mounts persist across reboots:</p>
-<pre><code>kctl --node 10.0.0.5:9091 node apply-nix -f config.nix</code></pre>
-            <p data-i18n-html="userdoc.storageday2.reconcileNixosP1">To only write the configuration file without running <code>nixos-rebuild</code>:</p>
-<pre><code>kctl --node 10.0.0.5:9091 node apply-nix -f config.nix --no-rebuild</code></pre>
+# Apply but skip the nixos-rebuild chain (e.g. for tests)
+kctl --node 10.0.0.5:9091 node apply-disk \
+  -f day2-disk.nix \
+  --apply \
+  --no-rebuild</code></pre>
+            </div>
+            <p class="note">Default <code>--timeout-seconds</code> is 300; the server-side hard cap is 3600. Formatting is destructive — the classifier will refuse layouts that target active devices, but always validate first.</p>
+            <p>The legacy command <code>kctl node apply-disko</code> still works as a deprecation alias for one release; new tooling and runbooks should use <code>apply-disk</code>.</p>
 
-            <h2 data-i18n="userdoc.storageday2.inventoryHealth">Inventory and health</h2>
-            <p data-i18n-html="userdoc.storageday2.inventoryHealthP1">Check the current disk layout on a node (runs <code>lsblk</code> remotely):</p>
+            <h2>Inventory and health</h2>
+            <p>Inspect the live disk topology on a node (runs <code>lsblk</code> remotely):</p>
 <pre><code>kctl --node 10.0.0.5:9091 node disks</code></pre>
-            <p data-i18n="userdoc.storageday2.inventoryHealthP2">Inspect storage backend and LVM inventory from the controller:</p>
+            <p>Inspect storage backend, LVM/ZFS inventory, and the most recent <code>DiskLayout</code> phase from the controller:</p>
 <pre><code>kctl describe node node-ab12cd34</code></pre>
-            <p data-i18n="userdoc.storageday2.inventoryHealthP3">The output includes the storage backend, volume group details (for LVM), pool status (for ZFS), and mount points.</p>
 
-            <h2 data-i18n="userdoc.storageday2.operationalRunbook">Operational runbook</h2>
-            <h3 data-i18n="userdoc.storageday2.preflightChecks">Preflight checks</h3>
+            <h2>Operational runbook</h2>
+            <h3>Adding a data disk</h3>
+            <ol>
+                <li>Attach the new disk to the node (physically or via the hypervisor).</li>
+                <li>Write a Nix layout fragment that declares the new <code>device</code> (existing OS disk attributes stay as they are; <code>kcore.disko.controllerFragments</code> still works for hand-authored configs).</li>
+                <li>Pre-flight: <code>kctl diff -f day2-disk-layout.yaml</code>. Confirm the listed target devices match what you intend to format.</li>
+                <li>Apply: <code>kctl apply -f day2-disk-layout.yaml</code>.</li>
+                <li>Watch <code>kctl describe disk-layout &lt;name&gt;</code> until <code>phase: applied</code>. For <code>filesystem</code> backends the new disk mounts at <code>/var/lib/kcore/volumes1</code>, <code>volumes2</code>, …</li>
+            </ol>
+            <h3>Reacting to a refusal</h3>
+            <ol>
+                <li><code>kctl describe disk-layout &lt;name&gt;</code> — read <code>status.refusalReason</code>.</li>
+                <li>Quiesce the workloads using the offending device (stop VMs, evacuate volumes).</li>
+                <li>The reconciler retries automatically on the next tick. No need to resubmit unless you actually want to change the layout body.</li>
+            </ol>
+            <h3>General guidance</h3>
             <ul>
-                <li data-i18n-html="userdoc.storageday2.preflightLi1">Run <code>lsblk</code> and <code>findmnt</code> to understand the current disk topology.</li>
-                <li data-i18n-html="userdoc.storageday2.preflightLi2">For LVM nodes, check <code>vgs</code> and <code>lvs</code> output.</li>
-                <li data-i18n-html="userdoc.storageday2.preflightLi3">For ZFS nodes, check <code>zpool status</code> and <code>zfs list</code>.</li>
-                <li data-i18n="userdoc.storageday2.preflightLi4">Verify no VMs are using the target devices.</li>
-            </ul>
-            <h3 data-i18n="userdoc.storageday2.addingDataDisk">Adding a data disk</h3>
-            <ul>
-                <li data-i18n="userdoc.storageday2.addDiskLi1">Attach the new disk to the node (physically or via hypervisor).</li>
-                <li data-i18n="userdoc.storageday2.addDiskLi2">Write a disko layout fragment that adds the new device.</li>
-                <li data-i18n-html="userdoc.storageday2.addDiskLi3">Validate: <code>kctl --node &lt;IP&gt;:9091 node apply-disko -f layout.nix</code></li>
-                <li data-i18n-html="userdoc.storageday2.addDiskLi4">Apply: <code>kctl --node &lt;IP&gt;:9091 node apply-disko -f layout.nix --apply</code></li>
-                <li data-i18n-html="userdoc.storageday2.addDiskLi5">For filesystem backends, the new disk mounts at <code>/var/lib/kcore/volumes1</code>, <code>volumes2</code>, etc.</li>
-                <li data-i18n="userdoc.storageday2.addDiskLi6">Reconcile NixOS config so mounts survive reboot.</li>
-            </ul>
-            <h3 data-i18n="userdoc.storageday2.generalGuidance">General guidance</h3>
-            <ul>
-                <li data-i18n="userdoc.storageday2.guidanceLi1">Always validate before applying.</li>
-                <li data-i18n="userdoc.storageday2.guidanceLi2">Keep backups of existing disko layouts.</li>
-                <li data-i18n="userdoc.storageday2.guidanceLi3">Schedule disk operations during maintenance windows when possible.</li>
+                <li>Always run <code>kctl diff -f</code> before <code>kctl apply -f</code>.</li>
+                <li>Keep the YAML manifests in version control alongside the rest of your cluster manifests.</li>
+                <li>One <code>DiskLayout</code> per node; for fleet-wide layouts, ship N manifests (or a multi-document YAML).</li>
+                <li>Schedule operations affecting disks that currently host workloads inside maintenance windows; the classifier will block them outside, by design.</li>
             </ul>
 
-            <h2 data-i18n="userdoc.storageday2.outOfScope">Out of scope</h2>
-            <p data-i18n-html="userdoc.storageday2.outOfScopeIntro">The following operations are <strong>not</strong> supported by the day-2 tooling:</p>
+            <h2>Out of scope</h2>
+            <p>The following are <strong>not</strong> supported by day-2 tooling and require dedicated procedures:</p>
             <ul>
-                <li data-i18n="userdoc.storageday2.outOfScopeLi1">In-place OS repartitioning (changing the OS disk layout after install).</li>
-                <li data-i18n="userdoc.storageday2.outOfScopeLi2">Automatic cross-backend migration (e.g. moving a VM from filesystem to LVM without manual steps).</li>
-                <li data-i18n="userdoc.storageday2.outOfScopeLi3">Backend conversion without dedicated migration tooling (e.g. converting a node from LVM to ZFS in place).</li>
+                <li>In-place OS-disk repartitioning after install.</li>
+                <li>Automatic cross-backend migration (filesystem ↔ LVM ↔ ZFS) without manual data movement.</li>
+                <li><code>nodeSelector</code>/label-driven fleet rollout — disk layouts are deliberately per-node.</li>
+                <li><code>--force</code> overrides for refusals — the operator clears blockers and resubmits.</li>
+                <li>Automatic rollback to a previous generation — submit the older layout body explicitly to roll back.</li>
             </ul>
         </main>
     </div>
