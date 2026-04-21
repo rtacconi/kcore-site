@@ -476,13 +476,17 @@
                     <div class="timeline-card">
                         <h3><span class="card-icon shipped">&#9881;</span> Declarative Disk Partitioning</h3>
                         <p>
-                            Disko-based layouts from install through day-2: the live ISO generates
+                            Declarative disk layouts from install through day-2. The live ISO generates
                             <code>disko-config.nix</code> and runs <code>disko --mode format,mount</code>;
                             the <code>kcore.disko</code> NixOS module expresses OS and data disks with optional
                             merged fragments; nodes default to <code>installer-only</code> ownership and can be
-                            moved to <code>controller-managed</code> for <code>kctl node apply-disko</code>.
-                            Fleet-wide rollout from the controller service is still evolving; operators use
-                            <code>kctl</code> per node today.
+                            moved to <code>controller-managed</code> for declarative <code>DiskLayout</code>
+                            resources. The controller stores <code>DiskLayout</code> objects in its replicated
+                            DB and reconciles them to the target node, which atomically persists the layout to
+                            <code>/etc/kcore/disk/current.nix</code> and chains
+                            <code>nixos-rebuild test</code> + <code>switch</code>. The node-agent classifier
+                            refuses any layout that would touch a disk currently backing an active kcore
+                            volume, LVM PV, or ZFS pool member &mdash; the controller never touches VMs.
                         </p>
                         <ul class="detail-list">
                             <li>
@@ -491,19 +495,23 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span><code>modules/kcore-disko.nix</code> with <code>kcore.disko.*</code> (including <code>managementMode</code> and <code>controllerFragments</code>)</span>
+                                <span><code>modules/kcore-disko.nix</code> with <code>kcore.disko.*</code> (including <code>managementMode</code>, <code>controllerFragments</code>, and <code>persistedLayoutPath</code>)</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>Ownership split: <code>/etc/kcore/disko-management-mode</code> &mdash; default <code>installer-only</code>; <code>controller-managed</code> unlocks <code>apply-disko --apply</code></span>
+                                <span>Ownership split: <code>/etc/kcore/disk-management-mode</code> &mdash; default <code>installer-only</code>; <code>controller-managed</code> unlocks declarative apply (legacy <code>disko-management-mode</code> path read as fallback)</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>Day-2 <code>kctl node apply-disko -f … [--apply]</code> &rarr; node agent <code>ApplyDiskoLayout</code> (validate via <code>nix-instantiate --parse</code>, apply via <code>disko --mode format,mount</code>)</span>
+                                <span>Per-node <code>kctl node apply-disk -f … [--apply] [--no-rebuild]</code> &rarr; node-agent <code>ApplyDiskLayout</code>: classifier-gated, atomic persist to <code>/etc/kcore/disk/current.nix</code>, automatic <code>nixos-rebuild</code> chain</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
-                                <span>Controller-orchestrated / fleet rollout of disko fragments and tighter automation into persisted <code>disko-config.nix</code> + <code>nixos-rebuild</code> workflows</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Declarative fleet rollout: <code>kind: DiskLayout</code> resource, controller CRUD + replication outbox, controller-side reconciler tick that pushes unobserved generations to nodes and writes back <code>observed_generation</code> + <code>phase</code></span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Safe / dangerous classifier in <code>kcore-disko-types</code> shared crate (used by both controller pre-flight and node-agent authoritative gate); refusal codes surface on <code>status.refusalReason</code></span>
                             </li>
                         </ul>
                     </div>
@@ -574,6 +582,10 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>DiskLayoutReconcile.tla</code> &mdash; per-resource state machine for the controller-orchestrated <code>DiskLayout</code>; safety invariant <em>&ldquo;no Applied transition without classifier approval&rdquo;</em></span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Trace bridge: Rust test traces validated against TLA+ invariants</span>
                             </li>
                         </ul>
@@ -605,15 +617,23 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Kani harnesses on the <code>DiskLayout</code> diff parser in <code>kcore-disko-types</code>: <code>extract_target_devices</code> never panics, comment stripper preserves length, every emitted path is <code>/dev/</code>-prefixed, extraction is deterministic</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Per-harness CI matrix &mdash; each <code>#[kani::proof]</code> runs on its own GitHub Actions runner with shared toolchain cache, completing the gate in ~1&ndash;2 min on warm cache</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>proptest on database CRUD invariants: VM, node, network, security-group, SSH-key round-trips and replication outbox state transitions</span>
+                                <span>proptest on database CRUD invariants: VM, node, network, security-group, SSH-key, and <code>DiskLayout</code> round-trips, idempotent upserts, foreign-key integrity, cascading delete, and the reconciler queue (<code>list_disk_layouts_needing_reconcile</code>)</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>552 workspace tests (incl. proptest fuzzers) + Kani matrix + TLA+ trace bridge run on every pull request</span>
+                                <span>proptest fuzzers for the <code>DiskLayout</code> safe/dangerous classifier: safe verdicts never overlap an active-VM, system-mount, LVM PV, or zpool-member device; classifier is deterministic on identical inputs</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>575 workspace tests (incl. proptest fuzzers) + Kani matrix + TLA+ trace bridge run on every pull request</span>
                             </li>
                         </ul>
                     </div>
