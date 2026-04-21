@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore storage day-2: declarative DiskLayout resources, safe/dangerous classifier, per-node apply-disk push, and operational runbook.">
+    <meta name="description" content="kcore storage day-2: declarative DiskLayout with structured YAML (spec.diskLayout) or disko Nix, classifier safety gates, per-node apply-disk, and operational runbook.">
     <title>Storage day-2 operations - kcore documentation</title>
     <link rel="canonical" href="https://kcorehypervisor.com/docs/user/storage-day2.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="Storage day-2 operations - kcore documentation">
-    <meta property="og:description" content="kcore storage day-2: declarative DiskLayout resources, safe/dangerous classifier, per-node apply-disk push, and operational runbook.">
+    <meta property="og:description" content="kcore storage day-2: declarative DiskLayout with structured YAML (spec.diskLayout) or disko Nix, classifier safety gates, per-node apply-disk, and operational runbook.">
     <meta property="og:url" content="https://kcorehypervisor.com/docs/user/storage-day2.html">
     <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
@@ -146,20 +146,48 @@
 <pre><code>echo controller-managed | sudo tee /etc/kcore/disk-management-mode</code></pre>
 
             <h2>Recommended workflow: declarative <code>DiskLayout</code></h2>
-            <p>Submit a <strong>YAML</strong> manifest with <code>kind: DiskLayout</code> to the controller. The disk graph itself is still expressed as <strong>Nix for disko</strong>, embedded in the manifest with <code>spec.layoutNix</code> (multi-line literal). The controller persists the resource in its replicated DB, runs the pre-flight, and the reconciler dispatches the resolved Nix body to the target node, writing the outcome back to <code>status</code>.</p>
-            <p class="note"><strong><code>layoutNix</code> vs <code>layoutNixFile</code>:</strong> use <code>layoutNix: |</code> for everything you are happy to keep in Git next to your other manifests. Use <code>layoutNixFile: relative/path.nix</code> only when the fragment is large or shared — paths are resolved relative to the YAML file. You must set <strong>exactly one</strong> of them; they are mutually exclusive.</p>
+            <p>Submit a <strong>YAML</strong> manifest with <code>kind: DiskLayout</code> to the controller. The node-agent still applies <strong>disko</strong> using a Nix body that defines <code>disko.devices</code>; <code>kctl</code> can build that body for you from structured YAML so you do not hand-author Nix for common data-disk layouts.</p>
+            <p class="note"><strong>Exactly one layout source:</strong> set <strong>either</strong> <code>spec.diskLayout</code> (structured YAML: disks, GPT partitions, partition contents), <strong>or</strong> inline <code>spec.layoutNix: |</code>, <strong>or</strong> <code>spec.layoutNixFile: relative/path.nix</code> (path resolved next to the manifest). Mixing more than one is rejected.</p>
+            <p><strong>Preferred — <code>spec.diskLayout</code>:</strong> describes whole disks, GPT partitions, and each partition&rsquo;s role. Supported partition <code>content.type</code> values include <code>filesystem</code> (with <code>format</code> and <code>mountpoint</code>), <code>lvm_pv</code> (with <code>vg</code>), and <code>zfs</code> (with <code>pool</code>). Optional <code>lvmVolumeGroups</code> / <code>zfsPools</code> lists declare empty stubs when needed. <code>kctl</code> expands this to the same <code>disko.devices</code> Nix the controller stores and the reconciler pushes to the node.</p>
             <div class="docs-yaml-only">
-<pre><code># day2-disk-layout.yaml — single file in version control (typical)
+<pre><code># day2-disk-layout.yaml — structured layout (typical)
 kind: DiskLayout
 metadata:
   name: prod-data-pool
 spec:
   nodeId: kvm-node-192-168-40-105   # controller node id for the target machine
+  diskLayout:
+    disks:
+      - name: data1
+        device: /dev/nvme1n1        # adjust to match lsblk on the node
+        gpt:
+          partitions:
+            - name: kcore0
+              size: "100%"
+              content:
+                type: filesystem
+                format: ext4
+                mountpoint: /var/lib/kcore/volumes1</code></pre>
+            <p>For LVM or ZFS member partitions, use <code>content: { type: lvm_pv, vg: vg_kcore }</code> or <code>content: { type: zfs, pool: tank0 }</code>, and list empty stubs if required:</p>
+<pre><code>  diskLayout:
+    lvmVolumeGroups:
+      - name: vg_kcore
+    zfsPools:
+      - name: tank0
+    disks: [ ... ]</code></pre>
+            <p>Field names use <strong>camelCase</strong> under <code>diskLayout</code> (for example <code>lvmVolumeGroups</code>). Shape and options follow what <code>kctl</code> accepts; see also the <a href="yaml-manifests.html">YAML manifest reference</a> for a field summary.</p>
+            <p><strong>Advanced — raw disko Nix:</strong> use <code>layoutNix: |</code> when you need disko features not covered by the YAML schema yet, or <code>layoutNixFile:</code> when the fragment is large or shared.</p>
+<pre><code># Inline disko Nix (advanced)
+kind: DiskLayout
+metadata:
+  name: prod-data-pool
+spec:
+  nodeId: kvm-node-192-168-40-105
   layoutNix: |
     {
       disko.devices.disk.data1 = {
         type = "disk";
-        device = "/dev/nvme1n1";   # new data disk — adjust to match lsblk on the node
+        device = "/dev/nvme1n1";
         content = {
           type = "gpt";
           partitions.data = {
@@ -173,8 +201,8 @@ spec:
         };
       };
     }</code></pre>
-            <p>The block under <code>layoutNix</code> must define <code>disko.devices</code> (directly or as in the example above, where attributes merge into the top-level disko device map). Shape and options follow <a href="https://github.com/nix-community/disko">disko</a> and your node&rsquo;s <code>kcore.disko.*</code> story; adjust devices, partition names, and <code>mountpoint</code> to match your backend (filesystem / LVM / ZFS).</p>
-<pre><code># Optional split: YAML points at a sibling .nix file (same directory or subpath)
+            <p>The block under <code>layoutNix</code> must define <code>disko.devices</code> (directly or as in the example above, where attributes merge into the top-level disko device map). Options follow <a href="https://github.com/nix-community/disko">disko</a> and your node&rsquo;s <code>kcore.disko.*</code> story.</p>
+<pre><code># Optional: YAML points at a sibling .nix file
 kind: DiskLayout
 metadata:
   name: prod-data-pool
@@ -213,6 +241,7 @@ kctl delete disk-layout prod-data-pool</code></pre>
                     <tr><td><code>failed</code></td><td>Classifier accepted it but disko or <code>nixos-rebuild</code> errored. Re-check <code>describe</code> for the message; resubmitting bumps the generation only if the body changed.</td></tr>
                 </tbody>
             </table>
+            <p>Changing <code>spec.diskLayout</code>, <code>spec.layoutNix</code>, or the file behind <code>layoutNixFile</code> bumps the generation when the resolved Nix body changes; resubmitting identical content does not.</p>
 
             <h2>What the node-agent does on a successful apply</h2>
             <ol>
@@ -254,7 +283,7 @@ kctl --node 10.0.0.5:9091 node apply-disk \
             <h3>Adding a data disk</h3>
             <ol>
                 <li>Attach the new disk to the node (physically or via the hypervisor).</li>
-                <li>Edit or create a <code>DiskLayout</code> YAML manifest: put the disko fragment under <code>spec.layoutNix: |</code> (or reference a file with <code>spec.layoutNixFile</code>). Existing OS disk definitions stay on the node; you are adding a new <code>disk.*</code> entry for the new block device (see the recommended workflow example).</li>
+                <li>Edit or create a <code>DiskLayout</code> YAML manifest: prefer <code>spec.diskLayout</code> for a structured description, or use <code>spec.layoutNix</code> / <code>spec.layoutNixFile</code> for full disko Nix. Existing OS disk definitions stay on the node; you are adding a new data disk entry (see the recommended workflow example).</li>
                 <li>Pre-flight: <code>kctl diff -f day2-disk-layout.yaml</code>. Confirm the listed target devices match what you intend to format.</li>
                 <li>Apply: <code>kctl apply -f day2-disk-layout.yaml</code>.</li>
                 <li>Watch <code>kctl describe disk-layout &lt;name&gt;</code> until <code>phase: applied</code>. For <code>filesystem</code> backends the new disk mounts at <code>/var/lib/kcore/volumes1</code>, <code>volumes2</code>, …</li>

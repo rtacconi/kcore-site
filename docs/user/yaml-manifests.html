@@ -280,6 +280,42 @@ spec:
     - kind: vm
       target: web-01</code></pre>
 
+            <!-- ======= DiskLayout ======= -->
+            <h2>DiskLayout manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: DiskLayout)</span></h2>
+            <p>A <code>DiskLayout</code> manifest declares day-2 partitioning for a node via the controller. Set <strong>exactly one</strong> of <code>spec.diskLayout</code> (structured YAML that <code>kctl</code> expands to disko Nix), <code>spec.layoutNix</code> (inline Nix), or <code>spec.layoutNixFile</code> (path relative to the manifest). Full workflow and classifier behaviour are documented in <a href="storage-day2.html">Storage day-2 operations</a>.</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"DiskLayout"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of this layout resource</td></tr>
+                <tr><td><code>spec.nodeId</code></td><td>string</td><td>Target node id in the controller</td></tr>
+                <tr><td><code>spec.diskLayout</code></td><td>object</td><td>Structured disk / GPT / partition tree (mutually exclusive with the other two)</td></tr>
+                <tr><td><code>spec.diskLayout.disks[]</code></td><td>array</td><td>Each item: <code>name</code>, <code>device</code> (<code>/dev/…</code>), <code>gpt.partitions[]</code></td></tr>
+                <tr><td><code>spec.diskLayout.disks[].gpt.partitions[].content</code></td><td>object</td><td>Tag <code>type</code>: <code>filesystem</code> | <code>lvm_pv</code> | <code>zfs</code> with the matching fields</td></tr>
+                <tr><td><code>spec.diskLayout.lvmVolumeGroups[]</code></td><td>array</td><td>Optional stubs: <code>name</code> for each volume group referenced by <code>lvm_pv</code></td></tr>
+                <tr><td><code>spec.diskLayout.zfsPools[]</code></td><td>array</td><td>Optional stubs: <code>name</code> for each pool referenced by <code>zfs</code> partition content</td></tr>
+                <tr><td><code>spec.layoutNix</code></td><td>string</td><td>Multi-line Nix defining <code>disko.devices</code> (mutually exclusive)</td></tr>
+                <tr><td><code>spec.layoutNixFile</code></td><td>string</td><td>Path to a <code>.nix</code> file (mutually exclusive)</td></tr>
+            </table>
+            <h3>DiskLayout example (<code>spec.diskLayout</code>)</h3>
+<pre><code>kind: DiskLayout
+metadata:
+  name: prod-data-pool
+spec:
+  nodeId: kvm-node-192-168-40-105
+  diskLayout:
+    disks:
+      - name: data1
+        device: /dev/nvme1n1
+        gpt:
+          partitions:
+            - name: kcore0
+              size: "100%"
+              content:
+                type: filesystem
+                format: ext4
+                mountpoint: /var/lib/kcore/volumes1</code></pre>
+            <p>Apply: <code>kctl diff -f disk-layout.yaml</code> then <code>kctl apply -f disk-layout.yaml</code>. Other commands: <code>kctl get disk-layouts</code>, <code>kctl describe disk-layout &lt;name&gt;</code>, <code>kctl delete disk-layout &lt;name&gt;</code>.</p>
+
             <!-- ======= Cluster ======= -->
             <h2>Cluster manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Cluster)</span></h2>
             <p>A <code>Cluster</code> manifest creates the cluster PKI on the operator workstation. This is a <strong>local operation</strong> that does not require a running controller.</p>
@@ -462,7 +498,8 @@ kctl apply -f vm.yaml
 kctl apply -f network.yaml
 kctl apply -f ssh-key.yaml
 kctl apply -f container.yaml
-kctl apply -f security-group.yaml</code></pre>
+kctl apply -f security-group.yaml
+kctl apply -f disk-layout.yaml</code></pre>
 
             <p class="note">Manifests are the recommended way to manage kcore resources. They provide a reproducible, version-controllable description of your infrastructure.</p>
         </main>
