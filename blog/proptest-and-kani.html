@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why kcore uses proptest for property-based tests and Kani for bounded proofs on security-sensitive Rust code.">
+    <title>Why we use proptest and Kani in kcore - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/proptest-and-kani.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Why we use proptest and Kani in kcore - kcore hypervisor">
+    <meta property="og:description" content="Why kcore uses proptest for property-based tests and Kani for bounded proofs on security-sensitive Rust code.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/proptest-and-kani.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.4rem; }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.pkan.title">Why we use proptest and Kani in kcore</h1>
+            <p class="post-meta" data-i18n="bp.pkan.date">17 April 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.pkan.back">← Back to blog</a>
+
+        <p data-i18n="bp.pkan.intro">
+            Rust’s borrow checker and type system rule out memory errors and a lot of API misuse. They do not
+            prove that Nix snippets we emit are safe, that database invariants hold under randomised workloads,
+            or that a path validator rejects every traversal attempt up to a bound. For those classes of bugs we
+            add two complementary tools: <strong>proptest</strong> for property-based testing at normal
+            <code>cargo test</code> speed, and <strong>Kani</strong> for bounded proofs on small, dependency-light crates.
+        </p>
+
+        <h2 data-i18n="bp.pkan.h2gap">What ordinary tests still miss</h2>
+        <p data-i18n="bp.pkan.gap.p1">
+            Integration tests are scenarios: they show one or a few paths work. Properties say “this must hold for
+            every input matching a strategy” (proptest) or “for every input up to this size” (Kani). That is the
+            difference between “we tried a few strings” and “we tried to break the assumption systematically.”
+        </p>
+
+        <h2 data-i18n="bp.pkan.h2proptest">proptest: cheap, fast randomised coverage</h2>
+        <p data-i18n-html="bp.pkan.proptest.p1">
+            We use <a href="https://github.com/proptest-rs/proptest">proptest</a> where we want high throughput
+            and easy co-location with existing unit tests: gRPC validation, controller database invariants on
+            in-memory SQLite, node registration, and similar. It is not a proof; it is a strong statistical search
+            for counterexamples, and it runs in the same CI jobs as the rest of the suite.
+        </p>
+        <ul>
+            <li data-i18n="bp.pkan.proptest.li1">Request and manifest validation paths (<code>crates/controller/src/grpc/validation.rs</code> and related).</li>
+            <li data-i18n="bp.pkan.proptest.li2">Database CRUD and consistency checks (<code>crates/controller/src/db.rs</code> test module).</li>
+            <li data-i18n="bp.pkan.proptest.li3">Node agent and registration flows where protobuf and identifiers need round-trip and boundary behaviour.</li>
+        </ul>
+
+        <h2 data-i18n="bp.pkan.h2kani">Kani: exhaustive within bounds, isolated in small crates</h2>
+        <p data-i18n-html="bp.pkan.kani.p1">
+            <a href="https://github.com/model-checking/kani">Kani</a> model-checks Rust functions with bounded input
+            sizes. Pointing it at the full controller binary is impractical: transitive dependencies (gRPC, TLS, SQLite, …)
+            explode build time. We keep proofs in <code>crates/kcore-sanitize</code> (minimal dependencies) for
+            security-sensitive string and path handling used when generating Nix and touching the filesystem.
+        </p>
+        <p data-i18n="bp.pkan.kani.p2">
+            Harnesses are gated so normal builds and clippy stay unchanged; CI runs Kani in dedicated jobs with pinned
+            tool versions so results are reproducible across merges.
+        </p>
+
+        <h2 data-i18n="bp.pkan.h2both">Why both, not one or the other</h2>
+        <p data-i18n="bp.pkan.both.p1">
+            proptest scales to large modules and finds real bugs quickly with little setup. Kani upgrades specific pure
+            functions from “we didn’t find a counterexample in N random tries” to “no counterexample exists within these
+            bounds” — the right trade-off for injection and path-safety code where a single missed edge case is
+            unacceptable. Together with TLA+ at the protocol level, they form a layered story: design models, then
+            implementation properties, then proofs on the hottest pure code.
+        </p>
+
+        <h2 data-i18n="bp.pkan.h2ci">What this means in CI</h2>
+        <p data-i18n-html="bp.pkan.ci.p1">
+            Property tests run with the normal Rust test matrix. Kani runs under the formal verification workflow
+            alongside TLA+ checks so a regression in any layer fails the same quality gate. For more detail on scope
+            and roadmap, see the <code>docs/formal-methods-and-verification.md</code> document in the kcore repository.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
