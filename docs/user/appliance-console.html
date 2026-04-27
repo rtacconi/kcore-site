@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Use the kcore appliance console: read-only local TUI, status pages, keyboard shortcuts, and security model.">
+    <title>Appliance console - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/appliance-console.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Appliance console - kcore documentation">
+    <meta property="og:description" content="Use the kcore appliance console: read-only local TUI, status pages, keyboard shortcuts, and security model.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/appliance-console.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="appliance-console.html" class="active">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+
+        <main class="docs-content">
+            <h1>Appliance console</h1>
+            <p>kcore nodes display a local appliance console on the host screen instead of a standard Linux login prompt. The console is read-only and designed for quick status checks during install, boot, and onsite troubleshooting.</p>
+            <p class="note"><strong>Administration remains remote.</strong> Use <code>kcorectl</code>, SSH, and the authenticated kcore API for real management. The local console does not expose a root shell.</p>
+
+            <h2>Remote management</h2>
+            <p>Use the management URL shown on the Overview page from an operator workstation:</p>
+<pre><code>kcorectl login https://&lt;management-ip&gt;:8443</code></pre>
+            <p>If the local API is not ready, the screen still opens and shows <code>API: unavailable</code>. Network and disk inventory continue to refresh from Linux when available.</p>
+
+            <h2>Overview page</h2>
+            <p>The first page shows node identity and management hints:</p>
+            <ul>
+                <li>Product name: <strong>kcore hypervisor</strong></li>
+                <li>Hostname, kcore version, and build ID</li>
+                <li>Management URL and local API endpoint</li>
+                <li>Cluster name and node role when known</li>
+                <li>Overall health, uptime, and current local time</li>
+                <li>Local login status: <code>disabled</code></li>
+            </ul>
+
+            <h2>Pages</h2>
+            <table>
+                <thead><tr><th>Page</th><th>Shows</th></tr></thead>
+                <tbody>
+                    <tr><td>Overview</td><td>Node identity, management URL, health, uptime, and remote-management command.</td></tr>
+                    <tr><td>Network</td><td>NIC table with interface, MAC, state, IPv4, IPv6, MTU, speed, driver, default-route marker, and management marker.</td></tr>
+                    <tr><td>Storage</td><td>Disk table with device, path, model, serial, size, SSD/HDD/NVMe type, read-only flag, mountpoints, health, and usage role.</td></tr>
+                    <tr><td>Diagnostics</td><td>Local status for node-agent, controller, and dashboard.</td></tr>
+                    <tr><td>Help</td><td>Keyboard shortcuts and security reminders.</td></tr>
+                </tbody>
+            </table>
+            <p>Missing values are shown as <code>-</code> or <code>—</code>, depending on terminal capabilities.</p>
+
+            <h2>Keyboard shortcuts</h2>
+            <table>
+                <thead><tr><th>Key</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Tab</code>, <code>Right</code></td><td>Next page.</td></tr>
+                    <tr><td><code>Shift+Tab</code>, <code>Left</code></td><td>Previous page.</td></tr>
+                    <tr><td><code>1</code> to <code>5</code></td><td>Jump to Overview, Network, Storage, Diagnostics, or Help.</td></tr>
+                    <tr><td><code>Up</code>, <code>Down</code></td><td>Move selection in the current table.</td></tr>
+                    <tr><td><code>r</code></td><td>Refresh inventory now.</td></tr>
+                    <tr><td><code>h</code> or <code>?</code></td><td>Open Help.</td></tr>
+                    <tr><td><code>Esc</code></td><td>Return to Overview.</td></tr>
+                    <tr><td><code>q</code></td><td>Disabled in production.</td></tr>
+                    <tr><td><code>Ctrl+C</code></td><td>Disabled in production.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Security model</h2>
+            <ul>
+                <li>No local username/password prompt is exposed.</li>
+                <li>Reboot and shutdown actions are not available from the local TUI.</li>
+                <li>Real administration happens through the authenticated remote API and <code>kcorectl</code>.</li>
+                <li>If the console process exits or crashes, <code>systemd</code> restarts it.</li>
+            </ul>
+
+            <h2>Troubleshooting</h2>
+            <p>If the console still shows a Linux login prompt:</p>
+            <ol>
+                <li>Confirm <code>kcore-console.service</code> is enabled and running.</li>
+                <li>Confirm <code>getty@tty1.service</code> and <code>autovt@.service</code> are masked or disabled.</li>
+                <li>Confirm <code>getty@tty2.service</code> through <code>getty@tty6.service</code> are also disabled; users can switch VTs with <code>Ctrl+Alt+F2</code> to <code>F6</code>.</li>
+                <li>Reboot and check the display attached to <code>tty1</code>.</li>
+            </ol>
+            <p>If network or disk tables are incomplete, the node may be missing Linux data from <code>ip</code>, <code>/sys</code>, or <code>lsblk</code>. The console continues rendering and refreshes automatically.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+</body>
+</html>
