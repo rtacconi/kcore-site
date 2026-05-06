@@ -19,6 +19,7 @@
   <url><loc>https://kcorehypervisor.com/docs/user/installation.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/docs/user/first-cluster.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kcorehypervisor.com/docs/user/add-node.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/docs/user/cluster-and-node-upgrades.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
   <url><loc>https://kcorehypervisor.com/docs/user/vm-creation.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/docs/user/images.html</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://kcorehypervisor.com/docs/user/networks.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>

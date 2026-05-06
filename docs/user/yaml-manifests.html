@@ -56,7 +56,7 @@
     </div>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li><li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
             <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
             <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
@@ -316,6 +316,43 @@ spec:
                 mountpoint: /var/lib/kcore/volumes1</code></pre>
             <p>Apply: <code>kctl diff -f disk-layout.yaml</code> then <code>kctl apply -f disk-layout.yaml</code>. Other commands: <code>kctl get disk-layouts</code>, <code>kctl describe disk-layout &lt;name&gt;</code>, <code>kctl delete disk-layout &lt;name&gt;</code>.</p>
 
+            <!-- ======= ClusterUpdate ======= -->
+            <h2 id="clusterupdate-manifest-kind-clusterupdate">ClusterUpdate manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: ClusterUpdate)</span></h2>
+            <p>A <code>ClusterUpdate</code> manifest declares a <strong>flake-pinned</strong> host OS rollout for one or more nodes. It is submitted with <code>kctl update cluster</code>, not <code>kctl apply</code>. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"ClusterUpdate"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Stable name for this rollout</td></tr>
+                <tr><td><code>spec.target.version</code></td><td>string</td><td>Human version label</td></tr>
+                <tr><td><code>spec.target.flake_ref</code></td><td>string</td><td>Flake URI (e.g. <code>github:org/repo</code>)</td></tr>
+                <tr><td><code>spec.target.flake_rev</code></td><td>string</td><td>Immutable Git revision</td></tr>
+                <tr><td><code>spec.target.nixpkgs_rev</code></td><td>string</td><td>Optional nixpkgs pin</td></tr>
+                <tr><td><code>spec.target.system_profile</code></td><td>string</td><td>Optional system profile attribute path</td></tr>
+                <tr><td><code>spec.selector</code></td><td>object</td><td><code>node_ids</code>, <code>all_nodes</code>, <code>controllers_only</code>, <code>labels</code>, <code>datacenters</code></td></tr>
+                <tr><td><code>spec.strategy</code></td><td>object</td><td><code>strategy_type</code>, <code>max_unavailable</code>, <code>batch_size</code></td></tr>
+                <tr><td><code>spec.drain_vms</code></td><td>boolean</td><td>Drain intent (consult release notes)</td></tr>
+                <tr><td><code>spec.drain_timeout_seconds</code></td><td>integer</td><td>Drain timeout</td></tr>
+                <tr><td><code>spec.activation.mode</code></td><td>string</td><td><code>test</code> | <code>switch</code> | <code>boot</code> | <code>auto</code></td></tr>
+                <tr><td><code>spec.activation.reboot_policy</code></td><td>string</td><td>Opaque; interpreted by node-agent</td></tr>
+                <tr><td><code>spec.approval_policy</code></td><td>string</td><td><code>manual</code> | <code>auto-non-disruptive</code> | <code>auto</code></td></tr>
+                <tr><td><code>spec.automatic_rollback</code></td><td>boolean</td><td>Rollback behaviour hint</td></tr>
+            </table>
+            <h3>ClusterUpdate example</h3>
+<pre><code>kind: ClusterUpdate
+metadata:
+  name: release-0-4-0
+spec:
+  target:
+    version: "0.4.0"
+    flake_ref: github:kcorehypervisor/kcore
+    flake_rev: "&lt;full-git-sha&gt;"
+  selector:
+    all_nodes: true
+  strategy:
+    strategy_type: one-at-a-time
+  approval_policy: manual</code></pre>
+            <p>Plan: <code>kctl update cluster plan -f rollout.yaml</code>. Apply: <code>kctl update cluster apply -f rollout.yaml</code>. Other: <code>kctl update cluster get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>.</p>
+
             <!-- ======= Cluster ======= -->
             <h2>Cluster manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Cluster)</span></h2>
             <p>A <code>Cluster</code> manifest creates the cluster PKI on the operator workstation. This is a <strong>local operation</strong> that does not require a running controller.</p>
@@ -450,6 +487,8 @@ spec:
                 <tr><td><code>SshKey</code></td><td><code>kctl apply -f</code></td><td>Register an SSH public key</td></tr>
                 <tr><td><code>Container</code></td><td><code>kctl apply -f</code></td><td>Create an OCI container</td></tr>
                 <tr><td><code>SecurityGroup</code></td><td><code>kctl apply -f</code> or <code>kctl sg apply -f</code></td><td>Create and attach firewall rules</td></tr>
+                <tr><td><code>DiskLayout</code></td><td><code>kctl diff -f</code> / <code>kctl apply -f</code></td><td>Day-2 disk layout (YAML or disko Nix)</td></tr>
+                <tr><td><code>ClusterUpdate</code></td><td><code>kctl update cluster plan -f</code> / <code>kctl update cluster apply -f</code></td><td>Host OS rollout (flake-pinned); not <code>kctl apply</code></td></tr>
             </table>
 
             <h2 id="idempotency-and-upsert">Idempotency and upsert</h2>
@@ -488,7 +527,7 @@ unchanged VM 'web-01'</code></pre>
             <p>No client-side diff, no client-side tracking of which fields are mutable — the controller is the single source of truth.</p>
 
             <h2>Applying manifests</h2>
-            <p>Use <code>kctl apply -f</code> for all resource types. The <code>kind</code> field is auto-detected:</p>
+            <p>Use <code>kctl apply -f</code> for most resource kinds; the <code>kind</code> field is auto-detected. <strong>Host OS rollouts</strong> use <code>kctl update cluster apply -f rollout.yaml</code> instead — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
 <pre><code># Bootstrap (local / ISO operations)
 kctl apply -f cluster.yaml
 kctl apply -f node-install.yaml
@@ -499,7 +538,11 @@ kctl apply -f network.yaml
 kctl apply -f ssh-key.yaml
 kctl apply -f container.yaml
 kctl apply -f security-group.yaml
-kctl apply -f disk-layout.yaml</code></pre>
+kctl apply -f disk-layout.yaml
+
+# Host OS upgrade (separate command — kind: ClusterUpdate)
+kctl update cluster plan -f rollout.yaml
+kctl update cluster apply -f rollout.yaml</code></pre>
 
             <p class="note">Manifests are the recommended way to manage kcore resources. They provide a reproducible, version-controllable description of your infrastructure.</p>
         </main>

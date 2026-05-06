@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore compliance: report categories, framework mappings, implemented and planned security features.">
-    <title>Compliance enablement - kcore documentation</title>
-    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/compliance.html">
+    <meta name="description" content="kcore cluster and node upgrades: flake-pinned ClusterUpdate rollouts, kctl update cluster, approval and phases.">
+    <title>Cluster &amp; node upgrades - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/cluster-and-node-upgrades.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
-    <meta property="og:title" content="Compliance enablement - kcore documentation">
-    <meta property="og:description" content="kcore compliance: report categories, framework mappings, implemented and planned security features.">
-    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/compliance.html">
+    <meta property="og:title" content="Cluster &amp; node upgrades - kcore documentation">
+    <meta property="og:description" content="Flake-pinned NixOS rollouts via ClusterUpdate: plan, apply, approve, observe per-node status.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/cluster-and-node-upgrades.html">
     <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
@@ -36,7 +36,6 @@
         .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
         table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
         th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
-        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
         @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
     </style>
 </head>
@@ -69,7 +68,7 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" class="active" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
@@ -89,7 +88,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
                 <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
-                <li><a href="compliance.html" class="active" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
                 <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
@@ -101,58 +100,72 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1 data-i18n="userdoc.compliance.h1">Compliance enablement</h1>
-            <p data-i18n="userdoc.compliance.intro">kcore is infrastructure software. Your organisation owns compliance scope. kcore provides controls, APIs, and isolation properties assessors can test — a compliance-enabling platform.</p>
-            <p class="note" data-i18n="userdoc.compliance.note">kcore is not a substitute for your own certifications. You inherit platform controls and document your policies on top.</p>
+            <h1>Cluster &amp; node upgrades</h1>
+            <p>kcore nodes run <strong>NixOS</strong>. Host upgrades move the system forward using an immutable <strong>flake revision</strong> (<code>flake_ref</code> + <code>flake_rev</code>) while the <strong>controller</strong> orchestrates prepare/activate work on each node. Workloads (VMs/containers) use the normal lifecycle APIs; they are not upgraded by this flow.</p>
 
-            <h2 data-i18n="userdoc.compliance.h2.report">Compliance report</h2>
-            <p data-i18n-html="userdoc.compliance.report.p">Retrieve the compliance report with <code>kctl get compliance-report</code> or <code>kctl describe compliance-report</code>. The report covers the following categories:</p>
-
-            <h3 data-i18n="userdoc.compliance.h3.crypto">1. Cryptography</h3>
-            <p data-i18n-html="userdoc.compliance.crypto.p">Library: <strong>aws-lc-rs / AWS-LC</strong> (FIPS 140-3 certificate #4816). TLS 1.3 and TLS 1.2 cipher suites, key-exchange groups, and excluded algorithms are enumerated. Maps to <strong>FIPS 140-3</strong>, <strong>PCI DSS 4.2</strong>, <strong>SOC 2 CC6.1</strong>.</p>
-
-            <h3 data-i18n="userdoc.compliance.h2.enc">2. Encryption in transit</h3>
-            <p data-i18n-html="userdoc.compliance.enc1">mTLS enabled or disabled. gRPC over mTLS with X.509 client certificates. Maps to <strong>SOC 2</strong>, <strong>PCI DSS</strong>, <strong>GDPR Art. 32</strong>.</p>
-
-            <h3 data-i18n="userdoc.compliance.h3.access">3. Access control</h3>
-            <p data-i18n-html="userdoc.compliance.access.p">RPC methods mapped to allowed identities (static CN-based authorisation). Maps to <strong>SOC 2 CC6.3</strong>, <strong>PCI 7.1</strong>, <strong>GDPR Art. 32</strong>.</p>
-
-            <h3 data-i18n="userdoc.compliance.h3.nodeinv">4. Node inventory</h3>
-            <p data-i18n-html="userdoc.compliance.nodeinv.p">Total, approved, pending, and rejected node counts. Maps to <strong>SOC 2 CC6.2</strong>, <strong>PCI 2.4</strong>.</p>
-
-            <h3 data-i18n="userdoc.compliance.h3.vminv">5. VM inventory</h3>
-            <p data-i18n="userdoc.compliance.vminv.p">Total, running, and stopped VM counts.</p>
-
-            <h3 data-i18n="userdoc.compliance.h3.netseg">6. Network segmentation</h3>
-            <p data-i18n-html="userdoc.compliance.netseg.p">Network counts by type (NAT / bridge / VXLAN). Maps to <strong>PCI 1.3</strong>, <strong>SOC 2 CC6.6</strong>.</p>
-
-            <h3 data-i18n="userdoc.compliance.h3.certlife">7. Certificate lifecycle</h3>
-            <p data-i18n-html="userdoc.compliance.certlife.p">Sub-CA enabled, auto-renewal window (30 days), expiring and unknown certificate counts. Maps to <strong>SOC 2 CC6.1</strong>, <strong>PCI 3.6</strong>.</p>
-
-            <h3 data-i18n="userdoc.compliance.h3.ear">8. Encryption at rest</h3>
-            <p data-i18n-html="userdoc.compliance.enc2">LUKS2 mandatory. TPM2, key-file, and unknown node counts. Maps to <strong>NIST 800-53 SC-28</strong>, <strong>SOC 2 CC6.1</strong>.</p>
-
-            <h3 data-i18n="userdoc.compliance.h2.iso">9. Infrastructure</h3>
-            <p data-i18n-html="userdoc.compliance.iso.p">NixOS, Cloud Hypervisor (KVM), VM isolation (per-VM TAP + per-network bridge), node approval. Maps to <strong>SOC 2 CC8.1</strong>, <strong>PCI 2.2</strong>.</p>
-
-            <h2 data-i18n="userdoc.compliance.h2.decl">Implemented security features</h2>
+            <h2>Cluster rollout vs single node</h2>
+            <p>Both use the same <strong><code>kind: ClusterUpdate</code></strong> manifest. The <strong>selector</strong> decides scope:</p>
             <ul>
-                <li data-i18n="userdoc.compliance.impl.li1">mTLS for all management-plane communication</li>
-                <li data-i18n="userdoc.compliance.impl.li2">CN-based authorisation for gRPC methods</li>
-                <li data-i18n="userdoc.compliance.impl.li3">Node approval queue</li>
-                <li data-i18n="userdoc.compliance.impl.li4">LUKS2 + TPM2 disk encryption</li>
-                <li data-i18n="userdoc.compliance.impl.li5">Automatic certificate renewal</li>
-                <li data-i18n="userdoc.compliance.impl.li6">Sub-CA rotation</li>
-                <li data-i18n="userdoc.compliance.impl.li7">Security groups (nftables)</li>
-                <li data-i18n-html="userdoc.compliance.impl.li8"><code>cargo audit</code> in CI</li>
+                <li><strong>Whole cluster</strong> — e.g. <code>selector.all_nodes: true</code> (subject to labels/datacenter filters when you use them).</li>
+                <li><strong>Controllers only</strong> — <code>selector.controllers_only: true</code>.</li>
+                <li><strong>One or few nodes</strong> — <code>selector.node_ids: [&quot;&lt;uuid&gt;&quot;, …]</code> for a targeted or rolling-by-hand rollout.</li>
             </ul>
+            <p class="note">There is no separate command for “upgrade this machine only”; narrow the selector instead.</p>
 
-            <h2 data-i18n="userdoc.compliance.h2.inprog">In progress</h2>
+            <h2>CLI (<code>kctl update cluster</code>)</h2>
+            <p>Alias: <code>kctl update os</code>. Requires a working controller context (same TLS setup as other <code>kctl</code> commands).</p>
+            <div class="docs-cli-only">
+<pre><code># Dry-run: resolve targets, viability, reboot hints
+kctl update cluster plan -f rollout.yaml
+
+# Submit or update the ClusterUpdate resource
+kctl update cluster apply -f rollout.yaml
+
+# Observe cluster + per-node phases
+kctl update cluster get release-0-4-0
+kctl update cluster list
+
+# If approval_policy is manual
+kctl update cluster approve release-0-4-0
+
+kctl update cluster cancel release-0-4-0
+kctl update cluster rollback release-0-4-0</code></pre>
+            </div>
+            <p class="docs-yaml-only note">Switch to <strong>CLI</strong> in the strip above for command blocks.</p>
+
+            <h2>YAML manifest outline</h2>
+            <p>Use camelCase fields; see <a href="yaml-manifests.html#clusterupdate-manifest-kind-clusterupdate">YAML manifest reference (ClusterUpdate)</a>.</p>
+<pre><code>kind: ClusterUpdate
+metadata:
+  name: release-0-4-0
+spec:
+  target:
+    version: "0.4.0"
+    flake_ref: github:kcorehypervisor/kcore
+    flake_rev: "&lt;full-git-sha&gt;"
+  selector:
+    all_nodes: true
+  strategy:
+    strategy_type: one-at-a-time
+    max_unavailable: 1
+    batch_size: 1
+  drain_vms: false
+  activation:
+    mode: auto
+  approval_policy: manual</code></pre>
+            <p>With <code>approval_policy: manual</code>, the controller waits for <code>kctl update cluster approve &lt;name&gt;</code> before rolling. Automatic policies advance without that step.</p>
+
+            <h2>Phases</h2>
+            <p>The cluster resource exposes a <strong>phase</strong> (pending, rolling_out, succeeded, failed, …). Each node row tracks prepare/activate progress and errors. Use <code>kctl update cluster get</code> for detail.</p>
+            <p class="note">Strategy knobs (<code>canary</code>, <code>batch</code>, …) exist on the API; simpler deployments may advance nodes one after another — confirm behaviour for your release.</p>
+
+            <h2>Host rollback</h2>
+            <p>Controller <code>rollback</code> expresses rollout intent. For a broken activation you can still recover with normal <strong>NixOS generation</strong> commands on the machine (e.g. previous bootloader generation); keep that in your physical/datacenter runbook.</p>
+
+            <h2>Further reading</h2>
             <ul>
-                <li data-i18n-html="userdoc.compliance.inprog.li1">Audit log of mutating API calls <span class="roadmap-badge">Planned</span></li>
-                <li data-i18n-html="userdoc.compliance.inprog.li2">RBAC / multiple operator roles <span class="roadmap-badge">Planned</span></li>
-                <li data-i18n-html="userdoc.compliance.inprog.li3">CRL/OCSP for certificate revocation <span class="roadmap-badge">Planned</span></li>
-                <li data-i18n-html="userdoc.compliance.inprog.li4">gRPC rate limiting <span class="roadmap-badge">Planned</span></li>
+                <li><a href="https://github.com/rtacconi/kcore/blob/main/docs/cluster-and-node-upgrades.md">cluster-and-node-upgrades.md</a> (operator guide in the repo)</li>
+                <li><a href="https://github.com/rtacconi/kcore/blob/main/docs/cluster-updates.md">cluster-updates.md</a> — architecture and design history</li>
             </ul>
         </main>
     </div>
