@@ -650,10 +650,11 @@
                         <p>
                             In-browser serial console in the dashboard for datacenter use: a CLI
                             terminal for day-to-day work, rescue, and installers. Also available
-                            from the CLI via <code>kctl console</code>. If you need a graphical
-                            desktop, install a VNC server (or equivalent) inside the guest OS
-                            yourself and reach it over the network. kcore does not provide a
-                            hypervisor-level graphical console &mdash; that would add complexity
+                            from the CLI via <code>kctl console</code>. Console opens are recorded
+                            in the append-only audit log (actor, VM, timestamp). If you need a
+                            graphical desktop, install a VNC server (or equivalent) inside the
+                            guest OS yourself and reach it over the network. kcore does not provide
+                            a hypervisor-level graphical console &mdash; that would add complexity
                             we do not need for headless workloads.
                         </p>
                         <ul class="detail-list">
@@ -700,11 +701,15 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>Append-only audit log with actor, action, resource, timestamp</span>
+                                <span>Append-only audit log with actor, action, resource, timestamp (includes console session opens)</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span><code>ListAuditEvents</code> API (+ <code>kctl audit</code> / dashboard)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Console session audit: <code>AttachVmConsole</code> records who opened which VM console, and when</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
