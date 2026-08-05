@@ -685,21 +685,26 @@
                 <!-- Q3 2026: SECURITY -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Q3 2026</div>
+                    <div class="timeline-dot in-progress"></div>
+                    <div class="timeline-date in-progress">August 2026 &mdash; In Progress</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128274;</span> Security &amp; Compliance</h3>
+                        <h3><span class="card-icon in-progress">&#128274;</span> Security &amp; Compliance</h3>
                         <p>
-                            RBAC, audit logging, SBOM, and compliance APIs for regulated environments.
+                            RBAC and audit logging for regulated environments, with SBOM, crypto
+                            config, and rate limiting still to land.
                         </p>
                         <ul class="detail-list">
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>RBAC roles: read-only, vm-admin, cluster-admin</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>RBAC roles: <code>read-only</code>, <code>vm-admin</code>, <code>cluster-admin</code> (per-operator certs <code>CN=kctl:&lt;name&gt;</code>, <code>kctl operator</code>)</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Append-only audit log with actor, action, resource, timestamp</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>ListAuditEvents</code> API (+ <code>kctl audit</code> / dashboard)</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
@@ -711,7 +716,7 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>New APIs: <code>ListAuditEvents</code>, <code>GetCryptoConfig</code>, <code>ExportSbom</code></span>
+                                <span>New APIs: <code>GetCryptoConfig</code>, <code>ExportSbom</code></span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
