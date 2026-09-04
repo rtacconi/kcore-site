@@ -89,7 +89,7 @@
                 <tr><td data-i18n-html="userdoc.kctlref.get.containers.cmd"><code>containers</code></td><td data-i18n-html="userdoc.kctlref.get.containers.alias"><code>container</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.nodes.cmd"><code>nodes</code></td><td data-i18n-html="userdoc.kctlref.get.nodes.alias"><code>node</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.networks.cmd"><code>networks</code></td><td data-i18n-html="userdoc.kctlref.get.networks.alias"><code>network</code></td></tr>
-                <tr><td data-i18n-html="userdoc.kctlref.get.storageclasses.cmd"><code>storage-classes</code></td><td data-i18n-html="userdoc.kctlref.get.storageclasses.alias"><code>storage-class</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.storageclasses.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.get.storageclasses.alias"><code>storage-classes</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.get.compliance.alias"><code>compliance</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.conflicts.cmd"><code>conflicts</code></td><td></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.replstatus.cmd"><code>replication-status</code></td><td></td></tr>
@@ -148,7 +148,7 @@
                 <tr><td data-i18n-html="userdoc.kctlref.node.approve.cmd"><code>approve</code></td><td data-i18n="userdoc.kctlref.node.approve.desc">Approve a pending node join request</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.node.reject.cmd"><code>reject</code></td><td data-i18n="userdoc.kctlref.node.reject.desc">Reject a pending node join request</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.node.applynix.cmd"><code>apply-nix</code></td><td data-i18n="userdoc.kctlref.node.applynix.desc">Apply NixOS configuration to a node</td></tr>
-                <tr><td data-i18n-html="userdoc.kctlref.node.applydisko.cmd"><code>apply-disko</code></td><td data-i18n="userdoc.kctlref.node.applydisko.desc">Apply Disko disk layout to a node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.node.applydisko.cmd"><code>apply-disk</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>apply-disko</code>)</span></td><td data-i18n-html="userdoc.kctlref.node.applydisko.desc">Validate or apply a day-2 disk layout on a node, built on disko. <code>-f</code> names the layout file. Validates only unless you pass <code>--apply</code>; <code>--timeout-seconds</code> defaults to 300, and <code>--no-rebuild</code> skips the <code>nixos-rebuild</code> that otherwise follows an apply.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.node.uploadimage.cmd"><code>upload-image</code></td><td data-i18n="userdoc.kctlref.node.uploadimage.desc">Upload a VM image to a node</td></tr>
             </table>
 
