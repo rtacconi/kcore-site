@@ -12,10 +12,10 @@
     <meta property="og:title" content="Documentation - kcore hypervisor">
     <meta property="og:description" content="kcore Documentation - Get started with the declarative virtualization platform">
     <meta property="og:url" content="https://kcorehypervisor.com/docs.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/docs-mode.css">
     <style>
@@ -252,6 +252,7 @@
                         <ul>
                             <li><a href="docs/user/vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                             <li><a href="docs/user/images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                            <li><a href="docs/user/vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                         </ul>
                     </div>
                     <div class="docs-nav-section">
@@ -350,6 +351,10 @@
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.images.title">VM images</div>
                         <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.images.desc">Controller downloads, node upload, formats, and readiness checks.</div>
                     </a>
+                    <a href="docs/user/vm-migration.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.vmmig.title">VM migration</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vmmig.desc">Cold drain and Cloud Hypervisor live migration over shared RBD.</div>
+                    </a>
                 </div>
 
                 <h2 data-i18n="docs.hub.h2.containers">Containers</h2>
@@ -384,7 +389,11 @@
                     </a>
                     <a href="docs/user/storage-vsan.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.vsan.title">kcore SAN (Ceph)</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vsan.desc">Distributed shared storage with Ceph — under active development.</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vsan.desc">Shared RBD disks, cold drain, and live migration with Ceph.</div>
+                    </a>
+                    <a href="docs/user/vm-migration.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.vmmig.title">VM migration</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vmmig.desc">Cold drain and Cloud Hypervisor live migration over shared RBD.</div>
                     </a>
                 </div>
 

@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore cluster and node upgrades: flake-pinned ClusterUpdate rollouts, kctl update cluster, approval and phases.">
-    <title>Cluster &amp; node upgrades - kcore documentation</title>
-    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/cluster-and-node-upgrades.html">
+    <meta name="description" content="Move Ceph-backed VMs between kcore nodes with cold drain or Cloud Hypervisor live migration over shared RBD.">
+    <title>VM migration - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/vm-migration.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
-    <meta property="og:title" content="Cluster &amp; node upgrades - kcore documentation">
-    <meta property="og:description" content="Flake-pinned NixOS rollouts via ClusterUpdate: plan, apply, approve, observe per-node status.">
-    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/cluster-and-node-upgrades.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:title" content="VM migration - kcore documentation">
+    <meta property="og:description" content="Move Ceph-backed VMs between kcore nodes with cold drain or Cloud Hypervisor live migration over shared RBD.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/vm-migration.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="../../css/docs-mode.css">
     <script src="../../js/docs-mode.js"></script>
@@ -68,12 +68,12 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" class="active" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
-                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="vm-migration.html" class="active" data-i18n="docs.nav.vmmigration">VM migration</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
@@ -101,72 +101,78 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1>Cluster &amp; node upgrades</h1>
-            <p>kcore nodes run <strong>NixOS</strong>. Host upgrades move the system forward using an immutable <strong>flake revision</strong> (<code>flake_ref</code> + <code>flake_rev</code>) while the <strong>controller</strong> orchestrates prepare/activate work on each node. Workloads (VMs/containers) use the normal lifecycle APIs; they are not upgraded by this flow.</p>
+            <h1 data-i18n="userdoc.vmmig.title">VM migration</h1>
+            <p class="note" data-i18n-html="userdoc.vmmig.note">Cold drain and live migration require <strong>kcore SAN</strong> (<code>storage_backend: ceph</code>). Local filesystem / LVM / ZFS disks stay on one node. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
+            <p data-i18n="userdoc.vmmig.intro">Shared RBD means the guest disk is not copied when a VM changes host. You choose cold reassignment (stop/start via Nix) or Cloud Hypervisor live migration (memory over TCP while both nodes map the same image).</p>
 
-            <h2>Cluster rollout vs single node</h2>
-            <p>Both use the same <strong><code>kind: ClusterUpdate</code></strong> manifest. The <strong>selector</strong> decides scope:</p>
+            <h2 data-i18n="userdoc.vmmig.compare">Cold vs live</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="userdoc.vmmig.thMode">Mode</th>
+                        <th data-i18n="userdoc.vmmig.thCommand">Command</th>
+                        <th data-i18n="userdoc.vmmig.thDowntime">Downtime</th>
+                        <th data-i18n="userdoc.vmmig.thWhen">When to use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-i18n="userdoc.vmmig.tdCold"><strong>Cold</strong></td>
+                        <td data-i18n-html="userdoc.vmmig.tdColdCmd"><code>kctl drain node …</code></td>
+                        <td data-i18n="userdoc.vmmig.tdColdDown">Guest stops on source and starts on destination</td>
+                        <td data-i18n="userdoc.vmmig.tdColdWhen">Evacuate a node for maintenance; fallback if live fails</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="userdoc.vmmig.tdLive"><strong>Live</strong></td>
+                        <td data-i18n-html="userdoc.vmmig.tdLiveCmd"><code>kctl migrate vm …</code></td>
+                        <td data-i18n="userdoc.vmmig.tdLiveDown">Brief pause during hypervisor cutover</td>
+                        <td data-i18n="userdoc.vmmig.tdLiveWhen">Keep the workload running while changing host</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.vmmig.prereq">Prerequisites</h2>
             <ul>
-                <li><strong>Whole cluster</strong> — e.g. <code>selector.all_nodes: true</code> (subject to labels/datacenter filters when you use them).</li>
-                <li><strong>Controllers only</strong> — <code>selector.controllers_only: true</code>.</li>
-                <li><strong>One or few nodes</strong> — <code>selector.node_ids: [&quot;&lt;uuid&gt;&quot;, …]</code> for a targeted or rolling-by-hand rollout.</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi1">Healthy <code>CephCluster</code>; both nodes are members.</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi2">VM created with <code>--storage-backend ceph</code>.</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi3">Live: allow ephemeral TCP between node IPs for the migration stream (same fabric as Ceph public/client is fine).</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi4">Roles: <code>vm-admin</code> for <code>migrate</code>; <code>cluster-admin</code> for <code>drain</code>.</li>
             </ul>
-            <p class="note">There is no separate command for “upgrade this machine only”; narrow the selector instead.</p>
 
-            <h2>CLI (<code>kctl update cluster</code>)</h2>
-            <p>Alias: <code>kctl update os</code>. Requires a working controller context (same TLS setup as other <code>kctl</code> commands).</p>
-            <div class="docs-cli-only">
-<pre><code># Dry-run: resolve targets, viability, reboot hints
-kctl update cluster plan -f rollout.yaml
+            <h2 data-i18n="userdoc.vmmig.live">Live migrate a VM</h2>
+<pre><code>kctl migrate vm app-1 --target-node node-b
 
-# Submit or update the ClusterUpdate resource
-kctl update cluster apply -f rollout.yaml
+# If live fails, fall back to cold reassignment of that VM:
+kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
+            <p data-i18n="userdoc.vmmig.liveP1">The controller prepares an empty Cloud Hypervisor on the destination (shared RBD already mapped), streams guest memory from the source over TCP, updates which node owns the VM, pushes Nix, then has systemd adopt the migrated process on the destination and clean up the source.</p>
+            <p data-i18n-html="userdoc.vmmig.liveP2">Success responses report <code>mode=live</code> (or <code>mode=cold</code> when fallback ran).</p>
 
-# Observe cluster + per-node phases
-kctl update cluster get release-0-4-0
-kctl update cluster list
+            <h2 data-i18n="userdoc.vmmig.cold">Cold drain a node</h2>
+<pre><code>kctl drain node node-a
+kctl drain node node-a --target-node node-b</code></pre>
+            <p data-i18n="userdoc.vmmig.coldP1">Every VM on the source is reassigned in the control plane. Nix push removes units on the source and creates them on destinations. Ceph disks are remapped — not copied. Guests experience a full stop/start.</p>
 
-# If approval_policy is manual
-kctl update cluster approve release-0-4-0
+            <h2 data-i18n="userdoc.vmmig.whatHappens">What happens under the hood</h2>
+            <h3 data-i18n="userdoc.vmmig.whatLive">Live</h3>
+            <ol>
+                <li data-i18n="userdoc.vmmig.whatLive1">Destination maps the RBD image and starts Cloud Hypervisor with only an API socket.</li>
+                <li data-i18n-html="userdoc.vmmig.whatLive2">Destination listens with <code>vm.receive-migration</code>; source calls <code>vm.send-migration</code> to <code>tcp:&lt;dest-ip&gt;:&lt;port&gt;</code>.</li>
+                <li data-i18n="userdoc.vmmig.whatLive3">Controller moves <code>node_id</code>, pushes config; destination systemd adopts the running process via a live-migrated marker.</li>
+                <li data-i18n="userdoc.vmmig.whatLive4">Source unit is stopped and the RBD mapping unmapped.</li>
+            </ol>
+            <h3 data-i18n="userdoc.vmmig.whatCold">Cold</h3>
+            <ol>
+                <li data-i18n="userdoc.vmmig.whatCold1">Controller reassigns <code>node_id</code> (volume row unchanged).</li>
+                <li data-i18n="userdoc.vmmig.whatCold2">Source Nix no longer defines the VM → unit stops.</li>
+                <li data-i18n="userdoc.vmmig.whatCold3">Destination Nix defines the VM → map RBD and start Cloud Hypervisor.</li>
+            </ol>
+            <p class="note" data-i18n-html="userdoc.vmmig.techNote">Contributor-level detail (RPC names, systemd handoff, RBD features): <a href="https://github.com/kcorehypervisor/kcore/blob/main/docs/vm-migration.md">docs/vm-migration.md</a> in the kcore repository.</p>
 
-kctl update cluster cancel release-0-4-0
-kctl update cluster rollback release-0-4-0</code></pre>
-            </div>
-            <p class="docs-yaml-only note">Switch to <strong>CLI</strong> in the strip above for command blocks.</p>
-
-            <h2>YAML manifest outline</h2>
-            <p>Use camelCase fields; see <a href="yaml-manifests.html#clusterupdate-manifest-kind-clusterupdate">YAML manifest reference (ClusterUpdate)</a>.</p>
-<pre><code>kind: ClusterUpdate
-metadata:
-  name: release-0-4-0
-spec:
-  target:
-    version: "0.4.0"
-    flake_ref: github:kcorehypervisor/kcore
-    flake_rev: "&lt;full-git-sha&gt;"
-  selector:
-    all_nodes: true
-  strategy:
-    strategy_type: one-at-a-time
-    max_unavailable: 1
-    batch_size: 1
-  drain_vms: false
-  activation:
-    mode: auto
-  approval_policy: manual</code></pre>
-            <p>With <code>approval_policy: manual</code>, the controller waits for <code>kctl update cluster approve &lt;name&gt;</code> before rolling. Automatic policies advance without that step.</p>
-
-            <h2>Phases</h2>
-            <p>The cluster resource exposes a <strong>phase</strong> (pending, rolling_out, succeeded, failed, …). Each node row tracks prepare/activate progress and errors. Use <code>kctl update cluster get</code> for detail.</p>
-            <p class="note">Strategy knobs (<code>canary</code>, <code>batch</code>, …) exist on the API; simpler deployments may advance nodes one after another — confirm behaviour for your release.</p>
-
-            <h2>Host rollback</h2>
-            <p>Controller <code>rollback</code> expresses rollout intent. For a broken activation you can still recover with normal <strong>NixOS generation</strong> commands on the machine (e.g. previous bootloader generation); keep that in your physical/datacenter runbook.</p>
-
-            <h2>Further reading</h2>
+            <h2 data-i18n="userdoc.vmmig.limits">Limits</h2>
             <ul>
-                <li><a href="https://github.com/rtacconi/kcore/blob/main/docs/README.md">Technical documentation index</a> (<code>docs/README.md</code>)</li>
-                <li><a href="https://github.com/rtacconi/kcore/tree/main/docs">Browse <code>docs/</code> on GitHub</a> — operator guide <code>cluster-and-node-upgrades.md</code> and design notes <code>cluster-updates.md</code> live here once merged to <code>main</code>.</li>
+                <li data-i18n="userdoc.vmmig.limitsLi1">Not supported for filesystem, LVM, or ZFS-backed VMs across nodes.</li>
+                <li data-i18n="userdoc.vmmig.limitsLi2">Live migration uses an ephemeral destination port; open host firewalls between members.</li>
+                <li data-i18n="userdoc.vmmig.limitsLi3">Drain does not yet prefer live migrate per VM — use <code>kctl migrate vm</code> when you need live.</li>
             </ul>
         </main>
     </div>

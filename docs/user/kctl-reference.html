@@ -58,7 +58,8 @@
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li></ul></div>
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
             <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
             <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
@@ -159,7 +160,13 @@
             <h2 data-i18n="userdoc.kctlref.h2.drain">drain</h2>
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
-                <tr><td data-i18n-html="userdoc.kctlref.drain.node.cmd"><code>node</code></td><td data-i18n-html="userdoc.kctlref.drain.node.desc">Live-migrate all VMs off a node. Use <code>--target-node</code> to specify the destination node.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.drain.node.cmd"><code>node</code></td><td data-i18n-html="userdoc.kctlref.drain.node.desc">Cold-reassign all VMs off a node (shared RBD does not copy disks). Use <code>--target-node</code> to pin the destination.</td></tr>
+            </table>
+
+            <h2 data-i18n="userdoc.kctlref.h2.migrate">migrate</h2>
+            <table>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.migrate.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.migrate.vm.desc">Live-migrate a Ceph-backed VM to <code>--target-node</code>. Optional <code>--allow-cold-fallback</code>. See <a href="vm-migration.html">VM migration</a>.</td></tr>
             </table>
 
             <h2 data-i18n="userdoc.kctlref.h2.rotate">rotate</h2>

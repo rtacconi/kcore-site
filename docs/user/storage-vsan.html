@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore SAN: distributed shared storage using Ceph — under active development for HA VM disks and migration.">
+    <meta name="description" content="kcore SAN: Ceph shared RBD for HA VM disks, cold drain, and Cloud Hypervisor live migration.">
     <title>kcore SAN (Ceph) - kcore documentation</title>
     <link rel="canonical" href="https://kcorehypervisor.com/docs/user/storage-vsan.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="kcore SAN (Ceph) - kcore documentation">
-    <meta property="og:description" content="kcore SAN: distributed shared storage using Ceph — under active development for HA VM disks and migration.">
+    <meta property="og:description" content="kcore SAN: Ceph shared RBD for HA VM disks, cold drain, and Cloud Hypervisor live migration.">
     <meta property="og:url" content="https://kcorehypervisor.com/docs/user/storage-vsan.html">
     <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
@@ -74,6 +74,7 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
@@ -101,8 +102,8 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1 data-i18n-html="userdoc.storagevsan.title">kcore SAN (Ceph) <span class="roadmap-badge">In Progress</span></h1>
-            <p class="note" data-i18n="userdoc.storagevsan.notePlanned">kcore SAN is under active development and is not yet generally available. This page describes the design and the phases shipping now.</p>
+            <h1 data-i18n-html="userdoc.storagevsan.title">kcore SAN (Ceph)</h1>
+            <p class="note" data-i18n="userdoc.storagevsan.notePlanned">Phases 1–2 (CephCluster fabric + RBD VM disks / cold drain) and live migration over shared RBD ship in kcore.</p>
             <p data-i18n="userdoc.storagevsan.intro">kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. <strong>kcore SAN</strong> adds distributed shared block storage using Ceph, so VM disks are replicated across nodes and can move with the workload.</p>
 
             <h2 data-i18n="userdoc.storagevsan.vision">Vision</h2>
@@ -118,13 +119,22 @@
                 <li data-i18n-html="userdoc.storagevsan.integrationLi1"><strong>Phase 1 (shipped):</strong> day-2 <code>CephCluster</code> YAML applied with <code>kctl apply</code> — controller reconciler configures NixOS <code>services.ceph</code>, bootstraps MON/MGR/OSD (including <code>ceph-volume</code> on the OSD disk), and tracks cluster health. OSDs are <em>not</em> created via node install <code>--storage-backend</code>.</li>
                 <li data-i18n-html="userdoc.storagevsan.integrationLi2"><strong>Phase 2 (shipped):</strong> RBD pool and <code>--storage-backend ceph</code> for VMs; volumes are cluster-scoped and map on any member node; cold drain moves VMs without copying disks.</li>
                 <li data-i18n="userdoc.storagevsan.integrationLi3">Dedicated Ceph cluster/replication network (e.g. 10Gb fabric) separate from the public/client path.</li>
-                <li data-i18n-html="userdoc.storagevsan.integrationLi4">Later: Cloud Hypervisor live migration on shared RBD.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi4">Cloud Hypervisor live migration on shared RBD (<code>kctl migrate vm</code>). See <a href="vm-migration.html">VM migration</a>.</li>
             </ul>
+
+            <h2 data-i18n="userdoc.storagevsan.opsMigrate">Moving VMs (cold and live)</h2>
+            <p data-i18n-html="userdoc.storagevsan.opsMigrateP1">Because the disk is an RBD image in pool <code>kcore-vms</code>, changing hosts does not copy guest blocks. Choose the mode that matches your downtime budget:</p>
+            <ul>
+                <li data-i18n-html="userdoc.storagevsan.opsMigrateLi1"><strong>Live:</strong> <code>kctl migrate vm &lt;id&gt; --target-node &lt;node&gt;</code> — memory streams over TCP; both nodes map the same image during cutover.</li>
+                <li data-i18n-html="userdoc.storagevsan.opsMigrateLi2"><strong>Cold:</strong> <code>kctl drain node &lt;node&gt;</code> — control plane reassigns VMs; Nix stop on source / start on destination.</li>
+                <li data-i18n-html="userdoc.storagevsan.opsMigrateLi3"><strong>Fallback:</strong> <code>kctl migrate vm … --allow-cold-fallback</code> tries live, then cold for that VM.</li>
+            </ul>
+            <p data-i18n-html="userdoc.storagevsan.opsMigrateP2">Operator runbook: <a href="vm-migration.html">VM migration</a>. Architecture and RPC flow: <a href="https://github.com/kcorehypervisor/kcore/blob/main/docs/vm-migration.md">docs/vm-migration.md</a> · Ceph integration: <a href="https://github.com/kcorehypervisor/kcore/blob/main/docs/ceph.md">docs/ceph.md</a>.</p>
 
             <h2 data-i18n="userdoc.storagevsan.targetUseCases">Target use cases</h2>
             <ul>
                 <li data-i18n-html="userdoc.storagevsan.useCaseLi1"><strong>HA VM storage</strong> — survive single-node failure without data loss.</li>
-                <li data-i18n-html="userdoc.storagevsan.useCaseLi2"><strong>Live migration</strong> — VMs can move between nodes without copying disks (planned after RBD).</li>
+                <li data-i18n-html="userdoc.storagevsan.useCaseLi2"><strong>Live migration</strong> — VMs can move between nodes without copying disks (<code>kctl migrate vm</code>).</li>
                 <li data-i18n-html="userdoc.storagevsan.useCaseLi3"><strong>Multi-node data redundancy</strong> — configurable replication factor (e.g. 2 or 3 copies).</li>
                 <li data-i18n-html="userdoc.storagevsan.useCaseLi4"><strong>Shared image cache</strong> — VM base images stored once in Ceph, cloned instantly.</li>
             </ul>
@@ -141,10 +151,12 @@ filesystem    3
 lvm           2
 zfs           1
 ceph          3</code></pre>
-            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP2">Nodes that are members of a healthy <code>CephCluster</code> are listed under the <code>ceph</code> storage class. Creating a VM on Ceph storage (Phase 2):</p>
-<pre><code>kctl create vm \
+            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP2">Nodes that are members of a healthy <code>CephCluster</code> are listed under the <code>ceph</code> storage class. Creating a VM on Ceph storage:</p>
+<pre><code>kctl create vm app-1 \
   --storage-backend ceph \
-  --storage-size-bytes 107374182400</code></pre>
+  --storage-size-bytes 107374182400 \
+  --image &lt;https-url&gt; \
+  --image-sha256 &lt;sha256&gt;</code></pre>
 
             <h3>Example <code>CephCluster</code> manifest (Phase 1)</h3>
 <pre><code>kind: CephCluster
