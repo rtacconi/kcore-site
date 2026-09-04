@@ -115,10 +115,10 @@
 
             <h2 data-i18n="userdoc.storagevsan.plannedIntegration">How it integrates</h2>
             <ul>
-                <li data-i18n-html="userdoc.storagevsan.integrationLi1"><strong>Phase 1 (in progress):</strong> day-2 <code>CephCluster</code> YAML applied with <code>kctl apply</code> — controller reconciler configures NixOS <code>services.ceph</code>, bootstraps MON/MGR/OSD (including <code>ceph-volume</code> on the OSD disk), and tracks cluster health. OSDs are <em>not</em> created via node install <code>--storage-backend</code>.</li>
-                <li data-i18n-html="userdoc.storagevsan.integrationLi2"><strong>Phase 2:</strong> RBD pool and <code>--storage-backend ceph</code> for VMs; volumes are cluster-scoped and map on any member node.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi1"><strong>Phase 1 (shipped):</strong> day-2 <code>CephCluster</code> YAML applied with <code>kctl apply</code> — controller reconciler configures NixOS <code>services.ceph</code>, bootstraps MON/MGR/OSD (including <code>ceph-volume</code> on the OSD disk), and tracks cluster health. OSDs are <em>not</em> created via node install <code>--storage-backend</code>.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi2"><strong>Phase 2 (shipped):</strong> RBD pool and <code>--storage-backend ceph</code> for VMs; volumes are cluster-scoped and map on any member node; cold drain moves VMs without copying disks.</li>
                 <li data-i18n="userdoc.storagevsan.integrationLi3">Dedicated Ceph cluster/replication network (e.g. 10Gb fabric) separate from the public/client path.</li>
-                <li data-i18n-html="userdoc.storagevsan.integrationLi4">Later: cold migrate/drain without disk copy, then Cloud Hypervisor live migration on shared RBD.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi4">Later: Cloud Hypervisor live migration on shared RBD.</li>
             </ul>
 
             <h2 data-i18n="userdoc.storagevsan.targetUseCases">Target use cases</h2>
