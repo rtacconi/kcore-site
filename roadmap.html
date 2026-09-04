@@ -735,15 +735,16 @@
                 <!-- SEP 2026: kcore SAN (Ceph) -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot in-progress"></div>
-                    <div class="timeline-date in-progress">September 2026 &mdash; In Progress</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">September 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon in-progress">&#128190;</span> kcore SAN (Ceph)</h3>
+                        <h3><span class="card-icon shipped">&#128190;</span> kcore SAN (Ceph)</h3>
                         <p>
                             Distributed shared block storage for the cluster &mdash; a vSAN-class
                             fabric powered by Ceph on NixOS, with the controller filling the gaps
-                            NixOS does not declare. Enables replicated VM disks and, later, live
-                            migration. See
+                            NixOS does not declare. Replicated VM disks, cold drain without
+                            copying disks, and Cloud Hypervisor live migration over shared RBD
+                            all work today. See
                             <a href="docs/user/storage-vsan.html">kcore SAN docs</a>.
                         </p>
                         <ul class="detail-list">
