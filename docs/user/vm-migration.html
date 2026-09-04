@@ -135,8 +135,8 @@
             <ul>
                 <li data-i18n-html="userdoc.vmmig.prereqLi1">Healthy <code>CephCluster</code>; both nodes are members.</li>
                 <li data-i18n-html="userdoc.vmmig.prereqLi2">VM created with <code>--storage-backend ceph</code>.</li>
-                <li data-i18n-html="userdoc.vmmig.prereqLi3">Live: allow ephemeral TCP between node IPs for the migration stream (same fabric as Ceph public/client is fine).</li>
-                <li data-i18n-html="userdoc.vmmig.prereqLi4">Roles: <code>vm-admin</code> for <code>migrate</code>; <code>cluster-admin</code> for <code>drain</code>.</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi3">Live: allow TCP 18000–18127 between node IPs for the migration stream (same fabric as Ceph public/client is fine).</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi4">Roles: <code>vm-admin</code> for <code>migrate vm</code>; <code>cluster-admin</code> for <code>drain</code> and <code>migrate reset-session</code>.</li>
             </ul>
 
             <h2 data-i18n="userdoc.vmmig.live">Live migrate a VM</h2>
@@ -171,9 +171,25 @@ kctl drain node node-a --target-node node-b</code></pre>
             <h2 data-i18n="userdoc.vmmig.limits">Limits</h2>
             <ul>
                 <li data-i18n="userdoc.vmmig.limitsLi1">Not supported for filesystem, LVM, or ZFS-backed VMs across nodes.</li>
-                <li data-i18n="userdoc.vmmig.limitsLi2">Live migration uses an ephemeral destination port; open host firewalls between members.</li>
+                <li data-i18n="userdoc.vmmig.limitsLi2">Live migration takes a destination port from the fixed 18000–18127 range; open host firewalls between members.</li>
                 <li data-i18n="userdoc.vmmig.limitsLi3">Drain does not yet prefer live migrate per VM — use <code>kctl migrate vm</code> when you need live.</li>
             </ul>
+
+            <h2 data-i18n="userdoc.vmmig.trouble">Troubleshooting</h2>
+            <h3 data-i18n="userdoc.vmmig.troubleAe">Migration keeps failing with ALREADY_EXISTS</h3>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP1">A migration that worked before starts failing immediately with <code>AlreadyExists</code>, naming the destination node. Nothing is actually receiving. The destination still holds the receive session it created when the migration began, because the controller died before it could abort it, and every later migration of that VM to that node is refused until an operator clears the session.</p>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP2">There is no automatic reaping, and that is deliberate. Deciding from the outside that a session is dead is a guess, and getting it wrong tears down a migration that is still running. kcore reports the evidence instead and leaves the call to you.</p>
+<pre><code># 1. Inspect. Read-only; covers every CephCluster member.
+kctl get migrate-session app-1
+
+# 2. Dry run: prints what it would clear, clears nothing, exits non-zero.
+kctl migrate reset-session app-1 --node node-b
+
+# 3. Clear it.
+kctl migrate reset-session app-1 --node node-b --force</code></pre>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP3">Per node, the inspect step reports whether a session is tracked, the reserved port and whether anything is listening on it, the receive VMM's pid and whether it is alive and really belongs to this VM (a recycled pid is reported as recycled, not as live), whether the handoff marker and API socket exist, and a verdict. A node that cannot be reached is reported rather than failing the whole report. Inspecting needs <code>read-only</code>; clearing needs <code>cluster-admin</code>.</p>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP4">Clearing releases the session and its port reservation, kills the receive VMM, removes the marker, pid and API socket files, and unmaps the destination's RBD image. It is idempotent, so clearing a node with no session is a success. <code>--node</code> is mandatory, and the controller refuses the node that currently owns the VM. Once the session is gone, retry the migration as normal.</p>
+            <p class="note" data-i18n-html="userdoc.vmmig.troubleAeNote">Read the verdict before you pass <code>--force</code>. Clearing a session whose receive VMM is still alive kills an in-flight migration.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

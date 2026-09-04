@@ -96,6 +96,7 @@
                 <tr><td data-i18n-html="userdoc.kctlref.get.certificates.cmd"><code>certificates</code></td><td data-i18n-html="userdoc.kctlref.get.certificates.alias"><code>certs</code>, <code>certificate</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.pkistatus.cmd"><code>pki-status</code></td><td data-i18n-html="userdoc.kctlref.get.pkistatus.alias"><code>pki</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.crl.cmd"><code>crl</code></td><td></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.migratesession.cmd"><code>migrate-session</code></td><td data-i18n-html="userdoc.kctlref.get.migratesession.alias"><code>migrate-sessions</code></td></tr>
             </table>
 
             <h2 data-i18n="userdoc.kctlref.h2.describe">describe</h2>
@@ -170,7 +171,9 @@
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.migrate.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.migrate.vm.desc">Live-migrate a Ceph-backed VM to <code>--target-node</code>. Optional <code>--allow-cold-fallback</code>. See <a href="vm-migration.html">VM migration</a>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.migrate.resetsession.cmd"><code>reset-session</code></td><td data-i18n-html="userdoc.kctlref.migrate.resetsession.desc">Clear a stranded live-migrate receive session on <code>--node</code> (mandatory). Reports what it would clear and exits non-zero unless <code>--force</code> is given. Needs <code>cluster-admin</code>.</td></tr>
             </table>
+            <p class="note" data-i18n-html="userdoc.kctlref.migrate.sessionNote">A receive session outlives its migration if the controller dies mid-flight, and every later migration of that VM to that node then fails with <code>ALREADY_EXISTS</code>. Nothing clears it automatically. Inspect first with <code>kctl get migrate-session &lt;vm&gt;</code> (read-only; queries every <code>CephCluster</code> member unless you pass <code>--node</code>), then clear with <code>kctl migrate reset-session &lt;vm&gt; --node &lt;id&gt; --force</code>. Clearing a session whose receive VMM is still alive kills an in-flight migration. See <a href="vm-migration.html">VM migration</a>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.rotate">rotate</h2>
             <table>
