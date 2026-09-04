@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Upcoming kcore vSAN feature: distributed shared storage using Ceph for HA VM storage and live migration.">
-    <title>vSAN with Ceph - kcore documentation</title>
+    <meta name="description" content="kcore SAN: distributed shared storage using Ceph — under active development for HA VM disks and migration.">
+    <title>kcore SAN (Ceph) - kcore documentation</title>
     <link rel="canonical" href="https://kcorehypervisor.com/docs/user/storage-vsan.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
-    <meta property="og:title" content="vSAN with Ceph - kcore documentation">
-    <meta property="og:description" content="Upcoming kcore vSAN feature: distributed shared storage using Ceph for HA VM storage and live migration.">
+    <meta property="og:title" content="kcore SAN (Ceph) - kcore documentation">
+    <meta property="og:description" content="kcore SAN: distributed shared storage using Ceph — under active development for HA VM disks and migration.">
     <meta property="og:url" content="https://kcorehypervisor.com/docs/user/storage-vsan.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="../../css/docs-mode.css">
     <script src="../../js/docs-mode.js"></script>
@@ -85,7 +85,7 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
                 <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
                 <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
-                <li><a href="storage-vsan.html" class="active" data-i18n="docs.nav.vsan">vSAN (Ceph)</a></li>
+                <li><a href="storage-vsan.html" class="active" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
                 <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
@@ -101,50 +101,68 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1 data-i18n-html="userdoc.storagevsan.title">vSAN with Ceph <span class="roadmap-badge">Planned</span></h1>
-            <p class="note" data-i18n="userdoc.storagevsan.notePlanned">This feature is planned and not yet implemented. This page describes the vision and intended integration.</p>
-            <p data-i18n="userdoc.storagevsan.intro">kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. vSAN will add distributed shared storage using Ceph, enabling VM disks to be replicated across nodes.</p>
+            <h1 data-i18n-html="userdoc.storagevsan.title">kcore SAN (Ceph) <span class="roadmap-badge">In Progress</span></h1>
+            <p class="note" data-i18n="userdoc.storagevsan.notePlanned">kcore SAN is under active development and is not yet generally available. This page describes the design and the phases shipping now.</p>
+            <p data-i18n="userdoc.storagevsan.intro">kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. <strong>kcore SAN</strong> adds distributed shared block storage using Ceph, so VM disks are replicated across nodes and can move with the workload.</p>
 
             <h2 data-i18n="userdoc.storagevsan.vision">Vision</h2>
             <ul>
                 <li data-i18n="userdoc.storagevsan.visionLi1">Distributed block storage across cluster nodes.</li>
-                <li data-i18n="userdoc.storagevsan.visionLi2">Ceph OSDs run on data disks, managed by the controller.</li>
+                <li data-i18n-html="userdoc.storagevsan.visionLi2">Ceph OSDs on dedicated data disks, managed by a declarative <code>CephCluster</code> resource.</li>
                 <li data-i18n="userdoc.storagevsan.visionLi3">RBD (RADOS Block Device) volumes serve as VM disks.</li>
                 <li data-i18n="userdoc.storagevsan.visionLi4">Storage is replicated across nodes for redundancy.</li>
             </ul>
 
-            <h2 data-i18n="userdoc.storagevsan.plannedIntegration">Planned integration</h2>
+            <h2 data-i18n="userdoc.storagevsan.plannedIntegration">How it integrates</h2>
             <ul>
-                <li data-i18n-html="userdoc.storagevsan.integrationLi1">Ceph OSDs deployed on data disks at install time using a new <code>--storage-backend ceph</code> flag.</li>
-                <li data-i18n="userdoc.storagevsan.integrationLi2">Controller manages pool topology and replication factor.</li>
-                <li data-i18n="userdoc.storagevsan.integrationLi3">RBD volumes created and attached as VM disks transparently.</li>
-                <li data-i18n-html="userdoc.storagevsan.integrationLi4">CRUSH map aligned with DC topology (<code>dc_id</code>) so replicas span failure domains.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi1"><strong>Phase 1 (in progress):</strong> day-2 <code>CephCluster</code> YAML applied with <code>kctl apply</code> — controller reconciler configures NixOS <code>services.ceph</code>, bootstraps MON/MGR/OSD (including <code>ceph-volume</code> on the OSD disk), and tracks cluster health. OSDs are <em>not</em> created via node install <code>--storage-backend</code>.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi2"><strong>Phase 2:</strong> RBD pool and <code>--storage-backend ceph</code> for VMs; volumes are cluster-scoped and map on any member node.</li>
+                <li data-i18n="userdoc.storagevsan.integrationLi3">Dedicated Ceph cluster/replication network (e.g. 10Gb fabric) separate from the public/client path.</li>
+                <li data-i18n-html="userdoc.storagevsan.integrationLi4">Later: cold migrate/drain without disk copy, then Cloud Hypervisor live migration on shared RBD.</li>
             </ul>
 
             <h2 data-i18n="userdoc.storagevsan.targetUseCases">Target use cases</h2>
             <ul>
                 <li data-i18n-html="userdoc.storagevsan.useCaseLi1"><strong>HA VM storage</strong> — survive single-node failure without data loss.</li>
-                <li data-i18n-html="userdoc.storagevsan.useCaseLi2"><strong>Live migration</strong> — VMs can move between nodes without copying disks.</li>
+                <li data-i18n-html="userdoc.storagevsan.useCaseLi2"><strong>Live migration</strong> — VMs can move between nodes without copying disks (planned after RBD).</li>
                 <li data-i18n-html="userdoc.storagevsan.useCaseLi3"><strong>Multi-node data redundancy</strong> — configurable replication factor (e.g. 2 or 3 copies).</li>
                 <li data-i18n-html="userdoc.storagevsan.useCaseLi4"><strong>Shared image cache</strong> — VM base images stored once in Ceph, cloned instantly.</li>
             </ul>
 
             <h2 data-i18n="userdoc.storagevsan.complementsLocal">How it complements local backends</h2>
-            <p data-i18n="userdoc.storagevsan.complementsLocalP1">Local backends (filesystem, LVM, ZFS) remain the right choice for single-node, performance-sensitive workloads where raw I/O throughput matters most. vSAN is designed for workloads that prioritise availability over raw I/O performance.</p>
-            <p data-i18n="userdoc.storagevsan.complementsLocalP2">Operators choose per-VM: a database that needs low-latency local NVMe stays on LVM, while a stateless application server uses Ceph-backed storage for easy failover.</p>
+            <p data-i18n="userdoc.storagevsan.complementsLocalP1">Local backends (filesystem, LVM, ZFS) remain the right choice for single-node, performance-sensitive workloads where raw I/O throughput matters most. kcore SAN is designed for workloads that prioritise availability over raw I/O performance.</p>
+            <p data-i18n="userdoc.storagevsan.complementsLocalP2">Operators choose per-VM: a database that needs low-latency local NVMe stays on LVM, while an application server uses Ceph-backed storage for easy failover.</p>
 
             <h2 data-i18n="userdoc.storagevsan.relationshipClasses">Relationship to existing storage classes</h2>
-            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP1">vSAN will appear as a new storage class (<code>ceph</code>) alongside the existing <code>filesystem</code>, <code>lvm</code>, and <code>zfs</code> classes:</p>
+            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP1">kcore SAN appears as a new storage class (<code>ceph</code>) alongside the existing <code>filesystem</code>, <code>lvm</code>, and <code>zfs</code> classes:</p>
 <pre><code>$ kctl get storage-class
 NAME          NODES
 filesystem    3
 lvm           2
 zfs           1
-ceph          4</code></pre>
-            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP2">Nodes with Ceph OSDs will be listed under the <code>ceph</code> storage class. Creating a VM on Ceph storage:</p>
+ceph          3</code></pre>
+            <p data-i18n-html="userdoc.storagevsan.relationshipClassesP2">Nodes that are members of a healthy <code>CephCluster</code> are listed under the <code>ceph</code> storage class. Creating a VM on Ceph storage (Phase 2):</p>
 <pre><code>kctl create vm \
   --storage-backend ceph \
   --storage-size-bytes 107374182400</code></pre>
+
+            <h3>Example <code>CephCluster</code> manifest (Phase 1)</h3>
+<pre><code>kind: CephCluster
+metadata:
+  name: lab-san
+spec:
+  publicNetwork: "10.10.0.0/24"
+  clusterNetwork: "10.20.0.0/24"
+  replication:
+    size: 3
+    minSize: 2
+  nodes:
+    - nodeId: dell-1
+      monAddr: "10.10.0.11:6789"
+      clusterAddr: "10.20.0.11"
+      publicIface: eth1
+      clusterIface: eth2
+      osdDevice: /dev/nvme0n1</code></pre>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
