@@ -90,14 +90,19 @@
                 <tr><td data-i18n-html="userdoc.kctlref.get.nodes.cmd"><code>nodes</code></td><td data-i18n-html="userdoc.kctlref.get.nodes.alias"><code>node</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.networks.cmd"><code>networks</code></td><td data-i18n-html="userdoc.kctlref.get.networks.alias"><code>network</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.storageclasses.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.get.storageclasses.alias"><code>storage-classes</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.volumes.cmd"><code>volumes</code></td><td data-i18n-html="userdoc.kctlref.get.volumes.alias"><code>volume</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.get.compliance.alias"><code>compliance</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.auditevents.cmd"><code>audit-events</code></td><td data-i18n-html="userdoc.kctlref.get.auditevents.alias"><code>audit</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.conflicts.cmd"><code>conflicts</code></td><td></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.replstatus.cmd"><code>replication-status</code></td><td></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.disklayouts.cmd"><code>disk-layouts</code></td><td data-i18n-html="userdoc.kctlref.get.disklayouts.alias"><code>disk-layout</code>, <code>disklayout</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.cephclusters.cmd"><code>ceph-clusters</code></td><td data-i18n-html="userdoc.kctlref.get.cephclusters.alias"><code>ceph-cluster</code>, <code>cephcluster</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.certificates.cmd"><code>certificates</code></td><td data-i18n-html="userdoc.kctlref.get.certificates.alias"><code>certs</code>, <code>certificate</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.pkistatus.cmd"><code>pki-status</code></td><td data-i18n-html="userdoc.kctlref.get.pkistatus.alias"><code>pki</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.crl.cmd"><code>crl</code></td><td></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.migratesession.cmd"><code>migrate-session</code></td><td data-i18n-html="userdoc.kctlref.get.migratesession.alias"><code>migrate-sessions</code></td></tr>
             </table>
+            <p data-i18n-html="userdoc.kctlref.get.flags">Filters worth knowing: <code>audit-events</code> takes <code>--limit</code> (default 100), <code>--action</code> for an exact action name, and <code>--since</code> for an RFC 3339 timestamp. <code>vms</code>, <code>networks</code> and <code>disk-layouts</code> take <code>--target-node</code>. <code>crl</code> takes <code>-o</code> to write the CRL to a file.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.describe">describe</h2>
             <table>
@@ -108,7 +113,10 @@
                 <tr><td data-i18n-html="userdoc.kctlref.describe.storageclass.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.describe.storageclass.alias"><code>storage-classes</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.sshkey.cmd"><code>ssh-key</code></td><td data-i18n-html="userdoc.kctlref.describe.sshkey.alias"><code>sshkey</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.describe.compliance.alias"><code>compliance</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.disklayout.cmd"><code>disk-layout</code></td><td data-i18n-html="userdoc.kctlref.describe.disklayout.alias"><code>disklayout</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.cephcluster.cmd"><code>ceph-cluster</code></td><td data-i18n-html="userdoc.kctlref.describe.cephcluster.alias"><code>cephcluster</code></td></tr>
             </table>
+            <p data-i18n-html="userdoc.kctlref.describe.disklayoutP"><code>describe disk-layout &lt;name&gt;</code> shows the current generation, the observed status reported by the node, and the layout body. See <a href="storage-day2.html">Day-2 operations</a> and <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.delete">delete</h2>
             <table>
@@ -117,7 +125,10 @@
                 <tr><td data-i18n-html="userdoc.kctlref.delete.network.cmd"><code>network</code></td><td data-i18n="userdoc.kctlref.delete.network.desc">Delete a network</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.delete.image.cmd"><code>image</code></td><td data-i18n="userdoc.kctlref.delete.image.desc">Delete a stored image</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.delete.container.cmd"><code>container</code></td><td data-i18n="userdoc.kctlref.delete.container.desc">Delete a container</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.delete.disklayout.cmd"><code>disk-layout</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>disklayout</code>)</span></td><td data-i18n-html="userdoc.kctlref.delete.disklayout.desc">Delete a DiskLayout on the controller. Does not touch the node and does not repartition anything. Needs <code>cluster-admin</code>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.delete.cephcluster.cmd"><code>ceph-cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>cephcluster</code>)</span></td><td data-i18n-html="userdoc.kctlref.delete.cephcluster.desc">Delete a CephCluster resource. Does not wipe OSDs, so the stored data survives. Needs <code>cluster-admin</code>.</td></tr>
             </table>
+            <p data-i18n-html="userdoc.kctlref.delete.flags"><code>vm</code> and <code>network</code> take <code>--target-node</code> when the name exists on more than one node. <code>image</code> and <code>container</code> take <code>--force</code>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.startstop">start / stop</h2>
             <table>
@@ -152,6 +163,12 @@
                 <tr><td data-i18n-html="userdoc.kctlref.node.uploadimage.cmd"><code>upload-image</code></td><td data-i18n="userdoc.kctlref.node.uploadimage.desc">Upload a VM image to a node</td></tr>
             </table>
 
+            <h2 data-i18n="userdoc.kctlref.h2.pull">pull</h2>
+            <table>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.pull.image.cmd"><code>image</code></td><td data-i18n-html="userdoc.kctlref.pull.image.desc">Pull an image onto a node from an HTTPS URI. <code>--sha256</code> is required &mdash; the pull is refused without it, because the checksum is the integrity check. The image is stored under <code>/var/lib/kcore/images/</code>.</td></tr>
+            </table>
+
             <h2 data-i18n="userdoc.kctlref.h2.sshkey">ssh-key</h2>
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
@@ -160,6 +177,20 @@
                 <tr><td data-i18n-html="userdoc.kctlref.sshkey.list.cmd"><code>list</code></td><td data-i18n="userdoc.kctlref.sshkey.list.desc">List all SSH keys</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.sshkey.get.cmd"><code>get</code></td><td data-i18n="userdoc.kctlref.sshkey.get.desc">Show details for an SSH key</td></tr>
             </table>
+
+            <h2 data-i18n="userdoc.kctlref.h2.operator">operator</h2>
+            <p data-i18n-html="userdoc.kctlref.operator.p">Operators are named RBAC identities, each with its own client certificate under <code>CN=kctl:&lt;name&gt;</code>. Every subcommand here needs <code>cluster-admin</code>.</p>
+            <table>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.operator.create.cmd"><code>create</code></td><td data-i18n-html="userdoc.kctlref.operator.create.desc">Register an operator identity as <code>CN=kctl:&lt;name&gt;</code>. Names are ASCII alphanumeric plus <code>_</code> and <code>-</code>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.operator.list.cmd"><code>list</code></td><td data-i18n="userdoc.kctlref.operator.list.desc">List operators</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.operator.get.cmd"><code>get</code></td><td data-i18n="userdoc.kctlref.operator.get.desc">Show one operator and its roles</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.operator.issuecert.cmd"><code>issue-cert</code></td><td data-i18n-html="userdoc.kctlref.operator.issuecert.desc">Issue a client certificate for the operator from the controller sub-CA and write it to <code>~/.kcore/operators/&lt;name&gt;/operator.crt</code> and <code>operator.key</code>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.operator.grantrole.cmd"><code>grant-role</code></td><td data-i18n-html="userdoc.kctlref.operator.grantrole.desc">Grant a role. <code>--role</code> is required and takes <code>read-only</code>, <code>vm-admin</code>, or <code>cluster-admin</code>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.operator.revokerole.cmd"><code>revoke-role</code></td><td data-i18n-html="userdoc.kctlref.operator.revokerole.desc">Remove one role from an operator, named with <code>--role</code>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.operator.delete.cmd"><code>delete</code></td><td data-i18n="userdoc.kctlref.operator.delete.desc">Delete an operator and all of its role assignments</td></tr>
+            </table>
+            <p class="note" data-i18n-html="userdoc.kctlref.operator.note">Removing a role is not the same as revoking the certificate. <code>revoke-role</code> changes what an identity is allowed to do; the certificate itself stays valid until you revoke it with <code>kctl revoke cert --subject kctl:&lt;name&gt;</code>. Revocation takes effect on the next RPC the operator makes, not during the TLS handshake. See <a href="certificates.html">certificates &amp; encryption</a>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.drain">drain</h2>
             <table>
@@ -191,6 +222,16 @@
 
             <h2 data-i18n="userdoc.kctlref.h2.apply">apply</h2>
             <p data-i18n-html="userdoc.kctlref.apply.p">Apply a NixOS configuration to the controller. Flags: <code>-f</code> (config file), <code>--dry-run</code> (preview without applying).</p>
+
+            <h2 data-i18n="userdoc.kctlref.h2.diff">diff</h2>
+            <p data-i18n-html="userdoc.kctlref.diff.p">Show what applying a manifest would change, without changing anything. <code>-f</code> / <code>--filename</code> is required. Only <code>kind: DiskLayout</code> is supported today &mdash; any other kind exits with an error rather than guessing. See <a href="storage-day2.html">Day-2 operations</a>.</p>
+
+            <h2 data-i18n="userdoc.kctlref.h2.version">version</h2>
+            <p data-i18n-html="userdoc.kctlref.version.p">Print the <code>kctl</code> client version. Takes no flags and does not contact a controller.</p>
+
+            <h2 data-i18n="userdoc.kctlref.h2.console">console</h2>
+            <p data-i18n-html="userdoc.kctlref.console.p"><code>kctl console &lt;vm&gt;</code> attaches to a VM's serial console through the controller. Press <code>Ctrl-]</code> then Enter to detach. Needs <code>vm-admin</code>, and every attach is recorded in the audit log as <code>AttachVmConsole</code> with the actor, the VM and the timestamp.</p>
+            <p data-i18n-html="userdoc.kctlref.console.p2">This is a serial console, so it is the right tool for a CLI login, rescue, or watching an installer. kcore does not provide a hypervisor-level graphical console; if you need a desktop, run a VNC server inside the guest and reach it over the network. The dashboard exposes the same console in a browser.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.workload">workload</h2>
             <table>
