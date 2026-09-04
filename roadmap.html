@@ -691,8 +691,11 @@
                     <div class="timeline-card">
                         <h3><span class="card-icon in-progress">&#128274;</span> Security &amp; Compliance</h3>
                         <p>
-                            RBAC and audit logging for regulated environments, with SBOM, crypto
-                            config, and rate limiting still to land.
+                            RBAC, audit logging, and certificate lifecycle for regulated
+                            environments. Node certificates now rotate on their own, and
+                            revoked certificates are published over CRL and OCSP &mdash; see
+                            <a href="docs/user/certificates.html">certificates &amp; encryption</a>.
+                            SBOM, crypto config reporting, and rate limiting are still to land.
                         </p>
                         <ul class="detail-list">
                             <li>
@@ -712,8 +715,8 @@
                                 <span>Console session audit: <code>AttachVmConsole</code> records who opened which VM console, and when</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Automated certificate rotation and CRL/OCSP revocation</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Automated certificate rotation and CRL/OCSP revocation &mdash; nodes generate their own keys and CSRs so private keys never leave the node, the sub-CA publishes a signed CRL and answers OCSP, and revoked peers are rejected on every RPC (<code>kctl rotate node-certs</code>, <code>kctl revoke cert</code>, <code>kctl get pki-status</code>)</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>

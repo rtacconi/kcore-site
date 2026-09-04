@@ -93,6 +93,9 @@
                 <tr><td data-i18n-html="userdoc.kctlref.get.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.get.compliance.alias"><code>compliance</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.conflicts.cmd"><code>conflicts</code></td><td></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.replstatus.cmd"><code>replication-status</code></td><td></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.certificates.cmd"><code>certificates</code></td><td data-i18n-html="userdoc.kctlref.get.certificates.alias"><code>certs</code>, <code>certificate</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.pkistatus.cmd"><code>pki-status</code></td><td data-i18n-html="userdoc.kctlref.get.pkistatus.alias"><code>pki</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.crl.cmd"><code>crl</code></td><td></td></tr>
             </table>
 
             <h2 data-i18n="userdoc.kctlref.h2.describe">describe</h2>
@@ -174,6 +177,13 @@
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.rotate.certs.cmd"><code>certs</code></td><td data-i18n="userdoc.kctlref.rotate.certs.desc">Rotate the controller TLS certificate</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.rotate.subca.cmd"><code>sub-ca</code></td><td data-i18n="userdoc.kctlref.rotate.subca.desc">Generate a new sub-CA</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.rotate.nodecerts.cmd"><code>node-certs</code></td><td data-i18n-html="userdoc.kctlref.rotate.nodecerts.desc">Rotate node certificates via CSR, so private keys stay on the nodes. Takes <code>--node</code> or <code>--all</code>. See <a href="certificates.html">certificates &amp; encryption</a>.</td></tr>
+            </table>
+
+            <h2 data-i18n="userdoc.kctlref.h2.revoke">revoke</h2>
+            <table>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.revoke.cert.cmd"><code>cert</code></td><td data-i18n-html="userdoc.kctlref.revoke.cert.desc">Revoke an issued certificate by <code>--serial</code>, <code>--subject</code>, or <code>--node</code>, with an optional RFC 5280 <code>--reason</code>. The certificate lands on the CRL and OCSP.</td></tr>
             </table>
 
             <h2 data-i18n="userdoc.kctlref.h2.apply">apply</h2>

@@ -117,19 +117,46 @@
             <h2 data-i18n="userdoc.certs.h2.bootstrap">mTLS bootstrap</h2>
             <p data-i18n-html="userdoc.certs.bootstrap.p"><code>kctl create cluster</code> generates the full PKI (root CA, sub-CA, controller cert, kctl client cert). <code>kctl node install</code> pushes the node certificate, private key, and CA chain to the target node. Controller nodes also receive the sub-CA key pair.</p>
 
-            <h2 data-i18n="userdoc.certs.h2.renewal">Certificate auto-renewal</h2>
-            <p data-i18n-html="userdoc.certs.renewal.p">The node-agent checks certificate expiry daily. If a certificate expires within 30 days, the agent calls the <code>RenewNodeCert</code> RPC. The sub-CA signs a new leaf certificate and returns the updated chain.</p>
+            <h2 data-i18n="userdoc.certs.h2.renewal">Automated certificate rotation</h2>
+            <p data-i18n-html="userdoc.certs.renewal.p">The controller checks its certificate inventory every hour and rotates any node certificate that has entered its renewal window — by default the last 30 days, or the last quarter of the certificate's lifetime, whichever comes first. Certificates are signed for 365 days.</p>
+            <p data-i18n-html="userdoc.certs.renewal.p2">Rotation is driven by the controller but the key material is not. The controller calls <code>RotateNodeCert</code> on the node, the node generates a fresh keypair and sends a CSR to <code>SignNodeCsr</code>, and the sub-CA returns a signed chain. Private keys never leave the node.</p>
+            <p data-i18n-html="userdoc.certs.renewal.p3">The node writes the new certificate and key atomically, then reloads TLS without restarting the process. Established gRPC connections drop and callers reconnect; in-memory state is kept. If the new certificate fails verification, the node rolls back and carries on serving with its old, still-valid certificate.</p>
 
             <h2 data-i18n="userdoc.certs.h2.rotation">Manual rotation</h2>
 <pre><code># Rotate the sub-CA
 kctl rotate sub-ca --certs-dir ~/.kcore/&lt;context&gt;/
 
 # Re-sign the controller cert and trigger TLS reload
-kctl rotate certs --controller &lt;host:port&gt; --certs-dir ~/.kcore/&lt;context&gt;/</code></pre>
-            <p data-i18n-html="userdoc.certs.rotation.p"><code>rotate sub-ca</code> generates a new sub-CA and pushes it to the controller. <code>rotate certs</code> re-signs the controller certificate and triggers <code>ReloadTls</code> on the controller.</p>
+kctl rotate certs --controller &lt;host:port&gt; --certs-dir ~/.kcore/&lt;context&gt;/
+
+# Rotate one node, or every approved node, ahead of schedule
+kctl rotate node-certs --node &lt;node-id&gt;
+kctl rotate node-certs --all</code></pre>
+            <p data-i18n-html="userdoc.certs.rotation.p"><code>rotate sub-ca</code> generates a new sub-CA and pushes it to the controller. <code>rotate certs</code> re-signs the controller certificate and triggers <code>ReloadTls</code> on the controller. <code>rotate node-certs</code> runs the CSR flow above immediately instead of waiting for the renewal window.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.revocation">Revocation: CRL and OCSP</h2>
+            <p data-i18n-html="userdoc.certs.revocation.p">Every certificate the controller signs is recorded in an inventory: serial, subject, node, validity window, SHA-256 fingerprint, and status. Revoking one marks it in that inventory and publishes it through both a CRL and an OCSP responder.</p>
+<pre><code># Revoke by serial, subject CN, or node
+kctl revoke cert --serial &lt;hex&gt; --reason key-compromise
+kctl revoke cert --node &lt;node-id&gt;
+
+# Fetch the current CRL
+kctl get crl -o crl.der</code></pre>
+            <p data-i18n-html="userdoc.certs.revocation.p2">The CRL is signed by the sub-CA and carries <code>thisUpdate</code> and <code>nextUpdate</code>; it is valid for 24 hours and regenerated when the revocation set changes or <code>nextUpdate</code> gets close. <code>--reason</code> accepts the RFC 5280 reason codes, such as <code>key-compromise</code>, <code>superseded</code>, or <code>privilege-withdrawn</code>.</p>
+            <p data-i18n-html="userdoc.certs.revocation.p3">Revocation is enforced above TLS, not inside the handshake: a revoked peer completes the TLS handshake and is then rejected with <code>PermissionDenied</code> before any RPC handler runs. No call succeeds with a revoked certificate. Checks run against a snapshot that refreshes every 60 seconds. When that snapshot goes stale the controller soft-fails by default, so a revocation outage cannot lock every node out of the cluster; set <code>revocation.failMode</code> to <code>hard-fail</code> if you would rather reject peers than serve on stale data.</p>
+            <p class="note" data-i18n-html="userdoc.certs.revocation.note">OCSP stapling is not supported. The controller runs an OCSP responder and nodes query it directly, as a fallback when CRL data is stale — no stapled response is attached to a kcore handshake.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.pkiendpoints">PKI endpoints</h2>
+            <p data-i18n-html="userdoc.certs.pkiendpoints.p">The controller serves the CRL and OCSP over plain HTTP on <code>pki.httpListenAddr</code>, by default <code>0.0.0.0:9092</code>. These objects are signed, so they do not need transport security, and a node whose certificate has just expired can still fetch what it needs to recover.</p>
+            <ul>
+                <li data-i18n-html="userdoc.certs.pkiendpoints.li1"><code>GET /pki/crl.der</code> and <code>GET /pki/crl.pem</code> — the current CRL</li>
+                <li data-i18n-html="userdoc.certs.pkiendpoints.li2"><code>POST /pki/ocsp</code> and <code>GET /pki/ocsp/&lt;base64&gt;</code> — OCSP responder, answering good, revoked, or unknown</li>
+                <li data-i18n-html="userdoc.certs.pkiendpoints.li3"><code>GET /pki/healthz</code> — responder health</li>
+            </ul>
+            <p data-i18n-html="userdoc.certs.pkiendpoints.p2">Set <code>pki.httpEnabled: false</code> to turn the listener off. Nodes fall back to the gRPC <code>GetCrl</code> call either way.</p>
 
             <h2 data-i18n="userdoc.certs.h2.inspect">Inspecting certificates</h2>
-            <p data-i18n-html="userdoc.certs.inspect.p"><code>kctl get nodes</code> shows <code>cert_expiry_days</code> per node. The compliance report includes a Certificate Lifecycle section with expiring and unknown certificate counts.</p>
+            <p data-i18n-html="userdoc.certs.inspect.p"><code>kctl get nodes</code> shows <code>cert_expiry_days</code> per node. <code>kctl get certificates</code> lists the controller's inventory, filterable with <code>--node</code>, <code>--status</code>, and <code>--expiring-within-days</code>. <code>kctl get pki-status</code> summarises rotation and revocation health. The compliance report includes a Certificate Lifecycle section with expiring and unknown certificate counts.</p>
 
             <h2 data-i18n="userdoc.certs.h2.luks">LUKS2 disk encryption</h2>
             <p data-i18n="userdoc.certs.luks.p">LUKS2 encryption is mandatory for the OS disk on every node.</p>

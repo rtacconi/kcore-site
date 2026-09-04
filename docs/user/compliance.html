@@ -142,18 +142,19 @@
                 <li data-i18n="userdoc.compliance.impl.li2">CN-based authorisation for gRPC methods</li>
                 <li data-i18n="userdoc.compliance.impl.li3">Node approval queue</li>
                 <li data-i18n="userdoc.compliance.impl.li4">LUKS2 + TPM2 disk encryption</li>
-                <li data-i18n="userdoc.compliance.impl.li5">Automatic certificate renewal</li>
+                <li data-i18n="userdoc.compliance.impl.li5">Automated node certificate rotation, with private keys kept on the node</li>
                 <li data-i18n="userdoc.compliance.impl.li6">Sub-CA rotation</li>
                 <li data-i18n="userdoc.compliance.impl.li7">Security groups (nftables)</li>
                 <li data-i18n-html="userdoc.compliance.impl.li8"><code>cargo audit</code> in CI</li>
+                <li data-i18n-html="userdoc.compliance.impl.li9">CRL and OCSP for certificate revocation, enforced on every RPC (see <a href="certificates.html">certificates &amp; encryption</a>)</li>
+                <li data-i18n="userdoc.compliance.impl.li10">RBAC operator roles with per-operator client certificates</li>
+                <li data-i18n="userdoc.compliance.impl.li11">Append-only audit log of mutating API calls</li>
             </ul>
 
             <h2 data-i18n="userdoc.compliance.h2.inprog">In progress</h2>
             <ul>
-                <li data-i18n-html="userdoc.compliance.inprog.li1">Audit log of mutating API calls <span class="roadmap-badge">Planned</span></li>
-                <li data-i18n-html="userdoc.compliance.inprog.li2">RBAC / multiple operator roles <span class="roadmap-badge">Planned</span></li>
-                <li data-i18n-html="userdoc.compliance.inprog.li3">CRL/OCSP for certificate revocation <span class="roadmap-badge">Planned</span></li>
                 <li data-i18n-html="userdoc.compliance.inprog.li4">gRPC rate limiting <span class="roadmap-badge">Planned</span></li>
+                <li data-i18n-html="userdoc.compliance.inprog.li5">SBOM export and signed release artifacts <span class="roadmap-badge">Planned</span></li>
             </ul>
         </main>
     </div>
