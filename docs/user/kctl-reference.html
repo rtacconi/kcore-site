@@ -59,7 +59,7 @@
             <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
             <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li>
-                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li></ul></div>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
             <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
             <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
@@ -76,7 +76,7 @@
             <p><code>kctl create</code> is idempotent. Re-running the same command (or re-applying the same manifest with <code>-f</code>) performs a server-side upsert: it creates the resource if missing, updates mutable fields if they drifted, rejects changes to immutable fields with <code>InvalidArgument</code>, or prints <code>unchanged</code> when the stored state already matches. See <a href="yaml-manifests.html#idempotency-and-upsert">Idempotency and upsert</a> for the mutable/immutable field tables.</p>
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
-                <tr><td data-i18n-html="userdoc.kctlref.create.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.create.vm.desc">Create a VM from CLI flags or <code>-f</code> YAML manifest</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.create.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.create.vm.desc">Create a VM from CLI flags or <code>-f</code> YAML manifest. Assign a GPU with <code>--gpu radeon0</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.container.cmd"><code>container</code></td><td data-i18n="userdoc.kctlref.create.container.desc">Create a container on a node</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.network.cmd"><code>network</code></td><td data-i18n="userdoc.kctlref.create.network.desc">Create a network</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.cluster.cmd"><code>cluster</code></td><td data-i18n="userdoc.kctlref.create.cluster.desc">Initialise PKI and mTLS context for a new cluster</td></tr>
@@ -192,6 +192,12 @@
             </table>
             <p class="note" data-i18n-html="userdoc.kctlref.operator.note">Removing a role is not the same as revoking the certificate. <code>revoke-role</code> changes what an identity is allowed to do; the certificate itself stays valid until you revoke it with <code>kctl revoke cert --subject kctl:&lt;name&gt;</code>. Revocation takes effect on the next RPC the operator makes, not during the TLS handshake. See <a href="certificates.html">certificates &amp; encryption</a>.</p>
 
+            <h2 data-i18n="userdoc.kctlref.h2.gpu">gpu</h2>
+            <table>
+                <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.gpu.list.cmd"><code>list</code></td><td data-i18n-html="userdoc.kctlref.gpu.list.desc">Cluster GPU inventory. <code>--local</code> scans this machine. <code>--node</code> filters one node. See <a href="gpu-passthrough.html">GPU passthrough</a>.</td></tr>
+            </table>
+
             <h2 data-i18n="userdoc.kctlref.h2.drain">drain</h2>
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
@@ -201,7 +207,7 @@
             <h2 data-i18n="userdoc.kctlref.h2.migrate">migrate</h2>
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
-                <tr><td data-i18n-html="userdoc.kctlref.migrate.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.migrate.vm.desc">Live-migrate a Ceph-backed VM to <code>--target-node</code>. Optional <code>--allow-cold-fallback</code>. See <a href="vm-migration.html">VM migration</a>.</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.migrate.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.migrate.vm.desc">Live-migrate a Ceph-backed VM to <code>--target-node</code>. Optional <code>--allow-cold-fallback</code>. A VM with a GPU is cold-migrated onto a free GPU of the same family, or onto <code>--gpu</code>. See <a href="vm-migration.html">VM migration</a> and <a href="gpu-passthrough.html">GPU passthrough</a>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.migrate.resetsession.cmd"><code>reset-session</code></td><td data-i18n-html="userdoc.kctlref.migrate.resetsession.desc">Clear a stranded live-migrate receive session on <code>--node</code> (mandatory). Reports what it would clear and exits non-zero unless <code>--force</code> is given. Needs <code>cluster-admin</code>.</td></tr>
             </table>
             <p class="note" data-i18n-html="userdoc.kctlref.migrate.sessionNote">A receive session outlives its migration if the controller dies mid-flight, and every later migration of that VM to that node then fails with <code>ALREADY_EXISTS</code>. Nothing clears it automatically. Inspect first with <code>kctl get migrate-session &lt;vm&gt;</code> (read-only; queries every <code>CephCluster</code> member unless you pass <code>--node</code>), then clear with <code>kctl migrate reset-session &lt;vm&gt; --node &lt;id&gt; --force</code>. Clearing a session whose receive VMM is still alive kills an in-flight migration. See <a href="vm-migration.html">VM migration</a>.</p>

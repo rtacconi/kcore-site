@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore licensing: Apache-2.0 open core, subscriptions, Standard and Premium editions.">
-    <title>Licensing and editions - kcore documentation</title>
-    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/licensing.html">
+    <meta name="description" content="Assign a named GPU such as radeon0 to a kcore VM, list GPUs across the cluster, and cold-migrate onto a free card.">
+    <title>GPU passthrough - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/gpu-passthrough.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
-    <meta property="og:title" content="Licensing and editions - kcore documentation">
-    <meta property="og:description" content="kcore licensing: Apache-2.0 open core, subscriptions, Standard and Premium editions.">
-    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/licensing.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:title" content="GPU passthrough - kcore documentation">
+    <meta property="og:description" content="Assign a named GPU such as radeon0 to a kcore VM, list GPUs across the cluster, and cold-migrate onto a free card.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/gpu-passthrough.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <link rel="stylesheet" href="../../css/styles.css">
     <link rel="stylesheet" href="../../css/docs-mode.css">
     <script src="../../js/docs-mode.js"></script>
@@ -36,7 +36,6 @@
         .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
         table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
         th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
-        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
         @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
     </style>
 </head>
@@ -75,7 +74,7 @@
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
-                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+                <li><a href="gpu-passthrough.html" class="active" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
@@ -99,25 +98,85 @@
                 <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
-                <li><a href="licensing.html" class="active" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
             </ul></div>
         </nav></aside>
         <main class="docs-content">
-            <h1 data-i18n="userdoc.licensing.h1">Licensing &amp; editions</h1>
+            <h1 data-i18n="userdoc.gpu.title">GPU passthrough</h1>
+            <p data-i18n-html="userdoc.gpu.intro">A VM takes a named GPU from the node that will run it. You ask for <code>radeon0</code> or <code>nvidia1</code>, not a PCI address. The node binds that card and its audio function to the guest.</p>
+            <p class="note" data-i18n-html="userdoc.gpu.note">This is whole-device passthrough. The guest gets the physical card, so the GPU cannot move live the way CPU and memory can. Moving the VM stops it, attaches a GPU on the destination, and boots the guest there. The disk still has to be shared Ceph RBD. See <a href="vm-migration.html">VM migration</a>.</p>
 
-            <p data-i18n-html="userdoc.licensing.p1">kcore follows an <strong>open-core</strong> model. The Community Edition source is available under the <strong>Apache License 2.0</strong>. Apache-2.0 does not restrict commercial use of the code you build from that tree; always read <code>LICENSE</code> for the exact terms.</p>
-
-            <p data-i18n-html="userdoc.licensing.p2"><strong>Subscriptions</strong> cover services and artifacts around the project: the official supported distribution, stable production update channel, signed ISO images, tested releases, and commercial support. A subscription does not replace the open-source licence on the public core.</p>
-
+            <h2 data-i18n="userdoc.gpu.inventory">See the GPUs</h2>
+            <p data-i18n="userdoc.gpu.inventoryP">On the machine you are logged into, read the local PCI bus. Across the cluster, read the inventory each node agent publishes.</p>
+<pre><code>kctl gpu list --local
+kctl gpu list
+kctl gpu list --node node-a</code></pre>
+            <p data-i18n-html="userdoc.gpu.names">Names are per node. <code>radeon0</code> is that node's lowest-address AMD GPU, <code>radeon1</code> the next. NVIDIA cards are <code>nvidia0</code>, Intel graphics are <code>intel0</code>. A row is <code>free</code>, <code>in-use</code>, or <code>blocked</code>.</p>
             <table>
-                <tr><th data-i18n="userdoc.licensing.th.context">Context</th><th data-i18n="userdoc.licensing.th.edition">Edition</th></tr>
-                <tr><td data-i18n="userdoc.licensing.tr.community">Contributors, labs, evaluation</td><td data-i18n="userdoc.licensing.tr.community.ed">Community Edition (build from source)</td></tr>
-                <tr><td data-i18n="userdoc.licensing.tr.prod">Production</td><td data-i18n="userdoc.licensing.tr.prod.ed">kcore Standard or Premium (per subscribed node)</td></tr>
+                <thead>
+                    <tr>
+                        <th data-i18n="userdoc.gpu.thState">State</th>
+                        <th data-i18n="userdoc.gpu.thMeaning">Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>free</code></td>
+                        <td data-i18n="userdoc.gpu.tdFree">The card can be assigned. Its IOMMU group is only the GPU and its audio function.</td>
+                    </tr>
+                    <tr>
+                        <td><code>in-use</code></td>
+                        <td data-i18n="userdoc.gpu.tdUsed">A VM already owns this name on this node.</td>
+                    </tr>
+                    <tr>
+                        <td><code>blocked</code></td>
+                        <td data-i18n="userdoc.gpu.tdBlocked">The IOMMU group also contains USB, SATA, a bridge, or another device the host cannot give away. An integrated GPU that shares a group with the host's disks is blocked.</td>
+                    </tr>
+                </tbody>
             </table>
 
-            <p data-i18n-html="userdoc.licensing.p3">Socket-based pricing and tier details are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page. The <a href="https://github.com/rtacconi/kcore/blob/main/PRICING.md" style="color:var(--accent-primary)">PRICING.md</a> file in the repository mirrors billing rules.</p>
+            <h2 data-i18n="userdoc.gpu.assign">Assign a GPU</h2>
+            <p data-i18n-html="userdoc.gpu.assignP"><code>--target-node</code> is required. <code>--gpu radeon</code> with no number takes the first free Radeon on that node. Repeat <code>--gpu</code> to attach more than one card. A name belongs to one VM.</p>
+            <div class="docs-cli-only">
+<pre><code>kctl create vm gpu-guest \
+  --target-node node-a \
+  --gpu radeon0 \
+  --cpu 4 --memory 8G \
+  --image https://example.com/debian.raw \
+  --image-sha256 &lt;sha256&gt; \
+  --storage-backend ceph \
+  --storage-size-bytes 21474836480</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code>apiVersion: kcore/v1
+kind: VM
+metadata:
+  name: gpu-guest
+spec:
+  cpu: 4
+  memoryBytes: 8589934592
+  targetNode: node-a
+  gpus:
+    - radeon0
+  storageBackend: ceph
+  storageSizeBytes: 21474836480</code></pre>
+            </div>
+            <p data-i18n-html="userdoc.gpu.assignPci"><code>--pci 0000:03:00.0</code> still works when you need a raw address. Prefer <code>--gpu</code>.</p>
 
-            <p data-i18n-html="userdoc.licensing.p4"><strong>Partner program</strong> (resellers, integrators, providers): <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" style="color:var(--accent-primary)">team@tacconiconsulting.com</a></p>
+            <h2 data-i18n="userdoc.gpu.migrate">Move the VM</h2>
+            <p data-i18n-html="userdoc.gpu.migrateP">Leave <code>--gpu</code> off to take a free GPU of the same family on the destination, one for each GPU the VM has now. Name a card when you want a specific one. Node drain uses the same automatic pick. If nothing compatible is free, the VM stays where it is.</p>
+<pre><code>kctl migrate vm gpu-guest --target-node node-b
+kctl migrate vm gpu-guest --target-node node-b --gpu radeon1</code></pre>
+            <p data-i18n-html="userdoc.gpu.migrateDisk">The guest disk is not copied. Cold migration of a GPU VM needs the same shared RBD disk as any other cross-node move. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
+
+            <h2 data-i18n="userdoc.gpu.limits">Limits</h2>
+            <ul>
+                <li data-i18n="userdoc.gpu.limitsLi1">The GPU itself is not live-migrated. CPU and memory of a GPU VM are not streamed to the new host while the card stays attached.</li>
+                <li data-i18n="userdoc.gpu.limitsLi2">A blocked GPU cannot be assigned. Fix is a discrete card whose IOMMU group is only that card.</li>
+                <li data-i18n="userdoc.gpu.limitsLi3">Changing the GPU list on a later apply is rejected. Migrate, or delete the VM and create it again.</li>
+                <li data-i18n-html="userdoc.gpu.limitsLi4">The host loses the card while the guest has it. The device stays on <code>vfio-pci</code> after the guest stops until you bind the host driver again.</li>
+            </ul>
+            <p class="note" data-i18n-html="userdoc.gpu.techNote">What the node does at start (VFIO bind, kernel parameters): <a href="https://github.com/kcorehypervisor/kcore/blob/feature/gpu-passthrough/docs/gpu-passthrough.md">docs/gpu-passthrough.md</a>.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

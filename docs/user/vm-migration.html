@@ -74,6 +74,7 @@
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
                 <li><a href="vm-migration.html" class="active" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
@@ -173,6 +174,7 @@ kctl drain node node-a --target-node node-b</code></pre>
                 <li data-i18n="userdoc.vmmig.limitsLi1">Not supported for filesystem, LVM, or ZFS-backed VMs across nodes.</li>
                 <li data-i18n="userdoc.vmmig.limitsLi2">Live migration takes a destination port from the fixed 18000–18127 range; open host firewalls between members.</li>
                 <li data-i18n="userdoc.vmmig.limitsLi3">Drain does not yet prefer live migrate per VM — use <code>kctl migrate vm</code> when you need live.</li>
+                <li data-i18n-html="userdoc.vmmig.limitsGpu">A VM with a GPU moves cold onto a free card of the same family. See <a href="gpu-passthrough.html">GPU passthrough</a>.</li>
             </ul>
 
             <h2 data-i18n="userdoc.vmmig.trouble">Troubleshooting</h2>

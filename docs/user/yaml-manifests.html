@@ -58,7 +58,7 @@
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li><li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
             <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li>
-                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li></ul></div>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
             <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
             <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
             <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
@@ -85,6 +85,7 @@
                 <tr><td><code>spec.storageBackend</code></td><td>string</td><td><code>filesystem</code> | <code>lvm</code> | <code>zfs</code></td></tr>
                 <tr><td><code>spec.storageSizeBytes</code></td><td>integer | string</td><td>Root disk size in bytes or human-readable, e.g. <code>"20G"</code></td></tr>
                 <tr><td><code>spec.targetNode</code></td><td>string</td><td>Pin VM to a specific node (optional)</td></tr>
+                <tr><td><code>spec.gpus</code></td><td>string[]</td><td>Named GPUs on that node, e.g. <code>radeon0</code>. Requires <code>spec.targetNode</code>. See <a href="gpu-passthrough.html">GPU passthrough</a>.</td></tr>
                 <tr><td><code>spec.dc</code></td><td>string</td><td>Target datacenter for scheduling (optional, mutually exclusive with targetNode)</td></tr>
                 <tr><td><code>spec.sshKeys</code></td><td>string[]</td><td>List of SSH key names to inject (must exist in the cluster)</td></tr>
                 <tr><td><code>spec.cloudInitUserData</code></td><td>string</td><td>Full cloud-init user-data (multi-line YAML block)</td></tr>
