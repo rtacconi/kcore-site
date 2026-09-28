@@ -1193,7 +1193,7 @@ const translations = {
     "userdoc.gpu.limitsLi2": "A blocked GPU cannot be assigned. Fix is a discrete card whose IOMMU group is only that card.",
     "userdoc.gpu.limitsLi3": "Changing the GPU list on a later apply is rejected. Migrate, or delete the VM and create it again.",
     "userdoc.gpu.limitsLi4": "The host loses the card while the guest has it. The device stays on <code>vfio-pci</code> after the guest stops until you bind the host driver again.",
-    "userdoc.gpu.techNote": "What the node does at start (VFIO bind, kernel parameters): <a href=\"https://github.com/kcorehypervisor/kcore/blob/feature/gpu-passthrough/docs/gpu-passthrough.md\">docs/gpu-passthrough.md</a>.",
+    "userdoc.gpu.techNote": "What the node does at start (VFIO bind, kernel parameters): <a href=\"https://github.com/kcorehypervisor/kcore/blob/main/docs/gpu-passthrough.md\">docs/gpu-passthrough.md</a>.",
     "userdoc.kctlref.h2.gpu": "gpu",
     "userdoc.kctlref.gpu.list.cmd": "<code>list</code>",
     "userdoc.kctlref.gpu.list.desc": "Cluster GPU inventory. <code>--local</code> scans this machine. <code>--node</code> filters one node. See <a href=\"gpu-passthrough.html\">GPU passthrough</a>.",

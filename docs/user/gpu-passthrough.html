@@ -176,7 +176,7 @@ kctl migrate vm gpu-guest --target-node node-b --gpu radeon1</code></pre>
                 <li data-i18n="userdoc.gpu.limitsLi3">Changing the GPU list on a later apply is rejected. Migrate, or delete the VM and create it again.</li>
                 <li data-i18n-html="userdoc.gpu.limitsLi4">The host loses the card while the guest has it. The device stays on <code>vfio-pci</code> after the guest stops until you bind the host driver again.</li>
             </ul>
-            <p class="note" data-i18n-html="userdoc.gpu.techNote">What the node does at start (VFIO bind, kernel parameters): <a href="https://github.com/kcorehypervisor/kcore/blob/feature/gpu-passthrough/docs/gpu-passthrough.md">docs/gpu-passthrough.md</a>.</p>
+            <p class="note" data-i18n-html="userdoc.gpu.techNote">What the node does at start (VFIO bind, kernel parameters): <a href="https://github.com/kcorehypervisor/kcore/blob/main/docs/gpu-passthrough.md">docs/gpu-passthrough.md</a>.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
