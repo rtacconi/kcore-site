@@ -92,6 +92,8 @@
                 <tr><td data-i18n-html="userdoc.kctlref.get.storageclasses.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.get.storageclasses.alias"><code>storage-classes</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.volumes.cmd"><code>volumes</code></td><td data-i18n-html="userdoc.kctlref.get.volumes.alias"><code>volume</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.get.compliance.alias"><code>compliance</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.cryptoconfig.cmd"><code>crypto-config</code></td><td data-i18n-html="userdoc.kctlref.get.cryptoconfig.alias"><code>crypto</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.sbom.cmd"><code>sbom</code></td><td></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.auditevents.cmd"><code>audit-events</code></td><td data-i18n-html="userdoc.kctlref.get.auditevents.alias"><code>audit</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.conflicts.cmd"><code>conflicts</code></td><td></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.replstatus.cmd"><code>replication-status</code></td><td></td></tr>
@@ -102,7 +104,7 @@
                 <tr><td data-i18n-html="userdoc.kctlref.get.crl.cmd"><code>crl</code></td><td></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.migratesession.cmd"><code>migrate-session</code></td><td data-i18n-html="userdoc.kctlref.get.migratesession.alias"><code>migrate-sessions</code></td></tr>
             </table>
-            <p data-i18n-html="userdoc.kctlref.get.flags">Filters worth knowing: <code>audit-events</code> takes <code>--limit</code> (default 100), <code>--action</code> for an exact action name, and <code>--since</code> for an RFC 3339 timestamp. <code>vms</code>, <code>networks</code> and <code>disk-layouts</code> take <code>--target-node</code>. <code>crl</code> takes <code>-o</code> to write the CRL to a file.</p>
+            <p data-i18n-html="userdoc.kctlref.get.flags">Filters worth knowing: <code>audit-events</code> takes <code>--limit</code> (default 100), <code>--action</code> for an exact action name, and <code>--since</code> for an RFC 3339 timestamp. <code>vms</code>, <code>networks</code> and <code>disk-layouts</code> take <code>--target-node</code>. <code>crl</code> takes <code>-o</code> to write the CRL to a file. <code>sbom</code> takes <code>--kind crates|iso-closure</code> and <code>-o</code> to write the CycloneDX document.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.describe">describe</h2>
             <table>
@@ -113,6 +115,7 @@
                 <tr><td data-i18n-html="userdoc.kctlref.describe.storageclass.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.describe.storageclass.alias"><code>storage-classes</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.sshkey.cmd"><code>ssh-key</code></td><td data-i18n-html="userdoc.kctlref.describe.sshkey.alias"><code>sshkey</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.describe.compliance.alias"><code>compliance</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.cryptoconfig.cmd"><code>crypto-config</code></td><td data-i18n-html="userdoc.kctlref.describe.cryptoconfig.alias"><code>crypto</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.disklayout.cmd"><code>disk-layout</code></td><td data-i18n-html="userdoc.kctlref.describe.disklayout.alias"><code>disklayout</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.cephcluster.cmd"><code>ceph-cluster</code></td><td data-i18n-html="userdoc.kctlref.describe.cephcluster.alias"><code>cephcluster</code></td></tr>
             </table>

@@ -686,16 +686,19 @@
                 <!-- Q3 2026: SECURITY -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot in-progress"></div>
-                    <div class="timeline-date in-progress">August 2026 &mdash; In Progress</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">September 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon in-progress">&#128274;</span> Security &amp; Compliance</h3>
+                        <h3><span class="card-icon shipped">&#128274;</span> Security &amp; Compliance</h3>
                         <p>
-                            RBAC, audit logging, and certificate lifecycle for regulated
-                            environments. Node certificates now rotate on their own, and
-                            revoked certificates are published over CRL and OCSP &mdash; see
+                            RBAC, audit logging, certificate lifecycle, SBOM export, and
+                            per-identity gRPC rate limiting. Node certificates rotate on
+                            their own, and revoked certificates are published over CRL and
+                            OCSP &mdash; see
                             <a href="docs/user/certificates.html">certificates &amp; encryption</a>.
-                            SBOM, crypto config reporting, and rate limiting are still to land.
+                            <code>kctl get crypto-config</code> reports the cryptographic
+                            posture. <code>kctl get sbom</code> exports the CycloneDX
+                            document, and release artifacts are signed with Sigstore.
                         </p>
                         <ul class="detail-list">
                             <li>
@@ -719,16 +722,16 @@
                                 <span>Automated certificate rotation and CRL/OCSP revocation &mdash; nodes generate their own keys and CSRs so private keys never leave the node, the sub-CA publishes a signed CRL and answers OCSP, and revoked peers are rejected on every RPC (<code>kctl rotate node-certs</code>, <code>kctl revoke cert</code>, <code>kctl get pki-status</code>)</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>SBOM generation and signed release artifacts</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>SBOM generation and signed release artifacts &mdash; CycloneDX SBOMs in the GitHub release, <code>SHA256SUMS</code> signed with Sigstore keyless signing</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>New APIs: <code>GetCryptoConfig</code>, <code>ExportSbom</code></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>New APIs: <code>GetCryptoConfig</code>, <code>ExportSbom</code> (<code>kctl get crypto-config</code>, <code>kctl get sbom</code>)</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>gRPC rate limiting</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>gRPC rate limiting &mdash; per-identity token bucket on the controller and node-agent (default 100 req/s, burst 200)</span>
                             </li>
                         </ul>
                     </div>
