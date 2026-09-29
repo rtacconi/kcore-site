@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Windows Server 2022 running on kcore, with IIS installed from the command line.">
+    <title>Windows Server 2022 on kcore - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/windows-server-2022-iis.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Windows Server 2022 on kcore">
+    <meta property="og:description" content="A Windows Server 2022 guest on Cloud Hypervisor, with IIS installed from the command line.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/windows-server-2022-iis.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/windows-server-2022-iis.png">
+    <meta property="og:image:alt" content="Default IIS welcome page on Windows Server 2022">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/windows-server-2022-iis.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .post-content figure {
+            margin: 1.5rem 0 2rem;
+        }
+        .post-content img {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content figcaption {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.6rem;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.win.title">Windows Server 2022 on kcore</h1>
+            <p class="post-meta" data-i18n="bp.win.date">29 September 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.win.back">← Back to blog</a>
+
+        <p data-i18n="bp.win.intro">
+            kcore runs guests on Cloud Hypervisor. Windows Server needs the Cloud Hypervisor UEFI firmware
+            and Hyper-V CPU enlightenments (<code>kvm_hyperv=on</code>) on every VM. With those set,
+            Server 2022 boots from a virtio disk and comes up on a virtio NIC.
+        </p>
+
+        <h2>IIS from the command line</h2>
+        <p data-i18n="bp.win.iis">IIS is an inbox feature. From an Administrator command prompt:</p>
+<pre><code>powershell -Command "Install-WindowsFeature Web-Server -IncludeManagementTools"</code></pre>
+
+        <p data-i18n="bp.win.shot">
+            The page below is the stock IIS welcome site, served by that guest and opened from a
+            workstation through a port forward to the VM.
+        </p>
+
+        <figure>
+            <img src="../assets/windows-server-2022-iis.png" alt="Default IIS welcome page on Windows Server 2022">
+            <figcaption data-i18n="bp.win.caption">Default IIS welcome page on Windows Server 2022.</figcaption>
+        </figure>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
