@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore — NixOS virtualization with an Apache-2.0 open core; subscriptions for official ISOs, enterprise updates, and support.">
-    <title>kcore hypervisor - Declarative Virtualization Platform</title>
+    <meta name="description" content="Leave costly VMware renewals behind. kcore is an open-core NixOS hypervisor with Windows guests, GPU passthrough, atomic updates, and migration help from VMware and Proxmox.">
+    <title>kcore hypervisor — VMware alternative for edge &amp; datacenters</title>
     <link rel="canonical" href="https://kcorehypervisor.com/">
     <meta name="robots" content="index, follow">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://kcorehypervisor.com/sitemap.xml">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="kcore hypervisor">
-    <meta property="og:title" content="kcore hypervisor - Declarative Virtualization Platform">
-    <meta property="og:description" content="kcore — NixOS virtualization with an Apache-2.0 open core; subscriptions for official ISOs, enterprise updates, and support.">
+    <meta property="og:title" content="kcore hypervisor — VMware alternative for edge &amp; datacenters">
+    <meta property="og:description" content="Open-core NixOS hypervisor: Windows guests, GPU passthrough, atomic rollback. Migrate from VMware or Proxmox.">
     <meta property="og:url" content="https://kcorehypervisor.com/">
-    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta property="og:locale" content="en_GB">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="kcore hypervisor">
-    <meta name="twitter:description" content="NixOS-based declarative virtualization: Terraform, gRPC API, atomic upgrades and rollback.">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta name="twitter:description" content="Open-core hypervisor for VMware exit: Windows, GPU passthrough, atomic updates. Hire us to migrate.">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <script type="application/ld+json">
     {"@context":"https://schema.org","@graph":[
-      {"@type":"WebSite","name":"kcore hypervisor","url":"https://kcorehypervisor.com/","description":"Declarative virtualization on NixOS for edge and datacenters.","publisher":{"@type":"Organization","name":"Tacconi Consulting Ltd","url":"https://kcorehypervisor.com/about.html"}},
-      {"@type":"SoftwareApplication","name":"kcore","applicationCategory":"DeveloperApplication","operatingSystem":"NixOS","license":"https://www.apache.org/licenses/LICENSE-2.0","description":"Declarative virtualization platform with gRPC API and Terraform provider.","url":"https://kcorehypervisor.com/","codeRepository":"https://github.com/rtacconi/kcore"}
+      {"@type":"WebSite","name":"kcore hypervisor","url":"https://kcorehypervisor.com/","description":"Open-core virtualization for edge and datacenters. VMware and Proxmox migration.","publisher":{"@type":"Organization","name":"Tacconi Consulting Ltd","url":"https://kcorehypervisor.com/about.html","email":"team@tacconiconsulting.com"}},
+      {"@type":"SoftwareApplication","name":"kcore","applicationCategory":"BusinessApplication","operatingSystem":"NixOS","license":"https://www.apache.org/licenses/LICENSE-2.0","description":"Open-core hypervisor with Windows guest support, GPU passthrough, and declarative operations.","url":"https://kcorehypervisor.com/","codeRepository":"https://github.com/kcorehypervisor/kcore","downloadUrl":"https://github.com/kcorehypervisor/kcore/releases"}
     ]}
     </script>
     <link rel="stylesheet" href="css/styles.css">
@@ -79,8 +79,11 @@
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
-                <span class="logo">kcore</span>
-                <span class="logo-tag">hypervisor</span>
+                <a href="index.html">
+                    <img class="nav-logo" src="assets/kcore-logo.png" alt="kcore" width="120" height="28">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
@@ -88,7 +91,7 @@
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
                 <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
-                <li><a href="#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+                <li><a href="https://github.com/kcorehypervisor/kcore/releases" class="btn-primary" data-i18n="nav.download">Download ISO</a></li>
             </ul>
         </div>
     </nav>
@@ -98,26 +101,24 @@
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title" data-i18n-html="hero.title">
-                    Declarative Virtualization<br>
-                    <span class="gradient-text">for Edge & Datacenters</span>
+                    A practical exit from<br>
+                    <span class="gradient-text">VMware &amp; Broadcom pricing</span>
                 </h1>
                 <p class="hero-subtitle" data-i18n="hero.subtitle">
-                    kcore is a NixOS-based hypervisor that treats VMs as declarative resources.
-                    Define them in Terraform, manage them with a CLI, roll back when things break.
+                    kcore is an open-core NixOS hypervisor for edge and datacenters: immutable hosts with atomic rollback,
+                    Windows guests, GPU passthrough, and multi-datacenter HA. Download the Community ISO free—or hire us to migrate from VMware or Proxmox.
                 </p>
                 <div class="hero-buttons">
-                    <a href="#get-started" class="btn btn-primary" data-i18n="hero.getStarted">Get Started</a>
-                    <a href="#docs" class="btn btn-secondary" data-i18n="hero.readDocs">Read Docs</a>
+                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-primary" data-i18n="hero.download">Download ISO</a>
+                    <a href="pricing.html" class="btn btn-secondary" data-i18n="hero.pricing">Pricing &amp; Buy</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20services" class="btn btn-secondary" data-i18n="hero.hire">Hire for migration</a>
                 </div>
-                <div class="hero-code">
-                    <pre><code><span class="code-comment"># Deploy a VM with kcore</span>
-<span class="code-keyword">resource</span> <span class="code-string">"kcore_vm"</span> <span class="code-string">"app"</span> {
-  <span class="code-property">name</span>     = <span class="code-string">"production-app"</span>
-  <span class="code-property">memory</span>   = <span class="code-number">4096</span>
-  <span class="code-property">vcpu</span>     = <span class="code-number">4</span>
-  <span class="code-property">storage</span>  = <span class="code-string">"50GB"</span>
-}</code></pre>
-                </div>
+                <p style="margin-top: 1.25rem; color: var(--text-tertiary); font-size: 0.95rem;" data-i18n="hero.techHint">
+                    Platform engineers: Terraform, gRPC, and MCP details live in
+                    <a href="docs.html" style="color: var(--accent-primary);">Docs</a>
+                    and
+                    <a href="features.html" style="color: var(--accent-primary);">Features</a>.
+                </p>
             </div>
         </div>
         <div class="hero-background">
@@ -135,10 +136,10 @@
                 and SSH into it.
             </p>
             <p class="links">
-                Read the full tutorial in the
-                <a href="blog/first-node-debian12-quickstart.html">new quickstart blog post</a>
-                or jump to the new user docs at
-                <a href="https://github.com/rtacconi/kcore/tree/main/docs/user">github.com/rtacconi/kcore/docs/user</a>.
+                Read the
+                <a href="blog/first-node-debian12-quickstart.html">quickstart blog post</a>
+                or the operator guides in
+                <a href="docs.html">Docs</a>.
             </p>
             <div id="first-cluster-demo"></div>
         </div>
@@ -148,8 +149,8 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2 data-i18n="features.title">What you get</h2>
-                <p data-i18n="features.subtitle">The things we actually built, not a wishlist</p>
+                <h2 data-i18n="features.title">Built for production estates</h2>
+                <p data-i18n="features.subtitle">What matters when you leave VMware—not a feature wishlist</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -160,8 +161,8 @@
                             <line x1="12" y1="22.08" x2="12" y2="12"></line>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.atomic.title">Atomic Updates & Rollback</h3>
-                    <p data-i18n="features.atomic.desc">NixOS under the hood means every system change is atomic. If an update breaks something, roll back in seconds. The host OS is immutable.</p>
+                    <h3 data-i18n="features.atomic.title">Atomic updates &amp; rollback</h3>
+                    <p data-i18n="features.atomic.desc">NixOS under the hood: every host change is atomic. If an update breaks something, roll back in seconds. The host OS is immutable.</p>
                 </div>
 
                 <div class="feature-card">
@@ -172,44 +173,41 @@
                             <line x1="12" y1="17" x2="12" y2="21"></line>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.declarative.title">Declarative Infrastructure</h3>
-                    <p data-i18n="features.declarative.desc">VMs are defined in Terraform or YAML. Commit your infra to git, review it in a PR, apply it like any other config change.</p>
+                    <h3 data-i18n="features.windows.title">Windows guests</h3>
+                    <p data-i18n="features.windows.desc">Run Windows Server and Windows desktop guests alongside Linux. Suitable for mixed estates leaving VMware.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                            <path d="M9 9h6v6H9z"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="features.gpu.title">GPU passthrough</h3>
+                    <p data-i18n="features.gpu.desc">Assign physical GPUs to VMs with VFIO passthrough. NVIDIA vGPU / SR-IOV support is under planning.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="features.ha.title">Multi-datacenter HA</h3>
+                    <p data-i18n="features.ha.desc">Control-plane replication across datacenters with CRDTs, a Rust gRPC stack, and formal methods (including TLA+) for distributed behaviour.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            <circle cx="9" cy="10" r="1"></circle>
-                            <circle cx="15" cy="10" r="1"></circle>
-                            <path d="M9 15c1.5 1 3.5 1 5 0"></path>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.mcp.title">MCP Server for AI Agents</h3>
-                    <p data-i18n="features.mcp.desc">kcore exposes an MCP server so AI coding agents (Cursor, Claude, etc.) can query and manage your VMs directly through the API.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="16 18 22 12 16 6"></polyline>
-                            <polyline points="8 6 2 12 8 18"></polyline>
-                        </svg>
-                    </div>
-                    <h3 data-i18n="features.grpc.title">gRPC API</h3>
-                    <p data-i18n="features.grpc.desc">Everything goes through a gRPC API. The CLI, the Terraform provider, and the MCP server all use the same interface. Build your own tooling on top.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                            <polyline points="2 17 12 22 22 17"></polyline>
-                            <polyline points="2 12 12 17 22 12"></polyline>
-                        </svg>
-                    </div>
-                    <h3 data-i18n="features.terraform.title">Terraform Provider</h3>
-                    <p data-i18n="features.terraform.desc">A proper Terraform provider, not a wrapper around shell scripts. Plan, apply, and destroy VMs alongside the rest of your stack.</p>
+                    <h3 data-i18n="features.migrate.title">Migration help</h3>
+                    <p data-i18n="features.migrate.desc">We are building a VMware work package and are available for hire to export workloads from VMware and Proxmox onto kcore.</p>
                 </div>
 
                 <div class="feature-card">
@@ -219,9 +217,43 @@
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.fast.title">Fast Provisioning</h3>
-                    <p data-i18n="features.fast.desc">VMs boot in seconds. No waiting around for cloud-init to finish or image downloads to complete. Local storage, local speed.</p>
+                    <h3 data-i18n="features.cost.title">Predictable open-core pricing</h3>
+                    <p data-i18n="features.cost.desc">Per CPU socket—not per core. Community ISO free; Standard, Premium, and Enterprise for signed ISOs and support. No 72-core order minimums.</p>
                 </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
+                <span data-i18n="features.techMore">Terraform, gRPC API, MCP for AI agents, and deep architecture notes:</span>
+                <a href="docs.html" style="color: var(--accent-primary);">Docs</a>
+                ·
+                <a href="features.html" style="color: var(--accent-primary);">Features</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Honest capability status -->
+    <section id="capability" class="features" style="padding-top: 2rem; padding-bottom: 3rem; background: var(--bg-secondary); border-top: 1px solid var(--border-primary); border-bottom: 1px solid var(--border-primary);">
+        <div class="container">
+            <div class="section-header" style="max-width: 800px; margin: 0 auto 2rem; text-align: center;">
+                <h2 data-i18n="capability.title">What works today — and what we are building</h2>
+                <p data-i18n="capability.subtitle">Straight answers for people evaluating a VMware exit</p>
+            </div>
+            <div style="max-width: 880px; margin: 0 auto; display: grid; gap: 1rem;">
+                <div style="padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem;">
+                    <strong style="color: var(--success);">Available now</strong>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0; line-height: 1.65;" data-i18n="capability.now">
+                        Community ISO &amp; kctl on GitHub Releases · Windows guests · GPU passthrough · atomic host updates &amp; rollback · multi-node clusters · Ceph-backed live migration where configured · multi-datacenter control-plane replication (CRDTs) on a Rust / gRPC stack with formal methods and TLA+ modelling for distributed behaviour.
+                    </p>
+                </div>
+                <div style="padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem;">
+                    <strong style="color: var(--accent-primary);">In progress / under planning</strong>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0; line-height: 1.65;" data-i18n="capability.soon">
+                        VMware migration work package (inventory → kcore declarative config) · NVIDIA vGPU / SR-IOV · integrated backup product. Until the VMware package ships, hire us to migrate from VMware or Proxmox.
+                    </p>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem;">
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20services" class="btn btn-primary" data-i18n="capability.hire">Hire us for migration</a>
+                    <a href="docs.html" class="btn btn-secondary" style="margin-left: 0.5rem;" data-i18n="capability.docs">Technical docs</a>
+                </p>
             </div>
         </div>
     </section>
@@ -233,8 +265,7 @@
                 <div class="platform-text">
                     <h2 data-i18n="platform.title">How it works</h2>
                     <p class="section-lead" data-i18n="platform.subtitle">
-                        A controller manages state, node agents run VMs via libvirt,
-                        and you talk to it all through a single CLI.
+                        A controller holds desired state; node agents run Cloud Hypervisor on each NixOS host; you operate the cluster with kctl and the same gRPC APIs.
                     </p>
                     <ul class="feature-list">
                         <li>
@@ -337,156 +368,15 @@ Created:     2026-03-10 14:23:45</span>
         </div>
     </section>
 
-    <!-- AI Integration Section -->
+    <!-- Platform teams (tech depth lives in Docs) -->
     <section id="ai" class="ai-section">
         <div class="container">
-            <div class="ai-content">
-                <div class="ai-visual">
-                    <div class="chat-window">
-                        <div class="chat-header">
-                            <span class="status-dot"></span>
-                            <span>AI Agent Connected</span>
-                        </div>
-                        <div class="chat-body">
-                            <div class="message user">
-                                <p>Create a VM cluster with 3 nodes, 4GB RAM each, for my web application</p>
-                            </div>
-                            <div class="message assistant">
-                                <p>I'll create a VM cluster for you. Here's the infrastructure code:</p>
-                                <div class="code-block">
-<pre><code>resource "kcore_vm" "web_cluster" {
-  count    = 3
-  name     = "web-${count.index + 1}"
-  memory   = 4096
-  vcpu     = 2
-  storage  = "20GB"
-  
-  network {
-    type = "vxlan"
-    fabric = "evpn"
-    segment = "tenant-default"
-  }
-}</code></pre>
-                                </div>
-                                <p>Would you like me to deploy this?</p>
-                            </div>
-                            <div class="message user">
-                                <p>Yes, deploy it</p>
-                            </div>
-                            <div class="message assistant">
-                                <p>✓ Deploying 3 VMs...<br>✓ All VMs are now running</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ai-text">
-                    <h2 data-i18n="ai.title">AI agents can manage your VMs</h2>
-                    <p class="section-lead" data-i18n="ai.subtitle">
-                        kcore ships with an MCP server. Connect it to Claude, Cursor, or any 
-                        MCP-compatible agent and let it create and manage infrastructure for you.
-                    </p>
-                    <div class="ai-features">
-                        <div class="ai-feature">
-                            <h4 data-i18n="ai.mcp.title">MCP Server</h4>
-                            <p data-i18n="ai.mcp.desc">
-                                The MCP server exposes VM lifecycle, node status, and resource 
-                                info to any compatible AI agent over a standard protocol.
-                            </p>
-                        </div>
-                        <div class="ai-feature">
-                            <h4 data-i18n="ai.terraform.title">Terraform Generation</h4>
-                            <p data-i18n="ai.terraform.desc">
-                                Ask an agent to set up infrastructure and it generates real 
-                                Terraform HCL that you can review, version, and apply.
-                            </p>
-                        </div>
-                        <div class="ai-feature">
-                            <h4 data-i18n="ai.observability.title">Observability</h4>
-                            <p data-i18n="ai.observability.desc">
-                                Agents can query node health, VM status, and resource usage
-                                to help you debug or plan capacity changes.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Code Example Section -->
-    <section class="code-example">
-        <div class="container">
-            <h2 data-i18n="code.title">Declarative by Design</h2>
-            <p class="section-lead" data-i18n="code.subtitle">Define your infrastructure with clean, readable code</p>
-            <div class="code-tabs">
-                <button class="tab-button active" data-tab="terraform">Terraform</button>
-                <button class="tab-button" data-tab="yaml">YAML</button>
-                <button class="tab-button" data-tab="cli">CLI</button>
-            </div>
-            <div class="code-panels">
-                <div class="code-panel active" id="terraform">
-<pre><code><span class="code-comment"># Define a complete VM with storage and networking</span>
-<span class="code-keyword">resource</span> <span class="code-string">"kcore_vm"</span> <span class="code-string">"production"</span> {
-  <span class="code-property">name</span>   = <span class="code-string">"prod-app-01"</span>
-  <span class="code-property">memory</span> = <span class="code-number">8192</span>
-  <span class="code-property">vcpu</span>   = <span class="code-number">4</span>
-  
-  <span class="code-keyword">disk</span> {
-    <span class="code-property">size</span>         = <span class="code-string">"100GB"</span>
-    <span class="code-property">storage_class</span> = <span class="code-string">"local-lvm"</span>
-  }
-  
-  <span class="code-keyword">network</span> {
-    <span class="code-property">type</span> = <span class="code-string">"vxlan"</span>
-    <span class="code-property">fabric</span> = <span class="code-string">"evpn"</span>
-    <span class="code-property">segment</span> = <span class="code-string">"tenant-prod"</span>
-  }
-  
-  <span class="code-property">tags</span> = {
-    <span class="code-property">environment</span> = <span class="code-string">"production"</span>
-    <span class="code-property">team</span>        = <span class="code-string">"platform"</span>
-  }
-}</code></pre>
-                </div>
-                <div class="code-panel" id="yaml">
-<pre><code><span class="code-comment"># vm.yaml - VM specification</span>
-<span class="code-property">apiVersion</span>: <span class="code-string">v1</span>
-<span class="code-property">kind</span>: <span class="code-string">VirtualMachine</span>
-<span class="code-property">metadata</span>:
-  <span class="code-property">name</span>: <span class="code-string">prod-app-01</span>
-  <span class="code-property">labels</span>:
-    <span class="code-property">environment</span>: <span class="code-string">production</span>
-    <span class="code-property">team</span>: <span class="code-string">platform</span>
-<span class="code-property">spec</span>:
-  <span class="code-property">memory</span>: <span class="code-number">8192</span>
-  <span class="code-property">vcpu</span>: <span class="code-number">4</span>
-  <span class="code-property">disks</span>:
-    - <span class="code-property">size</span>: <span class="code-string">100GB</span>
-      <span class="code-property">storageClass</span>: <span class="code-string">local-lvm</span>
-  <span class="code-property">network</span>:
-    <span class="code-property">type</span>: <span class="code-string">vxlan</span>
-    <span class="code-property">fabric</span>: <span class="code-string">evpn</span>
-    <span class="code-property">segment</span>: <span class="code-string">tenant-prod</span></code></pre>
-                </div>
-                <div class="code-panel" id="cli">
-<pre><code><span class="code-comment"># Create VM using kctl</span>
-<span class="prompt">$</span> kctl create vm prod-app-01 \
-  --memory 8192 \
-  --vcpu 4 \
-  --disk size=100GB,storage-class=local-lvm \
-  --network type=vxlan,fabric=evpn,segment=tenant-prod \
-  --label environment=production \
-  --label team=platform
-
-<span class="output">✓ VM prod-app-01 created successfully
-✓ Starting VM...</span>
-
-<span class="code-comment"># Apply from file</span>
-<span class="prompt">$</span> kctl apply -f vm.yaml
-
-<span class="output">✓ VM prod-app-01 configured
-✓ Status: running</span></code></pre>
-                </div>
+            <div class="section-header" style="text-align: center; max-width: 720px; margin: 0 auto 2rem;">
+                <h2 data-i18n="ai.title">Built for platform teams too</h2>
+                <p class="section-lead" data-i18n="ai.subtitle">
+                    Declarative APIs, Terraform, and an MCP server for AI agents. Deep reference material is in Docs—this homepage stays focused on operators leaving VMware.
+                </p>
+                <a href="docs.html" class="btn btn-secondary" data-i18n="ai.docsCta">Open documentation</a>
             </div>
         </div>
     </section>
@@ -495,14 +385,11 @@ Created:     2026-03-10 14:23:45</span>
     <section id="licensing" class="features" style="padding-top: 2.5rem; padding-bottom: 2.5rem; background: var(--bg-secondary); border-top: 1px solid var(--border-primary); border-bottom: 1px solid var(--border-primary);">
         <div class="container">
             <div class="section-header" style="max-width: 760px; margin: 0 auto; text-align: center;">
-                <h2 data-i18n="opencore.title">Open core pricing for production virtualization</h2>
+                <h2 data-i18n="opencore.title">Open core pricing</h2>
                 <p class="section-lead" data-i18n="opencore.subtitle" style="margin-top: 0.75rem;">
-                    kcore keeps the core platform open source under Apache-2.0, while paid subscriptions provide the official production-ready distribution, stable updates, and support.
+                    Community ISO free on GitHub Releases. Standard, Premium, and Enterprise per CPU socket for signed ISOs, the enterprise channel, and support.
                 </p>
-                <p style="color: var(--text-secondary); margin-top: 1rem; line-height: 1.65; font-size: 1rem;" data-i18n="opencore.lead">
-                    Community Edition is for labs, homelabs, and contributors. Standard and Premium are priced per physical CPU socket and are recommended for production.
-                </p>
-                <a href="pricing.html" class="btn btn-secondary" style="margin-top: 1.5rem; display: inline-block;" data-i18n="opencore.cta">Pricing and editions</a>
+                <a href="pricing.html" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;" data-i18n="opencore.cta">Pricing and Buy</a>
             </div>
         </div>
     </section>
@@ -512,10 +399,11 @@ Created:     2026-03-10 14:23:45</span>
         <div class="container">
             <div class="cta-content">
                 <h2 data-i18n="cta.title">Try it out</h2>
-                <p data-i18n="cta.desc">Community Edition is Apache-2.0: build from source or use project artifacts as published. For official signed ISOs, enterprise updates, and support, see Standard and Premium.</p>
+                <p data-i18n="cta.desc">Download the Community Edition ISO from GitHub Releases. For official signed ISOs, enterprise updates, and support—or to hire us for a VMware/Proxmox migration—see Pricing or email team@tacconiconsulting.com.</p>
                 <div class="cta-buttons">
-                    <a href="https://github.com/rtacconi/kcore/releases" class="btn btn-primary btn-large" data-i18n="cta.download">Download ISO & kctl</a>
-                    <a href="https://github.com/rtacconi/kcore" class="btn btn-secondary btn-large" data-i18n="cta.github">View on GitHub</a>
+                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-primary btn-large" data-i18n="cta.download">Download ISO &amp; kctl</a>
+                    <a href="pricing.html" class="btn btn-secondary btn-large" data-i18n="cta.buy">Buy subscription</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20services" class="btn btn-secondary btn-large" data-i18n="cta.hire">Hire for migration</a>
                 </div>
             </div>
         </div>
@@ -548,7 +436,8 @@ Created:     2026-03-10 14:23:45</span>
                     <ul>
                         <li><a href="about.html" data-i18n="footer.about">About</a></li>
                         <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
-                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore/releases">Download ISO</a></li>
                         <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
@@ -576,6 +465,7 @@ Created:     2026-03-10 14:23:45</span>
             );
         }
     </script>
+    <script src="js/commerce.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
     <script>

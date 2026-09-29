@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore open-core pricing: Apache-2.0 Community Edition; Standard and Premium subscriptions per CPU socket for official ISOs, enterprise updates, and support.">
+    <meta name="description" content="kcore open-core pricing: Community ISO free; Standard, Premium, and Enterprise per CPU socket. Migration services from VMware and Proxmox.">
     <title>Pricing &amp; licensing - kcore hypervisor</title>
     <link rel="canonical" href="https://kcorehypervisor.com/pricing.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="Pricing &amp; licensing - kcore hypervisor">
-    <meta property="og:description" content="kcore open-core pricing: Apache-2.0 Community Edition; Standard and Premium subscriptions per CPU socket for official ISOs, enterprise updates, and support.">
+    <meta property="og:description" content="kcore open-core pricing: Community ISO free; Standard, Premium, and Enterprise per CPU socket.">
     <meta property="og:url" content="https://kcorehypervisor.com/pricing.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <link rel="stylesheet" href="css/styles.css">
     <style>
         .pricing-hero {
@@ -24,85 +24,47 @@
             text-align: center;
             background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
         }
-
-        .pricing-hero h1 {
-            margin-bottom: 1rem;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .pricing-hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 720px;
-            margin: 0 auto;
-            line-height: 1.65;
-        }
-
+        .pricing-hero h1 { margin-bottom: 1rem; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .pricing-hero p { font-size: 1.2rem; color: var(--text-secondary); max-width: 720px; margin: 0 auto; line-height: 1.65; }
         .pricing-opencore {
             padding: 2rem 0 3rem;
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-primary);
             border-bottom: 1px solid var(--border-primary);
         }
-
-        .pricing-opencore h2 {
-            font-size: 1.35rem;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .pricing-opencore p {
-            color: var(--text-secondary);
-            line-height: 1.75;
-            max-width: 800px;
-            margin-bottom: 1rem;
-        }
-
-        .pricing-opencore p:last-child {
-            margin-bottom: 0;
-        }
-
-        .pricing-section {
-            padding: 4rem 0;
-        }
-
+        .pricing-opencore h2 { font-size: 1.35rem; margin-bottom: 1rem; color: var(--text-primary); }
+        .pricing-opencore p { color: var(--text-secondary); line-height: 1.75; max-width: 800px; margin-bottom: 1rem; }
+        .pricing-opencore p:last-child { margin-bottom: 0; }
+        .pricing-section { padding: 4rem 0; }
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            max-width: 1120px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            max-width: 1280px;
             margin: 0 auto;
             align-items: stretch;
         }
-
         .pricing-card {
             background: var(--bg-card);
             border: 1px solid var(--border-primary);
             border-radius: 0.75rem;
-            padding: 2rem;
+            padding: 1.75rem;
             display: flex;
             flex-direction: column;
             min-height: 100%;
         }
-
         .pricing-card.featured {
             border-color: var(--accent-primary);
             position: relative;
         }
-
         .pricing-card.featured::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 3px;
             background: var(--accent-gradient);
             border-radius: 0.75rem 0.75rem 0 0;
         }
-
         .pricing-label {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -110,55 +72,21 @@
             color: var(--accent-primary);
             margin-bottom: 0.5rem;
         }
-
-        .pricing-name {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .pricing-price {
-            font-size: 1.85rem;
-            font-weight: 700;
-            margin-bottom: 0.35rem;
-            line-height: 1.2;
-        }
-
-        .pricing-price span {
-            font-size: 0.95rem;
-            font-weight: 400;
-            color: var(--text-secondary);
-        }
-
-        .pricing-desc {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-
+        .pricing-name { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .pricing-price { font-size: 1.65rem; font-weight: 700; margin-bottom: 0.35rem; line-height: 1.2; }
+        .pricing-price span { font-size: 0.9rem; font-weight: 400; color: var(--text-secondary); }
+        .pricing-desc { color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.6; font-size: 0.92rem; }
+        .pricing-features { list-style: none; margin-bottom: 1.5rem; flex-grow: 1; }
         .pricing-features li {
-            padding: 0.4rem 0;
+            padding: 0.35rem 0;
             color: var(--text-secondary);
             display: flex;
             align-items: flex-start;
             gap: 0.65rem;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             line-height: 1.45;
         }
-
-        .pricing-features li .check {
-            color: var(--success);
-            flex-shrink: 0;
-            margin-top: 0.15rem;
-        }
-
+        .pricing-features li .check { color: var(--success); flex-shrink: 0; margin-top: 0.15rem; }
         .pricing-cta {
             display: inline-block;
             padding: 0.75rem 1.25rem;
@@ -169,67 +97,47 @@
             transition: all 0.2s ease;
             font-size: 0.95rem;
         }
-
-        .pricing-cta-primary {
-            background: var(--accent-gradient);
-            color: white;
+        .pricing-cta-primary { background: var(--accent-gradient); color: white; }
+        .pricing-cta-primary:hover { opacity: 0.9; color: white; }
+        .pricing-cta-secondary { border: 1px solid var(--border-secondary); color: var(--text-primary); }
+        .pricing-cta-secondary:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        .pricing-faq { max-width: 720px; margin: 4rem auto 0; }
+        .pricing-faq h2 { text-align: center; margin-bottom: 2rem; }
+        .faq-item { border-bottom: 1px solid var(--border-primary); padding: 1.35rem 0; }
+        .faq-item h3 { font-size: 1.05rem; margin-bottom: 0.65rem; }
+        .faq-item p { color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem; }
+        .services-box {
+            max-width: 900px;
+            margin: 3rem auto 0;
+            padding: 1.75rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
         }
-
-        .pricing-cta-primary:hover {
-            opacity: 0.9;
-            color: white;
-        }
-
-        .pricing-cta-secondary {
-            border: 1px solid var(--border-secondary);
-            color: var(--text-primary);
-        }
-
-        .pricing-cta-secondary:hover {
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-        }
-
-        .pricing-faq {
-            max-width: 720px;
-            margin: 4rem auto 0;
-        }
-
-        .pricing-faq h2 {
+        .services-box h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+        .services-box p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 0.75rem; }
+        .market-note {
+            max-width: 900px;
+            margin: 1.5rem auto 0;
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            line-height: 1.6;
             text-align: center;
-            margin-bottom: 2rem;
         }
-
-        .faq-item {
-            border-bottom: 1px solid var(--border-primary);
-            padding: 1.35rem 0;
+        @media (max-width: 1100px) {
+            .pricing-grid { grid-template-columns: repeat(2, 1fr); max-width: 720px; }
         }
-
-        .faq-item h3 {
-            font-size: 1.05rem;
-            margin-bottom: 0.65rem;
-        }
-
-        .faq-item p {
-            color: var(--text-secondary);
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 1024px) {
-            .pricing-grid {
-                grid-template-columns: 1fr;
-                max-width: 480px;
-            }
+        @media (max-width: 640px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
-                <a href="index.html" style="color: inherit; text-decoration: none;">
+                <a href="index.html">
+                    <img class="nav-logo" src="assets/kcore-logo.png" alt="kcore" width="120" height="28">
                     <span class="logo">kcore</span>
                     <span class="logo-tag">hypervisor</span>
                 </a>
@@ -240,17 +148,16 @@
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html">Roadmap</a></li>
                 <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
-                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+                <li><a href="https://github.com/kcorehypervisor/kcore/releases" class="btn-primary" data-i18n="nav.download">Download ISO</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="pricing-hero">
         <div class="container">
             <h1 data-i18n="pricing.title">Open core pricing for production virtualization</h1>
             <p data-i18n="pricing.subtitle">
-                kcore keeps the core platform open source under Apache-2.0, while paid subscriptions provide the official production-ready distribution, stable updates, and support.
+                Download the Community ISO free from GitHub Releases. Paid subscriptions fund the official signed distribution, the enterprise update channel, and commercial support.
             </p>
         </div>
     </section>
@@ -259,78 +166,107 @@
         <div class="container">
             <h2 data-i18n="pricing.openCoreTitle">Open core</h2>
             <p data-i18n="pricing.openCoreP1">
-                The open-source core remains available to everyone under Apache-2.0. You can build from source, run it in your lab, and contribute without a subscription.
+                The open-source core remains Apache-2.0. Community Edition ISOs and <code>kctl</code> binaries are published on
+                <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a>
+                for labs, evaluation, and contributors—no subscription required.
             </p>
             <p data-i18n="pricing.openCoreP2">
-                Subscriptions fund the official signed ISOs, the curated enterprise update channel, tested production releases, and commercial support. They do not change the licence on the public source tree.
+                Subscriptions fund official signed ISOs, the curated enterprise update channel, tested production releases, and commercial support. They do not change the licence on the public source tree.
             </p>
         </div>
     </section>
 
-    <!-- Pricing cards: Community Edition, Standard, Premium -->
     <section class="pricing-section">
         <div class="container">
             <div class="pricing-grid">
                 <div class="pricing-card">
                     <div class="pricing-name" data-i18n="pricing.community">Community Edition</div>
-                    <div class="pricing-price" data-i18n="pricing.free">Apache-2.0</div>
+                    <div class="pricing-price" data-i18n="pricing.free">Free</div>
                     <p class="pricing-desc" data-i18n="pricing.community.desc">
-                        Open-source core under Apache-2.0. Build from source, evaluate freely, and contribute to the project.
+                        Apache-2.0. Download the ISO and kctl from GitHub Releases, evaluate freely, and contribute.
                     </p>
                     <ul class="pricing-features">
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f1">Full core platform from public source</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f2">Suitable for labs, homelabs, evaluation, and contributors</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f3">No subscription required to build or run from source</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f4">Commercial use of your own builds is not restricted by us beyond Apache-2.0</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f1">Published ISO &amp; kctl on GitHub Releases</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f2">Full core platform (source + artifacts)</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f3">Labs, homelabs, evaluation, contributors</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.community.f4">Community channel / build-your-own updates</span></li>
                     </ul>
-                    <a href="https://github.com/rtacconi/kcore" class="pricing-cta pricing-cta-secondary" data-i18n="pricing.source">Source on GitHub</a>
+                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="pricing-cta pricing-cta-secondary" data-i18n="pricing.downloadIso">Download ISO</a>
                 </div>
 
                 <div class="pricing-card featured">
                     <div class="pricing-label" data-i18n="pricing.standardBadge">Production</div>
                     <div class="pricing-name" data-i18n="pricing.standard">kcore Standard</div>
-                    <div class="pricing-price">£109 <span data-i18n="pricing.perSocketYear">/ year / CPU socket</span></div>
+                    <div class="pricing-price">£249 <span data-i18n="pricing.perSocketYear">/ year / CPU socket</span></div>
                     <p class="pricing-desc" data-i18n="pricing.standard.desc">
-                        For production teams that want official ISO images, stable updates, and commercial support.
+                        Official distribution and commercial support for production clusters.
                     </p>
                     <ul class="pricing-features">
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f1">Stable and secure updates</span></li>
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f2">Enterprise repository / production update channel</span></li>
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f3">Official signed ISO images</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f4">All core platform features in the supported distribution</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f5">Support via customer portal or email</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f6">15 support tickets per year</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f7">Initial response within 1 business day</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f4">Support via email / portal</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f5">5 support tickets per year</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f6">Initial response within 1 business day</span></li>
                     </ul>
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Standard%20subscription" class="pricing-cta pricing-cta-primary" data-i18n="pricing.subscribeStandard">Subscribe</a>
+                    <a href="#" class="pricing-cta pricing-cta-primary" data-kcore-buy="standard" data-kcore-buy-label="Standard" data-i18n="pricing.buy">Buy</a>
                 </div>
 
                 <div class="pricing-card">
                     <div class="pricing-label" data-i18n="pricing.premiumBadge">Premium support</div>
                     <div class="pricing-name" data-i18n="pricing.premium">kcore Premium</div>
-                    <div class="pricing-price">£299 <span data-i18n="pricing.perSocketYear">/ year / CPU socket</span></div>
+                    <div class="pricing-price">£599 <span data-i18n="pricing.perSocketYear">/ year / CPU socket</span></div>
                     <p class="pricing-desc" data-i18n="pricing.premium.desc">
-                        For teams that need faster responses, unlimited support access, and hands-on remote troubleshooting.
+                        Faster responses, unlimited tickets, and remote troubleshooting.
                     </p>
                     <ul class="pricing-features">
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f1">Everything in Standard (distribution and update channel)</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f1">Everything in Standard</span></li>
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f2">Unlimited support tickets</span></li>
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f3">Initial response within 4 hours on a business day</span></li>
-                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f4">Remote support (SSH or equivalent secure session)</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f4">Remote support (SSH or secure session)</span></li>
                     </ul>
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Premium%20subscription" class="pricing-cta pricing-cta-secondary" data-i18n="pricing.subscribePremium">Subscribe</a>
+                    <a href="#" class="pricing-cta pricing-cta-primary" data-kcore-buy="premium" data-kcore-buy-label="Premium" data-i18n="pricing.buy">Buy</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-label" data-i18n="pricing.enterpriseBadge">Critical estates</div>
+                    <div class="pricing-name" data-i18n="pricing.enterprise">kcore Enterprise</div>
+                    <div class="pricing-price">£999 <span data-i18n="pricing.perSocketYear">/ year / CPU socket</span></div>
+                    <p class="pricing-desc" data-i18n="pricing.enterprise.desc">
+                        For CSPs and regulated estates that need Severity-1 coverage, a named engineer, and roadmap access. Minimum 8 sockets.
+                    </p>
+                    <ul class="pricing-features">
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f1">Everything in Premium</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f2">24/7 Severity-1 response target (2 hours)</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f3">Named technical contact</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f4">Roadmap influence &amp; design reviews</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f5">Offline key activation when available</span></li>
+                        <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f6">Custom / multi-year quotes on request</span></li>
+                    </ul>
+                    <a href="#" class="pricing-cta pricing-cta-secondary" data-kcore-buy="enterprise" data-kcore-buy-label="Enterprise" data-i18n="pricing.buyContact">Buy / contact</a>
                 </div>
             </div>
 
             <p style="max-width: 800px; margin: 2.5rem auto 0; color: var(--text-tertiary); font-size: 0.9rem; line-height: 1.6; text-align: center;" data-i18n="pricing.socketNote">
-                Pricing is per physical CPU socket, not per core. Production clusters should run the same subscription tier on every node for repository consistency and support eligibility.
+                Pricing is per physical CPU socket, not per core. Production clusters should run the same subscription tier on every node. Buy opens Stripe when a Payment Link is configured; otherwise it emails team@tacconiconsulting.com.
             </p>
 
-            <div style="max-width: 640px; margin: 2rem auto 0; padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; text-align: center;">
-                <h2 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);" data-i18n="pricing.partnerTitle">Partner program</h2>
-                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin: 0;">
-                    <span data-i18n="pricing.partnerLead">We run a partner program for resellers, integrators, and service providers. Email</span>
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program">team@tacconiconsulting.com</a>.
+            <p class="market-note" data-i18n="pricing.marketNote">
+                Market context (Sep 2026): Proxmox VE Premium is about €1,100/socket/year with 24/7 and a 2-hour Sev-1 target; Standard about €550. Vates XCP-ng Enterprise is about $1,800/host/year. kcore Enterprise is priced to sit in that band without matching Proxmox’s full mature support org on day one—custom SLAs available by quote.
+            </p>
+
+            <div class="services-box">
+                <h2 data-i18n="pricing.servicesTitle">Migration &amp; professional services</h2>
+                <p data-i18n="pricing.servicesP1">
+                    We are building a VMware migration work package (inventory → kcore Terraform / declarative config).
+                    Until that ships, we are available for hire to plan and execute exports from <strong>VMware</strong> and <strong>Proxmox</strong> onto kcore—assessment, pilot, cutover, and Year-1 subscription together.
+                </p>
+                <p data-i18n="pricing.servicesP2">
+                    Early engagements are typically services-led; recurring per-socket subscriptions follow as the long-term relationship (“subscriptions as the tail”).
+                </p>
+                <p style="margin-bottom: 0;">
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20services" class="pricing-cta pricing-cta-primary" data-i18n="pricing.hireCta">Hire us for migration</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20partner%20program" class="pricing-cta pricing-cta-secondary" style="margin-left: 0.5rem;" data-i18n="pricing.partnerCta">Partner program</a>
                 </p>
             </div>
 
@@ -338,33 +274,28 @@
                 <h2 data-i18n="pricing.faq">FAQ</h2>
                 <div class="faq-item">
                     <h3 data-i18n="pricing.faq1.q">Is kcore open source?</h3>
-                    <p data-i18n="pricing.faq1.a">
-                        Yes. The kcore Community Edition core is open source under Apache-2.0.
-                    </p>
+                    <p data-i18n="pricing.faq1.a">Yes. The Community Edition core is Apache-2.0. Community ISOs are on GitHub Releases.</p>
                 </div>
                 <div class="faq-item">
-                    <h3 data-i18n="pricing.faq2.q">Do I need a subscription to use kcore?</h3>
-                    <p data-i18n="pricing.faq2.a">
-                        No. You can build and use Community Edition without a subscription. A subscription is for the official supported distribution, enterprise update channel, and commercial support.
-                    </p>
+                    <h3 data-i18n="pricing.faq2.q">Do I need a subscription to try kcore?</h3>
+                    <p data-i18n="pricing.faq2.a">No. Download the Community ISO. Subscriptions are for the official signed distribution, enterprise update channel, and commercial support.</p>
                 </div>
                 <div class="faq-item">
                     <h3 data-i18n="pricing.faq3.q">What does a subscription include?</h3>
-                    <p data-i18n="pricing.faq3.a">
-                        Official signed ISO images, stable enterprise updates, tested production releases, and commercial support. Optional offline subscription key activation may be offered when available.
-                    </p>
+                    <p data-i18n="pricing.faq3.a">Official signed ISO images, stable enterprise updates, tested production releases, and support per tier. Optional offline subscription key activation may be offered when available.</p>
                 </div>
                 <div class="faq-item">
                     <h3 data-i18n="pricing.faq4.q">How is pricing calculated?</h3>
-                    <p data-i18n="pricing.faq4.a">
-                        Per physical CPU socket, not per core.
-                    </p>
+                    <p data-i18n="pricing.faq4.a">Per physical CPU socket, not per core. Enterprise has an 8-socket minimum; ask for multi-year or fleet quotes.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 data-i18n="pricing.faq5.q">How do I pay?</h3>
+                    <p data-i18n="pricing.faq5.a">Use Buy on a tier. If a Stripe Payment Link is configured it opens checkout; otherwise email team@tacconiconsulting.com and we will send an invoice or Stripe link.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -384,6 +315,7 @@
                     <h4 data-i18n="footer.resources">Resources</h4>
                     <ul>
                         <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore/releases">Download ISO</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -391,7 +323,7 @@
                     <ul>
                         <li><a href="about.html" data-i18n="footer.about">About</a></li>
                         <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
-                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
                         <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
@@ -402,6 +334,7 @@
         </div>
     </footer>
 
+    <script src="js/commerce.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
