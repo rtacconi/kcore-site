@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inventory tools, disk movers, and Terraform generators are different jobs. Almost none of them write Terraform for a hypervisor that is not VMware.">
+    <title>Three kinds of VMware migration tool - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/vmware-migration-tools.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Three kinds of VMware migration tool">
+    <meta property="og:description" content="Inventory tools, disk movers, and Terraform generators are different jobs. Almost none of them write Terraform for a hypervisor that is not VMware.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/vmware-migration-tools.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/vmware-migration-three-paths.jpg">
+    <meta property="og:image:alt" content="Three routes from one VMware inventory">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/vmware-migration-three-paths.jpg">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content figure {
+            margin: 1.5rem 0 2rem;
+        }
+        .post-content img {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+            background: #0a0a0a;
+        }
+        .post-content figcaption {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.6rem;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.mig.title">Three kinds of VMware migration tool</h1>
+            <p class="post-meta" data-i18n="bp.mig.date">1 October 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.mig.back">← Back to blog</a>
+
+        <p>
+            A question we get is whether kcore is the only tool that turns a VMware estate into Terraform.
+            It is not. Plenty of products move VMware virtual machines, and some of them write Terraform.
+            Almost none of them write Terraform for a hypervisor that is not VMware.
+        </p>
+        <p>
+            The names get mixed together because each one is called a migration tool.
+            They do three different jobs.
+        </p>
+
+        <figure>
+            <img src="../assets/vmware-migration-three-paths.jpg" alt="Three routes leaving one inventory: one stays put, one ends at a disk, one ends at a document and a disk">
+            <figcaption data-i18n="bp.mig.caption">Three routes from one inventory: stay and describe it, move the disks, or write Terraform for another hypervisor. The indigo route is the third.</figcaption>
+        </figure>
+
+        <h2>Stay on VMware, and describe it in Terraform</h2>
+        <p>
+            The official <a href="https://registry.terraform.io/providers/vmware/vsphere/latest/docs">vSphere provider</a>
+            manages virtual machines, networks, and datastores that remain on vSphere.
+            You can import a VM you already know by inventory path, and
+            <code>terraform plan -generate-config-out</code> will sketch HCL from that import.
+            The guest does not leave VMware. The provider still does not list a whole estate for you.
+            Operators enumerate with <code>govc</code> or PowerCLI, then write the import blocks.
+        </p>
+        <p>
+            <a href="https://github.com/GoogleCloudPlatform/terraformer">Terraformer</a> is the tool people
+            mean when they say “turn live infrastructure into Terraform.” It never really supported vSphere,
+            and Google archived the repository on 16 March 2026. Articles that show a
+            <code>terraformer import vsphere</code> command are describing a command that is not in the tool.
+        </p>
+
+        <h2>Leave VMware, without writing Terraform</h2>
+        <p>
+            This is the crowded category, and it is the one that actually copies disks.
+        </p>
+        <ul>
+            <li><a href="https://github.com/kubev2v/forklift">Forklift</a>, Red Hat’s Migration Toolkit for Virtualization, moves guests to KubeVirt. It uses virt-v2v, and it can warm-migrate with changed-block tracking.</li>
+            <li><a href="https://github.com/harvester/vm-import-controller">Harvester’s importer</a> does the same job toward a Harvester cluster, as Kubernetes resources.</li>
+            <li><a href="https://github.com/soyrageagency/vmware-to-proxmox">V2P</a> inventories vCenter, scores compatibility, and writes a Proxmox shell runbook. The output is a script, not Terraform.</li>
+            <li>Azure Migrate, AWS Application Migration Service, Google Migration Center, and Nutanix Move move the disks onto those platforms.</li>
+        </ul>
+        <p>
+            Several of those destinations can later be represented in Terraform.
+            The migrator itself lands the VM as a disk, a YAML object, or a cloud instance.
+        </p>
+
+        <h2>Leave VMware, and emit Terraform for the destination</h2>
+        <p>
+            This is the thin slice. A few small generators aim at Azure.
+            There is no maintained product that inventories vCenter and emits Terraform for another
+            on-prem hypervisor. That is the gap <a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a> is written for.
+        </p>
+        <p>
+            It reads a vCenter, or a Proxmox cluster, and writes <code>guests.tf</code> for the
+            kcore Terraform provider, plus a <code>gaps.md</code> for anything the provider cannot
+            express yet. <code>convert</code> then calls virt-v2v or qemu-img on a disk you have
+            already exported. It does not pull disk bytes out of vCenter. Forklift does that pull.
+            kcore-migrate does not.
+        </p>
+        <p>
+            The practical order is the same one the diagram shows. Inventory the estate.
+            Read the gaps. Convert an exported disk to qcow2 or raw. Apply the Terraform.
+            A whole-estate cutover is still a project. The commands are in the
+            <a href="https://kcorehypervisor.com/docs/user/import.html">import guide</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

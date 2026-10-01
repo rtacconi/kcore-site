@@ -8,6 +8,7 @@
   <url><loc>https://kcorehypervisor.com/roadmap.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://kcorehypervisor.com/blog.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/vmware-migration-tools.html</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/why-i-built-kcore.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/march-25-2026-update.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/crdt-replication.html</loc><changefreq>yearly</changefreq><priority>0.65</priority></url>
