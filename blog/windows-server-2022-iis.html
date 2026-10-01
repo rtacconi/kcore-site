@@ -200,10 +200,34 @@ resource "kcore_vm" "win" {
   }
 
   desired_state = "running"
+}
+
+# Windows 11 is the same resource and a different image.
+# The node does not present a TPM or Secure Boot, so the image has to be
+# built with those setup checks skipped. See the windows-guest recipe.
+resource "kcore_vm" "win11" {
+  name               = "win11-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "lvm"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+
+  image_path   = "/var/lib/kcore/images/windows-11.qcow2"
+  image_format = "qcow2"
+  target_node  = "node-107"
+
+  nic {
+    network = "default"
+    model   = "virtio"
+  }
+
+  desired_state = "running"
 }</code></pre>
         <p>
             <code>storage_size_bytes</code> is the virtual size of the disk, 40 GiB here, not the
             size of the compact qcow2 file. <code>terraform apply</code> creates the VM on the controller.
+            Windows 11 does not need another provider argument. Upload its qcow2 and change
+            <code>image_path</code>.
         </p>
         <div id="windows-config-cast" class="demo-wrap"></div>
 
