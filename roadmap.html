@@ -836,12 +836,16 @@
                 </div>
 
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Q4 2026</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">October 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#127760;</span> Networking Improvements</h3>
+                        <h3><span class="card-icon shipped">&#127760;</span> Networking Improvements</h3>
                         <p>
-                            Expanding from single-NIC IPv4 to richer network topologies and access control.
+                            A VM can join more than one network. A network can add an IPv6 /64
+                            beside IPv4, drop VM-to-VM traffic on its bridge, and reuse VXLAN
+                            addresses after a guest is deleted. Security groups still control
+                            north-south exposure, and named target-IP rules stay open when the
+                            east-west filter is on.
                         </p>
                         <ul class="detail-list">
                             <li>
@@ -849,11 +853,11 @@
                                 <span>Multi-NIC / multi-homed VMs</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>IPv6 support</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>East-west firewall between VMs on the same bridge</span>
                             </li>
                             <li>
@@ -861,7 +865,7 @@
                                 <span>Security groups with YAML apply flow and nftables rendering on nodes</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>VXLAN IP reclamation and improved peer discovery</span>
                             </li>
                         </ul>

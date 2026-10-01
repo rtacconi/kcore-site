@@ -95,7 +95,10 @@
                 <tr><td><code>spec.disks[].format</code></td><td>string</td><td><code>qcow2</code> | <code>raw</code></td></tr>
                 <tr><td><code>spec.nics[]</code></td><td>array</td><td>List of network interfaces (supports multiple NICs)</td></tr>
                 <tr><td><code>spec.nics[].network</code></td><td>string</td><td>Network name (default <code>"default"</code>)</td></tr>
-                <tr><td><code>spec.nics[].model</code></td><td>string</td><td>NIC model (default <code>"virtio"</code>)</td></tr>
+                <tr><td><code>spec.nics[].model</code></td><td>string</td><td>NIC model (default <code>"virtio"</code>). The guest still attaches as a virtio TAP.</td></tr>
+                <tr><td><code>spec.nics[].macAddress</code></td><td>string</td><td>Optional MAC. Generated from the VM name and NIC index when omitted.</td></tr>
+                <tr><td><code>spec.nodeLabels</code></td><td>string[]</td><td>Required node labels, each <code>key=value</code>. Also <code>spec.node_labels</code>.</td></tr>
+                <tr><td><code>spec.antiAffinity</code></td><td>string</td><td>Hard anti-affinity group. The VM is not placed on a node that already hosts the group.</td></tr>
                 <tr><td><code>spec.imageSha256</code></td><td>string</td><td>Top-level alternative to <code>disks[].sha256</code></td></tr>
                 <tr><td><code>spec.imageFormat</code></td><td>string</td><td>Top-level alternative to <code>disks[].format</code></td></tr>
             </table>
@@ -163,6 +166,9 @@ spec:
                 <tr><td><code>spec.targetNode</code></td><td>string</td><td>Pin network to a specific node (optional, NAT only)</td></tr>
                 <tr><td><code>spec.allowedTcpPorts</code></td><td>integer[]</td><td>TCP ports to open on the network (optional)</td></tr>
                 <tr><td><code>spec.allowedUdpPorts</code></td><td>integer[]</td><td>UDP ports to open on the network (optional)</td></tr>
+                <tr><td><code>spec.ipv6Prefix</code></td><td>string</td><td>Optional IPv6 /64. Empty leaves the network IPv4-only. Also <code>spec.ipv6_prefix</code>.</td></tr>
+                <tr><td><code>spec.ipv6Gateway</code></td><td>string</td><td>Gateway on that prefix (<code>prefix::1</code>). Also <code>spec.ipv6_gateway</code>.</td></tr>
+                <tr><td><code>spec.eastWestFirewall</code></td><td>boolean</td><td>Drop VM-to-VM traffic on this bridge. Default false. Also <code>spec.east_west_firewall</code>.</td></tr>
             </table>
 
             <h3>Network examples</h3>
@@ -510,7 +516,7 @@ unchanged VM 'web-01'</code></pre>
             <p>A change to an immutable field is rejected with <code>InvalidArgument</code>. The fix is always: <code>kctl delete …</code> then re-apply.</p>
             <table>
                 <tr><th>Kind</th><th>Mutable</th><th>Immutable (rejects with <code>InvalidArgument</code>)</th></tr>
-                <tr><td><code>VM</code></td><td><code>cpu</code>, <code>memoryBytes</code>, <code>desiredState</code></td><td><code>disks</code>, <code>nics</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>targetNode</code>, <code>sshKeys</code>, <code>cloudInitUserData</code>, <code>image_*</code></td></tr>
+                <tr><td><code>VM</code></td><td><code>cpu</code>, <code>memoryBytes</code>, <code>desiredState</code></td><td><code>disks</code>, <code>nics</code>, <code>nodeLabels</code>, <code>antiAffinity</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>targetNode</code>, <code>sshKeys</code>, <code>cloudInitUserData</code>, <code>image_*</code></td></tr>
                 <tr><td><code>Container</code></td><td><code>desiredState</code></td><td><code>image</code>, <code>command</code>, <code>network</code>, <code>env</code>, <code>ports</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>mountTarget</code></td></tr>
                 <tr><td><code>Network</code></td><td>— (none in v1)</td><td>all fields</td></tr>
                 <tr><td><code>SshKey</code></td><td>— (public key immutable)</td><td><code>publicKey</code></td></tr>

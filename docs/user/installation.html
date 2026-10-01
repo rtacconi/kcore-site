@@ -193,6 +193,22 @@ spec:
                 <li><strong>Reboot</strong> &mdash; unmounts all filesystems and reboots into the installed system.</li>
             </ol>
 
+            <h2>Webhooks</h2>
+            <p>After install, <code>controller.yaml</code> can POST JSON when a node misses heartbeats, a certificate enters the expiry window, or a VM runtime state changes. Delivery is asynchronous and can be signed with HMAC-SHA256.</p>
+<pre><code>webhooks:
+  enabled: true
+  endpoints:
+    - name: pager
+      url: https://hooks.example/kcore
+      secret: replace-me
+      events:
+        - node.heartbeat.missed
+        - cert.expiry.warning
+        - vm.state.changed</code></pre>
+
+            <h2>Scheduler</h2>
+            <p>The same file sets placement headroom. <code>scheduler.cpuOvercommit</code> and <code>scheduler.memoryOvercommit</code> default to <code>1.0</code> and must be between <code>1.0</code> and <code>16.0</code>. VM create uses that ceiling together with <code>--label</code> and <code>--anti-affinity</code>. See <a href="vm-creation.html">VM creation</a>.</p>
+
             <h2 data-i18n="userdoc.install.h2.next">Next steps</h2>
             <ul>
                 <li><a href="first-cluster.html" style="color:var(--accent-primary)">First cluster</a> &mdash; full walkthrough with VM creation.</li>

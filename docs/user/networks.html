@@ -170,6 +170,37 @@ spec:
             <pre><code>kctl node install ... --disable-vxlan</code></pre>
             <p data-i18n-html="userdoc.networks.disablevxlan.p2">The controller will reject VXLAN network creation requests targeting that node with a <code>FailedPrecondition</code> error.</p>
 
+            <h2>IPv6</h2>
+            <p>A network stays IPv4-only until it is given a /64 whose host bits are clear. The gateway must be the first address of that prefix. The controller then assigns each NIC the next host address, starting at <code>::2</code>, and cloud-init adds it beside the IPv4 address. The bridge receives the gateway. There is no DHCPv6.</p>
+            <div class="docs-cli-only">
+            <pre><code>kctl create network overlay \
+  --external-ip 0.0.0.0 \
+  --gateway-ip 10.240.0.1 \
+  --type vxlan \
+  --ipv6-prefix fd00:10:240::/64 \
+  --ipv6-gateway fd00:10:240::1</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+            <pre><code>kind: Network
+metadata:
+  name: overlay
+spec:
+  type: vxlan
+  externalIp: 0.0.0.0
+  gatewayIp: 10.240.0.1
+  ipv6Prefix: fd00:10:240::/64
+  ipv6Gateway: fd00:10:240::1</code></pre>
+            </div>
+
+            <h2>East-west firewall</h2>
+            <p><code>--east-west-firewall</code> (YAML <code>spec.eastWestFirewall: true</code>) drops VM-to-VM traffic on that bridge. Established flows, the gateway, DHCP, and security-group rules that name a target IP stay allowed. The filter is off unless the network asks for it. On a <code>255.255.255.0</code> mask the drop covers the /24.</p>
+
+            <h2>Multi-homed VMs</h2>
+            <p>NIC 0 is <code>--network</code> and owns the guest default route. Repeat <code>--extra-network</code> for each further network, up to eight NICs in total. Two NICs on the same VM cannot join the same network. NAT extras get a DHCP reservation that does not replace the default route. VXLAN extras get a static address and no gateway.</p>
+            <div class="docs-cli-only">
+            <pre><code>kctl create vm web --network frontend --extra-network backend</code></pre>
+            </div>
+
             <h2 data-i18n="userdoc.networks.h2.vmattach">VM network attachment</h2>
             <p data-i18n-html="userdoc.networks.vmattach.p1">Attach a VM to a network at creation time:</p>
             <div class="docs-cli-only">

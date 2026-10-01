@@ -89,9 +89,11 @@
             <pre><code>bridge fdb append 00:00:00:00:00:00 dev vxlan&lt;VNI&gt; dst &lt;peer_ip&gt;</code></pre>
             <p data-i18n="userdoc.vxlan.peers.p2">This implements head-end replication (flood-to-peers): BUM traffic is replicated to every known peer.</p>
             <p data-i18n="userdoc.vxlan.peers.p3">When a node joins or leaves a VXLAN network, the controller pushes updated configuration to the other nodes so VTEP forwarding entries stay consistent.</p>
+            <p>Peer entries include only other nodes that are ready and approved and that have the same network name. They are sorted by node id, with one entry per address. A node that is no longer ready drops out of the forwarding database the next time a member's config is generated.</p>
 
             <h2 data-i18n="userdoc.vxlan.h2.addressing">VM addressing</h2>
-            <p data-i18n-html="userdoc.vxlan.addressing.p">The controller allocates the next address in the subnet; addresses are not reclaimed when a VM is deleted. On VXLAN overlays, allocation is cluster-wide for a given network name, so VMs on different hosts never receive the same IP on the same overlay. Addresses are assigned via cloud-init static network configuration, not DHCP.</p>
+            <p data-i18n-html="userdoc.vxlan.addressing.p">The controller allocates the next address in the subnet. Deleting a VM returns that VXLAN address to a free list, and the next guest on the overlay reuses the lowest free address that is not still assigned. Allocation is cluster-wide for a given network name, so VMs on different hosts never receive the same IP on the same overlay. Addresses are assigned via cloud-init static network configuration, not DHCP.</p>
+            <p>An optional IPv6 /64 follows the same pattern. The gateway is <code>prefix::1</code>, guests start at <code>::2</code>, and a deleted guest's address returns to the free list. There is no DHCPv6. See <a href="networks.html">Networks</a>.</p>
 
             <h2 data-i18n="userdoc.vxlan.h2.nat">Outbound NAT</h2>
             <p data-i18n-html="userdoc.vxlan.nat.p">Outbound internet access for VMs on VXLAN networks is optional. Enable it with <code>--enable-outbound-nat</code> (or omit <code>--no-outbound-nat</code>) when creating the network. When enabled, kcore adds an nftables masquerade rule on the gateway interface so that VMs can reach external destinations.</p>

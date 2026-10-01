@@ -168,6 +168,12 @@ spec:
 
             <h2 data-i18n="userdoc.vmcreate.h2.sched">Scheduling</h2>
             <p data-i18n-html="userdoc.vmcreate.sched.p">Omit <code>--target-node</code> to let the controller choose a node, or set <code>--target-node &lt;node id&gt;</code> to pin placement.</p>
+            <p>Automatic placement still picks the ready, approved node with the most free memory, then CPU. Free capacity is heartbeat load subtracted from physical capacity times the overcommit ratio in <code>controller.yaml</code> (<code>scheduler.cpuOvercommit</code> and <code>scheduler.memoryOvercommit</code>, both default <code>1.0</code>).</p>
+            <ul>
+                <li><code>--label dc=dc-a</code> requires that exact node label. Repeat the flag for more than one label.</li>
+                <li><code>--anti-affinity web</code> keeps this VM off any node that already hosts that group. An explicit <code>--target-node</code> that misses a label or already hosts the group is rejected.</li>
+            </ul>
+            <p>YAML: <code>spec.nodeLabels</code> is a list of <code>key=value</code> strings, and <code>spec.antiAffinity</code> is the group name.</p>
 
             <h2 data-i18n="userdoc.vmcreate.h2.ready">Readiness</h2>
             <ul>
