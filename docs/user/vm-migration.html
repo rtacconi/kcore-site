@@ -153,6 +153,10 @@ kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
 kctl drain node node-a --target-node node-b</code></pre>
             <p data-i18n="userdoc.vmmig.coldP1">Every VM on the source is reassigned in the control plane. Nix push removes units on the source and creates them on destinations. Ceph disks are remapped — not copied. Guests experience a full stop/start.</p>
 
+            <h2>Automatic failover</h2>
+            <p>A node that misses heartbeats for 90 seconds is marked <code>not-ready</code>. The controller then cold-moves each Ceph VM onto another healthy member of the same cluster. It does not contact the failed node. Filesystem, LVM, and ZFS VMs stay there, and <code>kctl get cluster-health</code> lists them as VMs on a not-ready node.</p>
+            <p>When the node heartbeats again, the controller pushes a configuration that no longer starts the moved guests. Set <code>failover.enabled: false</code> in <code>controller.yaml</code> to leave every VM where it is.</p>
+
             <h2 data-i18n="userdoc.vmmig.whatHappens">What happens under the hood</h2>
             <h3 data-i18n="userdoc.vmmig.whatLive">Live</h3>
             <ol>

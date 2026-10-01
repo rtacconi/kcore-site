@@ -907,27 +907,26 @@
                 </div>
 
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">2027</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">October 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128736;</span> Operations &amp; Node Lifecycle</h3>
+                        <h3><span class="card-icon shipped">&#128736;</span> Operations &amp; Node Lifecycle</h3>
                         <p>
-                            Day-2 tooling and stronger safety for node removal and VM continuity.
-                            Cordon and certificate invalidation on delete shipped in October 2026;
-                            cluster health, backup, and automatic migration are still planned.
+                            Day-2 tooling for node removal, cluster health, database snapshots,
+                            and moving shared-disk VMs when a node stops heartbeating.
                         </p>
                         <ul class="detail-list">
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span><code>GetClusterHealth</code> API</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>GetClusterHealth</code> API &mdash; <code>kctl get cluster-health</code> reports ready nodes, VMs left on not-ready nodes, certificates inside 30 days, and unresolved replication conflicts</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Backup and restore tooling</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Backup and restore tooling &mdash; <code>kctl backup -o snapshot.sqlite</code> and <code>kctl restore controller -f snapshot.sqlite --confirm</code></span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Automatic VM migration on node failure</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Automatic VM migration on node failure &mdash; after 90 seconds without a heartbeat, Ceph VMs move to another healthy member; local-disk VMs stay on the failed node</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
