@@ -310,8 +310,9 @@ a:hover {
     color: #3f2a08 !important;
 }
 
-.exit-import {
-    color: #1a1204;
+.exit-deadline .exit-import,
+.exit-deadline .exit-import:hover {
+    color: #000;
     font-weight: 700;
     text-decoration: underline;
 }
