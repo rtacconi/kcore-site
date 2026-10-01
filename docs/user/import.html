@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inventory a vCenter or Proxmox estate with kcore-migrate, convert exported disks with virt-v2v or qemu-img, and apply kcore_vm with Terraform.">
+    <title>Import from VMware or Proxmox - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/import.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Import from VMware or Proxmox - kcore documentation">
+    <meta property="og:description" content="Inventory a vCenter or Proxmox estate with kcore-migrate, convert exported disks with virt-v2v or qemu-img, and apply kcore_vm with Terraform.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/import.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" class="active" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <h1 data-i18n="userdoc.import.title">Import from VMware or Proxmox</h1>
+            <p class="note" data-i18n-html="userdoc.import.note">This guide moves guests from vCenter or Proxmox onto kcore. Moving a VM between kcore nodes is <a href="vm-migration.html">VM migration</a>.</p>
+            <p data-i18n-html="userdoc.import.intro"><a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a> is separate from <code>kctl</code>. Inventory reads the source API and writes Terraform. It does not copy disk bytes. <code>convert</code> turns an exported disk into qcow2 or raw by calling <code>virt-v2v</code> or <code>qemu-img</code>. <a href="https://github.com/kcorehypervisor/terraform-provider-kcore">terraform-provider-kcore</a> applies the VM, and <code>kctl</code> uploads the finished image.</p>
+
+            <h2 data-i18n="userdoc.import.h2.install">Install</h2>
+            <p data-i18n="userdoc.import.install">On a Linux jump host, <code>nix develop</code> in the kcore-migrate repository supplies Go plus <code>virt-v2v</code> and <code>qemu-img</code>. GitHub release archives also ship the inventory command for Linux and macOS. Disk conversion still runs on Linux.</p>
+<pre><code>git clone git@github.com:kcorehypervisor/kcore-migrate.git
+cd kcore-migrate
+nix develop
+make build
+./bin/kcore-migrate version</code></pre>
+
+            <h2 data-i18n="userdoc.import.h2.inventory">Inventory</h2>
+            <p data-i18n="userdoc.import.inventory">The password comes from <code>VMWARE_PASSWORD</code> or <code>PROXMOX_PASSWORD</code>, or from the variable named by <code>--password-env</code>. It is not a command-line flag. <code>--insecure</code> skips TLS verification. Both sources write the same guest record.</p>
+            <h3 data-i18n="userdoc.import.h3.vmware">VMware</h3>
+            <p data-i18n="userdoc.import.vmware">The VMware reader uses govmomi. It lists virtual machines and leaves the VMDKs on the datastore.</p>
+<pre><code>export VMWARE_PASSWORD=...
+kcore-migrate inventory \
+  --source vmware \
+  --endpoint https://vcenter.example \
+  --username migrate@vsphere.local \
+  --out ./migrate-out</code></pre>
+            <h3 data-i18n="userdoc.import.h3.proxmox">Proxmox</h3>
+            <p data-i18n="userdoc.import.proxmox">The Proxmox reader lists QEMU virtual machines and LXC containers. A host without a port is read on port 8006. Disks stay on the node.</p>
+<pre><code>export PROXMOX_PASSWORD=...
+kcore-migrate inventory \
+  --source proxmox \
+  --endpoint https://pve.example:8006 \
+  --username root@pam \
+  --out ./migrate-out</code></pre>
+
+            <h2 data-i18n="userdoc.import.h2.outputs">What inventory writes</h2>
+            <ul>
+                <li data-i18n-html="userdoc.import.outTf"><code>guests.tf</code> — one <code>kcore_vm</code> per guest: name, CPU, memory, the first disk size, and NICs.</li>
+                <li data-i18n-html="userdoc.import.outGaps"><code>gaps.md</code> — extra disks, templates, LXC containers, VLAN tags, raw device mappings, and distributed port groups.</li>
+            </ul>
+            <p data-i18n="userdoc.import.provider">The provider registers <code>kcore_vm</code> only. NIC blocks name networks that must already exist. <code>storage_backend</code> is <code>filesystem</code> until the provider accepts Ceph. <code>image_path</code> stays empty until convert produces a disk. <code>kctl</code> accepts raw or qcow2.</p>
+
+            <h2 data-i18n="userdoc.import.h2.convert">Convert</h2>
+            <p data-i18n="userdoc.import.convert">convert does not read VMDK itself. An OVA, OVF, VMX, or VMDK runs <code>virt-v2v -o disk</code>, which fixes the guest for KVM and writes <code>name-sda</code> into <code>--out</code>. A qcow2, raw, or img file runs <code>qemu-img convert</code>, which only changes the container format. That is the usual path for a Proxmox disk.</p>
+<pre><code>kcore-migrate convert --input guest.ova --out ./converted
+kcore-migrate convert --input vm-100-disk-0.qcow2 --format raw --out ./converted/vm-100.raw</code></pre>
+            <p data-i18n="userdoc.import.format"><code>--format</code> is <code>qcow2</code> (the default) or <code>raw</code>. <code>--tool virt-v2v</code> or <code>--tool qemu-img</code> overrides the choice. An OVA, OVF, or VMX cannot use qemu-img. Set <code>image_path</code> to the finished file and <code>image_format</code> to <code>qcow2</code> or <code>raw</code>.</p>
+
+            <h2 data-i18n="userdoc.import.h2.tools">Tools on the conversion host</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="userdoc.import.thPiece">Piece</th>
+                        <th data-i18n="userdoc.import.thRole">Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>virt-v2v</code></td><td data-i18n="userdoc.import.toolVirt">nixpkgs, in the Linux shell. Converts an exported VMware guest and installs virtio drivers.</td></tr>
+                    <tr><td><code>virtio-win</code></td><td data-i18n="userdoc.import.toolWin">Fedora Windows virtio drivers, already linked by the nixpkgs virt-v2v package.</td></tr>
+                    <tr><td><code>qemu-img</code></td><td data-i18n="userdoc.import.toolQemu">nixpkgs qemu-utils. Changes the container format only.</td></tr>
+                    <tr><td><code>nbdkit</code></td><td data-i18n="userdoc.import.toolNbd">Wrapped inside virt-v2v. Serves the source disk during conversion.</td></tr>
+                    <tr><td>VMware VDDK</td><td data-i18n="userdoc.import.toolVddk">Broadcom download for a direct vCenter read. Proprietary. Not in kcore-migrate and not in the GitHub release. The nixpkgs nbdkit build has no VDDK plugin, so this shell converts exported disks.</td></tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.import.h2.apply">Apply</h2>
+            <p data-i18n="userdoc.import.apply">Create the kcore networks named in <code>guests.tf</code>. Point <code>image_path</code> and <code>image_format</code> at the converted disk, then apply with the Terraform provider. Upload that same raw or qcow2 image with <code>kctl</code> when the cluster is ready to receive it.</p>
+
+            <h2 data-i18n="userdoc.import.h2.limits">Limits</h2>
+            <ul>
+                <li data-i18n="userdoc.import.limit1">Inventory does not copy disk bytes.</li>
+                <li data-i18n="userdoc.import.limit2">A direct read from vCenter waits on an operator-installed VDDK and an nbdkit built with the VDDK plugin.</li>
+                <li data-i18n="userdoc.import.limit3">LXC containers and templates are listed, and gaps.md says they are not a normal QEMU guest to convert as-is.</li>
+                <li data-i18n-html="userdoc.import.limit4">This is not live migration between kcore nodes. That path is <a href="vm-migration.html">VM migration</a> and needs shared Ceph storage.</li>
+            </ul>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+</body>
+</html>

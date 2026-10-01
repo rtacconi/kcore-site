@@ -74,6 +74,7 @@
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
                 <li><a href="vm-migration.html" class="active" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
                 <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
@@ -104,6 +105,7 @@
         <main class="docs-content">
             <h1 data-i18n="userdoc.vmmig.title">VM migration</h1>
             <p class="note" data-i18n-html="userdoc.vmmig.note">Cold drain and live migration require <strong>kcore SAN</strong> (<code>storage_backend: ceph</code>). Local filesystem / LVM / ZFS disks stay on one node. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
+            <p data-i18n-html="userdoc.vmmig.importP">Leaving vCenter or Proxmox is a different task. See <a href="import.html">Import from VMware or Proxmox</a>.</p>
             <p data-i18n="userdoc.vmmig.intro">Shared RBD means the guest disk is not copied when a VM changes host. You choose cold reassignment (stop/start via Nix) or Cloud Hypervisor live migration (memory over TCP while both nodes map the same image).</p>
 
             <h2 data-i18n="userdoc.vmmig.compare">Cold vs live</h2>
