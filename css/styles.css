@@ -255,12 +255,145 @@ a:hover {
     font-size: 1.1rem;
 }
 
+/* Fixed stack: countdown first, then the menu. Sticky failed under body overflow-x. */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4000;
+}
+
+.site-header .navbar {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    z-index: 1;
+}
+
+/* VCSP term strip */
+.exit-deadline {
+    margin-top: 0;
+    background: #f59e0b;
+    color: #1a1204;
+    border-bottom: 1px solid #b45309;
+    padding: 0.7rem 0;
+}
+
+.exit-deadline-inner {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 1.25rem 1.5rem;
+    align-items: center;
+}
+
+.exit-kicker {
+    color: #1a1204;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 0.3rem;
+}
+
+.exit-deadline p {
+    color: #1a1204;
+    margin: 0;
+    line-height: 1.45;
+    font-size: 0.95rem;
+}
+
+.exit-note {
+    margin-top: 0.35rem !important;
+    font-size: 0.8rem !important;
+    color: #3f2a08 !important;
+}
+
+.exit-dateblock {
+    min-width: 14rem;
+}
+
+.exit-date {
+    display: block;
+    font-size: 1.85rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #1a1204;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+.exit-days-line {
+    margin: 0.35rem 0 0;
+    color: #1a1204;
+    font-size: 0.95rem;
+}
+
+.exit-days {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #1a1204;
+}
+
+.exit-deadline .btn-primary {
+    background: #1a1204;
+    color: #f59e0b;
+}
+
+.exit-deadline .btn {
+    white-space: nowrap;
+}
+
 /* Hero Section */
 .hero {
     position: relative;
-    padding: 10rem 0 6rem;
-    margin-top: 60px;
+    padding: 4.5rem 0 4rem;
+    margin-top: 0;
     overflow: hidden;
+}
+
+.hero-secondary-link {
+    margin-top: 0.25rem;
+    color: var(--text-tertiary);
+    font-size: 0.95rem;
+}
+
+.hero-secondary-link a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.hero-secondary-link a:hover {
+    text-decoration: underline;
+}
+
+.audience {
+    padding: 3.5rem 0 1rem;
+}
+
+.audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.audience-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.audience-card h3 {
+    margin-bottom: 0.6rem;
+}
+
+.audience-card p {
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin: 0;
 }
 
 .hero-background {
@@ -818,7 +951,16 @@ a:hover {
     }
     
     .hero {
-        padding: 6rem 0 4rem;
+        padding: 3rem 0 2.5rem;
+    }
+
+    .exit-deadline-inner,
+    .audience-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exit-dateblock {
+        min-width: 0;
     }
     
     .platform-content,

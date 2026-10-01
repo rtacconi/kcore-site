@@ -74,7 +74,23 @@
         }
     </style>
 </head>
-<body>
+<body class="home">
+    <header class="site-header">
+    <aside class="exit-deadline" aria-label="VMware cloud partner contract term">
+        <div class="container exit-deadline-inner">
+            <div class="exit-dateblock">
+                <p class="exit-kicker" data-i18n="deadline.kicker">VMware exit</p>
+                <time class="exit-date" datetime="2027-03-31" data-i18n="deadline.date">31 March 2027</time>
+                <p class="exit-days-line"><span class="exit-days" id="vcsp-days">—</span> <span id="vcsp-days-label" data-i18n="deadline.daysLabel">days left</span></p>
+            </div>
+            <div>
+                <p data-i18n="deadline.body">Most VMware Cloud Service Provider contracts that Broadcom will not renew end on this date.</p>
+                <p class="exit-note" data-i18n="deadline.note">This is not the end of VMware, and it is not an on-prem renewal date. Check your own contract. On-prem Broadcom quotes are usually per core, often with a 72-core minimum.</p>
+            </div>
+            <a class="btn btn-primary" href="mailto:team@tacconiconsulting.com?subject=kcore%20VCSP%20estate%20assessment" data-i18n="deadline.cta">Assess our estate</a>
+        </div>
+    </aside>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
@@ -95,6 +111,7 @@
             </ul>
         </div>
     </nav>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -102,22 +119,20 @@
             <div class="hero-content">
                 <h1 class="hero-title" data-i18n-html="hero.title">
                     A practical exit from<br>
-                    <span class="gradient-text">VMware &amp; Broadcom pricing</span>
+                    <span class="gradient-text">VMware pricing</span>
                 </h1>
                 <p class="hero-subtitle" data-i18n="hero.subtitle">
-                    kcore is an open-core NixOS hypervisor for edge and datacenters: immutable hosts with atomic rollback,
-                    Windows guests, GPU passthrough, and multi-datacenter HA. Download the Community ISO free—or hire us to migrate from VMware or Proxmox.
+                    Per-socket licensing, hosts that boot the previous generation if an update fails, and Windows guests. Download the evaluation ISO, or hire us to move an estate from VMware or Proxmox.
                 </p>
                 <div class="hero-buttons">
-                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-primary" data-i18n="hero.download">Download ISO</a>
-                    <a href="pricing.html" class="btn btn-secondary" data-i18n="hero.pricing">Pricing &amp; Buy</a>
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20services" class="btn btn-secondary" data-i18n="hero.hire">Hire for migration</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20assessment" class="btn btn-primary" data-i18n="hero.hire">Book a migration assessment</a>
+                    <a href="pricing.html" class="btn btn-secondary" data-i18n="hero.pricing">See pricing</a>
                 </div>
-                <p style="margin-top: 1.25rem; color: var(--text-tertiary); font-size: 0.95rem;" data-i18n="hero.techHint">
-                    Platform engineers: Terraform, gRPC, and MCP details live in
-                    <a href="docs.html" style="color: var(--accent-primary);">Docs</a>
-                    and
-                    <a href="features.html" style="color: var(--accent-primary);">Features</a>.
+                <p class="hero-secondary-link">
+                    <a href="https://github.com/kcorehypervisor/kcore/releases" data-i18n="hero.download">Download the evaluation ISO</a>
+                </p>
+                <p class="hero-secondary-link" data-i18n-html="hero.techHint">
+                    The install walkthrough is further down this page. API and Terraform detail is in <a href="docs.html">Docs</a>.
                 </p>
             </div>
         </div>
@@ -126,22 +141,26 @@
         </div>
     </section>
 
-    <!-- Quickstart Asciinema -->
-    <section class="quickstart-demo">
+    <section class="audience" id="who">
         <div class="container">
-            <h2>First cluster in one terminal demo</h2>
-            <p class="intro">
-                This asciinema shows the full first-run flow: install and approve your first node,
-                add the operator SSH key, create a Debian 12 VM, discover its IP with <code>describe</code>,
-                and SSH into it.
-            </p>
-            <p class="links">
-                Read the
-                <a href="blog/first-node-debian12-quickstart.html">quickstart blog post</a>
-                or the operator guides in
-                <a href="docs.html">Docs</a>.
-            </p>
-            <div id="first-cluster-demo"></div>
+            <div class="section-header">
+                <h2 data-i18n="audience.title">Three decisions this page is for</h2>
+                <p data-i18n="audience.subtitle">Pick the one that matches the renewal in front of you.</p>
+            </div>
+            <div class="audience-grid">
+                <article class="audience-card">
+                    <h3 data-i18n="audience.csp.title">Hosting providers leaving VCSP</h3>
+                    <p data-i18n="audience.csp.desc">Current customer contracts can still run. New commitment contracts and renewals cannot. We assess the estate and quote a move onto kcore before the term ends.</p>
+                </article>
+                <article class="audience-card">
+                    <h3 data-i18n="audience.onprem.title">On-prem estates facing a Broadcom quote</h3>
+                    <p data-i18n="audience.onprem.desc">kcore is priced per CPU socket per year, not per core, and there is no 72-core order minimum. Compare that number with the renewal before you re-platform.</p>
+                </article>
+                <article class="audience-card">
+                    <h3 data-i18n="audience.edge.title">Sites where a bad update is an outage</h3>
+                    <p data-i18n="audience.edge.desc">Each host update is one transaction. If it fails, the machine boots the previous generation. That is the reason to look at kcore for retail, plant, and remote racks.</p>
+                </article>
+            </div>
         </div>
     </section>
 
@@ -149,8 +168,8 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2 data-i18n="features.title">Built for production estates</h2>
-                <p data-i18n="features.subtitle">What matters when you leave VMware—not a feature wishlist</p>
+                <h2 data-i18n="features.title">What you are actually buying</h2>
+                <p data-i18n="features.subtitle">Outcomes a renewal conversation can use. Stack detail stays in the docs.</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
@@ -161,8 +180,8 @@
                             <line x1="12" y1="22.08" x2="12" y2="12"></line>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.atomic.title">Atomic updates &amp; rollback</h3>
-                    <p data-i18n="features.atomic.desc">NixOS under the hood: every host change is atomic. If an update breaks something, roll back in seconds. The host OS is immutable.</p>
+                    <h3 data-i18n="features.atomic.title">A failed update boots the last good host</h3>
+                    <p data-i18n="features.atomic.desc">Every host change is one transaction. If an update breaks the machine, it boots the previous generation. The host operating system is immutable.</p>
                 </div>
 
                 <div class="feature-card">
@@ -174,7 +193,7 @@
                         </svg>
                     </div>
                     <h3 data-i18n="features.windows.title">Windows guests</h3>
-                    <p data-i18n="features.windows.desc">Run Windows Server and Windows desktop guests alongside Linux. Suitable for mixed estates leaving VMware.</p>
+                    <p data-i18n="features.windows.desc">Windows Server and Windows desktop guests run next to Linux. A mixed estate does not have to split platforms to leave VMware.</p>
                 </div>
 
                 <div class="feature-card">
@@ -184,8 +203,8 @@
                             <path d="M9 9h6v6H9z"></path>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.gpu.title">GPU passthrough</h3>
-                    <p data-i18n="features.gpu.desc">Assign physical GPUs to VMs with VFIO passthrough. NVIDIA vGPU / SR-IOV support is under planning.</p>
+                    <h3 data-i18n="features.gpu.title">One physical GPU per VM</h3>
+                    <p data-i18n="features.gpu.desc">A physical GPU can be assigned to one VM. Licensed NVIDIA vGPU, where many VMs share one card, is not available yet.</p>
                 </div>
 
                 <div class="feature-card">
@@ -196,8 +215,8 @@
                             <path d="M2 12l10 5 10-5"></path>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.ha.title">Multi-datacenter HA</h3>
-                    <p data-i18n="features.ha.desc">Control-plane replication across datacenters with CRDTs, a Rust gRPC stack, and formal methods (including TLA+) for distributed behaviour.</p>
+                    <h3 data-i18n="features.ha.title">Move VMs when the disk is shared</h3>
+                    <p data-i18n="features.ha.desc">VMs move between hosts when their disks are on shared Ceph storage. The control plane can replicate across datacenters. This is not vSphere HA, and live migration needs Ceph.</p>
                 </div>
 
                 <div class="feature-card">
@@ -206,8 +225,8 @@
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.migrate.title">Migration help</h3>
-                    <p data-i18n="features.migrate.desc">We are building a VMware work package and are available for hire to export workloads from VMware and Proxmox onto kcore.</p>
+                    <h3 data-i18n="features.migrate.title">Migration is a project, not a button</h3>
+                    <p data-i18n="features.migrate.desc">There is no self-service VMware importer yet. We export the workloads and cut them over as a paid project. The same offer covers Proxmox.</p>
                 </div>
 
                 <div class="feature-card">
@@ -217,12 +236,12 @@
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                     </div>
-                    <h3 data-i18n="features.cost.title">Predictable open-core pricing</h3>
-                    <p data-i18n="features.cost.desc">Per CPU socket—not per core. Community ISO free; Standard, Premium, and Enterprise for signed ISOs and support. No 72-core order minimums.</p>
+                    <h3 data-i18n="features.cost.title">Per socket, not per core</h3>
+                    <p data-i18n="features.cost.desc">You pay per CPU socket per year. The evaluation ISO is free. There is no per-core meter and no 72-core minimum.</p>
                 </div>
             </div>
             <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
-                <span data-i18n="features.techMore">Terraform, gRPC API, MCP for AI agents, and deep architecture notes:</span>
+                <span data-i18n="features.techMore">API, Terraform, and architecture notes:</span>
                 <a href="docs.html" style="color: var(--accent-primary);">Docs</a>
                 ·
                 <a href="features.html" style="color: var(--accent-primary);">Features</a>
@@ -241,20 +260,37 @@
                 <div style="padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem;">
                     <strong style="color: var(--success);">Available now</strong>
                     <p style="color: var(--text-secondary); margin: 0.5rem 0 0; line-height: 1.65;" data-i18n="capability.now">
-                        Community ISO &amp; kctl on GitHub Releases · Windows guests · GPU passthrough · atomic host updates &amp; rollback · multi-node clusters · Ceph-backed live migration where configured · multi-datacenter control-plane replication (CRDTs) on a Rust / gRPC stack with formal methods and TLA+ modelling for distributed behaviour.
+                        Evaluation ISO and kctl on GitHub Releases. Windows guests. A physical GPU assigned to one VM. Atomic host updates and rollback. Multi-node clusters. Live migration when disks are on Ceph. Control-plane replication across datacenters.
                     </p>
                 </div>
                 <div style="padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem;">
                     <strong style="color: var(--accent-primary);">In progress / under planning</strong>
                     <p style="color: var(--text-secondary); margin: 0.5rem 0 0; line-height: 1.65;" data-i18n="capability.soon">
-                        VMware migration work package (inventory → kcore declarative config) · NVIDIA vGPU / SR-IOV · integrated backup product. Until the VMware package ships, hire us to migrate from VMware or Proxmox.
+                        A self-service VMware importer is not shipped. NVIDIA vGPU is not shipped. There is no integrated backup product. Until import exists, migration is a service we sell.
                     </p>
                 </div>
                 <p style="text-align: center; margin-top: 0.5rem;">
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20services" class="btn btn-primary" data-i18n="capability.hire">Hire us for migration</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20assessment" class="btn btn-primary" data-i18n="capability.hire">Book a migration assessment</a>
                     <a href="docs.html" class="btn btn-secondary" style="margin-left: 0.5rem;" data-i18n="capability.docs">Technical docs</a>
                 </p>
             </div>
+        </div>
+    </section>
+
+    <!-- Quickstart Asciinema: for the person who will install, after the decision content -->
+    <section class="quickstart-demo">
+        <div class="container">
+            <h2 data-i18n="demo.title">For the engineer who will install it</h2>
+            <p class="intro" data-i18n="demo.intro">
+                This recording is the first-run flow: install and approve a node, add an operator SSH key, create a Debian 12 VM, find its IP, and SSH in. It is not the migration path.
+            </p>
+            <p class="links">
+                Read the
+                <a href="blog/first-node-debian12-quickstart.html">quickstart blog post</a>
+                or the operator guides in
+                <a href="docs.html">Docs</a>.
+            </p>
+            <div id="first-cluster-demo"></div>
         </div>
     </section>
 
@@ -299,42 +335,6 @@
                     </ul>
                 </div>
                 <div class="platform-visual">
-                    <!-- AI Chat Window -->
-                    <div class="chat-window" style="margin-bottom: 1.5rem;">
-                        <div class="chat-header">
-                            <span class="status-dot"></span>
-                            <span>AI Infrastructure Assistant</span>
-                        </div>
-                        <div class="chat-body" style="max-height: 300px; padding: 1rem;">
-                            <div class="message user">
-                                <p>Show me the current state of our infrastructure. Any issues?</p>
-                            </div>
-                            <div class="message assistant">
-                                <p><strong>Infrastructure Overview:</strong></p>
-                                <p style="margin: 0.5rem 0; font-size: 0.9rem;">
-                                    ✓ <strong>3 VMs running</strong> across 2 nodes<br>
-                                    ✓ <strong>Total resources:</strong> 14 vCPUs, 14GB RAM<br>
-                                    ⚠️ <strong>Node-02:</strong> CPU usage at 78%<br>
-                                    ✓ <strong>Storage:</strong> 128GB used / 500GB available
-                                </p>
-                                <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-tertiary);">
-                                    💡 Recommendation: Consider scaling node-02 or redistributing workload.
-                                </p>
-                            </div>
-                            <div class="message user">
-                                <p>What's running on node-01?</p>
-                            </div>
-                            <div class="message assistant">
-                                <p style="font-size: 0.9rem;">
-                                    <strong>Node-01 workloads:</strong><br>
-                                    • production-app (4GB, 4 vCPU) - running<br>
-                                    • dev-web (2GB, 2 vCPU) - stopped<br><br>
-                                    Current load: 32% CPU, 6GB/16GB RAM
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Terminal Window -->
                     <div class="terminal-window">
                         <div class="terminal-header">
@@ -398,12 +398,12 @@ Created:     2026-03-10 14:23:45</span>
     <section id="get-started" class="cta">
         <div class="container">
             <div class="cta-content">
-                <h2 data-i18n="cta.title">Try it out</h2>
-                <p data-i18n="cta.desc">Download the Community Edition ISO from GitHub Releases. For official signed ISOs, enterprise updates, and support—or to hire us for a VMware/Proxmox migration—see Pricing or email team@tacconiconsulting.com.</p>
+                <h2 data-i18n="cta.title">Get a fit or a no-fit</h2>
+                <p data-i18n="cta.desc">Send socket count, roughly how many Windows and Linux guests, and whether you are a hosting provider or an on-prem estate. We reply with whether kcore is a sensible target and what a migration project looks like.</p>
                 <div class="cta-buttons">
-                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-primary btn-large" data-i18n="cta.download">Download ISO &amp; kctl</a>
-                    <a href="pricing.html" class="btn btn-secondary btn-large" data-i18n="cta.buy">Buy subscription</a>
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20services" class="btn btn-secondary btn-large" data-i18n="cta.hire">Hire for migration</a>
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20assessment" class="btn btn-primary btn-large" data-i18n="cta.hire">Book a migration assessment</a>
+                    <a href="pricing.html" class="btn btn-secondary btn-large" data-i18n="cta.buy">See pricing</a>
+                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-secondary btn-large" data-i18n="cta.download">Download the evaluation ISO</a>
                 </div>
             </div>
         </div>
@@ -468,6 +468,35 @@ Created:     2026-03-10 14:23:45</span>
     <script src="js/commerce.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        (function () {
+            function pinHeader() {
+                var header = document.querySelector(".site-header");
+                if (!header) return;
+                document.body.style.paddingTop = header.offsetHeight + "px";
+            }
+            var end = new Date("2027-03-31T22:59:59Z");
+            function renderCountdown() {
+                var days = document.getElementById("vcsp-days");
+                var label = document.getElementById("vcsp-days-label");
+                if (!days) return;
+                var remaining = end.getTime() - Date.now();
+                if (remaining <= 0) {
+                    days.textContent = "0";
+                    if (label) label.textContent = "31 March 2027 has passed";
+                    return;
+                }
+                days.textContent = String(Math.ceil(remaining / 86400000));
+            }
+            function refreshHeader() {
+                renderCountdown();
+                pinHeader();
+            }
+            document.addEventListener("DOMContentLoaded", refreshHeader);
+            document.addEventListener("kcore:lang", refreshHeader);
+            window.addEventListener("resize", pinHeader);
+        })();
+    </script>
     <script>
         (function () {
             var mc = typeof navigator !== "undefined" && navigator.modelContext;
