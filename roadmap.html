@@ -913,6 +913,8 @@
                         <h3><span class="card-icon planned">&#128736;</span> Operations &amp; Node Lifecycle</h3>
                         <p>
                             Day-2 tooling and stronger safety for node removal and VM continuity.
+                            Cordon and certificate invalidation on delete shipped in October 2026;
+                            cluster health, backup, and automatic migration are still planned.
                         </p>
                         <ul class="detail-list">
                             <li>
@@ -928,8 +930,8 @@
                                 <span>Automatic VM migration on node failure</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Node cordon and certificate invalidation on delete</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Node cordon and certificate invalidation on delete &mdash; <code>kctl node cordon</code> stops new placement without moving VMs; <code>kctl node delete</code> refuses while VMs, workloads, or networks remain, then revokes the node's certificates (RFC 5280 reason 5) and removes the row</span>
                             </li>
                         </ul>
                     </div>

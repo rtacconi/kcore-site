@@ -208,6 +208,10 @@ kctl node approve &lt;NODE_ID&gt;</code></pre>
 <pre><code>kctl node reject &lt;NODE_ID&gt;</code></pre>
             <p class="note" data-i18n="userdoc.addnode.note.approval">Even with auto-approval enabled, all node communication is authenticated via mTLS. Only nodes with a certificate signed by the cluster CA can register.</p>
 
+            <h2>Cordon and removal</h2>
+            <p><code>kctl node cordon &lt;NODE_ID&gt;</code> marks the node unschedulable. VMs already running there stay. Heartbeats do not clear the cordon. <code>kctl node uncordon &lt;NODE_ID&gt;</code> returns an approved node to scheduling. A node that is draining or drained stays that way; cordon does not evacuate guests. Disk-layout evacuate still uses the separate <code>draining</code> status.</p>
+            <p><code>kctl node delete &lt;NODE_ID&gt;</code> removes a node only after it has no VMs, workloads, or networks. It revokes every certificate issued to that node with RFC 5280 reason 5 (cessation of operation), refreshes the revocation set and CRL, then deletes the row. <code>kctl revoke cert --node &lt;NODE_ID&gt;</code> still revokes certificates without deleting the node.</p>
+
             <h2 data-i18n="userdoc.addnode.h2.certs">Certificates</h2>
             <p data-i18n="userdoc.addnode.p.certs1">Node certificates are renewed automatically when within 30 days of expiry. Operators can rotate the sub-CA at any time:</p>
 <pre><code>kctl rotate sub-ca</code></pre>
@@ -232,6 +236,8 @@ kctl node approve &lt;NODE_ID&gt;</code></pre>
                 <tr><td data-i18n="userdoc.addnode.td.installctrl">Install (with controller)</td><td data-i18n-html="userdoc.addnode.td.installctrlcmd"><code>kctl node install --node &lt;IP&gt;:9091 --os-disk /dev/sda --join-controller &lt;host:port&gt; --run-controller --dc-id DC1 -k</code></td></tr>
                 <tr><td data-i18n="userdoc.addnode.td.listnodes">List / describe nodes</td><td data-i18n-html="userdoc.addnode.td.listnodescmd"><code>kctl get nodes</code> / <code>kctl get node &lt;ID&gt;</code></td></tr>
                 <tr><td data-i18n="userdoc.addnode.td.approvereject">Approve / reject</td><td data-i18n-html="userdoc.addnode.td.approverejectcmd"><code>kctl node approve &lt;ID&gt;</code> / <code>kctl node reject &lt;ID&gt;</code></td></tr>
+                <tr><td>Cordon / uncordon</td><td><code>kctl node cordon &lt;ID&gt;</code> / <code>kctl node uncordon &lt;ID&gt;</code></td></tr>
+                <tr><td>Delete an empty node</td><td><code>kctl node delete &lt;ID&gt;</code></td></tr>
                 <tr><td data-i18n="userdoc.addnode.td.rotatesubca">Rotate sub-CA</td><td data-i18n-html="userdoc.addnode.td.rotatesubcacmd"><code>kctl rotate sub-ca</code></td></tr>
                 <tr><td data-i18n="userdoc.addnode.td.multictrl">Multi-controller query</td><td data-i18n-html="userdoc.addnode.td.multictrlcmd"><code>kctl -s &lt;IP1&gt;:9090 -s &lt;IP2&gt;:9090 get nodes</code></td></tr>
             </table>
