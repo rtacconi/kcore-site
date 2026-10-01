@@ -147,7 +147,7 @@
             <a href="https://github.com/kcorehypervisor/windows-guest">kcorehypervisor/windows-guest</a>.
             It installs Server 2022 under QEMU with virtio-win 0.1.240, turns on the serial console
             (SAC) and OpenSSH, and leaves a raw disk. Newer virtio-win builds fail on Cloud Hypervisor.
-            The recordings below are the kcore side: build the ISO, activate the CPU flag, create the VM.
+            The recordings below are the kcore side: build the ISO, declare the VM in Terraform, then watch it boot.
         </p>
 
         <h2>1. Build the kcore ISO</h2>
@@ -159,18 +159,51 @@
         <p>The result is a bootable ISO with volume id <code>KCORE</code>.</p>
         <div id="windows-iso-cast" class="demo-wrap"></div>
 
-        <h2>2. Activate the Windows CPU flag</h2>
+        <h2>2. Declare the VM in Terraform</h2>
         <p>
-            Cloud Hypervisor does not boot Windows reliably unless the CPU line includes
-            <code>kvm_hyperv=on</code>. Linux guests tolerate that flag, so kcore sets it on every VM
-            rather than making it a per-guest switch. The same unit allows 15 minutes for the first
-            copy of the image onto an LVM or ZFS volume. A Windows qcow2 is larger than the default
-            90 second start timeout, and a killed copy used to be skipped on the next start because
-            the volume already existed.
+            You do not edit the node. A current kcore image already starts every guest with
+            Hyper-V CPU enlightenments, which Windows needs and Linux ignores. The configuration
+            you write is a <code>kcore_vm</code> resource. Point it at the image uploaded to the
+            node. Leave cloud-init and SSH keys unset: Windows logs in as the Administrator
+            account from the image, not as a cloud-init user.
         </p>
+<pre><code>terraform {
+  required_providers {
+    kcore = {
+      source  = "kcorehypervisor/kcore"
+      version = "0.3.0"
+    }
+  }
+}
+
+provider "kcore" {
+  controller_address = "192.168.40.107:9090"
+  tls_cert_path      = var.tls_cert_path
+  tls_key_path       = var.tls_key_path
+  tls_ca_path        = var.tls_ca_path
+}
+
+resource "kcore_vm" "win" {
+  name               = "win-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "lvm"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+
+  image_path   = "/var/lib/kcore/images/windows-server-2022.qcow2"
+  image_format = "qcow2"
+  target_node  = "node-107"
+
+  nic {
+    network = "default"
+    model   = "virtio"
+  }
+
+  desired_state = "running"
+}</code></pre>
         <p>
-            The lines live in <code>modules/ch-vm/vm-service.nix</code>. After the node has that file,
-            <code>nixos-rebuild switch</code> restarts the VM unit with the new command line.
+            <code>storage_size_bytes</code> is the virtual size of the disk, 40 GiB here, not the
+            size of the compact qcow2 file. <code>terraform apply</code> creates the VM on the controller.
         </p>
         <div id="windows-config-cast" class="demo-wrap"></div>
 
