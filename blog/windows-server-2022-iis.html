@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Windows Server 2022 running on kcore, with IIS installed from the command line.">
+    <meta name="description" content="Build a kcore ISO, turn on Hyper-V CPU enlightenments, create a Windows Server 2022 VM, and serve IIS.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
     <title>Windows Server 2022 on kcore - kcore hypervisor</title>
     <link rel="canonical" href="https://kcorehypervisor.com/blog/windows-server-2022-iis.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="Windows Server 2022 on kcore">
-    <meta property="og:description" content="A Windows Server 2022 guest on Cloud Hypervisor, with IIS installed from the command line.">
+    <meta property="og:description" content="Build a kcore ISO, turn on Hyper-V CPU enlightenments, create a Windows Server 2022 VM, and serve IIS.">
     <meta property="og:url" content="https://kcorehypervisor.com/blog/windows-server-2022-iis.html">
     <meta property="og:image" content="https://kcorehypervisor.com/assets/windows-server-2022-iis.png">
     <meta property="og:image:alt" content="Default IIS welcome page on Windows Server 2022">
@@ -90,6 +91,18 @@
             margin-bottom: 1.5rem;
         }
         .back-link:hover { text-decoration: underline; }
+        .demo-wrap {
+            margin: 1.5rem 0 2rem;
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
     </style>
 </head>
 <body>
@@ -122,19 +135,73 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.win.back">← Back to blog</a>
 
-        <p data-i18n="bp.win.intro">
-            kcore runs guests on Cloud Hypervisor. Windows Server needs the Cloud Hypervisor UEFI firmware
-            and Hyper-V CPU enlightenments (<code>kvm_hyperv=on</code>) on every VM. With those set,
-            Server 2022 boots from a virtio disk and comes up on a virtio NIC.
+        <p>
+            Windows Server runs on kcore as a normal VM. The guest disk is built once, outside the
+            cluster, from installation media you are licensed to use. The node then boots that disk
+            on Cloud Hypervisor. Three things have to be true or Windows stops at the boot manager:
+            the kcore ISO must include the VM module, every guest must get Hyper-V CPU enlightenments,
+            and the uploaded image must already contain virtio drivers.
+        </p>
+        <p>
+            The disk recipe is
+            <a href="https://github.com/kcorehypervisor/windows-guest">kcorehypervisor/windows-guest</a>.
+            It installs Server 2022 under QEMU with virtio-win 0.1.240, turns on the serial console
+            (SAC) and OpenSSH, and leaves a raw disk. Newer virtio-win builds fail on Cloud Hypervisor.
+            The recordings below are the kcore side: build the ISO, activate the CPU flag, create the VM.
         </p>
 
-        <h2>IIS from the command line</h2>
-        <p data-i18n="bp.win.iis">IIS is an inbox feature. From an Administrator command prompt:</p>
-<pre><code>powershell -Command "Install-WindowsFeature Web-Server -IncludeManagementTools"</code></pre>
+        <h2>1. Build the kcore ISO</h2>
+        <p>
+            The installer ISO is a NixOS image. It copies the <code>ch-vm</code> module onto the node,
+            including the Cloud Hypervisor unit that every VM uses. Build it from a checkout of kcore:
+        </p>
+<pre><code>nix build .#nixosConfigurations.kcore-iso.config.system.build.isoImage</code></pre>
+        <p>The result is a bootable ISO with volume id <code>KCORE</code>.</p>
+        <div id="windows-iso-cast" class="demo-wrap"></div>
 
-        <p data-i18n="bp.win.shot">
-            The page below is the stock IIS welcome site, served by that guest and opened from a
-            workstation through a port forward to the VM.
+        <h2>2. Activate the Windows CPU flag</h2>
+        <p>
+            Cloud Hypervisor does not boot Windows reliably unless the CPU line includes
+            <code>kvm_hyperv=on</code>. Linux guests tolerate that flag, so kcore sets it on every VM
+            rather than making it a per-guest switch. The same unit allows 15 minutes for the first
+            copy of the image onto an LVM or ZFS volume. A Windows qcow2 is larger than the default
+            90 second start timeout, and a killed copy used to be skipped on the next start because
+            the volume already existed.
+        </p>
+        <p>
+            The lines live in <code>modules/ch-vm/vm-service.nix</code>. After the node has that file,
+            <code>nixos-rebuild switch</code> restarts the VM unit with the new command line.
+        </p>
+        <div id="windows-config-cast" class="demo-wrap"></div>
+
+        <h2>3. Create the Windows VM</h2>
+        <p>
+            Upload the qcow2 from the recipe, then create the VM. <code>--storage-size-bytes</code> is
+            the virtual size of the disk (40 GiB here), not the size of the compact file. LVM converts
+            that qcow2 to a raw volume before Cloud Hypervisor opens it. The guest address on a NAT
+            network is reachable from the node. <code>kctl console</code> is the serial port, and SAC
+            comes up once Windows has started.
+        </p>
+<pre><code>kctl --node 192.168.40.107:9091 node upload-image \
+  -f windows-server-2022.qcow2 \
+  --name windows-server-2022.qcow2 \
+  --format qcow2
+
+kctl create vm win-01 \
+  --cpu 2 --memory 4G --network default \
+  --storage-backend lvm --storage-size-bytes 42949672960 \
+  --target-node node-107 \
+  --image-path /var/lib/kcore/images/windows-server-2022.qcow2 \
+  --image-format qcow2</code></pre>
+        <div id="windows-vm-cast" class="demo-wrap"></div>
+
+        <h2>4. IIS from the command line</h2>
+        <p>IIS is an inbox feature. From an Administrator command prompt on the guest:</p>
+<pre><code>powershell -Command "Install-WindowsFeature Web-Server -IncludeManagementTools"</code></pre>
+        <p>
+            The page below is the stock IIS welcome site. The workstation cannot open the guest
+            address directly, so the browser is pointed at a port forward through the node
+            (<code>ssh -N -L 8080:&lt;guest-ip&gt;:80 root@&lt;node&gt;</code>).
         </p>
 
         <figure>
@@ -179,6 +246,15 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+    <script>
+        if (window.AsciinemaPlayer) {
+            const opts = { autoPlay: false, loop: false, fit: "width", preload: true, speed: 1 };
+            AsciinemaPlayer.create("../assets/windows-iso-build.cast", document.getElementById("windows-iso-cast"), opts);
+            AsciinemaPlayer.create("../assets/windows-kcore-config.cast", document.getElementById("windows-config-cast"), opts);
+            AsciinemaPlayer.create("../assets/windows-vm-create.cast", document.getElementById("windows-vm-cast"), opts);
+        }
+    </script>
     <script src="../js/i18n.js"></script>
     <script src="../js/main.js"></script>
 </body>
