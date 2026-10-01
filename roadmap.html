@@ -779,23 +779,25 @@
                 </div>
 
                 <!-- =============================== -->
-                <!-- Q3 2026: WEBHOOKS -->
+                <!-- SEP 2026: WEBHOOKS -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Q3 2026</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">September 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128225;</span> Webhooks &amp; Events</h3>
+                        <h3><span class="card-icon shipped">&#128225;</span> Webhooks &amp; Events</h3>
                         <p>
                             Push-based event system for external integrations and alerting.
+                            Endpoints are configured in <code>controller.yaml</code> and
+                            receive a JSON POST, optionally signed with HMAC-SHA256.
                         </p>
                         <ul class="detail-list">
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Events: <code>node.heartbeat.missed</code>, <code>cert.expiry.warning</code>, <code>vm.state.changed</code></span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Configurable webhook endpoints in <code>controller.yaml</code></span>
                             </li>
                         </ul>
