@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Build a Windows 10 Pro disk, create the VM with kctl, and open the desktop through an SSH port forward.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
+    <title>Windows 10 on kcore - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/windows-10-desktop.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Windows 10 on kcore">
+    <meta property="og:description" content="Build a Windows 10 Pro disk, create the VM with kctl, and open the desktop through an SSH port forward.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/windows-10-desktop.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/windows-10-start.png">
+    <meta property="og:image:alt" content="Windows 10 Start menu on a kcore guest">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/windows-10-start.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .post-content figure {
+            margin: 1.5rem 0 2rem;
+        }
+        .post-content img {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content figcaption {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.6rem;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .demo-wrap {
+            margin: 1.5rem 0 2rem;
+            border: 1px solid var(--border-primary);
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        .post-content ul, .post-content ol {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1>Windows 10 on kcore</h1>
+            <p class="post-meta">10 October 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link">← Back to blog</a>
+
+        <p>
+            Windows 10 Pro runs on kcore as a normal VM. The disk is built once, on a machine with
+            KVM, from installation media you are licensed to use. The node then boots that disk on
+            Cloud Hypervisor. The desktop is Remote Desktop on the guest. Cloud Hypervisor does not
+            attach a VGA console, and Windows 10 does not offer the Server serial console (SAC), so
+            the way in is an SSH port forward from your workstation to the guest.
+        </p>
+        <p>
+            The same path already runs
+            <a href="windows-server-2022-iis.html">Windows Server 2022</a>.
+            Windows 10 uses the same <code>kcore_vm</code> and a different image: the
+            <code>w10</code> virtio drivers, OpenSSH, and Remote Desktop. The recipe is
+            <a href="https://github.com/kcorehypervisor/windows-guest">kcorehypervisor/windows-guest</a>.
+            It holds scripts only. Keep the ISO, the finished disk, and the Administrator password on the build machine.
+        </p>
+
+        <h2>1. Build the disk</h2>
+        <p>You need four things on the build machine:</p>
+        <ul>
+            <li>An x86_64 Linux host with <code>/dev/kvm</code> and Nix.</li>
+            <li>A Windows 10 ISO you are licensed to install. The profile used here is Windows 10 Pro, which accepts incoming Remote Desktop.</li>
+            <li>Free space for a sparse 40&nbsp;GiB disk. The file stays small until Windows writes it.</li>
+            <li>The pinned virtio drivers. The recipe downloads virtio-win 0.1.240 and checks its SHA256. Newer virtio-win builds fail on Cloud Hypervisor: 0.1.271 and later break the network driver, and 0.1.285 and later can bugcheck the disk driver when discard is advertised.</li>
+        </ul>
+        <p>
+            Clone the recipe, point <code>WIN_ISO</code> at your ISO, and run the Windows 10 profile.
+            <code>--list-images</code> prints the edition names inside that ISO.
+        </p>
+<pre><code>git clone https://github.com/kcorehypervisor/windows-guest
+cd windows-guest
+nix develop -c ./build-win10.sh --list-images
+WIN_ISO=/path/to/windows-10.iso nix develop -c ./build-win10.sh</code></pre>
+        <p>The build does five things:</p>
+        <ol>
+            <li>Downloads virtio-win 0.1.240 and checks the pinned SHA256.</li>
+            <li>Builds a second CD with the unattended answer file, <code>viostor</code>, and <code>NetKVM</code> from the <code>w10</code> driver directories.</li>
+            <li>Installs Windows 10 Pro under QEMU onto a virtio disk, using OVMF. The empty disk is tried first; setup then starts from the DVD. After installation the disk boots on its own.</li>
+            <li>Installs OpenSSH, enables Remote Desktop, and shuts the guest down.</li>
+            <li>Writes a generated Administrator password to <code>build/admin-password.txt</code> (mode 0600). Set <code>WINDOWS_ADMIN_PASSWORD</code> beforehand if you want to choose one (8–64 letters and digits).</li>
+        </ol>
+        <p>
+            Consumer Windows 10 setup stops when the answer file has no product key. The Windows 10
+            profile inserts Microsoft's public Pro setup key so installation can finish. That key
+            does not activate Windows. Watch the installer on VNC at <code>127.0.0.1:5900</code> if
+            it stops on a region or keyboard page.
+        </p>
+        <p>
+            The finished disk is <code>build/windows-10.raw</code>. Pack a qcow2 for upload:
+        </p>
+<pre><code>qemu-img convert -c -O qcow2 build/windows-10.raw windows-10.qcow2
+qemu-img info windows-10.qcow2</code></pre>
+        <p>
+            <code>qemu-img info</code> reports a virtual size of 40&nbsp;GiB. That virtual size is
+            what the node allocates. The compact file on disk is smaller.
+        </p>
+
+        <h2>2. Create the VM</h2>
+        <p>
+            Upload the qcow2 to the node that will run the guest, then create the VM. A current
+            kcore node already starts every guest with Hyper-V CPU enlightenments
+            (<code>kvm_hyperv=on</code>). Windows needs those enlightenments. Linux ignores them.
+            Leave cloud-init and SSH keys unset. Windows logs in as the Administrator account from
+            the image.
+        </p>
+        <p>
+            <code>--storage-size-bytes 42949672960</code> is 40&nbsp;GiB, the virtual size, matching
+            the image. LVM converts the qcow2 to a raw volume before Cloud Hypervisor opens it.
+            <code>--wait</code> returns when the VM is running. The convert takes several minutes
+            on a 40&nbsp;GiB disk.
+        </p>
+<pre><code>kctl --node 192.168.40.119:9091 node upload-image \
+  -f windows-10.qcow2 \
+  --name windows-10.qcow2 \
+  --format qcow2
+
+kctl create vm win10-01 \
+  --cpu 2 --memory 4G --network default \
+  --storage-backend lvm --storage-size-bytes 42949672960 \
+  --target-node node-119 \
+  --image-path /var/lib/kcore/images/windows-10.qcow2 \
+  --image-format qcow2 \
+  --wait</code></pre>
+        <div id="windows-10-cast" class="demo-wrap"></div>
+        <p>
+            <code>kctl get vms</code> then shows <code>win10-01</code> running. The guest is on the
+            node's NAT network. On a default kcore node that network is <code>10.240.0.0/24</code>.
+            This VM received <code>10.240.0.22</code>. The workstation has no route to that
+            network. SSH and Remote Desktop both go through the node.
+        </p>
+
+        <h2>3. The same VM in Terraform</h2>
+        <p>
+            <code>kctl create</code> and Terraform create the same object. The provider is
+            <code>kcorehypervisor/kcore</code> 0.3.0. Point <code>image_path</code> at the file
+            uploaded in the previous step. There is no separate Windows guest type.
+        </p>
+<pre><code>terraform {
+  required_providers {
+    kcore = {
+      source  = "kcorehypervisor/kcore"
+      version = "0.3.0"
+    }
+  }
+}
+
+provider "kcore" {
+  controller_address = "192.168.40.107:9090"
+  tls_cert_path      = var.tls_cert_path
+  tls_key_path       = var.tls_key_path
+  tls_ca_path        = var.tls_ca_path
+}
+
+resource "kcore_vm" "win10" {
+  name               = "win10-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "lvm"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+
+  image_path   = "/var/lib/kcore/images/windows-10.qcow2"
+  image_format = "qcow2"
+  target_node  = "node-119"
+
+  nic {
+    network = "default"
+    model   = "virtio"
+  }
+
+  desired_state = "running"
+}</code></pre>
+
+        <h2>4. Forward Remote Desktop</h2>
+        <p>
+            The recipe enables Remote Desktop and opens its firewall group, so the guest listens
+            on TCP 3389. From the workstation, forward a free local port to that guest port and
+            leave the SSH session open. The node login is the one you already use for that machine.
+        </p>
+<pre><code>ssh -N -L 3390:10.240.0.22:3389 root@192.168.40.119</code></pre>
+        <p>
+            The first number is the port on your workstation. The last number is the port on the
+            guest. They do not have to match. Port 3389 on a Linux workstation is often already
+            xrdp. Binding the forward there fails with <code>Address already in use</code>, and a
+            Remote Desktop client pointed at <code>127.0.0.1</code> with no port opens that local
+            Linux session. Choose a free local port, here 3390, and keep 3389 on the Windows side.
+        </p>
+        <p>In Remmina, or any Remote Desktop client:</p>
+        <ul>
+            <li>Server: <code>127.0.0.1:3390</code></li>
+            <li>Username: <code>Administrator</code></li>
+            <li>Password: the contents of <code>build/admin-password.txt</code> from the build machine</li>
+            <li>Domain: leave blank</li>
+        </ul>
+        <p>
+            SSH to the guest uses the same jump and the same account, on port 22:
+        </p>
+<pre><code>ssh -J root@192.168.40.119 Administrator@10.240.0.22</code></pre>
+
+        <h2>5. The desktop</h2>
+        <p>
+            The session below is the Windows 10 Start menu on <code>win10-01</code>, reached
+            through that forward. The guest is Windows 10 Pro, build 19045, with the virtio disk
+            and network drivers installed by the recipe.
+        </p>
+        <figure>
+            <img src="../assets/windows-10-start.png" alt="Windows 10 Start menu on a kcore guest, open to the Productivity tiles and the search box">
+            <figcaption>Windows 10 Start menu on win10-01, via Remote Desktop through the node.</figcaption>
+        </figure>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.min.js"></script>
+    <script>
+        if (window.AsciinemaPlayer) {
+            const opts = { autoPlay: false, loop: false, fit: "width", preload: true, speed: 1 };
+            AsciinemaPlayer.create("../assets/windows-10-vm.cast", document.getElementById("windows-10-cast"), opts);
+        }
+    </script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
