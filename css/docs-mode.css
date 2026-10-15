@@ -117,3 +117,18 @@ html[data-docs-example-mode="yaml"] .docs-cli-only {
         justify-content: center;
     }
 }
+
+.docs-version-banner {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0 0 1rem;
+}
+
+.docs-version-switch select {
+    margin-left: 0.25rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    padding: 0.15rem 0.4rem;
+}

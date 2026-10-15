@@ -80,6 +80,9 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
                 <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
@@ -103,6 +106,8 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1 data-i18n="userdoc.gpu.title">GPU passthrough</h1>
             <p data-i18n-html="userdoc.gpu.intro">A VM takes a named GPU from the node that will run it. You ask for <code>radeon0</code> or <code>nvidia1</code>, not a PCI address. The node binds that card and its audio function to the guest.</p>
             <p class="note" data-i18n-html="userdoc.gpu.note">This is whole-device passthrough. The guest gets the physical card, so the GPU cannot move live the way CPU and memory can. Moving the VM stops it, attaches a GPU on the destination, and boots the guest there. The disk still has to be shared Ceph RBD. See <a href="vm-migration.html">VM migration</a>.</p>
@@ -182,5 +187,6 @@ kctl migrate vm gpu-guest --target-node node-b --gpu radeon1</code></pre>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>

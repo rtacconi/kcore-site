@@ -43,7 +43,7 @@
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
     </div></nav>
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
@@ -56,18 +56,23 @@
     </div>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li><li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li><li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                 <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html">kctl CLI</a></li><li><a href="yaml-manifests.html" class="active">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html" class="active">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
         </nav></aside>
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1>YAML manifest reference</h1>
             <p>kcore supports declarative resource creation via YAML manifests. Every resource that can be created with <code>kctl</code> CLI flags can also be expressed as a YAML manifest, making manifests the preferred way to manage infrastructure as code.</p>
             <p>All manifest kinds are auto-detected and applied with a single command:</p>
@@ -248,6 +253,18 @@ spec:
   env:
     NGINX_HOST: example.com</code></pre>
 
+
+            <h2 data-i18n="userdoc.yaml.postgresql.h2">PostgreSQL manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Postgresql)</span></h2>
+            <p data-i18n-html="userdoc.yaml.postgresql.p">One database from the NixOS postgresql package, on the node rather than in a VM. Field reference: <a href="postgresql.html">PostgreSQL</a>.</p>
+<pre><code>kind: Postgresql
+metadata:
+  name: app
+spec:
+  database: app
+  package: postgresql
+  port: 5432</code></pre>
+            <p data-i18n-html="userdoc.yaml.postgresql.apply">Apply: <code>kctl apply -f postgresql.yaml</code>. <code>kind: postgres</code> is accepted as well.</p>
+
             <!-- ======= SecurityGroup ======= -->
             <h2>SecurityGroup manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: SecurityGroup)</span></h2>
             <table>
@@ -333,34 +350,35 @@ spec:
                 <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"ClusterUpdate"</code></td></tr>
                 <tr><td><code>metadata.name</code></td><td>string</td><td>Stable name for this rollout</td></tr>
                 <tr><td><code>spec.target.version</code></td><td>string</td><td>Human version label</td></tr>
-                <tr><td><code>spec.target.flake_ref</code></td><td>string</td><td>Flake URI (e.g. <code>github:org/repo</code>)</td></tr>
-                <tr><td><code>spec.target.flake_rev</code></td><td>string</td><td>Immutable Git revision</td></tr>
-                <tr><td><code>spec.target.nixpkgs_rev</code></td><td>string</td><td>Optional nixpkgs pin</td></tr>
-                <tr><td><code>spec.target.system_profile</code></td><td>string</td><td>Optional system profile attribute path</td></tr>
-                <tr><td><code>spec.selector</code></td><td>object</td><td><code>node_ids</code>, <code>all_nodes</code>, <code>controllers_only</code>, <code>labels</code>, <code>datacenters</code></td></tr>
-                <tr><td><code>spec.strategy</code></td><td>object</td><td><code>strategy_type</code>, <code>max_unavailable</code>, <code>batch_size</code></td></tr>
-                <tr><td><code>spec.drain_vms</code></td><td>boolean</td><td>Drain intent (consult release notes)</td></tr>
-                <tr><td><code>spec.drain_timeout_seconds</code></td><td>integer</td><td>Drain timeout</td></tr>
+                <tr><td><code>spec.target.flakeRef</code></td><td>string</td><td>Flake URI without the commit (<code>github:kcorehypervisor/kcore</code>). <code>flake_ref</code> is accepted.</td></tr>
+                <tr><td><code>spec.target.flakeRev</code></td><td>string</td><td>40-character git commit. The node fetches <code>flakeRef/flakeRev</code>.</td></tr>
+                <tr><td><code>spec.target.nixpkgsRev</code></td><td>string</td><td>nixpkgs commit. Required when <code>updateKind</code> is <code>nixpkgs</code>.</td></tr>
+                <tr><td><code>spec.updateKind</code></td><td>string</td><td><code>kcore</code> or <code>nixpkgs</code></td></tr>
+                <tr><td><code>spec.testedOsPins</code></td><td>list</td><td>Pins from <code>kcore-X.Y.Z-release.json</code></td></tr>
+                <tr><td><code>spec.schemaVersion</code></td><td>integer</td><td>Schema the release's controller writes</td></tr>
+                <tr><td><code>spec.selector</code></td><td>object</td><td><code>nodeIds</code>, <code>allNodes</code>, <code>controllersOnly</code>, <code>labels</code>, <code>datacenters</code></td></tr>
+                <tr><td><code>spec.strategy</code></td><td>object</td><td><code>strategyType</code> (<code>one-at-a-time</code>), <code>maxUnavailable</code> (<code>1</code>), <code>batchSize</code></td></tr>
+                <tr><td><code>spec.drainVms</code></td><td>boolean</td><td>Migrate guests before a reboot</td></tr>
                 <tr><td><code>spec.activation.mode</code></td><td>string</td><td><code>test</code> | <code>switch</code> | <code>boot</code> | <code>auto</code></td></tr>
-                <tr><td><code>spec.activation.reboot_policy</code></td><td>string</td><td>Opaque; interpreted by node-agent</td></tr>
-                <tr><td><code>spec.approval_policy</code></td><td>string</td><td><code>manual</code> | <code>auto-non-disruptive</code> | <code>auto</code></td></tr>
-                <tr><td><code>spec.automatic_rollback</code></td><td>boolean</td><td>Rollback behaviour hint</td></tr>
+                <tr><td><code>spec.approvalPolicy</code></td><td>string</td><td><code>manual</code> | <code>auto-non-disruptive</code> | <code>auto</code></td></tr>
             </table>
             <h3>ClusterUpdate example</h3>
 <pre><code>kind: ClusterUpdate
 metadata:
-  name: release-0-4-0
+  name: release-0-4-2
 spec:
   target:
-    version: "0.4.0"
-    flake_ref: github:kcorehypervisor/kcore
-    flake_rev: "&lt;full-git-sha&gt;"
+    version: "0.4.2"
+    flakeRef: github:kcorehypervisor/kcore
+    flakeRev: "&lt;full-git-sha&gt;"
   selector:
-    all_nodes: true
+    allNodes: true
   strategy:
-    strategy_type: one-at-a-time
-  approval_policy: manual</code></pre>
-            <p>Plan: <code>kctl update cluster plan -f rollout.yaml</code>. Apply: <code>kctl update cluster apply -f rollout.yaml</code>. Other: <code>kctl update cluster get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>.</p>
+    strategyType: one-at-a-time
+    maxUnavailable: 1
+  approvalPolicy: manual
+  updateKind: kcore</code></pre>
+            <p>Plan: <code>kctl update cluster plan -f rollout.yaml</code>. Apply: <code>kctl update cluster apply -f rollout.yaml</code>. Other: <code>kctl update cluster get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>reboot</code>.</p>
 
             <!-- ======= Cluster ======= -->
             <h2>Cluster manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Cluster)</span></h2>
@@ -495,6 +513,7 @@ spec:
                 <tr><td><code>Network</code></td><td><code>kctl apply -f</code></td><td>Create a NAT, VXLAN, or bridge network</td></tr>
                 <tr><td><code>SshKey</code></td><td><code>kctl apply -f</code></td><td>Register an SSH public key</td></tr>
                 <tr><td><code>Container</code></td><td><code>kctl apply -f</code></td><td>Create an OCI container</td></tr>
+                <tr><td><code>Postgresql</code></td><td><code>kctl apply -f</code></td><td data-i18n="userdoc.yaml.postgresql.kind">One PostgreSQL database on a node</td></tr>
                 <tr><td><code>SecurityGroup</code></td><td><code>kctl apply -f</code> or <code>kctl sg apply -f</code></td><td>Create and attach firewall rules</td></tr>
                 <tr><td><code>DiskLayout</code></td><td><code>kctl diff -f</code> / <code>kctl apply -f</code></td><td>Day-2 disk layout (YAML or disko Nix)</td></tr>
                 <tr><td><code>ClusterUpdate</code></td><td><code>kctl update cluster plan -f</code> / <code>kctl update cluster apply -f</code></td><td>Host OS rollout (flake-pinned); not <code>kctl apply</code></td></tr>
@@ -519,6 +538,7 @@ unchanged VM 'web-01'</code></pre>
                 <tr><th>Kind</th><th>Mutable</th><th>Immutable (rejects with <code>InvalidArgument</code>)</th></tr>
                 <tr><td><code>VM</code></td><td><code>cpu</code>, <code>memoryBytes</code>, <code>desiredState</code></td><td><code>disks</code>, <code>nics</code>, <code>nodeLabels</code>, <code>antiAffinity</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>targetNode</code>, <code>sshKeys</code>, <code>cloudInitUserData</code>, <code>image_*</code></td></tr>
                 <tr><td><code>Container</code></td><td><code>desiredState</code></td><td><code>image</code>, <code>command</code>, <code>network</code>, <code>env</code>, <code>ports</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>mountTarget</code></td></tr>
+                <tr><td><code>Postgresql</code></td><td data-i18n-html="userdoc.yaml.postgresql.mutable"><code>port</code></td><td data-i18n-html="userdoc.yaml.postgresql.immutable"><code>database</code>, <code>package</code>, <code>targetNode</code></td></tr>
                 <tr><td><code>Network</code></td><td>— (none in v1)</td><td>all fields</td></tr>
                 <tr><td><code>SshKey</code></td><td>— (public key immutable)</td><td><code>publicKey</code></td></tr>
                 <tr><td><code>SecurityGroup</code></td><td><code>description</code>, <code>rules</code>, attachments</td><td><code>name</code></td></tr>
@@ -546,6 +566,7 @@ kctl apply -f vm.yaml
 kctl apply -f network.yaml
 kctl apply -f ssh-key.yaml
 kctl apply -f container.yaml
+kctl apply -f postgresql.yaml
 kctl apply -f security-group.yaml
 kctl apply -f disk-layout.yaml
 
@@ -558,5 +579,6 @@ kctl update cluster apply -f rollout.yaml</code></pre>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>

@@ -106,6 +106,8 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1 data-i18n="userdoc.import.title">Import from VMware or Proxmox</h1>
             <p class="note" data-i18n-html="userdoc.import.note">This guide moves guests from vCenter or Proxmox onto kcore. Moving a VM between kcore nodes is <a href="vm-migration.html">VM migration</a>.</p>
             <p data-i18n-html="userdoc.import.intro"><a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a> is separate from <code>kctl</code>. Inventory reads the source API and writes Terraform. It does not copy disk bytes. <code>convert</code> turns an exported disk into qcow2 or raw by calling <code>virt-v2v</code> or <code>qemu-img</code>. <a href="https://github.com/kcorehypervisor/terraform-provider-kcore">terraform-provider-kcore</a> applies the VM, and <code>kctl</code> uploads the finished image.</p>
@@ -181,5 +183,6 @@ kcore-migrate convert --input vm-100-disk-0.qcow2 --format raw --out ./converted
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>

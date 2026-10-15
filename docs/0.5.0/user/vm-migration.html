@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Move Ceph-backed VMs between kcore nodes with cold drain or Cloud Hypervisor live migration over shared RBD.">
+    <title>VM migration - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/vm-migration.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="VM migration - kcore documentation">
+    <meta property="og:description" content="Move Ceph-backed VMs between kcore nodes with cold drain or Cloud Hypervisor live migration over shared RBD.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/vm-migration.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" class="active" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+            
+            <h1 data-i18n="userdoc.vmmig.title">VM migration</h1>
+            <p class="note" data-i18n-html="userdoc.vmmig.note">Cold drain and live migration require <strong>kcore SAN</strong> (<code>storage_backend: ceph</code>). Local filesystem / LVM / ZFS disks stay on one node. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
+            <p data-i18n-html="userdoc.vmmig.importP">Leaving vCenter or Proxmox is a different task. See <a href="import.html">Import from VMware or Proxmox</a>.</p>
+            <p data-i18n="userdoc.vmmig.intro">Shared RBD means the guest disk is not copied when a VM changes host. You choose cold reassignment (stop/start via Nix) or Cloud Hypervisor live migration (memory over TCP while both nodes map the same image).</p>
+
+            <h2 data-i18n="userdoc.vmmig.compare">Cold vs live</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="userdoc.vmmig.thMode">Mode</th>
+                        <th data-i18n="userdoc.vmmig.thCommand">Command</th>
+                        <th data-i18n="userdoc.vmmig.thDowntime">Downtime</th>
+                        <th data-i18n="userdoc.vmmig.thWhen">When to use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-i18n="userdoc.vmmig.tdCold"><strong>Cold</strong></td>
+                        <td data-i18n-html="userdoc.vmmig.tdColdCmd"><code>kctl drain node …</code></td>
+                        <td data-i18n="userdoc.vmmig.tdColdDown">Guest stops on source and starts on destination</td>
+                        <td data-i18n="userdoc.vmmig.tdColdWhen">Evacuate a node for maintenance; fallback if live fails</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="userdoc.vmmig.tdLive"><strong>Live</strong></td>
+                        <td data-i18n-html="userdoc.vmmig.tdLiveCmd"><code>kctl migrate vm …</code></td>
+                        <td data-i18n="userdoc.vmmig.tdLiveDown">Brief pause during hypervisor cutover</td>
+                        <td data-i18n="userdoc.vmmig.tdLiveWhen">Keep the workload running while changing host</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.vmmig.prereq">Prerequisites</h2>
+            <ul>
+                <li data-i18n-html="userdoc.vmmig.prereqLi1">Healthy <code>CephCluster</code>; both nodes are members.</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi2">VM created with <code>--storage-backend ceph</code>.</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi3">Live: allow TCP 18000–18127 between node IPs for the migration stream (same fabric as Ceph public/client is fine).</li>
+                <li data-i18n-html="userdoc.vmmig.prereqLi4">Roles: <code>vm-admin</code> for <code>migrate vm</code>; <code>cluster-admin</code> for <code>drain</code> and <code>migrate reset-session</code>.</li>
+            </ul>
+
+            <h2 data-i18n="userdoc.vmmig.live">Live migrate a VM</h2>
+<pre><code>kctl migrate vm app-1 --target-node node-b
+
+# If live fails, fall back to cold reassignment of that VM:
+kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
+            <p data-i18n="userdoc.vmmig.liveP1">The controller prepares an empty Cloud Hypervisor on the destination (shared RBD already mapped), streams guest memory from the source over TCP, updates which node owns the VM, pushes Nix, then has systemd adopt the migrated process on the destination and clean up the source.</p>
+            <p data-i18n-html="userdoc.vmmig.liveP2">Success responses report <code>mode=live</code> (or <code>mode=cold</code> when fallback ran).</p>
+
+            <h2 data-i18n="userdoc.vmmig.cold">Cold drain a node</h2>
+<pre><code>kctl drain node node-a
+kctl drain node node-a --target-node node-b</code></pre>
+            <p data-i18n="userdoc.vmmig.coldP1">Every VM on the source is reassigned in the control plane. Nix push removes units on the source and creates them on destinations. Ceph disks are remapped — not copied. Guests experience a full stop/start.</p>
+
+            <h2>Automatic failover</h2>
+            <p>A node that misses heartbeats for 90 seconds is marked <code>not-ready</code>. The controller then cold-moves each Ceph VM onto another healthy member of the same cluster. It does not contact the failed node. Filesystem, LVM, and ZFS VMs stay there, and <code>kctl get cluster-health</code> lists them as VMs on a not-ready node.</p>
+            <p>When the node heartbeats again, the controller pushes a configuration that no longer starts the moved guests. Set <code>failover.enabled: false</code> in <code>controller.yaml</code> to leave every VM where it is.</p>
+
+            <h2 data-i18n="userdoc.vmmig.whatHappens">What happens under the hood</h2>
+            <h3 data-i18n="userdoc.vmmig.whatLive">Live</h3>
+            <ol>
+                <li data-i18n="userdoc.vmmig.whatLive1">Destination maps the RBD image and starts Cloud Hypervisor with only an API socket.</li>
+                <li data-i18n-html="userdoc.vmmig.whatLive2">Destination listens with <code>vm.receive-migration</code>; source calls <code>vm.send-migration</code> to <code>tcp:&lt;dest-ip&gt;:&lt;port&gt;</code>.</li>
+                <li data-i18n="userdoc.vmmig.whatLive3">Controller moves <code>node_id</code>, pushes config; destination systemd adopts the running process via a live-migrated marker.</li>
+                <li data-i18n="userdoc.vmmig.whatLive4">Source unit is stopped and the RBD mapping unmapped.</li>
+            </ol>
+            <h3 data-i18n="userdoc.vmmig.whatCold">Cold</h3>
+            <ol>
+                <li data-i18n="userdoc.vmmig.whatCold1">Controller reassigns <code>node_id</code> (volume row unchanged).</li>
+                <li data-i18n="userdoc.vmmig.whatCold2">Source Nix no longer defines the VM → unit stops.</li>
+                <li data-i18n="userdoc.vmmig.whatCold3">Destination Nix defines the VM → map RBD and start Cloud Hypervisor.</li>
+            </ol>
+            <p class="note" data-i18n-html="userdoc.vmmig.techNote">Contributor-level detail (RPC names, systemd handoff, RBD features): <a href="https://github.com/kcorehypervisor/kcore/blob/main/docs/vm-migration.md">docs/vm-migration.md</a> in the kcore repository.</p>
+
+            <h2 data-i18n="userdoc.vmmig.limits">Limits</h2>
+            <ul>
+                <li data-i18n="userdoc.vmmig.limitsLi1">Not supported for filesystem, LVM, or ZFS-backed VMs across nodes.</li>
+                <li data-i18n="userdoc.vmmig.limitsLi2">Live migration takes a destination port from the fixed 18000–18127 range; open host firewalls between members.</li>
+                <li data-i18n="userdoc.vmmig.limitsLi3">Drain does not yet prefer live migrate per VM — use <code>kctl migrate vm</code> when you need live.</li>
+                <li data-i18n-html="userdoc.vmmig.limitsGpu">A VM with a GPU moves cold onto a free card of the same family. See <a href="gpu-passthrough.html">GPU passthrough</a>.</li>
+            </ul>
+
+            <h2 data-i18n="userdoc.vmmig.trouble">Troubleshooting</h2>
+            <h3 data-i18n="userdoc.vmmig.troubleAe">Migration keeps failing with ALREADY_EXISTS</h3>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP1">A migration that worked before starts failing immediately with <code>AlreadyExists</code>, naming the destination node. Nothing is actually receiving. The destination still holds the receive session it created when the migration began, because the controller died before it could abort it, and every later migration of that VM to that node is refused until an operator clears the session.</p>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP2">There is no automatic reaping, and that is deliberate. Deciding from the outside that a session is dead is a guess, and getting it wrong tears down a migration that is still running. kcore reports the evidence instead and leaves the call to you.</p>
+<pre><code># 1. Inspect. Read-only; covers every CephCluster member.
+kctl get migrate-session app-1
+
+# 2. Dry run: prints what it would clear, clears nothing, exits non-zero.
+kctl migrate reset-session app-1 --node node-b
+
+# 3. Clear it.
+kctl migrate reset-session app-1 --node node-b --force</code></pre>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP3">Per node, the inspect step reports whether a session is tracked, the reserved port and whether anything is listening on it, the receive VMM's pid and whether it is alive and really belongs to this VM (a recycled pid is reported as recycled, not as live), whether the handoff marker and API socket exist, and a verdict. A node that cannot be reached is reported rather than failing the whole report. Inspecting needs <code>read-only</code>; clearing needs <code>cluster-admin</code>.</p>
+            <p data-i18n-html="userdoc.vmmig.troubleAeP4">Clearing releases the session and its port reservation, kills the receive VMM, removes the marker, pid and API socket files, and unmaps the destination's RBD image. It is idempotent, so clearing a node with no session is a success. <code>--node</code> is mandatory, and the controller refuses the node that currently owns the VM. Once the session is gone, retry the migration as normal.</p>
+            <p class="note" data-i18n-html="userdoc.vmmig.troubleAeNote">Read the verdict before you pass <code>--force</code>. Clearing a session whose receive VMM is still alive kills an in-flight migration.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+</body>
+</html>

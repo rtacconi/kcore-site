@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore VXLAN overlay: data plane, VNI derivation, FDB entries, peer discovery, and outbound NAT.">
+    <title>VXLAN overlay networking - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/overlay-vxlan.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="VXLAN overlay networking - kcore documentation">
+    <meta property="og:description" content="kcore VXLAN overlay: data plane, VNI derivation, FDB entries, peer discovery, and outbound NAT.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/overlay-vxlan.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html" class="active">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+            
+            <h1 data-i18n="userdoc.vxlan.h1">VXLAN overlay networking</h1>
+            <p data-i18n="userdoc.vxlan.intro">VXLAN overlays provide L2 connectivity across multiple nodes, allowing VMs on different hosts to communicate on the same logical network.</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.dataplane">Data plane</h2>
+            <p data-i18n-html="userdoc.vxlan.dataplane.p">Each VXLAN network creates a Linux VXLAN device (<code>vxlan&lt;VNI&gt;</code>) using UDP port 4789. The VXLAN device is attached to a bridge (<code>kbr-&lt;name&gt;</code>), and the gateway IP is assigned to the bridge interface to serve as the subnet gateway.</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.vni">VNI derivation</h2>
+            <p data-i18n="userdoc.vxlan.vni.p">The VXLAN Network Identifier is derived deterministically from the network name using a djb2-style hash:</p>
+            <pre><code>VNI = 10000 + (hash(name) % 6000)   // range 10000–15999</code></pre>
+            <p data-i18n="userdoc.vxlan.vni.p2">The same network name on different nodes produces the same VNI, which means the nodes automatically join the same overlay segment.</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.peers">Peer discovery</h2>
+            <p data-i18n-html="userdoc.vxlan.peers.p">Peer discovery uses static FDB entries. When the controller pushes a network configuration to a node, it includes the list of peer IPs (<code>vxlanPeers</code>). For each peer, the node adds a forwarding database entry:</p>
+            <pre><code>bridge fdb append 00:00:00:00:00:00 dev vxlan&lt;VNI&gt; dst &lt;peer_ip&gt;</code></pre>
+            <p data-i18n="userdoc.vxlan.peers.p2">This implements head-end replication (flood-to-peers): BUM traffic is replicated to every known peer.</p>
+            <p data-i18n="userdoc.vxlan.peers.p3">When a node joins or leaves a VXLAN network, the controller pushes updated configuration to the other nodes so VTEP forwarding entries stay consistent.</p>
+            <p>Peer entries include only other nodes that are ready and approved and that have the same network name. They are sorted by node id, with one entry per address. A node that is no longer ready drops out of the forwarding database the next time a member's config is generated.</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.addressing">VM addressing</h2>
+            <p data-i18n-html="userdoc.vxlan.addressing.p">The controller allocates the next address in the subnet. Deleting a VM returns that VXLAN address to a free list, and the next guest on the overlay reuses the lowest free address that is not still assigned. Allocation is cluster-wide for a given network name, so VMs on different hosts never receive the same IP on the same overlay. Addresses are assigned via cloud-init static network configuration, not DHCP.</p>
+            <p>An optional IPv6 /64 follows the same pattern. The gateway is <code>prefix::1</code>, guests start at <code>::2</code>, and a deleted guest's address returns to the free list. There is no DHCPv6. See <a href="networks.html">Networks</a>.</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.nat">Outbound NAT</h2>
+            <p data-i18n-html="userdoc.vxlan.nat.p">Outbound internet access for VMs on VXLAN networks is optional. Enable it with <code>--enable-outbound-nat</code> (or omit <code>--no-outbound-nat</code>) when creating the network. When enabled, kcore adds an nftables masquerade rule on the gateway interface so that VMs can reach external destinations.</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.firewall">Firewall</h2>
+            <p data-i18n-html="userdoc.vxlan.firewall.p">All <code>kbr-*</code> bridges are treated as trusted interfaces in the node firewall. UDP port 4789 is automatically allowed when any VXLAN network exists on the node.</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.systemd">Systemd ordering</h2>
+            <p data-i18n="userdoc.vxlan.systemd.p">VXLAN network services are started in a strict dependency order:</p>
+            <ol>
+                <li data-i18n-html="userdoc.vxlan.systemd.li1"><code>kcore-bridge-&lt;net&gt;</code> — creates the bridge and VXLAN device</li>
+                <li data-i18n-html="userdoc.vxlan.systemd.li2"><code>kcore-tap-&lt;vm&gt;</code> — creates the TAP device on the bridge</li>
+                <li data-i18n-html="userdoc.vxlan.systemd.li3"><code>kcore-vm-&lt;vm&gt;</code> — starts the Cloud Hypervisor VM</li>
+            </ol>
+            <p data-i18n-html="userdoc.vxlan.systemd.p2">NAT networks insert an additional unit between steps 1 and 2: <code>kcore-dhcp-&lt;net&gt;</code> (dnsmasq).</p>
+
+            <h2 data-i18n="userdoc.vxlan.h2.optout">Opt-out</h2>
+            <p data-i18n-html="userdoc.vxlan.optout.p">Pass <code>--disable-vxlan</code> during node installation to prevent VXLAN network creation on that node. NAT and bridge networks continue to work normally. If a VXLAN network creation is attempted on a node with VXLAN disabled, the controller returns a <code>FailedPrecondition</code> error.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+</body>
+</html>

@@ -81,6 +81,9 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
                 <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
@@ -104,6 +107,8 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1 data-i18n-html="userdoc.storagevsan.title">kcore SAN (Ceph)</h1>
             <p class="note" data-i18n="userdoc.storagevsan.notePlanned">Phases 1–2 (CephCluster fabric + RBD VM disks / cold drain) and live migration over shared RBD ship in kcore.</p>
             <p data-i18n="userdoc.storagevsan.intro">kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. <strong>kcore SAN</strong> adds distributed shared block storage using Ceph, so VM disks are replicated across nodes and can move with the workload.</p>
@@ -181,5 +186,6 @@ spec:
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>

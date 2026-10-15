@@ -44,12 +44,12 @@
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html">Features</a></li>
-            <li><a href="../../pricing.html">Pricing</a></li>
-            <li><a href="../../docs.html">Docs</a></li>
-            <li><a href="../../roadmap.html">Roadmap</a></li>
-            <li><a href="../../blog.html">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li>
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
         </ul>
     </div></nav>
 
@@ -65,46 +65,51 @@
 
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul>
-                <li><a href="installation.html">Installation</a></li>
-                <li><a href="first-cluster.html">First cluster</a></li>
-                <li><a href="add-node.html" class="active">Add a node</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li>
+                <li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li>
+                <li><a data-i18n="docs.nav.addnode" href="add-node.html" class="active">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul>
-                <li><a href="vm-creation.html">VM creation</a></li>
-                <li><a href="images.html">VM images</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li>
+                <li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                 <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
                 <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul>
-                <li><a href="containers.html">Container lifecycle</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul>
-                <li><a href="networks.html">Networks</a></li>
-                <li><a href="overlay-vxlan.html">VXLAN overlay</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul>
-                <li><a href="storage.html">Storage backends</a></li>
-                <li><a href="storage-day2.html">Day-2 operations</a></li>
-                <li><a href="storage-vsan.html">kcore SAN (Ceph)</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li>
+                <li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul>
-                <li><a href="security-groups.html">Security groups</a></li>
-                <li><a href="compliance.html">Compliance</a></li>
-                <li><a href="certificates.html">Certificates &amp; encryption</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li>
+                <li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li>
+                <li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul>
-                <li><a href="kctl-reference.html">kctl CLI</a></li>
-                <li><a href="yaml-manifests.html">YAML manifests</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li>
+                <li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li>
+                <li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul>
-                <li><a href="licensing.html">Editions &amp; pricing</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li>
+                <li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li>
             </ul></div>
         </nav></aside>
 
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1 data-i18n="userdoc.addnode.h1">Add nodes to the cluster</h1>
             <p data-i18n="userdoc.addnode.p.intro">A single-node kcore deployment is useful for evaluation, but production workloads benefit from multiple nodes for scheduling headroom, high-availability controllers, and cross-datacenter replication. This page walks through expanding your cluster from one node to many.</p>
             <p>Every install below requires <code>-k</code> (CLI) or <code>insecure: true</code> (YAML) because the live ISO node-agent runs without TLS. After reboot all traffic switches to mTLS automatically.</p>
@@ -333,5 +338,6 @@ spec:
 
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Declare one PostgreSQL database per node from the NixOS postgresql package.">
+    <title>PostgreSQL - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/postgresql.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="PostgreSQL - kcore documentation">
+    <meta property="og:description" content="Declare one PostgreSQL database per node from the NixOS postgresql package.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/postgresql.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html" data-i18n="docs.nav.appliance">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" class="active" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+            
+            <h1 data-i18n="userdoc.postgresql.h1">PostgreSQL</h1>
+            <p data-i18n="userdoc.postgresql.intro">kcore declares one PostgreSQL database on a node from the NixOS postgresql package. The service runs on kcoreOS itself. It does not run inside a VM.</p>
+            <p class="note" data-i18n-html="userdoc.postgresql.note">Version 1 listens on the node's Unix socket. TCP is not enabled. On the node, connect as the postgres superuser: <code>sudo -u postgres psql -d app</code>.</p>
+
+            <h2 data-i18n="userdoc.postgresql.h2.declare">Declare a database</h2>
+            <p data-i18n="userdoc.postgresql.declare.p">The first apply creates the database. A later apply can change the port. Changing the package, database name, or target node is rejected.</p>
+            <div class="docs-cli-only">
+            <pre><code>kctl create postgresql app \
+  --database app \
+  --package postgresql \
+  --port 5432 \
+  --target-node &lt;NODE_ID&gt;</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+            <pre><code>kind: Postgresql
+metadata:
+  name: app
+spec:
+  database: app
+  package: postgresql
+  port: 5432</code></pre>
+            <p data-i18n-html="userdoc.postgresql.apply">Apply: <code>kctl apply -f postgresql.yaml</code>. <code>kind: postgres</code> is accepted as well.</p>
+            </div>
+
+            <h2 data-i18n="userdoc.postgresql.h2.commands">Commands</h2>
+            <table>
+                <thead><tr><th data-i18n="userdoc.postgresql.th.op">Operation</th><th data-i18n="userdoc.postgresql.th.cmd">Command</th></tr></thead>
+                <tbody>
+                    <tr><td data-i18n="userdoc.postgresql.cmd.apply">Apply</td><td><code>kctl apply -f postgresql.yaml</code></td></tr>
+                    <tr><td data-i18n="userdoc.postgresql.cmd.create">Create</td><td><code>kctl create postgresql app --database app --package postgresql --port 5432</code></td></tr>
+                    <tr><td data-i18n="userdoc.postgresql.cmd.get">Get</td><td><code>kctl get postgresql app</code></td></tr>
+                    <tr><td data-i18n="userdoc.postgresql.cmd.list">List</td><td><code>kctl get postgresql</code></td></tr>
+                    <tr><td data-i18n="userdoc.postgresql.cmd.describe">Describe</td><td><code>kctl describe postgresql app</code></td></tr>
+                    <tr><td data-i18n="userdoc.postgresql.cmd.delete">Delete</td><td><code>kctl delete postgresql app</code></td></tr>
+                </tbody>
+            </table>
+            <p data-i18n-html="userdoc.postgresql.alias"><code>postgres</code> is an alias of <code>postgresql</code> on create, get, describe, and delete.</p>
+
+            <h2 data-i18n="userdoc.postgresql.h2.fields">Fields</h2>
+            <table>
+                <thead><tr><th data-i18n="userdoc.postgresql.th.field">Field</th><th data-i18n="userdoc.postgresql.th.desc">Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>metadata.name</code></td><td data-i18n-html="userdoc.postgresql.field.name">Instance name. Letters, digits, hyphen, and underscore, up to 63 characters, starting with a letter or digit.</td></tr>
+                    <tr><td><code>spec.database</code></td><td data-i18n-html="userdoc.postgresql.field.database">Database name. A PostgreSQL identifier. Defaults to the instance name when that name is a valid identifier. Immutable.</td></tr>
+                    <tr><td><code>spec.package</code></td><td data-i18n-html="userdoc.postgresql.field.package">Nixpkgs attribute: <code>postgresql</code> (default), <code>postgresql_14</code>, <code>postgresql_15</code>, <code>postgresql_16</code>, or <code>postgresql_17</code>. Immutable.</td></tr>
+                    <tr><td><code>spec.port</code></td><td data-i18n-html="userdoc.postgresql.field.port">Port recorded for the service. Default 5432. Mutable. Clients still use the local Unix socket in v1.</td></tr>
+                    <tr><td><code>spec.targetNode</code></td><td data-i18n-html="userdoc.postgresql.field.target">Node that hosts the database. Optional. The controller picks a ready node that does not already host PostgreSQL. Immutable. CLI flag: <code>--target-node</code>.</td></tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.postgresql.h2.upsert">Re-apply</h2>
+            <p data-i18n-html="userdoc.postgresql.upsert.p"><code>kctl apply -f</code> and <code>kctl create postgresql</code> upsert. Create and delete require <code>vm-admin</code>. Get and list are read-only.</p>
+
+            <h2 data-i18n="userdoc.postgresql.h2.connect">Connect</h2>
+            <p data-i18n-html="userdoc.postgresql.connect.p">After the node applies the NixOS config, the database is available on that node's Unix socket. Deleting the resource removes the NixOS service definition and leaves <code>/var/lib/postgresql</code> on disk.</p>
+
+            <h2 data-i18n="userdoc.postgresql.h2.limits">Current limits</h2>
+            <ul>
+                <li data-i18n="userdoc.postgresql.lim1">One database per node. A second instance on the same node is rejected.</li>
+                <li data-i18n="userdoc.postgresql.lim2">No TCP listener and no password setup in v1. Reach the database from the node.</li>
+                <li data-i18n="userdoc.postgresql.lim3">The package cannot change in place. A major upgrade needs a delete and a new database.</li>
+                <li data-i18n="userdoc.postgresql.lim4">A multi-node PostgreSQL cluster is planned for Q1 2027. This page covers the single database.</li>
+            </ul>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+</body>
+</html>
