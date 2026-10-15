@@ -1,7 +1,7 @@
 /**
- * Docs “example format” toggle: CLI vs YAML.
- * Persisted in localStorage under kcoreDocsExampleMode (cli | yaml).
- * Mark blocks with .docs-cli-only or .docs-yaml-only to show/hide by mode.
+ * Docs example format toggle: CLI, YAML, or Terraform.
+ * Persisted in localStorage under kcoreDocsExampleMode (cli | yaml | terraform).
+ * Mark blocks with .docs-cli-only, .docs-yaml-only, or .docs-tf-only.
  */
 
 :root {
@@ -94,12 +94,19 @@ body.docs-hub-page .docs-layout {
     border-left: 1px solid var(--border-primary);
 }
 
-/* Toggle CLI vs YAML blocks (requires data-docs-example-mode on <html>, set by docs-mode.js) */
-html[data-docs-example-mode="cli"] .docs-yaml-only {
+/* Hide the example blocks that are not the selected mode. */
+html[data-docs-example-mode="cli"] .docs-yaml-only,
+html[data-docs-example-mode="cli"] .docs-tf-only {
     display: none !important;
 }
 
-html[data-docs-example-mode="yaml"] .docs-cli-only {
+html[data-docs-example-mode="yaml"] .docs-cli-only,
+html[data-docs-example-mode="yaml"] .docs-tf-only {
+    display: none !important;
+}
+
+html[data-docs-example-mode="terraform"] .docs-cli-only,
+html[data-docs-example-mode="terraform"] .docs-yaml-only {
     display: none !important;
 }
 

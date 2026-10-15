@@ -124,6 +124,36 @@
             line-height: 1.6;
             text-align: center;
         }
+
+        .socket-qty {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin: 0 0 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .socket-qty input {
+            width: 6.5rem;
+            padding: 0.4rem 0.55rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.4rem;
+            font: inherit;
+        }
+        .socket-qty-note,
+        .socket-qty-checkout {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            margin: 0 0 0.5rem;
+            line-height: 1.4;
+        }
+        .socket-qty-total {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 0.35rem;
+        }
         @media (max-width: 1100px) {
             .pricing-grid { grid-template-columns: repeat(2, 1fr); max-width: 720px; }
         }
@@ -178,6 +208,8 @@
 
     <section class="pricing-section">
         <div class="container">
+            <span hidden id="socket-total-one" data-i18n="pricing.socketTotalOne">{n} socket · £{total} / year</span>
+            <span hidden id="socket-total-many" data-i18n="pricing.socketTotal">{n} sockets · £{total} / year</span>
             <div class="pricing-grid">
                 <div class="pricing-card">
                     <div class="pricing-name" data-i18n="pricing.community">Community Edition</div>
@@ -209,6 +241,13 @@
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f5">5 support tickets per year</span></li>
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.standard.f6">Initial response within 1 business day</span></li>
                     </ul>
+                    <label class="socket-qty">
+                        <span data-i18n="pricing.socketLabel">CPU sockets</span>
+                        <input id="socket-qty-standard" type="number" inputmode="numeric" min="1" step="1" value="1" data-socket-qty="standard" data-unit-price="249">
+                    </label>
+                    <p class="socket-qty-note" data-i18n="pricing.socketUnit">Physical CPU sockets, not cores.</p>
+                    <p class="socket-qty-total" data-socket-total="standard">1 socket · £249 / year</p>
+                    <p class="socket-qty-checkout" data-i18n="pricing.socketCheckout">Set this same socket count on the checkout page.</p>
                     <a href="#" class="pricing-cta pricing-cta-primary" data-kcore-buy="standard" data-kcore-buy-label="Standard" data-i18n="pricing.buy">Buy</a>
                 </div>
 
@@ -225,6 +264,13 @@
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f3">Initial response within 4 hours on a business day</span></li>
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.premium.f4">Remote support (SSH or secure session)</span></li>
                     </ul>
+                    <label class="socket-qty">
+                        <span data-i18n="pricing.socketLabel">CPU sockets</span>
+                        <input id="socket-qty-premium" type="number" inputmode="numeric" min="1" step="1" value="1" data-socket-qty="premium" data-unit-price="599">
+                    </label>
+                    <p class="socket-qty-note" data-i18n="pricing.socketUnit">Physical CPU sockets, not cores.</p>
+                    <p class="socket-qty-total" data-socket-total="premium">1 socket · £599 / year</p>
+                    <p class="socket-qty-checkout" data-i18n="pricing.socketCheckout">Set this same socket count on the checkout page.</p>
                     <a href="#" class="pricing-cta pricing-cta-primary" data-kcore-buy="premium" data-kcore-buy-label="Premium" data-i18n="pricing.buy">Buy</a>
                 </div>
 
@@ -243,6 +289,13 @@
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f5">Offline key activation when available</span></li>
                         <li><span class="check">&#10003;</span> <span data-i18n="pricing.enterprise.f6">Custom / multi-year quotes on request</span></li>
                     </ul>
+                    <label class="socket-qty">
+                        <span data-i18n="pricing.socketLabel">CPU sockets</span>
+                        <input id="socket-qty-enterprise" type="number" inputmode="numeric" min="8" step="1" value="8" data-socket-qty="enterprise" data-unit-price="999">
+                    </label>
+                    <p class="socket-qty-note" data-i18n="pricing.socketUnit">Physical CPU sockets, not cores.</p>
+                    <p class="socket-qty-total" data-socket-total="enterprise">8 sockets · £7,992 / year</p>
+                    <p class="socket-qty-checkout" data-i18n="pricing.socketCheckout">Set this same socket count on the checkout page.</p>
                     <a href="#" class="pricing-cta pricing-cta-secondary" data-kcore-buy="enterprise" data-kcore-buy-label="Enterprise" data-i18n="pricing.buyContact">Buy / contact</a>
                 </div>
             </div>
@@ -338,6 +391,50 @@
 
     <script src="js/commerce.js"></script>
     <script src="js/i18n.js"></script>
+
+    <script>
+    (function () {
+        var oneEl = document.getElementById("socket-total-one");
+        var manyEl = document.getElementById("socket-total-many");
+
+        function pounds(n) {
+            return n.toLocaleString("en-GB");
+        }
+
+        function readQty(input) {
+            var min = parseInt(input.getAttribute("min"), 10);
+            if (!isFinite(min) || min < 1) min = 1;
+            var n = parseInt(input.value, 10);
+            if (!isFinite(n)) n = min;
+            n = Math.floor(Math.abs(n));
+            if (n < min) n = min;
+            if (String(input.value) !== String(n)) input.value = String(n);
+            return n;
+        }
+
+        function render() {
+            var one = (oneEl && oneEl.textContent) || "{n} socket · £{total} / year";
+            var many = (manyEl && manyEl.textContent) || "{n} sockets · £{total} / year";
+            document.querySelectorAll("[data-socket-qty]").forEach(function (input) {
+                var n = readQty(input);
+                var unit = parseInt(input.getAttribute("data-unit-price"), 10);
+                var total = unit * n;
+                var tpl = n === 1 ? one : many;
+                var el = document.querySelector('[data-socket-total="' + input.getAttribute("data-socket-qty") + '"]');
+                if (!el) return;
+                el.textContent = tpl.split("{n}").join(String(n)).split("{total}").join(pounds(total));
+            });
+        }
+
+        document.querySelectorAll("[data-socket-qty]").forEach(function (input) {
+            input.addEventListener("input", render);
+            input.addEventListener("change", render);
+        });
+        document.addEventListener("kcore:lang", render);
+        document.addEventListener("DOMContentLoaded", render);
+    })();
+    </script>
+
     <script src="js/main.js"></script>
 </body>
 </html>

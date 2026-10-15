@@ -55,9 +55,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -166,6 +167,25 @@ spec:
     mode: auto
   approvalPolicy: manual
   updateKind: kcore</code></pre>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="docs.mode.tf.reboot">Reboot stays <code>kctl update cluster reboot</code>. Destroy cancels the rollout.</p>
+<pre><code>resource "kcore_cluster_update" "os" {
+  name            = "release-0-4-2"
+  version         = "0.4.2"
+  flake_ref       = "github:kcorehypervisor/kcore"
+  flake_rev       = "&lt;full-git-sha&gt;"
+  all_nodes       = true
+  strategy        = "one-at-a-time"
+  max_unavailable = 1
+  batch_size      = 1
+  drain_vms       = false
+  activation      = "auto"
+  approval        = "manual"
+  approve         = false
+  update_kind     = "kcore"
+}</code></pre>
+            </div>
             <p>With <code>approvalPolicy: manual</code>, the controller waits for <code>kctl update cluster approve &lt;name&gt;</code> before rolling. Automatic policies advance without that step. <code>strategyType</code> for this release is <code>one-at-a-time</code>. A nixpkgs move is a second manifest with <code>updateKind: nixpkgs</code> whose <code>nixpkgsRev</code> is one of <code>testedOsPins</code>.</p>
 
             <h2>Phases</h2>

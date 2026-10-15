@@ -1,11 +1,11 @@
 (function () {
     var STORAGE_KEY = 'kcoreDocsExampleMode';
-    var VALID = { cli: true, yaml: true };
+    var VALID = { cli: true, yaml: true, terraform: true };
 
     function readMode() {
         try {
             var v = localStorage.getItem(STORAGE_KEY);
-            if (v === 'cli' || v === 'yaml') return v;
+            if (VALID[v]) return v;
         } catch (e) {}
         return 'yaml';
     }
