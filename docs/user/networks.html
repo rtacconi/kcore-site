@@ -150,7 +150,8 @@ spec:
 
             <h2 data-i18n="userdoc.networks.h2.manage">List, describe, delete</h2>
             <p data-i18n-html="userdoc.networks.manage.p1"></p>
-            <pre><code># One row per logical network name (example)
+            <div class="docs-cli-only">
+<pre><code># One row per logical network name (example)
 kctl get networks
 # NAME   TYPE   GATEWAY      NETMASK         VLAN  OVERLAY  BRIDGE           NODES
 # prod   vxlan  10.100.0.1   255.255.255.0   -     yes      kbr-prod         3
@@ -160,6 +161,7 @@ kctl describe network prod
 
 # Remove (use --target-node when deleting one node’s copy of a shared name)
 kctl delete network prod</code></pre>
+</div>
             <p data-i18n-html="userdoc.networks.manage.p2"></p>
 
             <h2 data-i18n="userdoc.networks.h2.vlan">VLAN tagging</h2>
@@ -197,7 +199,9 @@ spec:
 
             <h2 data-i18n="userdoc.networks.h2.disablevxlan">Disable VXLAN on a node</h2>
             <p data-i18n-html="userdoc.networks.disablevxlan.p1">If a node should not participate in VXLAN overlays, pass <code>--disable-vxlan</code> during installation:</p>
-            <pre><code>kctl node install ... --disable-vxlan</code></pre>
+            <div class="docs-cli-only">
+<pre><code>kctl node install ... --disable-vxlan</code></pre>
+</div>
             <div class="docs-tf-only">
 <pre><code>resource "kcore_node" "worker" {
   address         = "192.168.40.151:9091"

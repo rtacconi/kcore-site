@@ -128,7 +128,34 @@ kctl kubernetes health lab</code></pre>
             <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code>. <code>kctl apply -f</code> does not accept this kind.</p>
             <div class="docs-tf-only">
             <p data-i18n-html="docs.mode.tf.k8s">Provider 0.5.0 has no Kubernetes cluster resource. Declare the cluster with CLI or YAML. <code>kcore_cluster_update</code> can store <code>kubernetes_version</code> on a tested OS pin. That field does not install Kubernetes.</p>
+<pre><code>resource "kcore_cluster_update" "os" {
+  name                    = "release-0-5-0"
+  version                 = "0.5.0"
+  flake_ref               = "github:kcorehypervisor/kcore"
+  flake_rev               = "&lt;full-git-sha&gt;"
+  nixpkgs_rev             = "&lt;nixpkgs-rev&gt;"
+  all_nodes               = true
+  strategy                = "one-at-a-time"
+  max_unavailable         = 1
+  batch_size              = 1
+  drain_vms               = false
+  activation              = "auto"
+  update_kind             = "kcore"
+  schema_version          = 59
+  previous_schema_version = 56
+  min_compatible_reader   = 56
+  approval                = "manual"
+  approve                 = false
+
+  tested_os_pins {
+    nixpkgs_rev        = "&lt;nixpkgs-rev&gt;"
+    ceph_rev           = "&lt;ceph-rev&gt;"
+    ceph_sha256        = "&lt;ceph-sha256&gt;"
+    kubernetes_version = "1.37.0"
+  }
+}</code></pre>
             </div>
+            <div class="docs-yaml-only">
             <pre><code>kind: KubernetesCluster
 metadata:
   name: lab
@@ -182,6 +209,7 @@ spec:
         storageClass: lvm
         sizeBytes: 53687091200
         fsType: ext4</code></pre>
+            </div>
             <p data-i18n-html="userdoc.k8s.kinds"><code>kind: kubernetes-cluster</code> and <code>kind: kubernetes_cluster</code> are accepted. Fields are camelCase.</p>
 
             <h2 data-i18n="userdoc.k8s.h2.does">What create does</h2>
@@ -263,12 +291,15 @@ spec:
             <p data-i18n-html="userdoc.k8s.vol.claims">The control plane then applies the Rancher local-path provisioner, image <code>rancher/local-path-provisioner:v0.0.30</code>, from <code>/etc/kubernetes/provisioner.yaml</code>. The oneshot unit is <code>kcore-kubernetes-provisioner</code>. The StorageClass name defaults to <code>local-path</code>. A claim is a directory on that filesystem. The size on the claim is not a quota. To give the directories more room, raise <code>sizeBytes</code> and apply again. Shrinking is rejected. Another volume adds a path to the same StorageClass. It does not create a second StorageClass.</p>
             <p data-i18n-html="userdoc.k8s.vol.names">The controller volume name is <code>k8s-&lt;cluster&gt;-&lt;node&gt;-&lt;volume&gt;</code>. The LVM device is <code>/dev/&lt;vg&gt;/&lt;lv&gt;</code>. The ZFS device is <code>/dev/zvol/&lt;pool&gt;/&lt;dataset&gt;</code>.</p>
             <p data-i18n="userdoc.k8s.vol.zfs">A ZFS volume uses the same shared provisioner. Set storageClass to zfs on a node whose storage backend is zfs.</p>
+            <div class="docs-yaml-only">
             <pre><code>      - name: kcore-kdata
         nodeId: node-103
         storageClass: zfs
         sizeBytes: 53687091200
         fsType: ext4</code></pre>
+            </div>
             <p data-i18n-html="userdoc.k8s.vol.lvm"><code>mode: lvm</code> creates one thin pool of the declared size. Every listed node must use the same name, volume group, size, and filesystem. The role is pool. <code>volumeGroup</code> is required. Leave <code>mountPath</code> empty. kcore does not install a provisioner and does not install a CSI driver. Do not create a CSI driver's pool with this API. kcore deletes only volumes it created. An operator who wants one block device per claim installs that driver and points it at a pool the driver owns.</p>
+            <div class="docs-yaml-only">
             <pre><code>localProvisioner:
   enabled: true
   mode: lvm
@@ -280,6 +311,10 @@ spec:
       sizeBytes: 53687091200
       role: pool
       volumeGroup: vg_kcore</code></pre>
+            </div>
+            <div class="docs-tf-only">
+            <p data-i18n-html="docs.mode.tf.k8svol">Those volumes are fields of the Kubernetes manifest. Provider 0.5.0 has no resource for them. <code>kcore_volume</code> is a VM data disk, not this local-path filesystem.</p>
+            </div>
 
             <h2 data-i18n="userdoc.k8s.h2.up">Upgrades</h2>
             <p data-i18n-html="userdoc.k8s.up.pin">Kubernetes binaries come from <code>pkgs.kubernetes</code> on the host NixOS pin. There is no separate Kubernetes upgrade command and no cordon-and-drain roller. Move the pin with a ClusterUpdate. See <a href="cluster-and-node-upgrades.html">cluster and node upgrades</a>.</p>

@@ -118,9 +118,11 @@
 
             <h2 data-i18n="userdoc.gpu.inventory">See the GPUs</h2>
             <p data-i18n="userdoc.gpu.inventoryP">On the machine you are logged into, read the local PCI bus. Across the cluster, read the inventory each node agent publishes.</p>
+<div class="docs-cli-only">
 <pre><code>kctl gpu list --local
 kctl gpu list
 kctl gpu list --node node-a</code></pre>
+</div>
             <p data-i18n-html="userdoc.gpu.names">Names are per node. <code>radeon0</code> is that node's lowest-address AMD GPU, <code>radeon1</code> the next. NVIDIA cards are <code>nvidia0</code>, Intel graphics are <code>intel0</code>. A row is <code>free</code>, <code>in-use</code>, or <code>blocked</code>.</p>
             <table>
                 <thead>
@@ -178,8 +180,13 @@ spec:
 
             <h2 data-i18n="userdoc.gpu.migrate">Move the VM</h2>
             <p data-i18n-html="userdoc.gpu.migrateP">Leave <code>--gpu</code> off to take a free GPU of the same family on the destination, one for each GPU the VM has now. Name a card when you want a specific one. Node drain uses the same automatic pick. If nothing compatible is free, the VM stays where it is.</p>
+<div class="docs-cli-only">
 <pre><code>kctl migrate vm gpu-guest --target-node node-b
 kctl migrate vm gpu-guest --target-node node-b --gpu radeon1</code></pre>
+</div>
+            <div class="docs-tf-only">
+            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            </div>
             <p data-i18n-html="userdoc.gpu.migrateDisk">The guest disk is not copied. Cold migration of a GPU VM needs the same shared RBD disk as any other cross-node move. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
 
             <h2 data-i18n="userdoc.gpu.limits">Limits</h2>

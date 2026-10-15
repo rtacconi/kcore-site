@@ -120,6 +120,30 @@
             </ol>
             <p data-i18n-html="userdoc.vxlan.systemd.p2">NAT networks insert an additional unit between steps 1 and 2: <code>kcore-dhcp-&lt;net&gt;</code> (dnsmasq).</p>
 
+            <div class="docs-tf-only">
+            <h2>Terraform</h2>
+            <p class="docs-mode-hint" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+<pre><code>resource "kcore_network" "overlay" {
+  name                = "overlay"
+  network_type        = "vxlan"
+  external_ip         = "0.0.0.0"
+  gateway_ip          = "10.240.0.1"
+  internal_netmask    = "255.255.255.0"
+  enable_outbound_nat = true
+  east_west_firewall  = true
+  ipv6_prefix         = "fd00:10:240::/64"
+  ipv6_gateway        = "fd00:10:240::1"
+}
+
+resource "kcore_node" "worker" {
+  address         = "192.168.40.151:9091"
+  os_disk         = "/dev/sda"
+  certs_dir       = "${path.module}/certs"
+  join_controller = "192.168.40.107:9090"
+  disable_vxlan   = true
+}</code></pre>
+            </div>
+
             <h2 data-i18n="userdoc.vxlan.h2.optout">Opt-out</h2>
             <p data-i18n-html="userdoc.vxlan.optout.p">Pass <code>--disable-vxlan</code> during node installation to prevent VXLAN network creation on that node. NAT and bridge networks continue to work normally. If a VXLAN network creation is attempted on a node with VXLAN disabled, the controller returns a <code>FailedPrecondition</code> error.</p>
         </main>

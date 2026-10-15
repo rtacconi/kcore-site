@@ -122,10 +122,41 @@
 
             <h2 data-i18n="userdoc.images.h2.upload">Upload to a node</h2>
             <p data-i18n="userdoc.images.upload.p1">For large or air-gapped files, stream an image to the node cache once, then reference it by path on subsequent creates:</p>
+<div class="docs-cli-only">
 <pre><code>kcore-kctl --node 192.168.40.105:9091 node upload-image \
   -f /path/to/image.qcow2 \
   --name my-image.qcow2 \
   --format qcow2</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>resource "kcore_vm" "fetched" {
+  name               = "web-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+  image_url          = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
+  image_sha256       = "&lt;sha256&gt;"
+
+  nic {
+    network = "default"
+  }
+}
+
+resource "kcore_vm" "uploaded" {
+  name               = "web-02"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+  image_path         = "/var/lib/kcore/images/my-image.qcow2"
+  image_format       = "qcow2"
+
+  nic {
+    network = "default"
+  }
+}</code></pre>
+</div>
             <p data-i18n-html="userdoc.images.upload.p2">Optional <code>--image-sha256</code> validates content during upload. Then create a VM with <code>--image-path /var/lib/kcore/images/...</code> and <code>--image-format</code>.</p>
 
             <h2 data-i18n="userdoc.images.h2.ssh">Wait for SSH</h2>

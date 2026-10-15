@@ -42,8 +42,8 @@
 </head>
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
-        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
     </div></nav>
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
@@ -80,7 +80,12 @@
             <h1>YAML manifest reference</h1>
             <p>kcore supports declarative resource creation via YAML manifests. Every resource that can be created with <code>kctl</code> CLI flags can also be expressed as a YAML manifest, making manifests the preferred way to manage infrastructure as code.</p>
             <p>All manifest kinds are auto-detected and applied with a single command:</p>
+<div class="docs-cli-only">
 <pre><code>kctl apply -f &lt;file.yaml&gt;</code></pre>
+</div>
+<div class="docs-yaml-only">
+<pre><code>kctl apply -f &lt;file.yaml&gt;</code></pre>
+</div>
             <p class="docs-mode-hint docs-cli-only">You are browsing in <strong>CLI</strong> mode. This page is the YAML manifest reference—switch the toggle above to <strong>YAML</strong> for the intended view, or open the <a href="kctl-reference.html">kctl CLI reference</a> for commands only.</p>
             <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
 
@@ -531,6 +536,7 @@ spec:
             <h2 id="idempotency-and-upsert">Idempotency and upsert</h2>
             <p><code>kctl apply -f</code> and <code>kctl create -f</code> are idempotent. The controller performs a server-side upsert: it looks up the existing resource, diffs it against your manifest, and then creates, updates the fields that are safe to change, rejects changes to fields that would require a rebuild, or does nothing when the stored state already matches.</p>
             <p>Every create command prints what happened:</p>
+<div class="docs-cli-only">
 <pre><code>$ kctl create vm -f vm.yaml
 updated VM 'web-01' (fields: cpu, memory_bytes, desired_state)
   ID:   vm-…
@@ -540,6 +546,7 @@ updated VM 'web-01' (fields: cpu, memory_bytes, desired_state)
 
 $ kctl create vm -f vm.yaml
 unchanged VM 'web-01'</code></pre>
+</div>
 
             <h3>Mutable vs immutable fields</h3>
             <p>A change to an immutable field is rejected with <code>InvalidArgument</code>. The fix is always: <code>kctl delete …</code> then re-apply.</p>
@@ -571,7 +578,23 @@ unchanged VM 'web-01'</code></pre>
             <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
             <p data-i18n-html="docs.mode.tf.join"><code>kcore_node</code> takes one <code>join_controller</code>, the bootstrap controller address. A list of join controllers is CLI and YAML only.</p>
             <p data-i18n-html="docs.mode.tf.disk"><code>kcore_disk_layout</code> takes <code>layout_nix</code>, a disko expression. The structured <code>spec.diskLayout</code> object is YAML only. <code>layoutNixFile</code> is not a provider attribute.</p>
-<pre><code>resource "kcore_cluster" "prod" {
+<pre><code>terraform {
+  required_providers {
+    kcore = {
+      source  = "kcorehypervisor/kcore"
+      version = "0.5.0"
+    }
+  }
+}
+
+provider "kcore" {
+  controller_address = "192.168.40.107:9090"
+  tls_cert_path      = "${path.module}/certs/kctl.crt"
+  tls_key_path       = "${path.module}/certs/kctl.key"
+  tls_ca_path        = "${path.module}/certs/ca.crt"
+}
+
+resource "kcore_cluster" "prod" {
   name       = "prod"
   controller = "192.168.40.107:9090"
   certs_dir  = "${path.module}/certs"
@@ -693,22 +716,104 @@ resource "kcore_disk_layout" "prod_data_pool" {
 }
 
 resource "kcore_cluster_update" "os" {
-  name            = "release-0-4-2"
-  version         = "0.4.2"
-  flake_ref       = "github:kcorehypervisor/kcore"
-  flake_rev       = "&lt;full-git-sha&gt;"
-  all_nodes       = true
-  strategy        = "one-at-a-time"
-  max_unavailable = 1
-  activation      = "auto"
-  approval        = "manual"
-  approve         = false
-  update_kind     = "kcore"
-}</code></pre>
+  name                    = "release-0-5-0"
+  version                 = "0.5.0"
+  flake_ref               = "github:kcorehypervisor/kcore"
+  flake_rev               = "&lt;full-git-sha&gt;"
+  nixpkgs_rev             = "&lt;nixpkgs-rev&gt;"
+  all_nodes               = true
+  strategy                = "one-at-a-time"
+  max_unavailable         = 1
+  batch_size              = 1
+  drain_vms               = false
+  activation              = "auto"
+  update_kind             = "kcore"
+  schema_version          = 59
+  previous_schema_version = 56
+  min_compatible_reader   = 56
+  approval                = "manual"
+  approve                 = false
+
+  tested_os_pins {
+    nixpkgs_rev        = "&lt;nixpkgs-rev&gt;"
+    ceph_rev           = "&lt;ceph-rev&gt;"
+    ceph_sha256        = "&lt;ceph-sha256&gt;"
+    kubernetes_version = "1.37.0"
+  }
+}
+resource "kcore_volume" "data" {
+  name          = "web-data"
+  size_bytes    = 10737418240
+  storage_class = "ceph"
+  vm            = kcore_vm.web.id
+}
+
+resource "kcore_volume_snapshot" "data" {
+  volume = kcore_volume.data.name
+  name   = "web-data-1"
+}
+
+resource "kcore_snapshot_policy" "daily" {
+  name            = "daily"
+  selector_volume = kcore_volume.data.name
+  schedule        = "@daily"
+  keep            = 7
+}
+
+resource "kcore_ceph_cluster" "lab" {
+  name           = "lab-san"
+  public_network = "10.10.0.0/24"
+  size           = 3
+  min_size       = 2
+
+  node {
+    node_id    = "dell-1"
+    osd_device = "/dev/nvme0n1"
+  }
+}
+
+resource "kcore_shared_filesystem" "home" {
+  name         = "home"
+  ceph_cluster = kcore_ceph_cluster.lab.name
+  fs_name      = "home"
+
+  client {
+    name  = "web"
+    paths = ["/"]
+  }
+}
+
+resource "kcore_object_store" "s3" {
+  name         = "s3"
+  ceph_cluster = kcore_ceph_cluster.lab.name
+  port         = 7480
+}
+
+resource "kcore_object_user" "app" {
+  name  = "app"
+  store = kcore_object_store.s3.name
+}
+
+resource "kcore_operator" "ci" {
+  name       = "ci"
+  roles      = ["vm-admin"]
+  issue_cert = true
+}
+
+data "kcore_nodes" "all" {}
+
+data "kcore_node" "controller" {
+  id = kcore_node.controller.node_id
+}
+
+data "kcore_vm" "web" {
+  id = kcore_vm.web.id
+}
+</code></pre>
             </div>
             <h2>Applying manifests</h2>
             <p>Use <code>kctl apply -f</code> for most resource kinds; the <code>kind</code> field is auto-detected. <strong>Host OS rollouts</strong> use <code>kctl update cluster apply -f rollout.yaml</code> instead — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
-<pre class="docs-yaml-only"><code># Bootstrap (local / ISO operations)
+<pre class="docs-cli-only"><code># Bootstrap (local / ISO operations)
 kctl apply -f cluster.yaml
 kctl apply -f node-install.yaml
 

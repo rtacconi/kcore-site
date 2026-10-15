@@ -42,8 +42,8 @@
 </head>
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
-        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
     </div></nav>
 
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
@@ -122,26 +122,63 @@
             </table>
 
             <h3 data-i18n="userdoc.storage.filesystemExample">Filesystem example</h3>
+<div class="docs-cli-only">
 <pre><code>kctl node install \
   --os-disk /dev/sda \
   --data-disk /dev/sdb \
   --storage-backend filesystem</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>resource "kcore_node" "files" {
+  bootstrap       = true
+  address         = "192.168.40.107:9091"
+  os_disk         = "/dev/sda"
+  data_disk       = ["/dev/sdb"]
+  storage_backend = "filesystem"
+  certs_dir       = "${path.module}/certs"
+  run_controller  = true
+}</code></pre>
+</div>
 
             <h3 data-i18n="userdoc.storage.lvmExample">LVM example</h3>
+<div class="docs-cli-only">
 <pre><code>kctl node install \
   --os-disk /dev/sda \
   --data-disk /dev/sdb \
   --storage-backend lvm \
   --lvm-vg-name vg_kcore \
   --lvm-lv-prefix kcore-</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>resource "kcore_node" "lvm" {
+  address         = "192.168.40.105:9091"
+  os_disk         = "/dev/sda"
+  data_disk       = ["/dev/sdb"]
+  storage_backend = "lvm"
+  certs_dir       = "${path.module}/certs"
+  join_controller = "192.168.40.107:9090"
+}</code></pre>
+</div>
 
             <h3 data-i18n="userdoc.storage.zfsExample">ZFS example</h3>
+<div class="docs-cli-only">
 <pre><code>kctl node install \
   --os-disk /dev/sda \
   --data-disk /dev/sdb --data-disk /dev/sdc \
   --storage-backend zfs \
   --zfs-pool-name tank0 \
   --zfs-dataset-prefix kcore/</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>resource "kcore_node" "zfs" {
+  address         = "192.168.40.103:9091"
+  os_disk         = "/dev/sda"
+  data_disk       = ["/dev/sdb", "/dev/sdc"]
+  storage_backend = "zfs"
+  certs_dir       = "${path.module}/certs"
+  join_controller = "192.168.40.107:9090"
+}</code></pre>
+</div>
 
             <h2 data-i18n="userdoc.storage.luksEncryption">LUKS disk encryption</h2>
             <p data-i18n-html="userdoc.storage.luksEncryptionP1">The OS disk is always encrypted with <strong>LUKS2</strong>. When <code>/sys/class/tpm/tpm0</code> exists on the node, the key is TPM2-sealed for automatic unlock on boot. Otherwise a key-file is used.</p>
@@ -149,18 +186,22 @@
 
             <h2 data-i18n="userdoc.storage.storageClasses">Storage classes</h2>
             <p data-i18n="userdoc.storage.storageClassesP1">Storage classes in kcore are derived from node registration — they are not a separate API object. Each node reports its configured backend, and the controller aggregates them.</p>
+<div class="docs-cli-only">
 <pre><code>$ kctl get storage-class
 NAME          NODES
 filesystem    3
 lvm           2
 zfs           1
 unspecified   0</code></pre>
+</div>
             <p data-i18n="userdoc.storage.storageClassesP2">To see which nodes use a specific backend:</p>
+<div class="docs-cli-only">
 <pre><code>$ kctl describe storage-class lvm
 Storage class: lvm
 Nodes (2):
   - node-ab12cd34
   - node-ef56gh78</code></pre>
+</div>
 
             <h2 data-i18n="userdoc.storage.nodeAgentConfig">Node-agent configuration</h2>
             <p data-i18n-html="userdoc.storage.nodeAgentConfigP1">The node-agent reads its storage settings from <code>/etc/kcore/node-agent.yaml</code>:</p>
@@ -207,6 +248,13 @@ spec:
   nic {
     network = "default"
   }
+}
+
+resource "kcore_volume" "data" {
+  name          = "my-vm-data"
+  size_bytes    = 10737418240
+  storage_class = "lvm"
+  vm            = kcore_vm.my_vm.id
 }</code></pre>
             </div>
 
