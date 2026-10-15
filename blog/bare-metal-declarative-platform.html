@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bare-metal platforms with declarative Kubernetes, Ceph SAN, object storage, and PostgreSQL — cloud-style workflows without hyperscaler markups.">
+    <title>Bare-metal platforms that feel like the cloud — without the cloud bill - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/bare-metal-declarative-platform.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Bare-metal platforms that feel like the cloud — without the cloud bill">
+    <meta property="og:description" content="Bare-metal platforms with declarative Kubernetes, Ceph SAN, object storage, and PostgreSQL — cloud-style workflows without hyperscaler markups.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/bare-metal-declarative-platform.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.55rem; }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
+            margin: 1.75rem 0 0.5rem;
+        }
+        .cta-row a {
+            display: inline-block;
+            padding: 0.65rem 1.1rem;
+            border-radius: 0.45rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .cta-row a.primary {
+            background: var(--accent-gradient, var(--accent-primary));
+            color: #fff;
+        }
+        .cta-row a.secondary {
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.bare.title">Bare-metal platforms that feel like the cloud — without the cloud bill</h1>
+            <p class="post-meta" data-i18n="bp.bare.date">15 October 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.bare.back">← Back to blog</a>
+
+        <p>
+            Cloud bills are going up and many teams are now asking a simple question: can we set up a bare-metal platform which still has a declarative feel—using Kubernetes, shared storage, object storage, and databases—without having to pay the markups imposed by the hyperscalers for every CPU hour?
+        </p>
+        <p>
+            It's not a case of longing for racks; it's a decision regarding cost and control. The cloud has caused operators to learn how to describe their infrastructure in textual form, to review changes, and then have the control plane match the desired state. The next thing that many people want is the same workflow to be applied to the hardware that they already have.
+        </p>
+        <h2>What “like the cloud” means on bare metal</h2>
+        <p>
+            With a public cloud you usually don't SSH directly into a hypervisor in order to create a disk. Instead, you declare a virtual machine, a volume, a load balancer, or a managed database, and then an API carries out the action. What's useful about this approach is not the name of the brand but the contract: the desired state expressed in YAML or Terraform, an API that takes responsibility for the lifecycle, and machines that boot using a known generation if an update fails.
+        </p>
+        <p>
+            A bare-metal platform which provides nothing but a web console doesn't meet that criterion. Likewise, a collection of shell scripts also fails the test. The standard must be a reviewable configuration and a genuine provider, not a demo that wraps SSH.
+        </p>
+        <h2>Bare-metal Kubernetes without a second estate</h2>
+        <p>
+            A large number of estates continue to run their various workloads as virtual machines and would like to have Kubernetes once it starts to pay for itself. It isn't always appropriate to require that every application be placed on OpenShift from the very beginning. A sensible approach is to use a virtual machine-first host platform which is able to set up a Kubernetes cluster on nodes that are already part of the cluster: by deploying the kubelet, etcd, and the API server from a manifest, together with an API VIP and Cilium whenever L2 announcements are needed.
+        </p>
+        <p>
+            That is what kcore does with <code>kctl kubernetes</code> and a <code>KubernetesCluster</code> manifest. Membership is fixed at create. Since the Terraform provider 0.5.0 does not include a Kubernetes cluster resource, the path is CLI or YAML. For buyers the key issue is the operating model: a single bare-metal fleet, with VMs first and Kubernetes only when you declare it—rather than a separate appliance for each layer.
+        </p>
+        <h2>Shared block (SAN-style) and local disks</h2>
+        <p>
+            The habit that people tend to overlook is using cloud block storage. On kcore, the local backends—namely the filesystem, LVM, and ZFS—hold the VM disks on the host machine that is running the guest; this should be the default setting when latency is a concern.
+        </p>
+        <p>
+            kcore SAN includes Ceph as shared block storage. You declare a <code>CephCluster</code>, bootstrap the MON, MGR and OSD components using the day-2 YAML file, and then place the VM disks on RBD. When performing a cold drain or a live migration, the virtual machines can be moved without having to copy their guest blocks since the image is already present in the cluster. This is the kind of result that teams have in mind when they talk about having shared storage on their physical hardware: redundant block storage, not a fibre-channel catalog from 2008.
+        </p>
+        <p>
+            People still select on a per-VM basis. A database which needs local NVMe can remain on LVM. An application server which should fail over cleanly can be placed on Ceph.
+        </p>
+        <h2>Object storage: say what ships</h2>
+        <p>
+            S3-compatible object storage fits into the same buyer narrative. The kcore control plane has an ObjectStore resource designed for Ceph RGW. This should be seen as ongoing control-plane development, not as a complete replacement for all the features available in cloud buckets. Currently, you can plan for Ceph-backed block storage for VMs, with object storage progressing in the same declarative manner as the rest of the platform. Never base a decision to migrate on a blog post alone — instead refer to the documentation for the phase in question.
+        </p>
+        <h2>PostgreSQL as a declared service</h2>
+        <p>
+            One of the reasons why people remain on a cloud bill is managed Postgres. Using kcore, one PostgreSQL database can be declared per node via the NixOS postgresql package. The service operates on the host operating system rather than within a guest VM. You use <code>kctl apply</code> to apply a YAML manifest, select a package pin like postgresql_16, and then connect via the node's Unix socket.
+        </p>
+        <p>
+            It is important to consider the current limitations. Version 1 does not include a TCP listener or a password configuration. Each node has at most one database; a multi-node Postgres cluster is intended for Q1 2027. Should you require a full RDS substitute today, make it known in the assessment. And if you need a declarative database situated next to the hypervisor for use by both the application and control plane, the appropriate option is already provided.
+        </p>
+        <h2>The cost shape</h2>
+        <p>
+            Hyperscalers charge for almost everything. kcore production subscriptions are based on each physical CPU socket per year rather than per core, and a free evaluation ISO is available on GitHub Releases under the Apache-2.0 license. This does not mean that electricity or disks are free. What it does is get rid of the habit of having to pay a premium for each vCPU of steady-state virtualization that you could run on your own hardware.
+        </p>
+        <h2>Who this article is for</h2>
+        <ul>
+            <li>Platform teams who wish to use bare-metal hosts where the standard workflow is Terraform and YAML.</li>
+            <li>Operators who want to run Kubernetes on the same physical hardware as their VMs, without having to reorganize their existing setup around a product that works only with Kubernetes.</li>
+            <li>Storage buyers who, when they refer to SAN, mean shared Ceph RBD, and who will also keep an eye on object storage as it becomes more entrenched.</li>
+            <li>Teams who wish for PostgreSQL to be declared alongside the node and should be aware of the limitations of Unix-socket v1.</li>
+        </ul>
+        <h2>Conclusion</h2>
+        <p>
+            The declarative desired state is the pattern worth keeping. The bill worth leaving is the one which charges cloud rates for capacity that you already have on premises. kcore is a bare-metal hypervisor product designed for this kind of situation: you install it on the physical hardware, manage the VMs via an API, add Ceph when you need shared block storage, set up Kubernetes on the same nodes, and then declare a PostgreSQL database where the documentation states it will fit.
+        </p>
+        <p>
+            Before you rewrite the operating model, download the evaluation ISO, read the Kubernetes, SAN, and PostgreSQL guides, and check your current cloud or VMware line items against the socket quote.
+        </p>
+
+        <div class="cta-row">
+            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a class="secondary" href="../docs/user/kubernetes.html">Kubernetes guide</a>
+            <a class="secondary" href="../docs/user/storage-vsan.html">kcore SAN (Ceph)</a>
+            <a class="secondary" href="../docs/user/postgresql.html">PostgreSQL guide</a>
+            <a class="secondary" href="../pricing.html">See pricing</a>
+        </div>
+        <p>
+            Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="../partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="../trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

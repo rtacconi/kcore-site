@@ -10,6 +10,7 @@
   <url><loc>https://kcorehypervisor.com/roadmap.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://kcorehypervisor.com/blog.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/bare-metal-declarative-platform.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/vmware-exit-strategy.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/windows-10-desktop.html</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/vmware-migration-tools.html</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
