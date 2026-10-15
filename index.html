@@ -72,6 +72,44 @@
             overflow: hidden;
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
         }
+
+        .assessment-form {
+            max-width: 640px;
+            margin: 1.5rem auto 0;
+            text-align: left;
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .assessment-form label {
+            display: grid;
+            gap: 0.35rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .assessment-form input,
+        .assessment-form select,
+        .assessment-form textarea {
+            width: 100%;
+            padding: 0.65rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font: inherit;
+        }
+
+        .assessment-form textarea {
+            min-height: 6rem;
+            resize: vertical;
+        }
+
+        .assessment-form .hint {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
     </style>
 </head>
 <body class="home">
@@ -145,7 +183,7 @@
                     Per-socket licensing, hosts that boot the previous generation if an update fails, and Windows guests. Download the evaluation ISO, or hire us to move an estate from VMware or Proxmox.
                 </p>
                 <div class="hero-buttons">
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20assessment" class="btn btn-primary" data-i18n="hero.hire">Book a migration assessment</a>
+                    <a href="#get-started" class="btn btn-primary" data-i18n="hero.hire">Book a migration assessment</a>
                     <a href="pricing.html" class="btn btn-secondary" data-i18n="hero.pricing">See pricing</a>
                 </div>
                 <p class="hero-secondary-link">
@@ -288,7 +326,7 @@
                     <p style="color: var(--text-secondary); margin: 0.5rem 0 0; line-height: 1.65;" data-i18n="capability.soon">kcore-migrate inventories VMware and Proxmox and converts exported disks. A direct vCenter disk read is not included. NVIDIA vGPU is not shipped. There is no integrated backup product.</p>
                 </div>
                 <p style="text-align: center; margin-top: 0.5rem;">
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20assessment" class="btn btn-primary" data-i18n="capability.hire">Book a migration assessment</a>
+                    <a href="#get-started" class="btn btn-primary" data-i18n="capability.hire">Book a migration assessment</a>
                     <a href="docs.html" class="btn btn-secondary" style="margin-left: 0.5rem;" data-i18n="capability.docs">Technical docs</a>
                 </p>
             </div>
@@ -347,7 +385,7 @@
                             <span class="check-icon">✓</span>
                             <div>
                                 <strong data-i18n="platform.storage.title">Flexible Storage</strong>
-                                <p data-i18n="platform.storage.desc">Local directories, LVM, or ZFS. Pick what makes sense for your hardware.</p>
+                                <p data-i18n="platform.storage.desc">Local directories, LVM, or ZFS on the host. Ceph is the shared-disk option.</p>
                             </div>
                         </li>
                     </ul>
@@ -418,11 +456,50 @@ Created:     2026-03-10 14:23:45</span>
             <div class="cta-content">
                 <h2 data-i18n="cta.title">Get a fit or a no-fit</h2>
                 <p data-i18n="cta.desc">Send socket count, roughly how many Windows and Linux guests, and whether you are a hosting provider or an on-prem estate. We reply with whether kcore is a sensible target and what a migration project looks like.</p>
-                <div class="cta-buttons">
-                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20migration%20assessment" class="btn btn-primary btn-large" data-i18n="cta.hire">Book a migration assessment</a>
-                    <a href="pricing.html" class="btn btn-secondary btn-large" data-i18n="cta.buy">See pricing</a>
-                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-secondary btn-large" data-i18n="cta.download">Download the evaluation ISO</a>
-                </div>
+                <form id="assessment" class="assessment-form">
+                    <label>
+                        <span data-i18n="assess.name">Name</span>
+                        <input name="name" type="text" required autocomplete="name">
+                    </label>
+                    <label>
+                        <span data-i18n="assess.email">Work email</span>
+                        <input name="email" type="email" required autocomplete="email">
+                    </label>
+                    <label>
+                        <span data-i18n="assess.company">Company</span>
+                        <input name="company" type="text" required autocomplete="organization">
+                    </label>
+                    <label>
+                        <span data-i18n="assess.sockets">CPU socket count</span>
+                        <input name="sockets" type="text" required inputmode="numeric">
+                    </label>
+                    <label>
+                        <span data-i18n="assess.windows">Rough Windows guest count</span>
+                        <input name="windows" type="text" required inputmode="numeric">
+                    </label>
+                    <label>
+                        <span data-i18n="assess.linux">Rough Linux guest count</span>
+                        <input name="linux" type="text" required inputmode="numeric">
+                    </label>
+                    <label>
+                        <span data-i18n="assess.estate">Where it runs</span>
+                        <select name="estate" required>
+                            <option value="" selected disabled></option>
+                            <option value="Hosting provider" data-i18n="assess.hosting">Hosting provider</option>
+                            <option value="On-prem estate" data-i18n="assess.onprem">On-prem estate</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span data-i18n="assess.note">Note (optional)</span>
+                        <textarea name="note"></textarea>
+                    </label>
+                    <p class="hint" data-i18n="assess.hint">This opens your email app. The site does not store the form.</p>
+                    <div class="cta-buttons">
+                        <button type="submit" class="btn btn-primary btn-large" data-i18n="cta.hire">Book a migration assessment</button>
+                        <a href="pricing.html" class="btn btn-secondary btn-large" data-i18n="cta.buy">See pricing</a>
+                        <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-secondary btn-large" data-i18n="cta.download">Download the evaluation ISO</a>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -456,6 +533,8 @@ Created:     2026-03-10 14:23:45</span>
                         <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
                         <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
                         <li><a href="https://github.com/kcorehypervisor/kcore/releases">Download ISO</a></li>
+                        <li><a href="partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="trademark.html" data-i18n="footer.trademark">Trademark</a></li>
                         <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
@@ -482,6 +561,33 @@ Created:     2026-03-10 14:23:45</span>
                 }
             );
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.getElementById("assessment");
+            if (!form) return;
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                var data = new FormData(form);
+                function field(name) {
+                    var value = data.get(name);
+                    return value == null ? "" : String(value).trim();
+                }
+                var lines = [
+                    "Name: " + field("name"),
+                    "Work email: " + field("email"),
+                    "Company: " + field("company"),
+                    "CPU socket count: " + field("sockets"),
+                    "Rough Windows guest count: " + field("windows"),
+                    "Rough Linux guest count: " + field("linux"),
+                    "Estate: " + field("estate"),
+                    "Note: " + field("note")
+                ];
+                window.location.href = "mailto:team@tacconiconsulting.com?subject="
+                    + encodeURIComponent("kcore migration assessment")
+                    + "&body=" + encodeURIComponent(lines.join("\n"));
+            });
+        });
     </script>
     <script src="js/commerce.js"></script>
     <script src="js/i18n.js"></script>
