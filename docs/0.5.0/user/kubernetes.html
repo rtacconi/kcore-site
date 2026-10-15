@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create a Kubernetes cluster, keep an API VIP with keepalived, install Cilium L2, and mount LVM or ZFS volumes.">
+    <title>Kubernetes - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/kubernetes.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Kubernetes - kcore documentation">
+    <meta property="og:description" content="Create a Kubernetes cluster, keep an API VIP with keepalived, install Cilium L2, and mount LVM or ZFS volumes.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/kubernetes.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html" data-i18n="docs.nav.appliance">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" class="active" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+
+            <h1 data-i18n="userdoc.k8s.h1">Kubernetes</h1>
+            <p data-i18n="userdoc.k8s.intro">kcore creates a Kubernetes cluster on nodes that are already members of the kcore cluster. The first apply stores the cluster, generates certificates, and deploys kubelet, etcd, and the API server. Put every member in that first manifest.</p>
+            <p class="note" data-i18n="userdoc.k8s.note">Addresses on this page are examples. Pick free addresses on your own network.</p>
+
+            <h2 data-i18n="userdoc.k8s.h2.create">Create a cluster</h2>
+            <p data-i18n-html="userdoc.k8s.create.p">Apply needs cluster-admin. <code>kctl</code> prints the plan, including blocking issues, then asks y/n. Answering y creates the cluster. A later apply of the same name updates it. There is no flag-only create. The manifest is the input.</p>
+            <div class="docs-cli-only">
+            <pre><code>kctl kubernetes apply -f cluster.yaml
+kctl kubernetes get lab
+kctl kubernetes list
+kctl kubernetes health lab</code></pre>
+            </div>
+            <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code>. <code>kctl apply -f</code> does not accept this kind.</p>
+            <div class="docs-tf-only">
+            <p data-i18n-html="docs.mode.tf.k8s">Provider 0.5.0 has no Kubernetes cluster resource. Declare the cluster with CLI or YAML. <code>kcore_cluster_update</code> can store <code>kubernetes_version</code> on a tested OS pin. That field does not install Kubernetes.</p>
+            </div>
+            <pre><code>kind: KubernetesCluster
+metadata:
+  name: lab
+spec:
+  clusterCidr: 10.244.0.0/16
+  serviceCidr: 10.96.0.0/12
+  clusterDns: 10.96.0.10
+  apiServerEndpoint: 192.168.40.200:6443
+  cni: cilium
+  cilium:
+    mode: native-routing
+    mtu: 1500
+    tunnel: disabled
+    autoDirectNodeRoutes: true
+    loadBalancerIpPools:
+      - 192.168.40.220/29
+  controlPlaneNodes:
+    - nodeId: node-105
+      advertiseAddress: 192.168.40.105
+      iface: enp6s0
+    - nodeId: node-107
+      advertiseAddress: 192.168.40.107
+      iface: enp6s0
+  workerNodes:
+    - nodeId: node-103
+      advertiseAddress: 192.168.40.103
+      iface: enp6s0
+  highAvailability:
+    enabled: true
+    vipAddress: 192.168.40.200
+    vipInterface: enp6s0
+  scheduleOnControlPlane: true
+  localProvisioner:
+    enabled: true
+    storageClassName: local-path
+    mode: shared
+    volumes:
+      - name: kcore-kdata
+        nodeId: node-105
+        storageClass: lvm
+        sizeBytes: 53687091200
+        fsType: ext4
+        role: filesystem
+      - name: kcore-kdata
+        nodeId: node-107
+        storageClass: lvm
+        sizeBytes: 53687091200
+        fsType: ext4
+      - name: kcore-kdata
+        nodeId: node-103
+        storageClass: lvm
+        sizeBytes: 53687091200
+        fsType: ext4</code></pre>
+            <p data-i18n-html="userdoc.k8s.kinds"><code>kind: kubernetes-cluster</code> and <code>kind: kubernetes_cluster</code> are accepted. Fields are camelCase.</p>
+
+            <h2 data-i18n="userdoc.k8s.h2.does">What create does</h2>
+            <ul>
+                <li data-i18n="userdoc.k8s.does.1">The phase starts as bootstrapping. The orchestrator generates PKI, deploys every member in parallel, waits for etcd quorum and the API, then marks the cluster ready. It checks again every 30 seconds.</li>
+                <li data-i18n-html="userdoc.k8s.does.2">The first entry in <code>controlPlaneNodes</code> is the bootstrap node. The <code>initialCluster</code> field in the YAML is ignored on create.</li>
+                <li data-i18n="userdoc.k8s.does.3">Each control-plane node must already exist and be ready. A missing or not-ready worker is a warning.</li>
+                <li data-i18n-html="userdoc.k8s.does.4">API port 6443 keeps the CNI you set. An empty <code>cni</code> is stored as cilium. Any other API port is stored as bridge. The node module accepts only cilium on the primary cluster. A second cluster on the same hosts must not run a second Cilium. The agents would share BPF pins.</li>
+                <li data-i18n-html="userdoc.k8s.does.5"><code>clusterDns</code> defaults to 10.96.0.10. <code>cni</code> defaults to cilium. Each node's <code>iface</code> defaults to enp6s0.</li>
+                <li data-i18n-html="userdoc.k8s.does.6"><code>scheduleOnControlPlane</code> lets control-plane nodes run pods. <code>workerNodes</code> can then be empty.</li>
+            </ul>
+
+            <h2 data-i18n="userdoc.k8s.h2.fields">Fields</h2>
+            <table>
+                <thead><tr><th data-i18n="userdoc.k8s.th.field">Field</th><th data-i18n="userdoc.k8s.th.desc">Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>metadata.name</code></td><td data-i18n="userdoc.k8s.f.name">Cluster name.</td></tr>
+                    <tr><td><code>spec.clusterCidr</code></td><td data-i18n="userdoc.k8s.f.pods">Pod CIDR. Required.</td></tr>
+                    <tr><td><code>spec.serviceCidr</code></td><td data-i18n="userdoc.k8s.f.svc">Service CIDR. Required.</td></tr>
+                    <tr><td><code>spec.clusterDns</code></td><td data-i18n="userdoc.k8s.f.dns">Cluster DNS address. Default 10.96.0.10.</td></tr>
+                    <tr><td><code>spec.apiServerEndpoint</code></td><td data-i18n="userdoc.k8s.f.api">host:port of the API. Required. Use the VIP when high availability is on.</td></tr>
+                    <tr><td><code>spec.cni</code></td><td data-i18n="userdoc.k8s.f.cni">Default cilium. A port other than 6443 is stored as bridge.</td></tr>
+                    <tr><td><code>spec.cilium</code></td><td data-i18n-html="userdoc.k8s.f.cilium">mode, mtu, tunnel, autoDirectNodeRoutes, loadBalancerIpPools. Defaults are native-routing, 1500, disabled, true, and an empty list. The list is stored. kcore does not apply the Cilium CRDs.</td></tr>
+                    <tr><td><code>controlPlaneNodes</code></td><td data-i18n-html="userdoc.k8s.f.cp">nodeId, advertiseAddress, and iface (default enp6s0). The first entry bootstraps etcd.</td></tr>
+                    <tr><td><code>workerNodes</code></td><td data-i18n="userdoc.k8s.f.wk">Same node fields. Stored as join members.</td></tr>
+                    <tr><td><code>highAvailability</code></td><td data-i18n-html="userdoc.k8s.f.ha">enabled, vipAddress, and vipInterface. kctl sets the method to keepalived.</td></tr>
+                    <tr><td><code>scheduleOnControlPlane</code></td><td data-i18n="userdoc.k8s.f.sched">When true, control-plane nodes accept pods.</td></tr>
+                    <tr><td><code>localProvisioner</code></td><td data-i18n-html="userdoc.k8s.f.local">enabled, storageClassName (default local-path), mode (shared or lvm), and volumes. See volumes below.</td></tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.k8s.h2.vip">API VIP</h2>
+            <p data-i18n-html="userdoc.k8s.vip.p"><code>highAvailability.enabled</code> starts keepalived on each control plane. Point <code>apiServerEndpoint</code> at <code>vipAddress</code> and the API port. vipAddress and vipInterface are both required when high availability is on.</p>
+            <ul>
+                <li data-i18n-html="userdoc.k8s.vip.1">The instance name is <code>kcore_api</code>. State is BACKUP, with nopreempt, so a restarted node does not take the VIP back.</li>
+                <li data-i18n-html="userdoc.k8s.vip.2"><code>virtual_router_id</code> is 40. <code>advert_int</code> is 1. Each member sends a unicast advertisement every second. That advertisement is the heartbeat.</li>
+                <li data-i18n="userdoc.k8s.vip.3">Priority is the last octet of the node's advertise address, or 100 when that octet is 0 or 255. Peers are the other etcd members. The address is vipAddress/24 on vipInterface.</li>
+                <li data-i18n="userdoc.k8s.vip.4">The firewall accepts IP protocol 112 and marks it NOTRACK, so VM masquerade does not rewrite the advertisements.</li>
+            </ul>
+            <p class="note" data-i18n="userdoc.k8s.vip.gap">keepalived does not probe TCP 6443. The VIP moves when advertisements stop, which is when keepalived is down. If only kube-apiserver exits and keepalived stays up, the VIP stays on that node.</p>
+            <p data-i18n-html="userdoc.k8s.kubeconfig">When the controller has generated a kubeconfig, the control plane writes it to <code>/etc/kubernetes/admin.conf</code>. Use that file with kubectl. The server is the API endpoint, which is the VIP when high availability is on.</p>
+
+            <h2 data-i18n="userdoc.k8s.h2.cilium">Cilium L2 load balancer</h2>
+            <p data-i18n-html="userdoc.k8s.cilium.p">Recorded Cilium settings default to native-routing, MTU 1500, tunnel disabled, and autoDirectNodeRoutes. <code>loadBalancerIpPools</code> is stored with the cluster. The node installs <code>cilium-cli</code>. It does not install the Cilium DaemonSet, and it does not apply <code>CiliumLoadBalancerIPPool</code> or <code>CiliumL2AnnouncementPolicy</code>.</p>
+            <p data-i18n="userdoc.k8s.cilium.op">After the API answers, install Cilium and apply the pool and the L2 policy yourself. The host does not run kube-proxy, so the install needs kube-proxy replacement. Use the cluster CIDR as the native routing CIDR, and the VIP as the Kubernetes API address. The interface list is the node interface. That is enp6s0 unless you set another iface.</p>
+            <pre><code>export KUBECONFIG=/etc/kubernetes/admin.conf
+helm repo add cilium https://helm.cilium.io/
+helm repo update
+helm install cilium cilium/cilium \
+  --namespace kube-system \
+  --set ipam.mode=kubernetes \
+  --set kubeProxyReplacement=true \
+  --set tunnel=disabled \
+  --set autoDirectNodeRoutes=true \
+  --set ipv4NativeRoutingCIDR=10.244.0.0/16 \
+  --set l2announcements.enabled=true \
+  --set k8sServiceHost=192.168.40.200 \
+  --set k8sServicePort=6443</code></pre>
+            <pre><code>apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: default-pool
+spec:
+  blocks:
+    - cidr: 192.168.40.220/29
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: default-l2-policy
+spec:
+  interfaces:
+    - enp6s0
+  loadBalancerIPs: true</code></pre>
+            <p data-i18n="userdoc.k8s.cilium.pool">The pool CIDR in this example is 192.168.40.220/29. Pick a range that does not overlap the VIP or node addresses. A service is announced when loadBalancerClass is empty or io.cilium/l2-announcer. interfaces is a regular expression. kcore does not run these commands. Match the chart version you install.</p>
+
+            <h2 data-i18n="userdoc.k8s.h2.vol">Volumes, LVM and ZFS</h2>
+            <p data-i18n-html="userdoc.k8s.vol.lead"><code>localProvisioner.enabled</code> is required when volumes are listed. Mode empty or <code>shared</code> is the default. Mode <code>lvm</code> is a thin pool and does not serve claims.</p>
+            <p data-i18n-html="userdoc.k8s.vol.shared">Shared mode creates one LVM logical volume or one ZFS zvol on the named node, formats it, and mounts it. <code>storageClass</code> is <code>lvm</code> or <code>zfs</code>, and the node's storage backend must already be that class. <code>sizeBytes</code> must be positive. An empty <code>fsType</code> becomes ext4. The other accepted value is xfs. An empty role becomes filesystem. The default mount path is <code>/mnt/kcore/&lt;cluster&gt;/&lt;name&gt;</code>.</p>
+            <p data-i18n-html="userdoc.k8s.vol.claims">The control plane then applies the Rancher local-path provisioner, image <code>rancher/local-path-provisioner:v0.0.30</code>, from <code>/etc/kubernetes/provisioner.yaml</code>. The oneshot unit is <code>kcore-kubernetes-provisioner</code>. The StorageClass name defaults to <code>local-path</code>. A claim is a directory on that filesystem. The size on the claim is not a quota. To give the directories more room, raise <code>sizeBytes</code> and apply again. Shrinking is rejected. Another volume adds a path to the same StorageClass. It does not create a second StorageClass.</p>
+            <p data-i18n-html="userdoc.k8s.vol.names">The controller volume name is <code>k8s-&lt;cluster&gt;-&lt;node&gt;-&lt;volume&gt;</code>. The LVM device is <code>/dev/&lt;vg&gt;/&lt;lv&gt;</code>. The ZFS device is <code>/dev/zvol/&lt;pool&gt;/&lt;dataset&gt;</code>.</p>
+            <p data-i18n="userdoc.k8s.vol.zfs">A ZFS volume uses the same shared provisioner. Set storageClass to zfs on a node whose storage backend is zfs.</p>
+            <pre><code>      - name: kcore-kdata
+        nodeId: node-103
+        storageClass: zfs
+        sizeBytes: 53687091200
+        fsType: ext4</code></pre>
+            <p data-i18n-html="userdoc.k8s.vol.lvm"><code>mode: lvm</code> creates one thin pool of the declared size. Every listed node must use the same name, volume group, size, and filesystem. The role is pool. <code>volumeGroup</code> is required. Leave <code>mountPath</code> empty. kcore does not install a provisioner and does not install a CSI driver. Do not create a CSI driver's pool with this API. kcore deletes only volumes it created. An operator who wants one block device per claim installs that driver and points it at a pool the driver owns.</p>
+            <pre><code>localProvisioner:
+  enabled: true
+  mode: lvm
+  storageClassName: kcore-lvm
+  volumes:
+    - name: kcore-kdata
+      nodeId: node-105
+      storageClass: lvm
+      sizeBytes: 53687091200
+      role: pool
+      volumeGroup: vg_kcore</code></pre>
+
+            <h2 data-i18n="userdoc.k8s.h2.up">Upgrades</h2>
+            <p data-i18n-html="userdoc.k8s.up.pin">Kubernetes binaries come from <code>pkgs.kubernetes</code> on the host NixOS pin. There is no separate Kubernetes upgrade command and no cordon-and-drain roller. Move the pin with a ClusterUpdate. See <a href="cluster-and-node-upgrades.html">cluster and node upgrades</a>.</p>
+            <p data-i18n-html="userdoc.k8s.up.reapply">A second <code>kctl kubernetes apply</code> updates CIDRs, DNS, the API endpoint, CNI, Cilium settings, the VIP, local volumes, and <code>scheduleOnControlPlane</code>. It redeploys node certificates and node configuration. It does not change cluster membership. It does not cordon or drain nodes. Success returns the phase to ready when the previous phase was updating or degraded. A volume or deploy error sets the phase to degraded.</p>
+            <p data-i18n-html="userdoc.k8s.up.scale"><code>kctl kubernetes scale --add-control-plane node-id:address</code> and <code>--add-workers node-id:address</code> record those members and set the phase to scaling. The interface on that command is fixed to enp6s0. The orchestrator only bootstraps clusters in phase bootstrapping, so a scale does not join the new nodes. If the existing etcd quorum and API are already healthy, the phase is set back to ready without adding those nodes. <code>--remove</code> logs the node id and does not delete the membership row. Put every member in the first manifest.</p>
+
+            <h2 data-i18n="userdoc.k8s.h2.cmd">Commands</h2>
+            <table>
+                <thead><tr><th data-i18n="userdoc.k8s.th.op">Operation</th><th data-i18n="userdoc.k8s.th.cmd">Command</th></tr></thead>
+                <tbody>
+                    <tr><td data-i18n="userdoc.k8s.cmd.apply">Apply</td><td><code>kctl kubernetes apply -f cluster.yaml</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.get">Get</td><td><code>kctl kubernetes get lab</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.list">List</td><td><code>kctl kubernetes list</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.health">Health</td><td><code>kctl kubernetes health lab</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.delete">Delete the cluster row</td><td><code>kctl kubernetes delete lab</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.scale">Record a member change</td><td><code>kctl kubernetes scale lab --add-workers node-103:192.168.40.103</code></td></tr>
+                </tbody>
+            </table>
+            <p data-i18n-html="userdoc.k8s.delete.p"><code>kctl kubernetes delete lab</code> removes the cluster row from the controller. <code>--force</code> is accepted. Deleting the row does not by itself turn Kubernetes off on the nodes.</p>
+
+            <h2 data-i18n="userdoc.k8s.h2.lim">Limits</h2>
+            <ul>
+                <li data-i18n="userdoc.k8s.lim1">Membership is fixed at create. Scale records nodes and does not join or remove them.</li>
+                <li data-i18n="userdoc.k8s.lim2">The VIP heartbeat is a keepalived unicast advertisement every second. It is not a check of port 6443.</li>
+                <li data-i18n="userdoc.k8s.lim3">Cilium and the L2 load-balancer objects are applied by the operator after the API is up.</li>
+                <li data-i18n-html="userdoc.k8s.lim4">Shared volumes are directories on one filesystem. Claim size is not a quota. <code>mode: lvm</code> does not bind claims.</li>
+                <li data-i18n="userdoc.k8s.lim5">A cluster whose API port is not 6443 is stored with bridge CNI, not Cilium.</li>
+                <li data-i18n="userdoc.k8s.lim6">Terraform provider 0.5.0 has no Kubernetes cluster resource.</li>
+            </ul>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

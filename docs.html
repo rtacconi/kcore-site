@@ -297,6 +297,9 @@
                             <li><a href="docs/user/yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
                         </ul>
                     </div>
+                    <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                        <li><a href="docs/user/kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+                    </ul></div>
                     <div class="docs-nav-section">
                         <h4 data-i18n="docs.nav.licensing">Licensing</h4>
                         <ul>
@@ -428,7 +431,15 @@
                     </a>
                 </div>
 
-                <h2 data-i18n="docs.hub.h2.reference">Reference</h2>
+                                <h2 data-i18n="docs.hub.h2.kubernetes">Kubernetes</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/kubernetes.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.k8s.title">Kubernetes clusters</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.k8s.desc">Create a cluster, keep an API VIP, announce Cilium L2 addresses, and mount LVM or ZFS volumes.</div>
+                    </a>
+                </div>
+
+<h2 data-i18n="docs.hub.h2.reference">Reference</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
                     <a href="docs/user/kctl-reference.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.kctl.title">kctl CLI</div>
