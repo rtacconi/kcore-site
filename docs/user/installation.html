@@ -56,9 +56,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -146,6 +147,15 @@ spec:
   controller: 192.168.40.107:9090</code></pre>
             <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
             </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="docs.mode.tf.certs"><code>kcore_cluster</code> writes the trust material to <code>certs_dir</code>. The first node sets <code>bootstrap</code>. Later nodes set <code>join_controller</code> to that node's <code>controller_address</code>.</p>
+<pre><code>resource "kcore_cluster" "my_cluster" {
+  name       = "my-cluster"
+  controller = "192.168.40.107:9090"
+  certs_dir  = "${path.module}/certs"
+}</code></pre>
+            </div>
             <p data-i18n-html="userdoc.install.p.pki2">This is a <strong>one-time operation</strong> per cluster. Certificate material is saved under <code>~/.kcore/certs/</code> and the mTLS context is written to <code>~/.kcore/config</code> with all certificate data embedded inline. Every subsequent <code>kctl</code> command and every <code>kctl node install</code> call uses this context automatically.</p>
             <p class="note">If you already have a config file from a previous cluster, add <code>--force</code> (CLI) or <code>force: true</code> (YAML) to overwrite the existing certificate files.</p>
 
@@ -171,6 +181,18 @@ spec:
   dcId: DC1
   insecure: true</code></pre>
             <p>Apply: <code>kctl apply -f node-controller.yaml</code></p>
+            </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_node" "controller" {
+  bootstrap      = true
+  address        = "192.168.40.107:9091"
+  os_disk        = "/dev/sda"
+  certs_dir      = kcore_cluster.my_cluster.certs_dir
+  run_controller = true
+  dc_id          = "DC1"
+  insecure       = true
+  hostname       = "kvm-node-107"
+}</code></pre>
             </div>
             <p data-i18n-html="userdoc.install.p.install2">The installer partitions the disk with LUKS encryption (TPM2-sealed when available), deploys NixOS, configures the controller and node-agent services, provisions mTLS certificates, and reboots. After reboot, the controller listens on <code>:9090</code>, the node-agent on <code>:9091</code>, and the dashboard on <code>:8080</code>.</p>
             <p data-i18n-html="userdoc.install.p.install3">The node registers with its own controller and is <strong>auto-approved</strong> by default.</p>

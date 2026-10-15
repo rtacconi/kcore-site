@@ -56,9 +56,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -218,6 +219,33 @@ metadata:
 spec:
   nodeId: kvm-node-192-168-40-105
   layoutNixFile: ./fragments/nvme-data1.nix</code></pre>
+            </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="docs.mode.tf.disk"><code>kcore_disk_layout</code> takes <code>layout_nix</code>, a disko expression. The structured <code>spec.diskLayout</code> object is YAML only. <code>layoutNixFile</code> is not a provider attribute.</p>
+<pre><code>resource "kcore_disk_layout" "prod_data_pool" {
+  name    = "prod-data-pool"
+  node_id = "kvm-node-192-168-40-105"
+  layout_nix = <<-NIX
+    {
+      disko.devices.disk.data1 = {
+        type = "disk";
+        device = "/dev/nvme1n1";
+        content = {
+          type = "gpt";
+          partitions.data = {
+            size = "100%";
+            content = {
+              type = "filesystem";
+              format = "ext4";
+              mountpoint = "/var/lib/kcore/volumes1";
+            };
+          };
+        };
+      };
+    }
+  NIX
+}</code></pre>
             </div>
             <p>Each manifest targets <strong>one</strong> node — heterogeneous fleets get one manifest per node, applied with <code>kctl apply -f ./disk-layouts/</code> or as a multi-document YAML file.</p>
             <div class="docs-cli-only">

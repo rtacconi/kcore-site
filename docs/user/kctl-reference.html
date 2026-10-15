@@ -48,9 +48,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -77,6 +78,7 @@
             <h1 data-i18n="userdoc.kctlref.h1">kctl CLI reference</h1>
             <p data-i18n-html="userdoc.kctlref.intro"><code>kctl</code> is the command-line interface for managing kcore clusters. Global flags: <code>-s</code> / <code>--controller</code> (controller address, repeatable for HA), <code>-k</code> / <code>--insecure</code> (skip TLS verification), <code>-c</code> / <code>--config</code> (path to config file), <code>--node</code> (node address for direct node commands).</p>
             <p class="docs-mode-hint docs-yaml-only">You are browsing in <strong>YAML</strong> mode. This page lists CLI commands; for manifest kinds and fields see the <a href="yaml-manifests.html">YAML manifest reference</a>.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf.kctl">This page is the <code>kctl</code> reference. Terraform examples are on the task pages, such as <a href="vm-creation.html">VM creation</a>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.create">create</h2>
             <p><code>kctl create</code> is idempotent. Re-running the same command (or re-applying the same manifest with <code>-f</code>) performs a server-side upsert: it creates the resource if missing, updates mutable fields if they drifted, rejects changes to immutable fields with <code>InvalidArgument</code>, or prints <code>unchanged</code> when the stored state already matches. See <a href="yaml-manifests.html#idempotency-and-upsert">Idempotency and upsert</a> for the mutable/immutable field tables.</p>

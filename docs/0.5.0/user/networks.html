@@ -52,9 +52,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -133,6 +134,16 @@ spec:
   internalNetmask: "255.255.255.0"</code></pre>
             <p>Apply: <code>kctl apply -f network.yaml</code></p>
             </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+<pre><code>resource "kcore_network" "private" {
+  name             = "private"
+  network_type     = "vxlan"
+  external_ip      = "192.168.40.105"
+  gateway_ip       = "10.250.0.1"
+  internal_netmask = "255.255.255.0"
+}</code></pre>
+            </div>
 
             <h2 data-i18n="userdoc.networks.h2.manage">List, describe, delete</h2>
             <p data-i18n-html="userdoc.networks.manage.p1"></p>
@@ -170,10 +181,30 @@ spec:
   internalNetmask: "255.255.255.0"</code></pre>
             <p>Apply: <code>kctl apply -f network.yaml</code></p>
             </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_network" "vlan_net" {
+  name             = "vlan-net"
+  network_type     = "nat"
+  vlan_id          = 100
+  external_ip      = "192.168.100.10"
+  gateway_ip       = "10.100.0.1"
+  internal_netmask = "255.255.255.0"
+}</code></pre>
+            </div>
 
             <h2 data-i18n="userdoc.networks.h2.disablevxlan">Disable VXLAN on a node</h2>
             <p data-i18n-html="userdoc.networks.disablevxlan.p1">If a node should not participate in VXLAN overlays, pass <code>--disable-vxlan</code> during installation:</p>
             <pre><code>kctl node install ... --disable-vxlan</code></pre>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_node" "worker" {
+  address         = "192.168.40.151:9091"
+  os_disk         = "/dev/sda"
+  certs_dir       = kcore_cluster.prod.certs_dir
+  join_controller = "192.168.40.107:9090"
+  disable_vxlan   = true
+  insecure        = true
+}</code></pre>
+            </div>
             <p data-i18n-html="userdoc.networks.disablevxlan.p2">The controller will reject VXLAN network creation requests targeting that node with a <code>FailedPrecondition</code> error.</p>
 
             <h2>IPv6</h2>
@@ -197,14 +228,55 @@ spec:
   ipv6Prefix: fd00:10:240::/64
   ipv6Gateway: fd00:10:240::1</code></pre>
             </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_network" "overlay" {
+  name             = "overlay"
+  network_type     = "vxlan"
+  external_ip      = "0.0.0.0"
+  gateway_ip       = "10.240.0.1"
+  ipv6_prefix      = "fd00:10:240::/64"
+  ipv6_gateway     = "fd00:10:240::1"
+}</code></pre>
+            </div>
 
             <h2>East-west firewall</h2>
             <p><code>--east-west-firewall</code> (YAML <code>spec.eastWestFirewall: true</code>) drops VM-to-VM traffic on that bridge. Established flows, the gateway, DHCP, and security-group rules that name a target IP stay allowed. The filter is off unless the network asks for it. On a <code>255.255.255.0</code> mask the drop covers the /24.</p>
 
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_network" "overlay" {
+  name               = "overlay"
+  network_type       = "vxlan"
+  external_ip        = "0.0.0.0"
+  gateway_ip         = "10.240.0.1"
+  ipv6_prefix        = "fd00:10:240::/64"
+  ipv6_gateway       = "fd00:10:240::1"
+  east_west_firewall = true
+}</code></pre>
+            </div>
             <h2>Multi-homed VMs</h2>
             <p>NIC 0 is <code>--network</code> and owns the guest default route. Repeat <code>--extra-network</code> for each further network, up to eight NICs in total. Two NICs on the same VM cannot join the same network. NAT extras get a DHCP reservation that does not replace the default route. VXLAN extras get a static address and no gateway.</p>
             <div class="docs-cli-only">
             <pre><code>kctl create vm web --network frontend --extra-network backend</code></pre>
+            </div>
+            <div class="docs-tf-only">
+            <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
+<pre><code>resource "kcore_vm" "web" {
+  name               = "web"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+  image_url          = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
+  image_sha256       = "&lt;sha256&gt;"
+
+  nic {
+    network = "frontend"
+  }
+
+  nic {
+    network = "backend"
+  }
+}</code></pre>
             </div>
 
             <h2 data-i18n="userdoc.networks.h2.vmattach">VM network attachment</h2>
@@ -228,6 +300,22 @@ spec:
       sha256: "&lt;sha256&gt;"
       format: qcow2</code></pre>
             <p>Apply: <code>kctl apply -f vm.yaml</code></p>
+            </div>
+            <div class="docs-tf-only">
+            <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
+<pre><code>resource "kcore_vm" "web" {
+  name               = "web-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+  image_url          = "https://..."
+  image_sha256       = "&lt;sha256&gt;"
+
+  nic {
+    network = "private"
+  }
+}</code></pre>
             </div>
             <p data-i18n="userdoc.networks.vmattach.p2">VMs on VXLAN networks receive controller-assigned static IPs (unique across the cluster for that overlay name) via cloud-init. VMs on NAT networks receive IPs from dnsmasq DHCP.</p>
         </main>

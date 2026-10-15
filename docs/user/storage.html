@@ -49,9 +49,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -187,6 +188,23 @@ spec:
   storageSizeBytes: "40G"
   # ... (other fields)</code></pre>
             <p>Apply: <code>kctl apply -f vm.yaml</code></p>
+            </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
+<pre><code>resource "kcore_vm" "my_vm" {
+  name               = "my-vm"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+  image_url          = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
+  image_sha256       = "&lt;sha256&gt;"
+
+  nic {
+    network = "default"
+  }
+}</code></pre>
             </div>
 
             <h2 data-i18n="userdoc.storage.sanLink">Shared storage (kcore SAN)</h2>

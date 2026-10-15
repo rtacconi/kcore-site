@@ -56,9 +56,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -140,6 +141,19 @@ spec:
   insecure: true</code></pre>
             <p>Apply: <code>kctl apply -f worker-node.yaml</code></p>
             </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="docs.mode.tf.join"><code>kcore_node</code> takes one <code>join_controller</code>, the bootstrap controller address. A list of join controllers is CLI and YAML only.</p>
+<pre><code>resource "kcore_node" "worker" {
+  address         = "192.168.40.151:9091"
+  os_disk         = "/dev/sda"
+  certs_dir       = kcore_cluster.prod.certs_dir
+  join_controller = "192.168.40.107:9090"
+  dc_id           = "DC1"
+  insecure        = true
+  hostname        = "kvm-node-151"
+}</code></pre>
+            </div>
             <p data-i18n-html="userdoc.addnode.p.agent2">You can specify multiple <code>--join-controller</code> flags so the node agent knows about all controllers for failover. This node runs the node agent only&mdash;no controller process.</p>
             <p data-i18n-html="userdoc.addnode.p.agent3">After reboot the node registers with the controller and is <strong>auto-approved</strong> by default. Verify with:</p>
 <pre><code>kctl get nodes</code></pre>
@@ -169,6 +183,18 @@ spec:
   dcId: DC1
   insecure: true</code></pre>
             <p>Apply: <code>kctl apply -f ha-controller.yaml</code></p>
+            </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_node" "ha" {
+  address         = "192.168.40.105:9091"
+  os_disk         = "/dev/sda"
+  certs_dir       = kcore_cluster.prod.certs_dir
+  run_controller  = true
+  join_controller = "192.168.40.107:9090"
+  dc_id           = "DC1"
+  insecure        = true
+  hostname        = "kvm-node-105"
+}</code></pre>
             </div>
             <p data-i18n-html="userdoc.addnode.p.ha2">After reboot, the two controllers automatically discover each other and begin CRDT replication. Your <code>kctl</code> config is <strong>auto-updated</strong> to include the new controller endpoint, so <code>kctl</code> can fail over transparently:</p>
 <pre><code>kctl get nodes</code></pre>
@@ -200,10 +226,38 @@ spec:
   insecure: true</code></pre>
             <p>Apply: <code>kctl apply -f dc2-controller.yaml</code></p>
             </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_node" "dc2" {
+  address         = "&lt;NEW_NODE_IP&gt;:9091"
+  os_disk         = "/dev/sda"
+  certs_dir       = kcore_cluster.prod.certs_dir
+  run_controller  = true
+  join_controller = "192.168.40.107:9090"
+  dc_id           = "DC2"
+  insecure        = true
+}</code></pre>
+            </div>
             <p data-i18n-html="userdoc.addnode.p.crossdc2">Resources created on this node are tagged with <code>DC2</code>. Controllers across datacenters replicate state via conflict-free replicated data types (CRDTs) with adaptive cross-DC timeouts, so each site maintains an eventually-consistent view of the cluster.</p>
             <p data-i18n-html="userdoc.addnode.p.crossdc3">You can target a specific datacenter when creating VMs:</p>
 <pre><code>kctl create vm db-replica --dc DC2 \
   --image &lt;image-url&gt; --network default</code></pre>
+            <div class="docs-tf-only">
+            <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
+<pre><code>resource "kcore_vm" "db_replica" {
+  name               = "db-replica"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+  image_url          = "&lt;image-url&gt;"
+  image_sha256       = "&lt;sha256&gt;"
+  target_dc          = "DC2"
+
+  nic {
+    network = "default"
+  }
+}</code></pre>
+            </div>
 
             <h2 data-i18n="userdoc.addnode.h2.registration">Registration and approval</h2>
             <p data-i18n-html="userdoc.addnode.p.registration1">By default, nodes are <strong>auto-approved</strong> on registration. This means a node with a valid mTLS certificate issued by the cluster CA is immediately available for scheduling after reboot.</p>
@@ -331,6 +385,45 @@ spec:
   dcId: DC1
   insecure: true</code></pre>
             <p>Apply each file in order: <code>kctl apply -f cluster.yaml</code>, then each node file after the previous node has rebooted.</p>
+            </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_cluster" "prod" {
+  name       = "prod"
+  controller = "192.168.40.107:9090"
+  certs_dir  = "${path.module}/certs"
+}
+
+resource "kcore_node" "controller" {
+  bootstrap      = true
+  address        = "192.168.40.107:9091"
+  os_disk        = "/dev/sda"
+  certs_dir      = kcore_cluster.prod.certs_dir
+  run_controller = true
+  dc_id          = "DC1"
+  insecure       = true
+  hostname       = "kvm-node-107"
+}
+
+resource "kcore_node" "ha" {
+  address         = "192.168.40.105:9091"
+  os_disk         = "/dev/sda"
+  certs_dir       = kcore_cluster.prod.certs_dir
+  run_controller  = true
+  join_controller = kcore_node.controller.controller_address
+  dc_id           = "DC1"
+  insecure        = true
+  hostname        = "kvm-node-105"
+}
+
+resource "kcore_node" "worker" {
+  address         = "192.168.40.151:9091"
+  os_disk         = "/dev/sda"
+  certs_dir       = kcore_cluster.prod.certs_dir
+  join_controller = kcore_node.controller.controller_address
+  dc_id           = "DC1"
+  insecure        = true
+  hostname        = "kvm-node-151"
+}</code></pre>
             </div>
             <p>After each node reboots, it auto-registers and auto-approves. Controllers auto-discover each other and replicate state via CRDTs. Run <code>kctl get nodes</code> to verify the full cluster.</p>
         </main>

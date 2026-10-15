@@ -49,9 +49,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -94,6 +95,26 @@ spec:
   attachments:
     - kind: vm
       target: web-01</code></pre>
+            </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+<pre><code>resource "kcore_security_group" "expose_nginx" {
+  name = "expose-nginx"
+
+  rule {
+    protocol    = "tcp"
+    host_port   = 8080
+    target_port = 80
+    source_cidr = "0.0.0.0/0"
+    enable_dnat = true
+  }
+}
+
+resource "kcore_security_group_attachment" "web" {
+  security_group = kcore_security_group.expose_nginx.name
+  target_kind    = "vm"
+  target_id      = "web-01"
+}</code></pre>
             </div>
 
             <h2 data-i18n="userdoc.sg.h2.rules">Rules</h2>

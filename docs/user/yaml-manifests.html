@@ -48,9 +48,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -78,6 +79,7 @@
             <p>All manifest kinds are auto-detected and applied with a single command:</p>
 <pre><code>kctl apply -f &lt;file.yaml&gt;</code></pre>
             <p class="docs-mode-hint docs-cli-only">You are browsing in <strong>CLI</strong> mode. This page is the YAML manifest reference—switch the toggle above to <strong>YAML</strong> for the intended view, or open the <a href="kctl-reference.html">kctl CLI reference</a> for commands only.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
 
             <!-- ======= VM ======= -->
             <h2>VM manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: VM)</span></h2>
@@ -111,7 +113,7 @@
 
             <h3>VM examples</h3>
             <p><strong>LVM-backed VM with SSH key injection:</strong></p>
-<pre><code>kind: VM
+<pre class="docs-yaml-only"><code>kind: VM
 metadata:
   name: web-server
 spec:
@@ -132,7 +134,7 @@ spec:
       format: qcow2</code></pre>
 
             <p><strong>ZFS-backed VM with cloud-init:</strong></p>
-<pre><code>kind: VM
+<pre class="docs-yaml-only"><code>kind: VM
 metadata:
   name: db-server
 spec:
@@ -179,7 +181,7 @@ spec:
 
             <h3>Network examples</h3>
             <p><strong>VXLAN overlay (multi-node):</strong></p>
-<pre><code>kind: Network
+<pre class="docs-yaml-only"><code>kind: Network
 metadata:
   name: vxlan-prod
 spec:
@@ -189,7 +191,7 @@ spec:
   enableOutboundNat: true</code></pre>
 
             <p><strong>NAT network (single node):</strong></p>
-<pre><code>kind: Network
+<pre class="docs-yaml-only"><code>kind: Network
 metadata:
   name: nat-mgmt
 spec:
@@ -199,7 +201,7 @@ spec:
   targetNode: kvm-node-01</code></pre>
 
             <p><strong>Bridge network with VLAN:</strong></p>
-<pre><code>kind: Network
+<pre class="docs-yaml-only"><code>kind: Network
 metadata:
   name: bridge-vlan100
 spec:
@@ -220,7 +222,7 @@ spec:
             </table>
 
             <h3>Example</h3>
-<pre><code>kind: SshKey
+<pre class="docs-yaml-only"><code>kind: SshKey
 metadata:
   name: my-deploy-key
 spec:
@@ -241,7 +243,7 @@ spec:
             </table>
 
             <h3>Example</h3>
-<pre><code>kind: Container
+<pre class="docs-yaml-only"><code>kind: Container
 metadata:
   name: nginx-web
 spec:
@@ -256,7 +258,7 @@ spec:
 
             <h2 data-i18n="userdoc.yaml.postgresql.h2">PostgreSQL manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Postgresql)</span></h2>
             <p data-i18n-html="userdoc.yaml.postgresql.p">One database from the NixOS postgresql package, on the node rather than in a VM. Field reference: <a href="postgresql.html">PostgreSQL</a>.</p>
-<pre><code>kind: Postgresql
+<pre class="docs-yaml-only"><code>kind: Postgresql
 metadata:
   name: app
 spec:
@@ -286,7 +288,7 @@ spec:
             </table>
 
             <h3>Example</h3>
-<pre><code>kind: SecurityGroup
+<pre class="docs-yaml-only"><code>kind: SecurityGroup
 metadata:
   name: web-sg
 spec:
@@ -323,7 +325,7 @@ spec:
                 <tr><td><code>spec.layoutNixFile</code></td><td>string</td><td>Path to a <code>.nix</code> file (mutually exclusive)</td></tr>
             </table>
             <h3>DiskLayout example (<code>spec.diskLayout</code>)</h3>
-<pre><code>kind: DiskLayout
+<pre class="docs-yaml-only"><code>kind: DiskLayout
 metadata:
   name: prod-data-pool
 spec:
@@ -363,7 +365,7 @@ spec:
                 <tr><td><code>spec.approvalPolicy</code></td><td>string</td><td><code>manual</code> | <code>auto-non-disruptive</code> | <code>auto</code></td></tr>
             </table>
             <h3>ClusterUpdate example</h3>
-<pre><code>kind: ClusterUpdate
+<pre class="docs-yaml-only"><code>kind: ClusterUpdate
 metadata:
   name: release-0-4-2
 spec:
@@ -393,7 +395,7 @@ spec:
             </table>
 
             <h3>Cluster example</h3>
-<pre><code>kind: Cluster
+<pre class="docs-yaml-only"><code>kind: Cluster
 metadata:
   name: prod
 spec:
@@ -427,7 +429,7 @@ spec:
 
             <h3>NodeInstall examples</h3>
             <p><strong>First controller node:</strong></p>
-<pre><code>kind: NodeInstall
+<pre class="docs-yaml-only"><code>kind: NodeInstall
 metadata:
   name: kvm-node-107
 spec:
@@ -438,7 +440,7 @@ spec:
   insecure: true</code></pre>
 
             <p><strong>HA second controller joining the first:</strong></p>
-<pre><code>kind: NodeInstall
+<pre class="docs-yaml-only"><code>kind: NodeInstall
 metadata:
   name: kvm-node-105
 spec:
@@ -452,7 +454,7 @@ spec:
   insecure: true</code></pre>
 
             <p><strong>Agent-only worker node:</strong></p>
-<pre><code>kind: NodeInstall
+<pre class="docs-yaml-only"><code>kind: NodeInstall
 metadata:
   name: kvm-node-151
 spec:
@@ -555,9 +557,151 @@ unchanged VM 'web-01'</code></pre>
             </ul>
             <p>No client-side diff, no client-side tracking of which fields are mutable — the controller is the single source of truth.</p>
 
+            <div class="docs-tf-only">
+            <h2>Terraform</h2>
+            <p data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="docs.mode.tf.pg">Provider 0.5.0 has no PostgreSQL resource. Declare the database with CLI or YAML.</p>
+            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.join"><code>kcore_node</code> takes one <code>join_controller</code>, the bootstrap controller address. A list of join controllers is CLI and YAML only.</p>
+            <p data-i18n-html="docs.mode.tf.disk"><code>kcore_disk_layout</code> takes <code>layout_nix</code>, a disko expression. The structured <code>spec.diskLayout</code> object is YAML only. <code>layoutNixFile</code> is not a provider attribute.</p>
+<pre><code>resource "kcore_cluster" "prod" {
+  name       = "prod"
+  controller = "192.168.40.107:9090"
+  certs_dir  = "${path.module}/certs"
+}
+
+resource "kcore_node" "controller" {
+  bootstrap      = true
+  address        = "192.168.40.107:9091"
+  os_disk        = "/dev/sda"
+  certs_dir      = kcore_cluster.prod.certs_dir
+  run_controller = true
+  dc_id          = "DC1"
+  insecure       = true
+  hostname       = "kvm-node-107"
+}
+
+resource "kcore_ssh_key" "deploy" {
+  name       = "my-deploy-key"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExample... ops@company.com"
+}
+
+resource "kcore_network" "vxlan_prod" {
+  name                = "vxlan-prod"
+  network_type        = "vxlan"
+  gateway_ip          = "10.200.0.1"
+  internal_netmask    = "255.255.255.0"
+  enable_outbound_nat = true
+}
+
+resource "kcore_network" "nat_mgmt" {
+  name             = "nat-mgmt"
+  network_type     = "nat"
+  gateway_ip       = "10.100.0.1"
+  internal_netmask = "255.255.255.0"
+  target_node      = "kvm-node-01"
+}
+
+resource "kcore_vm" "web" {
+  name               = "web-server"
+  cpu                = 4
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "lvm"
+  storage_size_bytes = 20 * 1024 * 1024 * 1024
+  target_node        = "kvm-node-01"
+  ssh_key_names      = ["my-deploy-key"]
+  image_url          = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
+  image_sha256       = "&lt;sha256&gt;"
+  desired_state      = "running"
+
+  nic {
+    network = "vxlan-prod"
+  }
+
+  nic {
+    network = "nat-mgmt"
+  }
+}
+
+resource "kcore_workload" "nginx" {
+  name    = "nginx-web"
+  image   = "docker.io/library/nginx:latest"
+  network = "nat-mgmt"
+  ports   = ["80:80", "443:443"]
+
+  env = {
+    NGINX_HOST = "example.com"
+  }
+}
+
+resource "kcore_security_group" "web" {
+  name        = "web-sg"
+  description = "Allow HTTP and HTTPS traffic"
+
+  rule {
+    protocol    = "tcp"
+    host_port   = 80
+    target_port = 80
+    source_cidr = "0.0.0.0/0"
+  }
+
+  rule {
+    protocol    = "tcp"
+    host_port   = 443
+    target_port = 443
+    source_cidr = "0.0.0.0/0"
+    enable_dnat = true
+    target_vm   = "web-01"
+  }
+}
+
+resource "kcore_security_group_attachment" "web" {
+  security_group = kcore_security_group.web.name
+  target_kind    = "vm"
+  target_id      = "web-01"
+}
+
+resource "kcore_disk_layout" "prod_data_pool" {
+  name    = "prod-data-pool"
+  node_id = "kvm-node-192-168-40-105"
+  layout_nix = <<-NIX
+    {
+      disko.devices.disk.data1 = {
+        type = "disk";
+        device = "/dev/nvme1n1";
+        content = {
+          type = "gpt";
+          partitions.data = {
+            size = "100%";
+            content = {
+              type = "filesystem";
+              format = "ext4";
+              mountpoint = "/var/lib/kcore/volumes1";
+            };
+          };
+        };
+      };
+    }
+  NIX
+}
+
+resource "kcore_cluster_update" "os" {
+  name            = "release-0-4-2"
+  version         = "0.4.2"
+  flake_ref       = "github:kcorehypervisor/kcore"
+  flake_rev       = "&lt;full-git-sha&gt;"
+  all_nodes       = true
+  strategy        = "one-at-a-time"
+  max_unavailable = 1
+  activation      = "auto"
+  approval        = "manual"
+  approve         = false
+  update_kind     = "kcore"
+}</code></pre>
+            </div>
             <h2>Applying manifests</h2>
             <p>Use <code>kctl apply -f</code> for most resource kinds; the <code>kind</code> field is auto-detected. <strong>Host OS rollouts</strong> use <code>kctl update cluster apply -f rollout.yaml</code> instead — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
-<pre><code># Bootstrap (local / ISO operations)
+<pre class="docs-yaml-only"><code># Bootstrap (local / ISO operations)
 kctl apply -f cluster.yaml
 kctl apply -f node-install.yaml
 

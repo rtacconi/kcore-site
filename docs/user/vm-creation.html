@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore VM creation: CLI, YAML manifests, images, SSH keys, cloud-init, scheduling.">
+    <meta name="description" content="kcore VM creation: CLI, YAML, Terraform, images, SSH keys, cloud-init, scheduling.">
     <title>VM creation modes - kcore documentation</title>
     <link rel="canonical" href="https://kcorehypervisor.com/docs/user/vm-creation.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="VM creation modes - kcore documentation">
-    <meta property="og:description" content="kcore VM creation: CLI, YAML manifests, images, SSH keys, cloud-init, scheduling.">
+    <meta property="og:description" content="kcore VM creation: CLI, YAML, Terraform, images, SSH keys, cloud-init, scheduling.">
     <meta property="og:url" content="https://kcorehypervisor.com/docs/user/vm-creation.html">
     <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
@@ -56,9 +56,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -111,9 +112,10 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             
             <h1 data-i18n="userdoc.vmcreate.h1">VM creation modes</h1>
-            <p data-i18n-html="userdoc.vmcreate.intro">VMs are created through the controller API. Below are the main patterns supported by <code>kcore-kctl create vm</code> (and equivalent YAML).</p>
+            <p data-i18n-html="userdoc.vmcreate.intro">VMs are created through the controller API. The patterns below are <code>kcore-kctl create vm</code>, YAML, and Terraform provider <code>kcorehypervisor/kcore</code> 0.5.0.</p>
             <p class="docs-mode-hint docs-cli-only">Showing <strong>CLI</strong> examples below. Use the toggle above to switch to YAML manifests.</p>
             <p class="docs-mode-hint docs-yaml-only">Showing <strong>YAML</strong> examples below. Use the toggle above for raw <code>kctl</code> commands.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
 
             <h2 data-i18n="userdoc.vmcreate.h2.req">Requirements</h2>
             <ul>
@@ -164,6 +166,42 @@ spec:
             <p data-i18n-html="userdoc.vmcreate.yaml.override">CLI flags (<code>--storage-backend</code>, <code>--storage-size-bytes</code>) override the YAML values when both are provided.</p>
             </div>
 
+            <div class="docs-tf-only">
+            <h2>Terraform</h2>
+            <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
+            <h3>HTTPS image + SHA256</h3>
+<pre><code>resource "kcore_vm" "web" {
+  name               = "web-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+
+  image_url    = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
+  image_sha256 = "&lt;sha256&gt;"
+
+  nic {
+    network = "default"
+  }
+}</code></pre>
+            <h3>Node-local image path</h3>
+            <p data-i18n-html="userdoc.vmcreate.tf.local">Do not set <code>image_url</code> on the same resource.</p>
+<pre><code>resource "kcore_vm" "web" {
+  name               = "web-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+
+  image_path   = "/var/lib/kcore/images/base.qcow2"
+  image_format = "qcow2"
+
+  nic {
+    network = "default"
+  }
+}</code></pre>
+            <p data-i18n-html="userdoc.vmcreate.tf.sched">Pin placement with <code>target_node</code> or <code>target_dc</code>. <code>nodeLabels</code> and <code>antiAffinity</code> are CLI and YAML only in provider 0.5.0. Register a key with <code>kcore_ssh_key</code> and set <code>ssh_key_names</code>. <code>cloud_init_user_data</code> is the cloud-init YAML string.</p>
+            </div>
             <h2 data-i18n="userdoc.vmcreate.h2.ssh">SSH access patterns</h2>
             <ul>
                 <li data-i18n-html="userdoc.vmcreate.ssh1"><strong>Controller-managed keys:</strong> register a public key (<code>kcore-kctl ssh-key create ...</code>) and pass <code>--ssh-key &lt;name&gt;</code> on create.</li>

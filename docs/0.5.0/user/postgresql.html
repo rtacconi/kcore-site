@@ -55,9 +55,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -131,6 +132,9 @@ spec:
   package: postgresql
   port: 5432</code></pre>
             <p data-i18n-html="userdoc.postgresql.apply">Apply: <code>kctl apply -f postgresql.yaml</code>. <code>kind: postgres</code> is accepted as well.</p>
+            </div>
+            <div class="docs-tf-only">
+            <p data-i18n-html="docs.mode.tf.pg">Provider 0.5.0 has no PostgreSQL resource. Declare the database with CLI or YAML.</p>
             </div>
 
             <h2 data-i18n="userdoc.postgresql.h2.commands">Commands</h2>

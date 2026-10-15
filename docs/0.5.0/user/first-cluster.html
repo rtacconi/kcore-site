@@ -55,9 +55,10 @@
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
             <span class="docs-mode-strip-label">Show examples as</span>
-            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
                 <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
             </div>
         </div>
     </div>
@@ -128,6 +129,15 @@ spec:
   controller: 192.168.40.107:9090</code></pre>
             <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
             </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="docs.mode.tf.certs"><code>kcore_cluster</code> writes the trust material to <code>certs_dir</code>. The first node sets <code>bootstrap</code>. Later nodes set <code>join_controller</code> to that node's <code>controller_address</code>.</p>
+<pre><code>resource "kcore_cluster" "prod" {
+  name       = "prod"
+  controller = "192.168.40.107:9090"
+  certs_dir  = "${path.module}/certs"
+}</code></pre>
+            </div>
             <p data-i18n-html="userdoc.firstcluster.p.pki2">This generates the root CA, sub-CA, controller certificate, and <code>kctl</code> client certificate. All certificate data is embedded inline in <code>~/.kcore/config</code> and the PEM files are saved to <code>~/.kcore/certs/</code>.</p>
             <p class="note">This is a one-time operation per cluster. The context name (<code>prod</code>) is how <code>kctl</code> identifies this cluster in multi-cluster setups. If you omit <code>--context</code>, it defaults to <code>default</code>.</p>
 
@@ -159,6 +169,18 @@ spec:
   dcId: DC1
   insecure: true</code></pre>
             <p>Apply: <code>kctl apply -f node-controller.yaml</code></p>
+            </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_node" "controller" {
+  bootstrap      = true
+  address        = "192.168.40.107:9091"
+  os_disk        = "/dev/sda"
+  certs_dir      = kcore_cluster.prod.certs_dir
+  run_controller = true
+  dc_id          = "DC1"
+  insecure       = true
+  hostname       = "kvm-node-107"
+}</code></pre>
             </div>
             <p data-i18n-html="userdoc.firstcluster.p.install2">The installer wipes the disk, creates a LUKS-encrypted root partition (TPM2-sealed when available), deploys NixOS, provisions mTLS certificates, and reboots. After reboot:</p>
             <ul>
@@ -205,6 +227,23 @@ spec:
       sha256: "&lt;sha256&gt;"
       format: qcow2</code></pre>
             <p>Apply: <code>kctl apply -f web-01.yaml</code></p>
+            </div>
+            <div class="docs-tf-only">
+            <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
+<pre><code>resource "kcore_vm" "web" {
+  name               = "web-01"
+  cpu                = 2
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "filesystem"
+  storage_size_bytes = 40 * 1024 * 1024 * 1024
+  image_url          = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
+  image_sha256       = "&lt;sha256&gt;"
+  ssh_key_names      = ["my-key"]
+
+  nic {
+    network = "default"
+  }
+}</code></pre>
             </div>
             <p data-i18n-html="userdoc.firstcluster.p.createvm">See <a href="vm-creation.html" style="color:var(--accent-primary)">VM creation</a> for all options including YAML manifests, SSH keys, and cloud-init.</p>
 
