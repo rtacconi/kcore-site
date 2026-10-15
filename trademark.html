@@ -25,12 +25,19 @@
             background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
         }
         .page-hero h1 { margin-bottom: 1rem; }
-        .trademark-logo {
-            display: block;
-            width: min(36rem, 90%);
-            height: auto;
+        .trademark-logo-frame {
+            width: min(28rem, 90%);
+            aspect-ratio: 1185 / 240;
+            overflow: hidden;
             margin: 1.5rem auto 0;
-            background: #000;
+        }
+        .trademark-logo-frame img {
+            width: calc(100% * 1997 / 1185);
+            max-width: none;
+            height: auto;
+            margin-left: calc(-100% * 450 / 1185);
+            margin-top: calc(-100% * 272 / 1185);
+            display: block;
         }
         .page-section { padding: 3rem 0 4rem; }
         .page-narrow { max-width: 800px; margin: 0 auto; }
@@ -60,7 +67,9 @@
     <section class="page-hero">
         <div class="container">
             <h1 data-i18n="tm.title">Trademark</h1>
-            <img class="trademark-logo" src="assets/kcore-logo.png" alt="kcore logo" width="1997" height="788">
+            <div class="trademark-logo-frame">
+                <img src="assets/kcore-logo.png" alt="kcore logo" width="1997" height="788">
+            </div>
         </div>
     </section>
 

@@ -273,15 +273,22 @@
         </div>
     </section>
 
-    <!-- Atomic Updates Feature -->
+    <section class="feature-section">
+        <div class="container">
+            <div class="lead-facts">
+                <h2 data-i18n="fp.provision.title">Bare-metal install</h2>
+                <p data-i18n="fp.provision.desc">A provisioner configures servers over IPMI and Redfish. It netboots kcore with UEFI HTTP boot.</p>
+            </div>
+        </div>
+    </section>
+
     <section class="feature-section">
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2 data-i18n="fp.atomic.title">Atomic Updates & Instant Rollback</h2>
+                    <h2 data-i18n="fp.atomic.title">A failed update boots the previous generation</h2>
                     <p data-i18n="fp.atomic.desc">
-                        kcore runs on NixOS, which means system updates are transactional. If something
-                        goes wrong, you boot into the previous generation. No partial states, no manual cleanup.
+                        Host updates are one transaction. If an update fails, the machine boots the previous generation.
                     </p>
                     <ul class="feature-list-items">
                         <li>
@@ -305,9 +312,9 @@
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong data-i18n="fp.atomic.f3.title">Reproducible Builds</strong><br>
+                                <strong data-i18n="fp.atomic.f3.title">Download the ISO</strong><br>
                                 <span style="color: var(--text-tertiary);" data-i18n="fp.atomic.f3.desc">
-                                    The ISO is built from a flake.nix. Same inputs, same output, every time.
+                                    Official ISOs are produced from flake.nix. Download the evaluation ISO. You do not build it.
                                 </span>
                             </div>
                         </li>
@@ -315,26 +322,20 @@
                 </div>
                 <div class="feature-visual">
                     <div class="feature-diagram">
-                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);">
-                            Version 1 (Current)
+                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);" data-i18n="fp.diagram.current">
+                            Current generation
                         </div>
                         <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box" style="background: rgba(139, 92, 246, 0.1);">
-                            Apply Update → Version 2
+                        <div class="diagram-box" style="background: rgba(139, 92, 246, 0.1);" data-i18n="fp.diagram.apply">
+                            Apply update
                         </div>
                         <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box" style="background: rgba(16, 185, 129, 0.1);">
-                            ✓ Health Check Passed
-                        </div>
-                        <div style="margin: 2rem 0; text-align: center; color: var(--text-tertiary);">
-                            or
-                        </div>
-                        <div class="diagram-box" style="background: rgba(239, 68, 68, 0.1);">
-                            ✗ Health Check Failed
+                        <div class="diagram-box" style="background: rgba(239, 68, 68, 0.1);" data-i18n="fp.diagram.fails">
+                            Update fails
                         </div>
                         <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);">
-                            Auto Rollback → Version 1
+                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);" data-i18n="fp.diagram.previous">
+                            Boot the previous generation
                         </div>
                     </div>
                 </div>
@@ -509,22 +510,16 @@
                         <td><span class="check-mark">✓</span></td>
                     </tr>
                     <tr>
-                        <td data-i18n="fp.compare.rollback">Instant Rollback</td>
+                        <td data-i18n="fp.compare.rollback">Boots the previous generation</td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="cross-mark">✗</span></td>
-                        <td><span class="check-mark">✓</span></td>
+                        <td><span class="cross-mark">✗</span></td>
                     </tr>
                     <tr>
                         <td data-i18n="fp.compare.iac">Infrastructure as Code</td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span style="color: var(--warning);" data-i18n="fp.compare.partial">Partial</span></td>
                         <td><span class="check-mark">✓</span></td>
-                    </tr>
-                    <tr>
-                        <td data-i18n="fp.compare.ai">AI Integration</td>
-                        <td><span class="check-mark">✓</span></td>
-                        <td><span class="cross-mark">✗</span></td>
-                        <td><span class="cross-mark">✗</span></td>
                     </tr>
                     <tr>
                         <td data-i18n="fp.compare.isolation">Full OS Isolation</td>
@@ -537,18 +532,6 @@
                         <td><span class="check-mark">✓</span></td>
                         <td><span class="check-mark">✓</span></td>
                         <td><span style="color: var(--warning);" data-i18n="fp.compare.limited">Limited</span></td>
-                    </tr>
-                    <tr>
-                        <td data-i18n="fp.compare.efficiency">Resource Efficiency</td>
-                        <td><span style="color: var(--success);" data-i18n="fp.compare.high">High</span></td>
-                        <td><span style="color: var(--warning);" data-i18n="fp.compare.medium">Medium</span></td>
-                        <td><span style="color: var(--success);" data-i18n="fp.compare.vhigh">Very High</span></td>
-                    </tr>
-                    <tr>
-                        <td data-i18n="fp.compare.learning">Learning Curve</td>
-                        <td><span style="color: var(--success);" data-i18n="fp.compare.low">Low</span></td>
-                        <td><span style="color: var(--success);" data-i18n="fp.compare.low">Low</span></td>
-                        <td><span style="color: var(--warning);" data-i18n="fp.compare.high">High</span></td>
                     </tr>
                 </tbody>
             </table>

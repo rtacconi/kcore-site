@@ -963,12 +963,24 @@
                 </div>
 
                 <div class="timeline-entry">
+                    <div class="timeline-dot planned"></div>
+                    <div class="timeline-date planned">Planned</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon planned">&#128190;</span> Immutable backups</h3>
+                        <p>
+                            Backups that cannot be changed after they are written.
+                            This is not shipped. <code>kctl backup</code> today copies the controller database.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-entry">
                     <div class="timeline-dot shipped"></div>
                     <div class="timeline-date shipped">October 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
                         <h3><span class="card-icon shipped">&#128736;</span> Operations &amp; Node Lifecycle</h3>
                         <p>
-                            Day-2 tooling for node removal, cluster health, database snapshots,
+                            Day-2 tooling for node removal, cluster health, a copy of the controller database,
                             and moving shared-disk VMs when a node stops heartbeating.
                         </p>
                         <ul class="detail-list">
@@ -978,7 +990,7 @@
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>Backup and restore tooling &mdash; <code>kctl backup -o snapshot.sqlite</code> and <code>kctl restore controller -f snapshot.sqlite --confirm</code></span>
+                                <span>Controller database copy &mdash; <code>kctl backup -o snapshot.sqlite</code> and <code>kctl restore controller -f snapshot.sqlite --confirm</code>. This is not guest backup.</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
@@ -987,6 +999,10 @@
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Node cordon and certificate invalidation on delete &mdash; <code>kctl node cordon</code> stops new placement without moving VMs; <code>kctl node delete</code> refuses while VMs, workloads, or networks remain, then revokes the node's certificates (RFC 5280 reason 5) and removes the row</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Bare-metal provisioner. It configures servers over IPMI and Redfish, and netboots kcore with UEFI HTTP boot.</span>
                             </li>
                         </ul>
                     </div>

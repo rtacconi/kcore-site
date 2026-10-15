@@ -6,7 +6,7 @@
 
 - [Documentation hub](https://kcorehypervisor.com/docs.html)
 - [User guides](https://kcorehypervisor.com/docs/user/index.html)
-- [Product repository](https://github.com/rtacconi/kcore)
+- [Product repository](https://github.com/kcorehypervisor/kcore)
 
 ## Machine-readable
 

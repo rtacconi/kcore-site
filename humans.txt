@@ -1,7 +1,7 @@
 /* TEAM */
 Project: kcore hypervisor
 Site: https://kcorehypervisor.com/
-Product docs: https://github.com/rtacconi/kcore
+Product docs: https://github.com/kcorehypervisor/kcore
 
 /* THANKS */
 NixOS, Cloud Hypervisor, and open-source contributors.

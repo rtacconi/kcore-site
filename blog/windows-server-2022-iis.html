@@ -147,16 +147,19 @@
             <a href="https://github.com/kcorehypervisor/windows-guest">kcorehypervisor/windows-guest</a>.
             It installs Server 2022 under QEMU with virtio-win 0.1.240, turns on the serial console
             (SAC) and OpenSSH, and leaves a raw disk. Newer virtio-win builds fail on Cloud Hypervisor.
-            The recordings below are the kcore side: build the ISO, declare the VM in Terraform, then watch it boot.
+            Download the evaluation ISO from
+            <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a>.
+            You do not build it. The first recording shows a build from a checkout.
+            After that, the VM is declared in Terraform and boots.
         </p>
 
-        <h2>1. Build the kcore ISO</h2>
+        <h2>1. Download the evaluation ISO</h2>
         <p>
             The installer ISO is a NixOS image. It copies the <code>ch-vm</code> module onto the node,
-            including the Cloud Hypervisor unit that every VM uses. Build it from a checkout of kcore:
+            including the Cloud Hypervisor unit that every VM uses.
+            The recording builds that ISO from a checkout. For an install, download the evaluation ISO.
+            The file is a bootable ISO with volume id <code>KCORE</code>.
         </p>
-<pre><code>nix build .#nixosConfigurations.kcore-iso.config.system.build.isoImage</code></pre>
-        <p>The result is a bootable ISO with volume id <code>KCORE</code>.</p>
         <div id="windows-iso-cast" class="demo-wrap"></div>
 
         <h2>2. Declare the VM in Terraform</h2>
