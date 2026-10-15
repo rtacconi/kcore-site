@@ -134,6 +134,7 @@
             <p data-i18n-html="userdoc.certs.renewal.p3">The node writes the new certificate and key atomically, then reloads TLS without restarting the process. Established gRPC connections drop and callers reconnect; in-memory state is kept. If the new certificate fails verification, the node rolls back and carries on serving with its old, still-valid certificate.</p>
 
             <h2 data-i18n="userdoc.certs.h2.rotation">Manual rotation</h2>
+<div class="docs-cli-only">
 <pre><code># Rotate the sub-CA
 kctl rotate sub-ca --certs-dir ~/.kcore/&lt;context&gt;/
 
@@ -143,16 +144,27 @@ kctl rotate certs --controller &lt;host:port&gt; --certs-dir ~/.kcore/&lt;contex
 # Rotate one node, or every approved node, ahead of schedule
 kctl rotate node-certs --node &lt;node-id&gt;
 kctl rotate node-certs --all</code></pre>
+</div>
+<div class="docs-tf-only">
+            <p data-i18n-html="docs.mode.tf.rotate">Rotation and revocation stay <code>kctl</code> commands. Provider 0.5.0 can issue an operator certificate.</p>
+<pre><code>resource "kcore_operator" "ci" {
+  name       = "ci"
+  roles      = ["vm-admin"]
+  issue_cert = true
+}</code></pre>
+</div>
             <p data-i18n-html="userdoc.certs.rotation.p"><code>rotate sub-ca</code> generates a new sub-CA and pushes it to the controller. <code>rotate certs</code> re-signs the controller certificate and triggers <code>ReloadTls</code> on the controller. <code>rotate node-certs</code> runs the CSR flow above immediately instead of waiting for the renewal window.</p>
 
             <h2 data-i18n="userdoc.certs.h2.revocation">Revocation: CRL and OCSP</h2>
             <p data-i18n-html="userdoc.certs.revocation.p">Every certificate the controller signs is recorded in an inventory: serial, subject, node, validity window, SHA-256 fingerprint, and status. Revoking one marks it in that inventory and publishes it through both a CRL and an OCSP responder.</p>
+<div class="docs-cli-only">
 <pre><code># Revoke by serial, subject CN, or node
 kctl revoke cert --serial &lt;hex&gt; --reason key-compromise
 kctl revoke cert --node &lt;node-id&gt;
 
 # Fetch the current CRL
 kctl get crl -o crl.der</code></pre>
+</div>
             <p><code>kctl node delete &lt;node-id&gt;</code> revokes every certificate issued to that node before the node row is removed. The reason code is RFC 5280 reason 5, cessation of operation. Delete refuses while the node still hosts a VM, a workload, or a network. Revoking with <code>kctl revoke cert --node</code> leaves the node in the cluster.</p>
             <p data-i18n-html="userdoc.certs.revocation.p2">The CRL is signed by the sub-CA and carries <code>thisUpdate</code> and <code>nextUpdate</code>; it is valid for 24 hours and regenerated when the revocation set changes or <code>nextUpdate</code> gets close. <code>--reason</code> accepts the RFC 5280 reason codes, such as <code>key-compromise</code>, <code>superseded</code>, or <code>privilege-withdrawn</code>.</p>
             <p data-i18n-html="userdoc.certs.revocation.p3">Revocation is enforced above TLS, not inside the handshake: a revoked peer completes the TLS handshake and is then rejected with <code>PermissionDenied</code> before any RPC handler runs. No call succeeds with a revoked certificate. Checks run against a snapshot that refreshes every 60 seconds. When that snapshot goes stale the controller soft-fails by default, so a revocation outage cannot lock every node out of the cluster; set <code>revocation.failMode</code> to <code>hard-fail</code> if you would rather reject peers than serve on stale data.</p>

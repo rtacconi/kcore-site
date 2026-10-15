@@ -41,14 +41,14 @@
 </head>
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
-        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            <li><a href="../../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
         </ul>
     </div></nav>
 
@@ -135,7 +135,23 @@ spec:
             <div class="docs-tf-only">
             <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
             <p data-i18n-html="docs.mode.tf.certs"><code>kcore_cluster</code> writes the trust material to <code>certs_dir</code>. The first node sets <code>bootstrap</code>. Later nodes set <code>join_controller</code> to that node's <code>controller_address</code>.</p>
-<pre><code>resource "kcore_cluster" "prod" {
+<pre><code>terraform {
+  required_providers {
+    kcore = {
+      source  = "kcorehypervisor/kcore"
+      version = "0.5.0"
+    }
+  }
+}
+
+provider "kcore" {
+  controller_address = "192.168.40.107:9090"
+  tls_cert_path      = "${path.module}/certs/kctl.crt"
+  tls_key_path       = "${path.module}/certs/kctl.key"
+  tls_ca_path        = "${path.module}/certs/ca.crt"
+}
+
+resource "kcore_cluster" "prod" {
   name       = "prod"
   controller = "192.168.40.107:9090"
   certs_dir  = "${path.module}/certs"
@@ -146,8 +162,10 @@ spec:
 
             <h2 data-i18n="userdoc.firstcluster.h2.boot">2. Boot the target machine</h2>
             <p data-i18n-html="userdoc.firstcluster.p.boot">Write the kcore ISO to a USB drive and boot the server from it. The live environment starts a node-agent listening on <code>:9091</code>. You can optionally inspect the hardware first:</p>
+<div class="docs-cli-only">
 <pre><code>kctl --node 192.168.40.107:9091 -k node disks
 kctl --node 192.168.40.107:9091 -k node nics</code></pre>
+</div>
             <p data-i18n-html="userdoc.firstcluster.p.discover">Identify the OS disk (e.g. <code>/dev/sda</code>) and any data disks.</p>
 
             <h2 data-i18n="userdoc.firstcluster.h2.install">3. Install to disk</h2>
@@ -196,7 +214,16 @@ spec:
 
             <h2 data-i18n="userdoc.firstcluster.h2.verify">4. Verify the cluster</h2>
             <p data-i18n-html="userdoc.firstcluster.p.verify1">After the node reboots, <code>kctl</code> connects over mTLS using the context created in step 1. No <code>-s</code> or <code>-k</code> flags needed:</p>
+<div class="docs-cli-only">
 <pre><code>kctl get nodes</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>data "kcore_nodes" "all" {}
+
+output "node_hostnames" {
+  value = [for n in data.kcore_nodes.all.nodes : n.hostname]
+}</code></pre>
+</div>
             <p data-i18n-html="userdoc.firstcluster.p.verify2">Expected output:</p>
 <pre><code>ID                         ADDRESS              DC   STATUS  APPROVAL  CERT EXPIRY  LUKS
 kvm-node-192-168-40-107    192.168.40.107:9091  DC1   ready   approved       364d    TPM2</code></pre>

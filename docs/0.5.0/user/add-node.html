@@ -42,14 +42,14 @@
 </head>
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
-        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            <li><a href="../../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
         </ul>
     </div></nav>
 
@@ -159,7 +159,9 @@ spec:
             </div>
             <p data-i18n-html="userdoc.addnode.p.agent2">You can specify multiple <code>--join-controller</code> flags so the node agent knows about all controllers for failover. This node runs the node agent only&mdash;no controller process.</p>
             <p data-i18n-html="userdoc.addnode.p.agent3">After reboot the node registers with the controller and is <strong>auto-approved</strong> by default. Verify with:</p>
+<div class="docs-cli-only">
 <pre><code>kctl get nodes</code></pre>
+</div>
 
             <h2 data-i18n="userdoc.addnode.h2.ha">Add a second controller (HA)</h2>
             <p data-i18n-html="userdoc.addnode.p.ha1">For HA you want at least two controllers. The new node starts its own controller and joins the existing one:</p>
@@ -200,10 +202,14 @@ spec:
 }</code></pre>
             </div>
             <p data-i18n-html="userdoc.addnode.p.ha2">After reboot, the two controllers automatically discover each other and begin CRDT replication. Your <code>kctl</code> config is <strong>auto-updated</strong> to include the new controller endpoint, so <code>kctl</code> can fail over transparently:</p>
+<div class="docs-cli-only">
 <pre><code>kctl get nodes</code></pre>
+</div>
             <p>Both controllers will show an identical view of the cluster. You can also verify from a specific controller:</p>
+<div class="docs-cli-only">
 <pre><code>kctl -s 192.168.40.105:9090 get nodes
 kctl -s 192.168.40.107:9090 get nodes</code></pre>
+</div>
 
             <h2 data-i18n="userdoc.addnode.h2.crossdc">Cross-DC: add a node in DC2</h2>
             <p data-i18n-html="userdoc.addnode.p.crossdc1">Multi-datacenter deployments tag each node with a datacenter identifier:</p>
@@ -242,8 +248,10 @@ spec:
             </div>
             <p data-i18n-html="userdoc.addnode.p.crossdc2">Resources created on this node are tagged with <code>DC2</code>. Controllers across datacenters replicate state via conflict-free replicated data types (CRDTs) with adaptive cross-DC timeouts, so each site maintains an eventually-consistent view of the cluster.</p>
             <p data-i18n-html="userdoc.addnode.p.crossdc3">You can target a specific datacenter when creating VMs:</p>
+<div class="docs-cli-only">
 <pre><code>kctl create vm db-replica --dc DC2 \
   --image &lt;image-url&gt; --network default</code></pre>
+</div>
             <div class="docs-tf-only">
             <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
 <pre><code>resource "kcore_vm" "db_replica" {
@@ -265,10 +273,14 @@ spec:
             <h2 data-i18n="userdoc.addnode.h2.registration">Registration and approval</h2>
             <p data-i18n-html="userdoc.addnode.p.registration1">By default, nodes are <strong>auto-approved</strong> on registration. This means a node with a valid mTLS certificate issued by the cluster CA is immediately available for scheduling after reboot.</p>
             <p data-i18n-html="userdoc.addnode.p.registration2">If you prefer manual approval, set <code>requireManualApproval: true</code> in the controller configuration. In manual mode, nodes register as <strong>pending</strong> and must be explicitly approved:</p>
+<div class="docs-cli-only">
 <pre><code>kctl get nodes
 kctl node approve &lt;NODE_ID&gt;</code></pre>
+</div>
             <p data-i18n="userdoc.addnode.p.registration3">If a registration is unexpected or suspicious, reject it:</p>
+<div class="docs-cli-only">
 <pre><code>kctl node reject &lt;NODE_ID&gt;</code></pre>
+</div>
             <p class="note" data-i18n="userdoc.addnode.note.approval">Even with auto-approval enabled, all node communication is authenticated via mTLS. Only nodes with a certificate signed by the cluster CA can register.</p>
 
             <h2>Cordon and removal</h2>
@@ -278,9 +290,13 @@ kctl node approve &lt;NODE_ID&gt;</code></pre>
 
             <h2 data-i18n="userdoc.addnode.h2.certs">Certificates</h2>
             <p data-i18n="userdoc.addnode.p.certs1">Node certificates are renewed automatically when within 30 days of expiry. Operators can rotate the sub-CA at any time:</p>
+<div class="docs-cli-only">
 <pre><code>kctl rotate sub-ca</code></pre>
+</div>
             <p data-i18n="userdoc.addnode.p.certs2">Inspect certificate expiry for all nodes:</p>
+<div class="docs-cli-only">
 <pre><code>kctl get nodes</code></pre>
+</div>
 
             <h2 data-i18n="userdoc.addnode.h2.replication">Controller replication</h2>
             <p>When a second controller joins the cluster, replication starts automatically:</p>

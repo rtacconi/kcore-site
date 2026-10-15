@@ -41,14 +41,14 @@
 </head>
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
-        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            <li><a href="../../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
         </ul>
     </div></nav>
 
@@ -152,16 +152,28 @@
             </ul>
 
             <h2 data-i18n="userdoc.vmmig.live">Live migrate a VM</h2>
+<div class="docs-cli-only">
 <pre><code>kctl migrate vm app-1 --target-node node-b
 
 # If live fails, fall back to cold reassignment of that VM:
 kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
+</div>
+<div class="docs-tf-only">
+            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.5.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
+<pre><code>resource "kcore_volume" "app" {
+  name          = "app-data"
+  size_bytes    = 107374182400
+  storage_class = "ceph"
+}</code></pre>
+</div>
             <p data-i18n="userdoc.vmmig.liveP1">The controller prepares an empty Cloud Hypervisor on the destination (shared RBD already mapped), streams guest memory from the source over TCP, updates which node owns the VM, pushes Nix, then has systemd adopt the migrated process on the destination and clean up the source.</p>
             <p data-i18n-html="userdoc.vmmig.liveP2">Success responses report <code>mode=live</code> (or <code>mode=cold</code> when fallback ran).</p>
 
             <h2 data-i18n="userdoc.vmmig.cold">Cold drain a node</h2>
+<div class="docs-cli-only">
 <pre><code>kctl drain node node-a
 kctl drain node node-a --target-node node-b</code></pre>
+</div>
             <p data-i18n="userdoc.vmmig.coldP1">Every VM on the source is reassigned in the control plane. Nix push removes units on the source and creates them on destinations. Ceph disks are remapped — not copied. Guests experience a full stop/start.</p>
 
             <h2>Automatic failover</h2>
@@ -196,6 +208,7 @@ kctl drain node node-a --target-node node-b</code></pre>
             <h3 data-i18n="userdoc.vmmig.troubleAe">Migration keeps failing with ALREADY_EXISTS</h3>
             <p data-i18n-html="userdoc.vmmig.troubleAeP1">A migration that worked before starts failing immediately with <code>AlreadyExists</code>, naming the destination node. Nothing is actually receiving. The destination still holds the receive session it created when the migration began, because the controller died before it could abort it, and every later migration of that VM to that node is refused until an operator clears the session.</p>
             <p data-i18n-html="userdoc.vmmig.troubleAeP2">There is no automatic reaping, and that is deliberate. Deciding from the outside that a session is dead is a guess, and getting it wrong tears down a migration that is still running. kcore reports the evidence instead and leaves the call to you.</p>
+<div class="docs-cli-only">
 <pre><code># 1. Inspect. Read-only; covers every CephCluster member.
 kctl get migrate-session app-1
 
@@ -204,6 +217,10 @@ kctl migrate reset-session app-1 --node node-b
 
 # 3. Clear it.
 kctl migrate reset-session app-1 --node node-b --force</code></pre>
+</div>
+            <div class="docs-tf-only">
+            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.5.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
+            </div>
             <p data-i18n-html="userdoc.vmmig.troubleAeP3">Per node, the inspect step reports whether a session is tracked, the reserved port and whether anything is listening on it, the receive VMM's pid and whether it is alive and really belongs to this VM (a recycled pid is reported as recycled, not as live), whether the handoff marker and API socket exist, and a verdict. A node that cannot be reached is reported rather than failing the whole report. Inspecting needs <code>read-only</code>; clearing needs <code>cluster-admin</code>.</p>
             <p data-i18n-html="userdoc.vmmig.troubleAeP4">Clearing releases the session and its port reservation, kills the receive VMM, removes the marker, pid and API socket files, and unmaps the destination's RBD image. It is idempotent, so clearing a node with no session is a success. <code>--node</code> is mandatory, and the controller refuses the node that currently owns the VM. Once the session is gone, retry the migration as normal.</p>
             <p class="note" data-i18n-html="userdoc.vmmig.troubleAeNote">Read the verdict before you pass <code>--force</code>. Clearing a session whose receive VMM is still alive kills an in-flight migration.</p>

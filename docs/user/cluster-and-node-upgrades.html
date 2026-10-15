@@ -151,6 +151,7 @@ kctl update cluster reboot release-0-4-2 --node &lt;node-id&gt;</code></pre>
 
             <h2>YAML manifest outline</h2>
             <p>The release asset is camelCase. <code>kctl</code> also accepts the snake_case names. See <a href="yaml-manifests.html#clusterupdate-manifest-kind-clusterupdate">YAML manifest reference (ClusterUpdate)</a>. Copy <code>cluster-update-X.Y.Z.yaml</code> from the GitHub Release for that version. It already contains the commit and the tested pins.</p>
+<div class="docs-yaml-only">
 <pre><code>kind: ClusterUpdate
 metadata:
   name: release-0-4-2
@@ -170,23 +171,35 @@ spec:
     mode: auto
   approvalPolicy: manual
   updateKind: kcore</code></pre>
+            </div>
             <div class="docs-tf-only">
             <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
             <p data-i18n-html="docs.mode.tf.reboot">Reboot stays <code>kctl update cluster reboot</code>. Destroy cancels the rollout.</p>
 <pre><code>resource "kcore_cluster_update" "os" {
-  name            = "release-0-4-2"
-  version         = "0.4.2"
-  flake_ref       = "github:kcorehypervisor/kcore"
-  flake_rev       = "&lt;full-git-sha&gt;"
-  all_nodes       = true
-  strategy        = "one-at-a-time"
-  max_unavailable = 1
-  batch_size      = 1
-  drain_vms       = false
-  activation      = "auto"
-  approval        = "manual"
-  approve         = false
-  update_kind     = "kcore"
+  name                    = "release-0-5-0"
+  version                 = "0.5.0"
+  flake_ref               = "github:kcorehypervisor/kcore"
+  flake_rev               = "&lt;full-git-sha&gt;"
+  nixpkgs_rev             = "&lt;nixpkgs-rev&gt;"
+  all_nodes               = true
+  strategy                = "one-at-a-time"
+  max_unavailable         = 1
+  batch_size              = 1
+  drain_vms               = false
+  activation              = "auto"
+  update_kind             = "kcore"
+  schema_version          = 59
+  previous_schema_version = 56
+  min_compatible_reader   = 56
+  approval                = "manual"
+  approve                 = false
+
+  tested_os_pins {
+    nixpkgs_rev        = "&lt;nixpkgs-rev&gt;"
+    ceph_rev           = "&lt;ceph-rev&gt;"
+    ceph_sha256        = "&lt;ceph-sha256&gt;"
+    kubernetes_version = "1.37.0"
+  }
 }</code></pre>
             </div>
             <p>With <code>approvalPolicy: manual</code>, the controller waits for <code>kctl update cluster approve &lt;name&gt;</code> before rolling. Automatic policies advance without that step. <code>strategyType</code> for this release is <code>one-at-a-time</code>. A nixpkgs move is a second manifest with <code>updateKind: nixpkgs</code> whose <code>nixpkgsRev</code> is one of <code>testedOsPins</code>.</p>

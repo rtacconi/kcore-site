@@ -42,14 +42,14 @@
 </head>
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
-        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
-            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
-            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
-            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
-            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
-            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
-            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            <li><a href="../../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
         </ul>
     </div></nav>
 
@@ -153,7 +153,23 @@ spec:
             <div class="docs-tf-only">
             <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
             <p data-i18n-html="docs.mode.tf.certs"><code>kcore_cluster</code> writes the trust material to <code>certs_dir</code>. The first node sets <code>bootstrap</code>. Later nodes set <code>join_controller</code> to that node's <code>controller_address</code>.</p>
-<pre><code>resource "kcore_cluster" "my_cluster" {
+<pre><code>terraform {
+  required_providers {
+    kcore = {
+      source  = "kcorehypervisor/kcore"
+      version = "0.5.0"
+    }
+  }
+}
+
+provider "kcore" {
+  controller_address = "192.168.40.107:9090"
+  tls_cert_path      = "${path.module}/certs/kctl.crt"
+  tls_key_path       = "${path.module}/certs/kctl.key"
+  tls_ca_path        = "${path.module}/certs/ca.crt"
+}
+
+resource "kcore_cluster" "my_cluster" {
   name       = "my-cluster"
   controller = "192.168.40.107:9090"
   certs_dir  = "${path.module}/certs"
@@ -202,7 +218,16 @@ spec:
 
             <h2 data-i18n="userdoc.install.h2.verify">Step 3 &mdash; Verify the cluster</h2>
             <p data-i18n-html="userdoc.install.p.verify1">After the node reboots, <code>kctl</code> connects over mTLS using the context created in step 1. No additional flags needed:</p>
+<div class="docs-cli-only">
 <pre><code>kctl get nodes</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>data "kcore_nodes" "all" {}
+
+output "node_hostnames" {
+  value = [for n in data.kcore_nodes.all.nodes : n.hostname]
+}</code></pre>
+</div>
             <p data-i18n-html="userdoc.install.p.verify2">You should see the node with status <strong>ready</strong> and approval <strong>approved</strong>. The dashboard is available at <code>http://&lt;NODE_IP&gt;:8080</code>.</p>
 
             <h2 data-i18n="userdoc.install.h2.tls">TLS modes</h2>

@@ -228,14 +228,14 @@ kctl create vm win10-01 \
         <h2>3. The same VM in Terraform</h2>
         <p>
             <code>kctl create</code> and Terraform create the same object. The provider is
-            <code>kcorehypervisor/kcore</code> 0.3.0. Point <code>image_path</code> at the file
+            <code>kcorehypervisor/kcore</code> 0.5.0. Point <code>image_path</code> at the file
             uploaded in the previous step. There is no separate Windows guest type.
         </p>
 <pre><code>terraform {
   required_providers {
     kcore = {
       source  = "kcorehypervisor/kcore"
-      version = "0.3.0"
+      version = "0.5.0"
     }
   }
 }

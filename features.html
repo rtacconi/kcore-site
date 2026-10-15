@@ -393,31 +393,32 @@
                     </ul>
                 </div>
                 <div class="feature-visual">
-                    <pre style="margin: 0; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.6;"><code><span class="code-comment"># Infrastructure as Code</span>
+                    <pre style="margin: 0; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.6;"><code><span class="code-comment"># Provider kcorehypervisor/kcore 0.5.0</span>
 <span class="code-keyword">resource</span> <span class="code-string">"kcore_vm"</span> <span class="code-string">"web"</span> {
-  <span class="code-property">count</span>  = <span class="code-number">3</span>
-  <span class="code-property">name</span>   = <span class="code-string">"web-${count.index}"</span>
-  <span class="code-property">memory</span> = <span class="code-number">4096</span>
-  <span class="code-property">vcpu</span>   = <span class="code-number">2</span>
-  
-  <span class="code-keyword">disk</span> {
-    <span class="code-property">size</span>         = <span class="code-string">"50GB"</span>
-    <span class="code-property">storage_class</span> = <span class="code-string">"ssd"</span>
-  }
-  
-  <span class="code-keyword">network</span> {
-    <span class="code-property">name</span> = <span class="code-string">"production"</span>
+  <span class="code-property">name</span>               = <span class="code-string">"web"</span>
+  <span class="code-property">cpu</span>                = <span class="code-number">2</span>
+  <span class="code-property">memory_bytes</span>       = <span class="code-number">4294967296</span>
+  <span class="code-property">storage_backend</span>    = <span class="code-string">"filesystem"</span>
+  <span class="code-property">storage_size_bytes</span> = <span class="code-number">53687091200</span>
+  <span class="code-property">image_url</span>          = <span class="code-string">"https://example.com/debian.qcow2"</span>
+  <span class="code-property">image_sha256</span>       = <span class="code-string">"&lt;sha256&gt;"</span>
+
+  <span class="code-keyword">nic</span> {
+    <span class="code-property">network</span> = <span class="code-string">"production"</span>
   }
 }
 
 <span class="code-keyword">resource</span> <span class="code-string">"kcore_vm"</span> <span class="code-string">"db"</span> {
-  <span class="code-property">name</span>   = <span class="code-string">"postgres"</span>
-  <span class="code-property">memory</span> = <span class="code-number">8192</span>
-  <span class="code-property">vcpu</span>   = <span class="code-number">4</span>
-  
-  <span class="code-keyword">disk</span> {
-    <span class="code-property">size</span>         = <span class="code-string">"200GB"</span>
-    <span class="code-property">storage_class</span> = <span class="code-string">"nvme"</span>
+  <span class="code-property">name</span>               = <span class="code-string">"db"</span>
+  <span class="code-property">cpu</span>                = <span class="code-number">4</span>
+  <span class="code-property">memory_bytes</span>       = <span class="code-number">8589934592</span>
+  <span class="code-property">storage_backend</span>    = <span class="code-string">"lvm"</span>
+  <span class="code-property">storage_size_bytes</span> = <span class="code-number">214748364800</span>
+  <span class="code-property">image_url</span>          = <span class="code-string">"https://example.com/debian.qcow2"</span>
+  <span class="code-property">image_sha256</span>       = <span class="code-string">"&lt;sha256&gt;"</span>
+
+  <span class="code-keyword">nic</span> {
+    <span class="code-property">network</span> = <span class="code-string">"production"</span>
   }
 }</code></pre>
                 </div>

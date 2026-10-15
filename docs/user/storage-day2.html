@@ -156,7 +156,9 @@
                 </tbody>
             </table>
             <p>Promote a node to controller-managed mode explicitly when the runbook and maintenance window are in place:</p>
+<div class="docs-cli-only">
 <pre><code>echo controller-managed | sudo tee /etc/kcore/disk-management-mode</code></pre>
+</div>
 
             <h2>Recommended workflow: declarative <code>DiskLayout</code></h2>
             <p>Submit a <strong>YAML</strong> manifest with <code>kind: DiskLayout</code> to the controller. The node-agent still applies <strong>disko</strong> using a Nix body that defines <code>disko.devices</code>; <code>kctl</code> can build that body for you from structured YAML so you do not hand-author Nix for common data-disk layouts.</p>
@@ -248,6 +250,25 @@ spec:
       };
     }
   NIX
+}
+
+resource "kcore_volume" "data" {
+  name          = "db-data"
+  size_bytes    = 107374182400
+  storage_class = "lvm"
+}
+
+resource "kcore_volume_snapshot" "data" {
+  volume      = kcore_volume.data.name
+  name        = "db-data-1"
+  consistency = "crash"
+}
+
+resource "kcore_snapshot_policy" "daily" {
+  name            = "daily"
+  selector_volume = kcore_volume.data.name
+  schedule        = "@daily"
+  keep            = 7
 }</code></pre>
             </div>
             <p>Each manifest targets <strong>one</strong> node — heterogeneous fleets get one manifest per node, applied with <code>kctl apply -f ./disk-layouts/</code> or as a multi-document YAML file.</p>
@@ -315,9 +336,13 @@ kctl --node 10.0.0.5:9091 node apply-disk \
 
             <h2>Inventory and health</h2>
             <p>Inspect the live disk topology on a node (runs <code>lsblk</code> remotely):</p>
+<div class="docs-cli-only">
 <pre><code>kctl --node 10.0.0.5:9091 node disks</code></pre>
+</div>
             <p>Inspect storage backend, LVM/ZFS inventory, and the most recent <code>DiskLayout</code> phase from the controller:</p>
+<div class="docs-cli-only">
 <pre><code>kctl describe node node-ab12cd34</code></pre>
+</div>
 
             <h2>Operational runbook</h2>
             <h3>Adding a data disk</h3>

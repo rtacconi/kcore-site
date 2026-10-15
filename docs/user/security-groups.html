@@ -169,7 +169,9 @@ kctl sg detach --name &lt;sg&gt; --kind vm --target &lt;vm&gt;</code></pre>
             <p>When the network sets <code>eastWestFirewall</code>, those same rules that name a <code>targetIp</code> are also accepted on the bridge before other VM-to-VM traffic is dropped. Rules without a target IP stay north-south. See <a href="networks.html">Networks</a>.</p>
 
             <h2 data-i18n="userdoc.sg.h2.apply">Apply via kctl apply</h2>
+<div class="docs-cli-only">
 <pre><code>kctl apply -f sg.yaml</code></pre>
+</div>
             <p data-i18n-html="userdoc.sg.apply.p"><code>kctl apply</code> auto-detects <code>kind: SecurityGroup</code> and routes to the security group handler.</p>
         </main>
     </div>
