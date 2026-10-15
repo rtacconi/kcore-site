@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A practical VMware exit strategy: how to choose between Proxmox, Nutanix, OpenShift Virtualization, OpenStack, OpenNebula, and kcore without recreating lock-in.">
+    <title>VMware exit strategy: choosing the right platform - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/vmware-exit-strategy.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="VMware exit strategy: choosing the right platform">
+    <meta property="og:description" content="A practical VMware exit strategy: how to choose between Proxmox, Nutanix, OpenShift Virtualization, OpenStack, OpenNebula, and kcore without recreating lock-in.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/vmware-exit-strategy.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.55rem; }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
+            margin: 1.75rem 0 0.5rem;
+        }
+        .cta-row a {
+            display: inline-block;
+            padding: 0.65rem 1.1rem;
+            border-radius: 0.45rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .cta-row a.primary {
+            background: var(--accent-gradient, var(--accent-primary));
+            color: #fff;
+        }
+        .cta-row a.secondary {
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.exit.title">VMware exit strategy: choosing the right platform</h1>
+            <p class="post-meta" data-i18n="bp.exit.date">15 October 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.exit.back">← Back to blog</a>
+
+        <p>
+            Comparing <strong>kcore</strong> with Proxmox, Nutanix, OpenShift Virtualization, OpenStack, and OpenNebula
+            for teams that need a real path off VMware.
+        </p>
+        <p>
+            The VMware market changed. Many organizations are looking again at alternatives.
+            For years VMware was the default for enterprise virtualization. The stack was mature,
+            the tooling was familiar, and operators knew the model. Licensing, commercial flexibility,
+            and strategic control pushed a different question: not only “what replaces VMware?”,
+            but “what operating model do we want next?”
+        </p>
+        <p>
+            That distinction matters.
+        </p>
+        <p>
+            A VMware exit is not a hypervisor swap. It is a decision about cost structure, skills,
+            automation, storage and network integration, migration risk, and how much vendor lock-in
+            you will accept on the next platform. The right answer depends on whether you need
+            basic virtualization, a Kubernetes-first stack, a full private-cloud control plane,
+            or a VM-first platform that still speaks APIs and Terraform.
+        </p>
+
+        <h2>The real criteria for a VMware replacement</h2>
+        <p>
+            Headline feature lists are a weak filter. A replacement has to cover the work you already do:
+            create and place VMs, attach storage and networks, keep guests available, back them up,
+            and support the hardware your applications need, including GPUs when that is required.
+        </p>
+        <p>
+            That is only the first layer.
+        </p>
+        <p>
+            Teams also want cloud-style operations: an API, declarative config, reviewable changes,
+            and a path that does not force every change through a proprietary console.
+            Terraform and YAML matter here because they turn the estate into text you can diff and audit.
+        </p>
+        <p>
+            Kubernetes support matters, but in context. Some estates are already Kubernetes-first.
+            Many still run a large VM estate and need a platform that can host Kubernetes later
+            without forcing every workload through a redesign on day one.
+        </p>
+        <p>
+            Migration tooling is part of the platform choice. Inventory, disk conversion, and cutover
+            are different jobs. A credible exit plan names who does each job and what remains a project.
+        </p>
+
+        <h2>The platform landscape</h2>
+        <p>
+            Several platforms compete for attention. Each has a different center of gravity.
+        </p>
+        <ul>
+            <li>
+                <strong>VMware Cloud Foundation</strong> is the lowest-change path if you stay inside VMware.
+                You keep the operating model and the ecosystem. You also keep the commercial exposure
+                that started the exit discussion.
+            </li>
+            <li>
+                <strong>Nutanix</strong> is a strong HCI-led option when an appliance-style stack is the priority.
+                Integration can be attractive. Cost and platform dependency are the usual trade-offs
+                for teams that left VMware because pricing and lock-in became hard to accept.
+            </li>
+            <li>
+                <strong>Proxmox</strong> is appealing for smaller environments, labs, and teams that want
+                straightforward KVM virtualization at a lower cost. Simplicity is a strength.
+                It is a weaker fit when you want a first-class API, Terraform as the default workflow,
+                and a productized path from inventory to guest definitions on another hypervisor.
+            </li>
+            <li>
+                <strong>Red Hat OpenStack</strong> fits large IaaS estates with dedicated platform engineering.
+                The operational burden is real. Many teams cannot justify that lifecycle cost
+                unless they already run OpenStack skills in-house.
+            </li>
+            <li>
+                <strong>Red Hat OpenShift Virtualization</strong> is a Kubernetes-first option.
+                It fits when Kubernetes is already the main operating model and VMs are secondary.
+                It is not always the most natural fit for a VM-first VMware replacement.
+            </li>
+            <li>
+                <strong>OpenNebula</strong> targets enterprises that want VM operations plus a broader
+                private-cloud and multi-tenant model, including elastic Kubernetes in that same story.
+                If your requirement is a full open private cloud with that shape, evaluate it on those terms.
+            </li>
+        </ul>
+
+        <h2>Where kcore fits</h2>
+        <p>
+            <strong>kcore</strong> is a VM-first hypervisor product for teams that want to leave VMware pricing
+            without moving into another closed appliance stack. Guests are managed with <code>kctl</code>,
+            YAML manifests, and the Terraform provider <code>kcorehypervisor/kcore</code>.
+            The provider talks to the kcore API over gRPC. That is a normal IaC workflow, not a shell wrapper.
+        </p>
+        <p>
+            Pricing is per physical CPU socket per year, not per core.
+            The Community Edition ISO and <code>kctl</code> are on
+            <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a> under Apache-2.0.
+            Paid tiers fund the signed distribution, the enterprise update channel, and commercial support.
+            See <a href="../pricing.html">pricing</a>.
+        </p>
+        <p>
+            Host updates are designed so a failed update boots the previous generation.
+            Windows Server and Windows desktop guests run.
+            Live migration of a VM needs shared Ceph storage; control-plane replication across datacenters
+            is not vSphere HA. One physical GPU can be assigned to one VM; NVIDIA vGPU is not available.
+            Those limits are documented on the <a href="../features.html">features</a> page so you can plan honestly.
+        </p>
+        <p>
+            Kubernetes is available as clusters on nodes that are already in the kcore cluster.
+            That supports a gradual path: keep VM-first operations, then add Kubernetes where it helps.
+            It is not a claim that every Kubernetes-first platform feature ships on day one.
+        </p>
+        <p>
+            For migration, <a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a>
+            inventories vCenter or Proxmox and writes Terraform for kcore, plus a gap report.
+            <code>convert</code> turns an exported disk into qcow2 or raw with <code>virt-v2v</code> or <code>qemu-img</code>.
+            It does not pull disk bytes straight from vCenter. Cutover remains a project.
+            The operator steps are in the <a href="../docs/user/import.html">import guide</a>.
+            A deeper split of inventory tools, disk movers, and Terraform generators is in
+            <a href="vmware-migration-tools.html">Three kinds of VMware migration tool</a>.
+        </p>
+
+        <h2>Match the platform to the operating model</h2>
+        <p>
+            The useful comparison is not “who has the longest feature list?”
+            It is “what operating model do we want to run for the next five years?”
+        </p>
+        <ul>
+            <li>Small environments and technical teams often land on Proxmox.</li>
+            <li>Appliance-style HCI often lands on Nutanix.</li>
+            <li>Large engineering-led IaaS often lands on OpenStack.</li>
+            <li>Kubernetes-first organizations often land on OpenShift Virtualization.</li>
+            <li>Private-cloud and multi-tenant IaaS requirements often land on OpenNebula or similar stacks.</li>
+            <li>
+                VM-first estates that want per-socket commercial terms, reviewable Terraform and YAML,
+                a free evaluation ISO, and a migration path that writes destination HCL often land on kcore.
+            </li>
+        </ul>
+        <p>
+            If you need NetApp, Veeam, or another vendor certification as a hard gate, check that vendor’s
+            support matrix for the platform you pick. Do not assume a blog post replaces that check.
+        </p>
+
+        <h2>Conclusion</h2>
+        <p>
+            Leaving VMware is a strategic infrastructure decision, not only a cost line.
+            The wrong replacement recreates lock-in, adds operational weight you cannot staff,
+            or forces an operating model that does not match the workloads you still run.
+        </p>
+        <p>
+            The best alternative is the one that fits your architecture, skills, commercial priorities,
+            and cloud timeline. For teams that want a practical VM-first exit with API and Terraform
+            as normal tools, kcore is built for that path.
+        </p>
+
+        <div class="cta-row">
+            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a class="secondary" href="../pricing.html">See pricing</a>
+            <a class="secondary" href="../docs/user/import.html">Read the import guide</a>
+            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+        </div>
+        <p>
+            Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="../partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="../trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

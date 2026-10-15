@@ -8,6 +8,11 @@
 - [User guides](https://kcorehypervisor.com/docs/user/index.html)
 - [Product repository](https://github.com/kcorehypervisor/kcore)
 
+## Blog
+
+- [VMware exit strategy](https://kcorehypervisor.com/blog/vmware-exit-strategy.html)
+- [VMware migration tools](https://kcorehypervisor.com/blog/vmware-migration-tools.html)
+
 ## Machine-readable
 
 - [Sitemap](https://kcorehypervisor.com/sitemap.xml)
