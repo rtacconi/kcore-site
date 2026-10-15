@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore certificates: mTLS bootstrap, PKI hierarchy, auto-renewal, rotation, LUKS disk encryption.">
+    <title>Certificates and encryption - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/certificates.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Certificates and encryption - kcore documentation">
+    <meta property="og:description" content="kcore certificates: mTLS bootstrap, PKI hierarchy, auto-renewal, rotation, LUKS disk encryption.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/certificates.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+            
+            <h1 data-i18n="userdoc.certs.h1">Certificates and encryption</h1>
+            <p data-i18n="userdoc.certs.intro">kcore uses mutual TLS (mTLS) for all management-plane communication. Disk encryption with LUKS2 protects data at rest.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.pki">PKI hierarchy</h2>
+            <ul>
+                <li data-i18n-html="userdoc.certs.pki.li1"><strong>Root CA</strong> — created by <code>kctl create cluster</code></li>
+                <li data-i18n-html="userdoc.certs.pki.li2"><strong>Sub-CA</strong> — lives on the controller, signs node leaf certificates</li>
+                <li data-i18n-html="userdoc.certs.pki.li3"><strong>Controller cert</strong> — identifies the controller to nodes and clients</li>
+                <li data-i18n-html="userdoc.certs.pki.li4"><strong>kctl client cert</strong> — authenticates CLI operations</li>
+                <li data-i18n-html="userdoc.certs.pki.li5"><strong>Per-node certs</strong> — generated during <code>kctl node install</code></li>
+            </ul>
+
+            <h2 data-i18n="userdoc.certs.h2.bootstrap">mTLS bootstrap</h2>
+            <p data-i18n-html="userdoc.certs.bootstrap.p"><code>kctl create cluster</code> generates the full PKI (root CA, sub-CA, controller cert, kctl client cert). <code>kctl node install</code> pushes the node certificate, private key, and CA chain to the target node. Controller nodes also receive the sub-CA key pair.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.renewal">Automated certificate rotation</h2>
+            <p data-i18n-html="userdoc.certs.renewal.p">The controller checks its certificate inventory every hour and rotates any node certificate that has entered its renewal window — by default the last 30 days, or the last quarter of the certificate's lifetime, whichever comes first. Certificates are signed for 365 days.</p>
+            <p data-i18n-html="userdoc.certs.renewal.p2">Rotation is driven by the controller but the key material is not. The controller calls <code>RotateNodeCert</code> on the node, the node generates a fresh keypair and sends a CSR to <code>SignNodeCsr</code>, and the sub-CA returns a signed chain. Private keys never leave the node.</p>
+            <p data-i18n-html="userdoc.certs.renewal.p3">The node writes the new certificate and key atomically, then reloads TLS without restarting the process. Established gRPC connections drop and callers reconnect; in-memory state is kept. If the new certificate fails verification, the node rolls back and carries on serving with its old, still-valid certificate.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.rotation">Manual rotation</h2>
+<pre><code># Rotate the sub-CA
+kctl rotate sub-ca --certs-dir ~/.kcore/&lt;context&gt;/
+
+# Re-sign the controller cert and trigger TLS reload
+kctl rotate certs --controller &lt;host:port&gt; --certs-dir ~/.kcore/&lt;context&gt;/
+
+# Rotate one node, or every approved node, ahead of schedule
+kctl rotate node-certs --node &lt;node-id&gt;
+kctl rotate node-certs --all</code></pre>
+            <p data-i18n-html="userdoc.certs.rotation.p"><code>rotate sub-ca</code> generates a new sub-CA and pushes it to the controller. <code>rotate certs</code> re-signs the controller certificate and triggers <code>ReloadTls</code> on the controller. <code>rotate node-certs</code> runs the CSR flow above immediately instead of waiting for the renewal window.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.revocation">Revocation: CRL and OCSP</h2>
+            <p data-i18n-html="userdoc.certs.revocation.p">Every certificate the controller signs is recorded in an inventory: serial, subject, node, validity window, SHA-256 fingerprint, and status. Revoking one marks it in that inventory and publishes it through both a CRL and an OCSP responder.</p>
+<pre><code># Revoke by serial, subject CN, or node
+kctl revoke cert --serial &lt;hex&gt; --reason key-compromise
+kctl revoke cert --node &lt;node-id&gt;
+
+# Fetch the current CRL
+kctl get crl -o crl.der</code></pre>
+            <p><code>kctl node delete &lt;node-id&gt;</code> revokes every certificate issued to that node before the node row is removed. The reason code is RFC 5280 reason 5, cessation of operation. Delete refuses while the node still hosts a VM, a workload, or a network. Revoking with <code>kctl revoke cert --node</code> leaves the node in the cluster.</p>
+            <p data-i18n-html="userdoc.certs.revocation.p2">The CRL is signed by the sub-CA and carries <code>thisUpdate</code> and <code>nextUpdate</code>; it is valid for 24 hours and regenerated when the revocation set changes or <code>nextUpdate</code> gets close. <code>--reason</code> accepts the RFC 5280 reason codes, such as <code>key-compromise</code>, <code>superseded</code>, or <code>privilege-withdrawn</code>.</p>
+            <p data-i18n-html="userdoc.certs.revocation.p3">Revocation is enforced above TLS, not inside the handshake: a revoked peer completes the TLS handshake and is then rejected with <code>PermissionDenied</code> before any RPC handler runs. No call succeeds with a revoked certificate. Checks run against a snapshot that refreshes every 60 seconds. When that snapshot goes stale the controller soft-fails by default, so a revocation outage cannot lock every node out of the cluster; set <code>revocation.failMode</code> to <code>hard-fail</code> if you would rather reject peers than serve on stale data.</p>
+            <p class="note" data-i18n-html="userdoc.certs.revocation.note">OCSP stapling is not supported. The controller runs an OCSP responder and nodes query it directly, as a fallback when CRL data is stale — no stapled response is attached to a kcore handshake.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.pkiendpoints">PKI endpoints</h2>
+            <p data-i18n-html="userdoc.certs.pkiendpoints.p">The controller serves the CRL and OCSP over plain HTTP on <code>pki.httpListenAddr</code>, by default <code>0.0.0.0:9092</code>. These objects are signed, so they do not need transport security, and a node whose certificate has just expired can still fetch what it needs to recover.</p>
+            <ul>
+                <li data-i18n-html="userdoc.certs.pkiendpoints.li1"><code>GET /pki/crl.der</code> and <code>GET /pki/crl.pem</code> — the current CRL</li>
+                <li data-i18n-html="userdoc.certs.pkiendpoints.li2"><code>POST /pki/ocsp</code> and <code>GET /pki/ocsp/&lt;base64&gt;</code> — OCSP responder, answering good, revoked, or unknown</li>
+                <li data-i18n-html="userdoc.certs.pkiendpoints.li3"><code>GET /pki/healthz</code> — responder health</li>
+            </ul>
+            <p data-i18n-html="userdoc.certs.pkiendpoints.p2">Set <code>pki.httpEnabled: false</code> to turn the listener off. Nodes fall back to the gRPC <code>GetCrl</code> call either way.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.inspect">Inspecting certificates</h2>
+            <p data-i18n-html="userdoc.certs.inspect.p"><code>kctl get nodes</code> shows <code>cert_expiry_days</code> per node. <code>kctl get certificates</code> lists the controller's inventory, filterable with <code>--node</code>, <code>--status</code>, and <code>--expiring-within-days</code>. <code>kctl get pki-status</code> summarises rotation and revocation health. The compliance report includes a Certificate Lifecycle section with expiring and unknown certificate counts.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.luks">LUKS2 disk encryption</h2>
+            <p data-i18n="userdoc.certs.luks.p">LUKS2 encryption is mandatory for the OS disk on every node.</p>
+            <ul>
+                <li data-i18n-html="userdoc.certs.luks.li1"><strong>TPM2 path</strong> — <code>systemd-cryptenroll</code> seals the LUKS key to the TPM2 device.</li>
+                <li data-i18n-html="userdoc.certs.luks.li2"><strong>Key-file path</strong> — passphrase-based unlock using a key file.</li>
+                <li data-i18n-html="userdoc.certs.luks.li3"><strong>Recovery key</strong> — stored at <code>/etc/kcore/recovery/luks-recovery-key.txt</code> (root-only, mode 0400).</li>
+            </ul>
+
+            <h2 data-i18n="userdoc.certs.h2.luksreport">LUKS reporting</h2>
+            <p data-i18n-html="userdoc.certs.luksreport.p">The node-agent detects the LUKS unlock method at registration: <strong>tpm2</strong> if <code>/dev/mapper/cryptroot</code> exists and a TPM device is present, <strong>key-file</strong> otherwise. <code>kctl get compliance-report</code> shows the cluster-wide LUKS breakdown by method.</p>
+
+            <h2 data-i18n="userdoc.certs.h2.tlsconfig">TLS configuration</h2>
+            <ul>
+                <li data-i18n-html="userdoc.certs.tls.li1"><strong>Production</strong> — mTLS required (default). All gRPC and API traffic is encrypted and mutually authenticated.</li>
+                <li data-i18n-html="userdoc.certs.tls.li2"><strong>Development</strong> — <code>kctl --insecure</code> disables TLS for local testing over plain HTTP.</li>
+            </ul>
+            <p class="note" data-i18n-html="userdoc.certs.tls.note">Never use <code>--insecure</code> in production. Disabling mTLS removes authentication and encryption from the management plane.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+</body>
+</html>

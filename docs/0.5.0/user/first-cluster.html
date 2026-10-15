@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your first kcore cluster: boot ISO, discover hardware, install to disk, approve the node, create a VM.">
+    <title>First cluster - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/first-cluster.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="First cluster - kcore documentation">
+    <meta property="og:description" content="Create your first kcore cluster: boot ISO, discover hardware, install to disk, approve the node, create a VM.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/first-cluster.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li>
+                <li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html" class="active">First cluster</a></li>
+                <li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li>
+                <li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li>
+                <li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li>
+                <li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li>
+                <li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li>
+                <li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li>
+                <li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li>
+                <li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+            
+            <h1 data-i18n="userdoc.firstcluster.h1">First cluster</h1>
+            <p data-i18n="userdoc.firstcluster.p.intro">This walkthrough creates a single-node kcore cluster: one machine running both the controller and the node agent, ready to schedule VMs. The entire process takes two commands from your operator workstation.</p>
+
+            <h2 data-i18n="userdoc.firstcluster.h2.pki">1. Create the cluster PKI</h2>
+            <p data-i18n-html="userdoc.firstcluster.p.pki1">On your operator workstation (where <code>kctl</code> is installed), create the cluster trust material:</p>
+            <div class="docs-cli-only">
+<pre><code>kctl create cluster \
+  --controller 192.168.40.107:9090 \
+  --context prod</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># cluster.yaml
+kind: Cluster
+metadata:
+  name: prod
+spec:
+  controller: 192.168.40.107:9090</code></pre>
+            <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
+            </div>
+            <p data-i18n-html="userdoc.firstcluster.p.pki2">This generates the root CA, sub-CA, controller certificate, and <code>kctl</code> client certificate. All certificate data is embedded inline in <code>~/.kcore/config</code> and the PEM files are saved to <code>~/.kcore/certs/</code>.</p>
+            <p class="note">This is a one-time operation per cluster. The context name (<code>prod</code>) is how <code>kctl</code> identifies this cluster in multi-cluster setups. If you omit <code>--context</code>, it defaults to <code>default</code>.</p>
+
+            <h2 data-i18n="userdoc.firstcluster.h2.boot">2. Boot the target machine</h2>
+            <p data-i18n-html="userdoc.firstcluster.p.boot">Write the kcore ISO to a USB drive and boot the server from it. The live environment starts a node-agent listening on <code>:9091</code>. You can optionally inspect the hardware first:</p>
+<pre><code>kctl --node 192.168.40.107:9091 -k node disks
+kctl --node 192.168.40.107:9091 -k node nics</code></pre>
+            <p data-i18n-html="userdoc.firstcluster.p.discover">Identify the OS disk (e.g. <code>/dev/sda</code>) and any data disks.</p>
+
+            <h2 data-i18n="userdoc.firstcluster.h2.install">3. Install to disk</h2>
+            <p data-i18n-html="userdoc.firstcluster.p.install1">Install kcore to disk with a controller on this node:</p>
+            <div class="docs-cli-only">
+<pre><code>kctl node install \
+  --node 192.168.40.107:9091 \
+  --os-disk /dev/sda \
+  --run-controller \
+  --dc-id DC1 \
+  -k</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code># node-controller.yaml
+kind: NodeInstall
+metadata:
+  name: kvm-node-107
+spec:
+  node: 192.168.40.107:9091
+  osDisk: /dev/sda
+  runController: true
+  dcId: DC1
+  insecure: true</code></pre>
+            <p>Apply: <code>kctl apply -f node-controller.yaml</code></p>
+            </div>
+            <p data-i18n-html="userdoc.firstcluster.p.install2">The installer wipes the disk, creates a LUKS-encrypted root partition (TPM2-sealed when available), deploys NixOS, provisions mTLS certificates, and reboots. After reboot:</p>
+            <ul>
+                <li>Controller listens on <code>:9090</code> with mTLS</li>
+                <li>Node agent listens on <code>:9091</code> with mTLS</li>
+                <li>Dashboard available at <code>http://192.168.40.107:8080</code></li>
+                <li>The node registers with its own controller and is <strong>auto-approved</strong></li>
+            </ul>
+            <p class="note">The install takes 10&ndash;20 minutes depending on network speed (the installer downloads NixOS packages from the cache). The node reboots automatically when done.</p>
+
+            <h2 data-i18n="userdoc.firstcluster.h2.verify">4. Verify the cluster</h2>
+            <p data-i18n-html="userdoc.firstcluster.p.verify1">After the node reboots, <code>kctl</code> connects over mTLS using the context created in step 1. No <code>-s</code> or <code>-k</code> flags needed:</p>
+<pre><code>kctl get nodes</code></pre>
+            <p data-i18n-html="userdoc.firstcluster.p.verify2">Expected output:</p>
+<pre><code>ID                         ADDRESS              DC   STATUS  APPROVAL  CERT EXPIRY  LUKS
+kvm-node-192-168-40-107    192.168.40.107:9091  DC1   ready   approved       364d    TPM2</code></pre>
+            <p data-i18n-html="userdoc.firstcluster.p.verify3">The node shows status <strong>ready</strong> and approval <strong>approved</strong>. Your single-node cluster is operational.</p>
+
+            <h2 data-i18n="userdoc.firstcluster.h2.createvm">5. Create your first VM</h2>
+            <div class="docs-cli-only">
+<pre><code>kctl create vm web-01 \
+  --image https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2 \
+  --image-sha256 &lt;sha256&gt; \
+  --network default \
+  --storage-backend filesystem \
+  --storage-size-bytes 42949672960 \
+  --wait-for-ssh</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code>kind: VM
+metadata:
+  name: web-01
+spec:
+  cpu: 2
+  memoryBytes: "4G"
+  storageBackend: filesystem
+  storageSizeBytes: "40G"
+  sshKeys:
+    - my-key
+  nics:
+    - network: default
+  disks:
+    - image: https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2
+      sha256: "&lt;sha256&gt;"
+      format: qcow2</code></pre>
+            <p>Apply: <code>kctl apply -f web-01.yaml</code></p>
+            </div>
+            <p data-i18n-html="userdoc.firstcluster.p.createvm">See <a href="vm-creation.html" style="color:var(--accent-primary)">VM creation</a> for all options including YAML manifests, SSH keys, and cloud-init.</p>
+
+            <h2 data-i18n="userdoc.firstcluster.h2.next">Next steps</h2>
+            <ul>
+                <li data-i18n-html="userdoc.firstcluster.li.next1"><a href="add-node.html" style="color:var(--accent-primary)">Add more nodes</a> &mdash; agent-only nodes, HA controllers, cross-DC.</li>
+                <li data-i18n-html="userdoc.firstcluster.li.next2"><a href="images.html" style="color:var(--accent-primary)">Upload images</a> &mdash; for air-gapped or large image files.</li>
+                <li data-i18n-html="userdoc.firstcluster.li.next3"><a href="networks.html" style="color:var(--accent-primary)">Create networks</a> &mdash; NAT, bridge, or VXLAN overlay.</li>
+            </ul>
+        </main>
+    </div>
+
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+</body>
+</html>

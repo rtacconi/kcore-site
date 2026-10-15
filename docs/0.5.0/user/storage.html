@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore storage: filesystem, LVM, and ZFS backends, day-0 configuration, and storage classes.">
+    <title>Storage backends - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/storage.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Storage backends - kcore documentation">
+    <meta property="og:description" content="kcore storage: filesystem, LVM, and ZFS backends, day-0 configuration, and storage classes.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/storage.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html" class="active">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+            
+            <h1 data-i18n="userdoc.storage.title">Storage backends</h1>
+            <p data-i18n-html="userdoc.storage.intro">kcore supports three VM data-plane storage backends: <strong>filesystem</strong>, <strong>LVM</strong>, and <strong>ZFS</strong>. The backend is chosen at node install time and determines where VM disks are stored.</p>
+
+            <h2 data-i18n="userdoc.storage.supportedBackends">Supported backends</h2>
+            <table>
+                <thead>
+                    <tr><th data-i18n="userdoc.storage.thBackend">Backend</th><th data-i18n="userdoc.storage.thHowItWorks">How it works</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-i18n-html="userdoc.storage.tdFilesystem"><strong>Filesystem</strong></td>
+                        <td data-i18n-html="userdoc.storage.tdFilesystemDesc">VM images and volumes are stored under <code>/var/lib/kcore/</code>. Single-disk nodes use the OS filesystem directly. Multi-disk nodes get dedicated ext4 mounts at <code>/var/lib/kcore/volumes</code>, <code>/var/lib/kcore/volumes1</code>, etc.</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n-html="userdoc.storage.tdLvm"><strong>LVM</strong></td>
+                        <td data-i18n-html="userdoc.storage.tdLvmDesc">Disko creates the PV and VG at install time. The node-agent creates and deletes LVs at runtime via <code>lvcreate</code>. The VG name is configurable (default <code>vg_kcore</code>).</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n-html="userdoc.storage.tdZfs"><strong>ZFS</strong></td>
+                        <td data-i18n-html="userdoc.storage.tdZfsDesc">Disko creates the pool at install time. The node-agent uses it for zvol and dataset operations. The pool name is configurable (default <code>tank0</code>).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.storage.day0Config">Day-0 configuration (install time)</h2>
+            <p data-i18n-html="userdoc.storage.day0ConfigIntro">The <code>kctl node install</code> command accepts the following storage-related flags:</p>
+            <table>
+                <thead>
+                    <tr><th data-i18n="userdoc.storage.thFlag">Flag</th><th data-i18n="userdoc.storage.thDescription">Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td data-i18n-html="userdoc.storage.tdOsDisk"><code>--os-disk</code></td><td data-i18n-html="userdoc.storage.tdOsDiskDesc">Required. Device path for the OS disk (e.g. <code>/dev/sda</code>).</td></tr>
+                    <tr><td data-i18n-html="userdoc.storage.tdDataDisk"><code>--data-disk</code></td><td data-i18n="userdoc.storage.tdDataDiskDesc">Repeatable. Device path(s) for data disks.</td></tr>
+                    <tr><td data-i18n-html="userdoc.storage.tdStorageBackend"><code>--storage-backend</code></td><td data-i18n-html="userdoc.storage.tdStorageBackendDesc">One of <code>filesystem</code>, <code>lvm</code>, or <code>zfs</code>.</td></tr>
+                    <tr><td data-i18n-html="userdoc.storage.tdLvmVgName"><code>--lvm-vg-name</code></td><td data-i18n-html="userdoc.storage.tdLvmVgNameDesc">LVM volume group name (default <code>vg_kcore</code>).</td></tr>
+                    <tr><td data-i18n-html="userdoc.storage.tdLvmLvPrefix"><code>--lvm-lv-prefix</code></td><td data-i18n="userdoc.storage.tdLvmLvPrefixDesc">Prefix for LVM logical volume names.</td></tr>
+                    <tr><td data-i18n-html="userdoc.storage.tdZfsPoolName"><code>--zfs-pool-name</code></td><td data-i18n-html="userdoc.storage.tdZfsPoolNameDesc">ZFS pool name (default <code>tank0</code>).</td></tr>
+                    <tr><td data-i18n-html="userdoc.storage.tdZfsDatasetPrefix"><code>--zfs-dataset-prefix</code></td><td data-i18n="userdoc.storage.tdZfsDatasetPrefixDesc">Prefix for ZFS dataset names.</td></tr>
+                </tbody>
+            </table>
+
+            <h3 data-i18n="userdoc.storage.filesystemExample">Filesystem example</h3>
+<pre><code>kctl node install \
+  --os-disk /dev/sda \
+  --data-disk /dev/sdb \
+  --storage-backend filesystem</code></pre>
+
+            <h3 data-i18n="userdoc.storage.lvmExample">LVM example</h3>
+<pre><code>kctl node install \
+  --os-disk /dev/sda \
+  --data-disk /dev/sdb \
+  --storage-backend lvm \
+  --lvm-vg-name vg_kcore \
+  --lvm-lv-prefix kcore-</code></pre>
+
+            <h3 data-i18n="userdoc.storage.zfsExample">ZFS example</h3>
+<pre><code>kctl node install \
+  --os-disk /dev/sda \
+  --data-disk /dev/sdb --data-disk /dev/sdc \
+  --storage-backend zfs \
+  --zfs-pool-name tank0 \
+  --zfs-dataset-prefix kcore/</code></pre>
+
+            <h2 data-i18n="userdoc.storage.luksEncryption">LUKS disk encryption</h2>
+            <p data-i18n-html="userdoc.storage.luksEncryptionP1">The OS disk is always encrypted with <strong>LUKS2</strong>. When <code>/sys/class/tpm/tpm0</code> exists on the node, the key is TPM2-sealed for automatic unlock on boot. Otherwise a key-file is used.</p>
+            <p data-i18n-html="userdoc.storage.luksEncryptionP2">The recovery key is written to <code>/etc/kcore/recovery/luks-recovery-key.txt</code> (root-only, mode 0400). Store this key securely — it is the only way to unlock the disk if the TPM is cleared or the key-file is lost.</p>
+
+            <h2 data-i18n="userdoc.storage.storageClasses">Storage classes</h2>
+            <p data-i18n="userdoc.storage.storageClassesP1">Storage classes in kcore are derived from node registration — they are not a separate API object. Each node reports its configured backend, and the controller aggregates them.</p>
+<pre><code>$ kctl get storage-class
+NAME          NODES
+filesystem    3
+lvm           2
+zfs           1
+unspecified   0</code></pre>
+            <p data-i18n="userdoc.storage.storageClassesP2">To see which nodes use a specific backend:</p>
+<pre><code>$ kctl describe storage-class lvm
+Storage class: lvm
+Nodes (2):
+  - node-ab12cd34
+  - node-ef56gh78</code></pre>
+
+            <h2 data-i18n="userdoc.storage.nodeAgentConfig">Node-agent configuration</h2>
+            <p data-i18n-html="userdoc.storage.nodeAgentConfigP1">The node-agent reads its storage settings from <code>/etc/kcore/node-agent.yaml</code>:</p>
+<pre><code>storage:
+  backend: lvm                          # filesystem | lvm | zfs
+  filesystemVolumeDir: /var/lib/kcore/volumes
+  lvm:
+    vgName: vg_kcore
+    lvPrefix: kcore-
+  zfs:
+    poolName: tank0
+    datasetPrefix: kcore/
+  imageCacheDir: /var/lib/kcore/image-cache</code></pre>
+
+            <h2 data-i18n="userdoc.storage.vmStorageFlags">VM storage flags</h2>
+            <p data-i18n="userdoc.storage.vmStorageFlagsP1">When creating a VM you can specify the storage backend and disk size:</p>
+            <div class="docs-cli-only">
+<pre><code>kctl create vm \
+  --storage-backend filesystem \
+  --storage-size-bytes 42949672960</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code>kind: VM
+metadata:
+  name: my-vm
+spec:
+  storageBackend: filesystem
+  storageSizeBytes: "40G"
+  # ... (other fields)</code></pre>
+            <p>Apply: <code>kctl apply -f vm.yaml</code></p>
+            </div>
+
+            <h2 data-i18n="userdoc.storage.sanLink">Shared storage (kcore SAN)</h2>
+            <p data-i18n-html="userdoc.storage.sanLinkP">For Ceph RBD disks, cold drain, and live migration, see <a href="storage-vsan.html">kcore SAN (Ceph)</a> and <a href="vm-migration.html">VM migration</a>.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+</body>
+</html>

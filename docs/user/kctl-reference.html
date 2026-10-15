@@ -43,7 +43,7 @@
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html">Features</a></li><li><a href="../../pricing.html">Pricing</a></li><li><a href="../../docs.html">Docs</a></li><li><a href="../../roadmap.html">Roadmap</a></li><li><a href="../../blog.html">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary">Get Started</a></li></ul>
+        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
     </div></nav>
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
@@ -56,19 +56,24 @@
     </div>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4>Getting started</h4><ul><li><a href="installation.html">Installation</a></li><li><a href="first-cluster.html">First cluster</a></li><li><a href="add-node.html">Add a node</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Virtual machines</h4><ul><li><a href="vm-creation.html">VM creation</a></li><li><a href="images.html">VM images</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                 <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Containers</h4><ul><li><a href="containers.html">Container lifecycle</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Networking</h4><ul><li><a href="networks.html">Networks</a></li><li><a href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Storage</h4><ul><li><a href="storage.html">Storage backends</a></li><li><a href="storage-day2.html">Day-2 operations</a></li><li><a href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Security</h4><ul><li><a href="security-groups.html">Security groups</a></li><li><a href="compliance.html">Compliance</a></li><li><a href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Reference</h4><ul><li><a href="kctl-reference.html" class="active">kctl CLI</a></li><li><a href="yaml-manifests.html">YAML manifests</a></li></ul></div>
-            <div class="docs-nav-section"><h4>Licensing</h4><ul><li><a href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html" class="active">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
         </nav></aside>
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1 data-i18n="userdoc.kctlref.h1">kctl CLI reference</h1>
             <p data-i18n-html="userdoc.kctlref.intro"><code>kctl</code> is the command-line interface for managing kcore clusters. Global flags: <code>-s</code> / <code>--controller</code> (controller address, repeatable for HA), <code>-k</code> / <code>--insecure</code> (skip TLS verification), <code>-c</code> / <code>--config</code> (path to config file), <code>--node</code> (node address for direct node commands).</p>
             <p class="docs-mode-hint docs-yaml-only">You are browsing in <strong>YAML</strong> mode. This page lists CLI commands; for manifest kinds and fields see the <a href="yaml-manifests.html">YAML manifest reference</a>.</p>
@@ -79,6 +84,7 @@
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.create.vm.desc">Create a VM from CLI flags or <code>-f</code> YAML manifest. Assign a GPU with <code>--gpu radeon0</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.container.cmd"><code>container</code></td><td data-i18n="userdoc.kctlref.create.container.desc">Create a container on a node</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.create.postgresql.cmd"><code>postgresql</code></td><td data-i18n-html="userdoc.kctlref.create.postgresql.desc">One PostgreSQL database from the NixOS package. Alias <code>postgres</code>. See <a href="postgresql.html">PostgreSQL</a>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.network.cmd"><code>network</code></td><td data-i18n="userdoc.kctlref.create.network.desc">Create a network</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.create.cluster.cmd"><code>cluster</code></td><td data-i18n="userdoc.kctlref.create.cluster.desc">Initialise PKI and mTLS context for a new cluster</td></tr>
             </table>
@@ -89,6 +95,7 @@
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.aliases">Aliases</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.vms.cmd"><code>vms</code></td><td data-i18n-html="userdoc.kctlref.get.vms.alias"><code>vm</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.containers.cmd"><code>containers</code></td><td data-i18n-html="userdoc.kctlref.get.containers.alias"><code>container</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.get.postgresql.cmd"><code>postgresql</code></td><td data-i18n-html="userdoc.kctlref.get.postgresql.alias"><code>postgres</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.nodes.cmd"><code>nodes</code></td><td data-i18n-html="userdoc.kctlref.get.nodes.alias"><code>node</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.networks.cmd"><code>networks</code></td><td data-i18n-html="userdoc.kctlref.get.networks.alias"><code>network</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.get.storageclasses.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.get.storageclasses.alias"><code>storage-classes</code></td></tr>
@@ -114,6 +121,7 @@
                 <tr><td data-i18n-html="userdoc.kctlref.describe.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.describe.vm.alias"><code>vms</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.node.cmd"><code>node</code></td><td data-i18n-html="userdoc.kctlref.describe.node.alias"><code>nodes</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.network.cmd"><code>network</code></td><td data-i18n-html="userdoc.kctlref.describe.network.alias"><code>networks</code></td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.describe.postgresql.cmd"><code>postgresql</code></td><td data-i18n-html="userdoc.kctlref.describe.postgresql.alias"><code>postgres</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.storageclass.cmd"><code>storage-class</code></td><td data-i18n-html="userdoc.kctlref.describe.storageclass.alias"><code>storage-classes</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.sshkey.cmd"><code>ssh-key</code></td><td data-i18n-html="userdoc.kctlref.describe.sshkey.alias"><code>sshkey</code></td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.describe.compliance.cmd"><code>compliance-report</code></td><td data-i18n-html="userdoc.kctlref.describe.compliance.alias"><code>compliance</code></td></tr>
@@ -130,6 +138,7 @@
                 <tr><td data-i18n-html="userdoc.kctlref.delete.network.cmd"><code>network</code></td><td data-i18n="userdoc.kctlref.delete.network.desc">Delete a network</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.delete.image.cmd"><code>image</code></td><td data-i18n="userdoc.kctlref.delete.image.desc">Delete a stored image</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.delete.container.cmd"><code>container</code></td><td data-i18n="userdoc.kctlref.delete.container.desc">Delete a container</td></tr>
+                <tr><td data-i18n-html="userdoc.kctlref.delete.postgresql.cmd"><code>postgresql</code></td><td data-i18n-html="userdoc.kctlref.delete.postgresql.desc">Remove the NixOS service definition. <code>/var/lib/postgresql</code> stays on disk. Alias <code>postgres</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.delete.disklayout.cmd"><code>disk-layout</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>disklayout</code>)</span></td><td data-i18n-html="userdoc.kctlref.delete.disklayout.desc">Delete a DiskLayout on the controller. Does not touch the node and does not repartition anything. Needs <code>cluster-admin</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.delete.cephcluster.cmd"><code>ceph-cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>cephcluster</code>)</span></td><td data-i18n-html="userdoc.kctlref.delete.cephcluster.desc">Delete a CephCluster resource. Does not wipe OSDs, so the stored data survives. Needs <code>cluster-admin</code>.</td></tr>
             </table>
@@ -270,5 +279,6 @@
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>

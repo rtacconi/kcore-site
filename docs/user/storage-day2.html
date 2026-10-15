@@ -81,6 +81,9 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
                 <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
@@ -104,6 +107,8 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1>Storage day-2 operations</h1>
             <p>After initial install you may need to add data disks, expand storage, or reconfigure layouts. kcore exposes day-2 disk changes as declarative <strong><code>DiskLayout</code></strong> resources owned by the controller, with a per-node <code>kctl node apply-disk</code> escape hatch for one-off pushes and validation.</p>
             <p class="note"><strong>Naming:</strong> the operator surface uses the plain word <em>disk</em> (<code>DiskLayout</code>, <code>kctl … disk-layout</code>, <code>/etc/kcore/disk-management-mode</code>). The underlying partitioning tool is still <a href="https://github.com/nix-community/disko">disko</a> and is referenced as such in logs and the <code>kcore.disko.*</code> NixOS module — only the user-facing names changed.</p>
@@ -319,5 +324,6 @@ kctl --node 10.0.0.5:9091 node apply-disk \
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>

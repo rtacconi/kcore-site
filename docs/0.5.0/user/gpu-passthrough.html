@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Assign a named GPU such as radeon0 to a kcore VM, list GPUs across the cluster, and cold-migrate onto a free card.">
+    <title>GPU passthrough - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.5.0/user/gpu-passthrough.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="GPU passthrough - kcore documentation">
+    <meta property="og:description" content="Assign a named GPU such as radeon0 to a kcore VM, list GPUs across the cluster, and cold-migrate onto a free card.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.5.0/user/gpu-passthrough.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI or YAML examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" class="active" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.5.0"></p>
+            
+            <h1 data-i18n="userdoc.gpu.title">GPU passthrough</h1>
+            <p data-i18n-html="userdoc.gpu.intro">A VM takes a named GPU from the node that will run it. You ask for <code>radeon0</code> or <code>nvidia1</code>, not a PCI address. The node binds that card and its audio function to the guest.</p>
+            <p class="note" data-i18n-html="userdoc.gpu.note">This is whole-device passthrough. The guest gets the physical card, so the GPU cannot move live the way CPU and memory can. Moving the VM stops it, attaches a GPU on the destination, and boots the guest there. The disk still has to be shared Ceph RBD. See <a href="vm-migration.html">VM migration</a>.</p>
+
+            <h2 data-i18n="userdoc.gpu.inventory">See the GPUs</h2>
+            <p data-i18n="userdoc.gpu.inventoryP">On the machine you are logged into, read the local PCI bus. Across the cluster, read the inventory each node agent publishes.</p>
+<pre><code>kctl gpu list --local
+kctl gpu list
+kctl gpu list --node node-a</code></pre>
+            <p data-i18n-html="userdoc.gpu.names">Names are per node. <code>radeon0</code> is that node's lowest-address AMD GPU, <code>radeon1</code> the next. NVIDIA cards are <code>nvidia0</code>, Intel graphics are <code>intel0</code>. A row is <code>free</code>, <code>in-use</code>, or <code>blocked</code>.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="userdoc.gpu.thState">State</th>
+                        <th data-i18n="userdoc.gpu.thMeaning">Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>free</code></td>
+                        <td data-i18n="userdoc.gpu.tdFree">The card can be assigned. Its IOMMU group is only the GPU and its audio function.</td>
+                    </tr>
+                    <tr>
+                        <td><code>in-use</code></td>
+                        <td data-i18n="userdoc.gpu.tdUsed">A VM already owns this name on this node.</td>
+                    </tr>
+                    <tr>
+                        <td><code>blocked</code></td>
+                        <td data-i18n="userdoc.gpu.tdBlocked">The IOMMU group also contains USB, SATA, a bridge, or another device the host cannot give away. An integrated GPU that shares a group with the host's disks is blocked.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.gpu.assign">Assign a GPU</h2>
+            <p data-i18n-html="userdoc.gpu.assignP"><code>--target-node</code> is required. <code>--gpu radeon</code> with no number takes the first free Radeon on that node. Repeat <code>--gpu</code> to attach more than one card. A name belongs to one VM.</p>
+            <div class="docs-cli-only">
+<pre><code>kctl create vm gpu-guest \
+  --target-node node-a \
+  --gpu radeon0 \
+  --cpu 4 --memory 8G \
+  --image https://example.com/debian.raw \
+  --image-sha256 &lt;sha256&gt; \
+  --storage-backend ceph \
+  --storage-size-bytes 21474836480</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code>apiVersion: kcore/v1
+kind: VM
+metadata:
+  name: gpu-guest
+spec:
+  cpu: 4
+  memoryBytes: 8589934592
+  targetNode: node-a
+  gpus:
+    - radeon0
+  storageBackend: ceph
+  storageSizeBytes: 21474836480</code></pre>
+            </div>
+            <p data-i18n-html="userdoc.gpu.assignPci"><code>--pci 0000:03:00.0</code> still works when you need a raw address. Prefer <code>--gpu</code>.</p>
+
+            <h2 data-i18n="userdoc.gpu.migrate">Move the VM</h2>
+            <p data-i18n-html="userdoc.gpu.migrateP">Leave <code>--gpu</code> off to take a free GPU of the same family on the destination, one for each GPU the VM has now. Name a card when you want a specific one. Node drain uses the same automatic pick. If nothing compatible is free, the VM stays where it is.</p>
+<pre><code>kctl migrate vm gpu-guest --target-node node-b
+kctl migrate vm gpu-guest --target-node node-b --gpu radeon1</code></pre>
+            <p data-i18n-html="userdoc.gpu.migrateDisk">The guest disk is not copied. Cold migration of a GPU VM needs the same shared RBD disk as any other cross-node move. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
+
+            <h2 data-i18n="userdoc.gpu.limits">Limits</h2>
+            <ul>
+                <li data-i18n="userdoc.gpu.limitsLi1">The GPU itself is not live-migrated. CPU and memory of a GPU VM are not streamed to the new host while the card stays attached.</li>
+                <li data-i18n="userdoc.gpu.limitsLi2">A blocked GPU cannot be assigned. Fix is a discrete card whose IOMMU group is only that card.</li>
+                <li data-i18n="userdoc.gpu.limitsLi3">Changing the GPU list on a later apply is rejected. Migrate, or delete the VM and create it again.</li>
+                <li data-i18n-html="userdoc.gpu.limitsLi4">The host loses the card while the guest has it. The device stays on <code>vfio-pci</code> after the guest stops until you bind the host driver again.</li>
+            </ul>
+            <p class="note" data-i18n-html="userdoc.gpu.techNote">What the node does at start (VFIO bind, kernel parameters): <a href="https://github.com/kcorehypervisor/kcore/blob/main/docs/gpu-passthrough.md">docs/gpu-passthrough.md</a>.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+</body>
+</html>

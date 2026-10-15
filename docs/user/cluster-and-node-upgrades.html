@@ -80,6 +80,9 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
                 <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
@@ -103,15 +106,18 @@
             </ul></div>
         </nav></aside>
         <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            
             <h1>Cluster &amp; node upgrades</h1>
-            <p>kcore nodes run <strong>NixOS</strong>. Host upgrades move the system forward using an immutable <strong>flake revision</strong> (<code>flake_ref</code> + <code>flake_rev</code>) while the <strong>controller</strong> orchestrates prepare/activate work on each node. Workloads (VMs/containers) use the normal lifecycle APIs; they are not upgraded by this flow.</p>
+            <p>kcore nodes run <strong>NixOS</strong>. Host upgrades move the system forward using an immutable <strong>flake revision</strong> (<code>flakeRef</code> + <code>flakeRev</code>) while the <strong>controller</strong> orchestrates prepare/activate work on each node. Workloads (VMs/containers) use the normal lifecycle APIs; they are not upgraded by this flow.</p>
+            <p>These pages match one kcore release. The GitHub Release for that version includes <code>cluster-update-X.Y.Z.yaml</code>. Community Edition nodes fetch that git commit and compile it. A later private channel will serve prebuilt closures of newer versions, the provisioner, and the backup service.</p>
 
             <h2>Cluster rollout vs single node</h2>
             <p>Both use the same <strong><code>kind: ClusterUpdate</code></strong> manifest. The <strong>selector</strong> decides scope:</p>
             <ul>
-                <li><strong>Whole cluster</strong> — e.g. <code>selector.all_nodes: true</code> (subject to labels/datacenter filters when you use them).</li>
-                <li><strong>Controllers only</strong> — <code>selector.controllers_only: true</code>.</li>
-                <li><strong>One or few nodes</strong> — <code>selector.node_ids: [&quot;&lt;uuid&gt;&quot;, …]</code> for a targeted or rolling-by-hand rollout.</li>
+                <li><strong>Whole cluster</strong> — e.g. <code>selector.allNodes: true</code> (subject to labels/datacenter filters when you use them).</li>
+                <li><strong>Controllers only</strong> — <code>selector.controllersOnly: true</code>.</li>
+                <li><strong>One or few nodes</strong> — <code>selector.nodeIds: [&quot;&lt;uuid&gt;&quot;, …]</code> for a targeted or rolling-by-hand rollout.</li>
             </ul>
             <p class="note">There is no separate command for “upgrade this machine only”; narrow the selector instead.</p>
 
@@ -125,42 +131,46 @@ kctl update cluster plan -f rollout.yaml
 kctl update cluster apply -f rollout.yaml
 
 # Observe cluster + per-node phases
-kctl update cluster get release-0-4-0
+kctl update cluster get release-0-4-2
 kctl update cluster list
 
-# If approval_policy is manual
-kctl update cluster approve release-0-4-0
+# If approvalPolicy is manual
+kctl update cluster approve release-0-4-2
 
-kctl update cluster cancel release-0-4-0
-kctl update cluster rollback release-0-4-0</code></pre>
+kctl update cluster cancel release-0-4-2
+kctl update cluster rollback release-0-4-2
+
+# Boot a generation staged because the kernel or guest units changed
+kctl update cluster reboot release-0-4-2 --node &lt;node-id&gt;</code></pre>
             </div>
             <p class="docs-yaml-only note">Switch to <strong>CLI</strong> in the strip above for command blocks.</p>
 
             <h2>YAML manifest outline</h2>
-            <p>Use camelCase fields; see <a href="yaml-manifests.html#clusterupdate-manifest-kind-clusterupdate">YAML manifest reference (ClusterUpdate)</a>.</p>
+            <p>The release asset is camelCase. <code>kctl</code> also accepts the snake_case names. See <a href="yaml-manifests.html#clusterupdate-manifest-kind-clusterupdate">YAML manifest reference (ClusterUpdate)</a>. Copy <code>cluster-update-X.Y.Z.yaml</code> from the GitHub Release for that version. It already contains the commit and the tested pins.</p>
 <pre><code>kind: ClusterUpdate
 metadata:
-  name: release-0-4-0
+  name: release-0-4-2
 spec:
   target:
-    version: "0.4.0"
-    flake_ref: github:kcorehypervisor/kcore
-    flake_rev: "&lt;full-git-sha&gt;"
+    version: "0.4.2"
+    flakeRef: github:kcorehypervisor/kcore
+    flakeRev: "&lt;full-git-sha&gt;"
   selector:
-    all_nodes: true
+    allNodes: true
   strategy:
-    strategy_type: one-at-a-time
-    max_unavailable: 1
-    batch_size: 1
-  drain_vms: false
+    strategyType: one-at-a-time
+    maxUnavailable: 1
+    batchSize: 1
+  drainVms: false
   activation:
     mode: auto
-  approval_policy: manual</code></pre>
-            <p>With <code>approval_policy: manual</code>, the controller waits for <code>kctl update cluster approve &lt;name&gt;</code> before rolling. Automatic policies advance without that step.</p>
+  approvalPolicy: manual
+  updateKind: kcore</code></pre>
+            <p>With <code>approvalPolicy: manual</code>, the controller waits for <code>kctl update cluster approve &lt;name&gt;</code> before rolling. Automatic policies advance without that step. <code>strategyType</code> for this release is <code>one-at-a-time</code>. A nixpkgs move is a second manifest with <code>updateKind: nixpkgs</code> whose <code>nixpkgsRev</code> is one of <code>testedOsPins</code>.</p>
 
             <h2>Phases</h2>
             <p>The cluster resource exposes a <strong>phase</strong> (pending, rolling_out, succeeded, failed, …). Each node row tracks prepare/activate progress and errors. Use <code>kctl update cluster get</code> for detail.</p>
-            <p class="note">Strategy knobs (<code>canary</code>, <code>batch</code>, …) exist on the API; simpler deployments may advance nodes one after another — confirm behaviour for your release.</p>
+            <p class="note"><code>canary</code>, <code>batch</code>, and <code>per-dc</code> are refused. The rollout advances one node at a time.</p>
 
             <h2>Host rollback</h2>
             <p>Controller <code>rollback</code> expresses rollout intent. For a broken activation you can still recover with normal <strong>NixOS generation</strong> commands on the machine (e.g. previous bootloader generation); keep that in your physical/datacenter runbook.</p>
@@ -174,5 +184,6 @@ spec:
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/docs-version.js"></script>
 </body>
 </html>
