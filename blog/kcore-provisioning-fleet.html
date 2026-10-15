@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How kcore-provisioning helps manage a fleet of bare-metal servers: verified OS images, machine inventory, BMC power control, boot targets, and UEFI HTTP netboot.">
+    <title>Manage a server fleet with kcore-provisioning - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/kcore-provisioning-fleet.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Manage a server fleet with kcore-provisioning">
+    <meta property="og:description" content="How kcore-provisioning helps manage a fleet of bare-metal servers: verified OS images, machine inventory, BMC power control, boot targets, and UEFI HTTP netboot.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/kcore-provisioning-fleet.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-provisioning-overview.png">
+    <meta property="og:image:alt" content="kcore-provisioning overview dashboard showing images and machines">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-provisioning-overview.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-hero-image {
+            display: block;
+            width: min(960px, 100%);
+            margin: 1.75rem auto 0;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.55rem; }
+        .post-content figure {
+            margin: 1.75rem 0 2rem;
+        }
+        .post-content figure img {
+            display: block;
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content figcaption {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.55rem;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
+            margin: 1.75rem 0 0.5rem;
+        }
+        .cta-row a {
+            display: inline-block;
+            padding: 0.65rem 1.1rem;
+            border-radius: 0.45rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .cta-row a.primary {
+            background: var(--accent-gradient, var(--accent-primary));
+            color: #fff;
+        }
+        .cta-row a.secondary {
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.prov.title">Manage a server fleet with kcore-provisioning</h1>
+            <p class="post-meta" data-i18n="bp.prov.date">15 October 2026</p>
+            <img class="post-hero-image" src="../assets/kcore-provisioning-overview.png" alt="kcore-provisioning overview dashboard with image and machine counters" width="1440" height="900">
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.prov.back">← Back to blog</a>
+
+        <p>
+            Installing one kcore node from an evaluation ISO is fine for a lab. A rack of PowerEdge boxes is a different job. You need a list of machines, a verified image, a boot target, and a way to power the BMC without walking the aisle with a KVM.
+        </p>
+        <p>
+            That is what <strong>kcore-provisioning</strong> is for. The provisioner configures servers over IPMI and Redfish and netboots kcore with UEFI HTTP boot. The dashboard below is the operator view of that controller: images, machines, boot configs, and power. Screenshots are from a lab install; the shape of the UI is what matters.
+        </p>
+
+        <h2>What the dashboard shows</h2>
+        <p>
+            The overview is a single page for fleet health. It counts total and verified OS images, total machines, and how many are provisioned, provisioning, or failed. It auto-refreshes every ten seconds from the provisioning controller API. Quick links jump to Images, Machines, and Boot Configs. Recent activity lists the last provisioning events when any exist.
+        </p>
+        <p>
+            You do not open a spreadsheet to answer “which hosts are ready?” You open Overview.
+        </p>
+
+        <h2>Feature list</h2>
+        <ul>
+            <li><strong>Verified OS images</strong> — downloaded images with name, version, architecture, type (ISO or raw), verification status, size, and created time. Filter by verified, pending, or failed.</li>
+            <li><strong>Machine inventory</strong> — registered physical servers with name, MAC, IP, state (discovered, provisioning, provisioned, failed, offline), power state, manufacturer, model, and assigned boot target.</li>
+            <li><strong>BMC / iDRAC detail</strong> — per-machine pages show manufacturer, model, serial, CPU, cores, memory, BMC IP and firmware, NIC MACs, and storage devices from the BMC.</li>
+            <li><strong>Power control</strong> — Power On, Power Off, and Reset from the machine page. The dashboard footer states this UI is power control for interactive actions; install progress still comes from the provisioner pipeline.</li>
+            <li><strong>Drive health</strong> — ask the BMC about each drive and re-check without a separate hardware tool.</li>
+            <li><strong>Boot configurations</strong> — which machine boots which image, with MAC, kernel parameters when set, and a config URL you can view or download.</li>
+            <li><strong>Netboot path</strong> — the product path behind this UI is UEFI HTTP boot of kcore after BMC configuration over IPMI or Redfish, not a USB stick per host.</li>
+            <li><strong>API-backed</strong> — the page reads the provisioning controller API, so the same facts can feed automation instead of living only in a console.</li>
+        </ul>
+
+        <figure>
+            <img src="../assets/kcore-provisioning-images.png" alt="OS Images table with three verified kcoreos images" width="1440" height="900">
+            <figcaption>Images: verified kcoreos builds ready to assign as boot targets.</figcaption>
+        </figure>
+
+        <h2>Why a fleet is easier this way</h2>
+        <p>
+            Manual install does not scale past a few nodes. Someone has to image each disk, set boot order, and track which MAC got which build. With kcore-provisioning the loop is shorter:
+        </p>
+        <ul>
+            <li>Register or discover the machine once. The inventory keeps MAC, BMC address, model, and NICs.</li>
+            <li>Keep a small set of verified images. Operators pick a known-good version instead of copying ISOs by hand.</li>
+            <li>Attach a boot config to the machine. The target image is explicit and downloadable.</li>
+            <li>Power the host from the same page when you need a reboot into the netboot path.</li>
+            <li>Watch Overview for provisioned versus failed while the controller does the work.</li>
+        </ul>
+        <p>
+            That is the same operating idea as cloud instance launch — desired image, inventory, power — on metal you already own.
+        </p>
+
+        <figure>
+            <img src="../assets/kcore-provisioning-machines.png" alt="Machines table listing three Dell PowerEdge T140 servers" width="1440" height="900">
+            <figcaption>Machines: three Dell PowerEdge T140 hosts in DISCOVERED state with boot targets assigned.</figcaption>
+        </figure>
+
+        <h2>A machine page in practice</h2>
+        <p>
+            Opening one host shows why this is faster than a BMC-only workflow. Power controls sit next to drive health. System information, CPU and memory, BMC firmware, NICs, and storage are on one screen. Provisioning status links the boot target and lets you download the config. You are not bouncing between iDRAC, a PXE server UI, and a wiki page for the kernel line.
+        </p>
+
+        <figure>
+            <img src="../assets/kcore-provisioning-machine-detail.png" alt="Machine details with power control and BMC information" width="1440" height="1600">
+            <figcaption>Machine details: power control, BMC data, NICs, storage, and boot target on one page.</figcaption>
+        </figure>
+
+        <h2>Where this sits in kcore</h2>
+        <p>
+            Day-to-day VM and cluster work still goes through <code>kctl</code>, YAML, and the Terraform provider after nodes are installed. The provisioner is the front door for getting bare metal onto that fleet. Community Edition install from the evaluation ISO remains the path for a single host or a small lab. The provisioner is the path when the unit of work is a rack, not a laptop.
+        </p>
+        <p>
+            For product framing on IPMI, Redfish, and UEFI HTTP boot, see <a href="../features.html">features</a>. For node join and approval after install, see the <a href="../docs/user/add-node.html">add-node</a> and <a href="../docs/user/installation.html">installation</a> guides.
+        </p>
+
+        <h2>Conclusion</h2>
+        <p>
+            Fleet management on bare metal fails when inventory, images, boot targets, and power live in four tools. kcore-provisioning puts those facts in one controller and one dashboard. Verified images, discovered machines, boot configs, and BMC power are enough to stop treating every new server as a special project.
+        </p>
+
+        <div class="cta-row">
+            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a class="secondary" href="../features.html">See features</a>
+            <a class="secondary" href="../docs/user/installation.html">Installation guide</a>
+            <a class="secondary" href="../pricing.html">See pricing</a>
+        </div>
+        <p>
+            Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="../partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="../trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

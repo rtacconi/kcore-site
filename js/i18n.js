@@ -466,6 +466,13 @@ const translations = {
     "bp.bare.date": "15 October 2026",
     "bp.bare.back": "← Back to blog",
 
+    "blog.post14.title": "Manage a server fleet with kcore-provisioning",
+    "blog.post14.date": "15 October 2026",
+    "blog.post14.summary": "Verified images, machine inventory, BMC power, and boot targets — how the provisioning dashboard makes a rack of servers tractable.",
+    "bp.prov.title": "Manage a server fleet with kcore-provisioning",
+    "bp.prov.date": "15 October 2026",
+    "bp.prov.back": "← Back to blog",
+
     "bp.win.title": "Windows Server 2022 on kcore",
     "bp.win.date": "29 September 2026",
     "bp.win.back": "← Back to blog",
@@ -2262,6 +2269,13 @@ const translations = {
     "bp.bare.title": "Piattaforme bare-metal che sembrano il cloud — senza il conto del cloud",
     "bp.bare.date": "15 ottobre 2026",
     "bp.bare.back": "← Torna al blog",
+
+    "blog.post14.title": "Gestire una flotta di server con kcore-provisioning",
+    "blog.post14.date": "15 ottobre 2026",
+    "blog.post14.summary": "Immagini verificate, inventario macchine, power BMC e boot target — come la dashboard di provisioning rende gestibile un rack di server.",
+    "bp.prov.title": "Gestire una flotta di server con kcore-provisioning",
+    "bp.prov.date": "15 ottobre 2026",
+    "bp.prov.back": "← Torna al blog",
 
     "bp.win.title": "Windows Server 2022 su kcore",
     "bp.win.date": "29 settembre 2026",
@@ -4060,6 +4074,13 @@ const translations = {
     "bp.bare.date": "15 de octubre de 2026",
     "bp.bare.back": "← Volver al blog",
 
+    "blog.post14.title": "Gestionar una flota de servidores con kcore-provisioning",
+    "blog.post14.date": "15 de octubre de 2026",
+    "blog.post14.summary": "Imágenes verificadas, inventario de máquinas, energía BMC y destinos de arranque — cómo el panel de provisioning hace manejable un rack de servidores.",
+    "bp.prov.title": "Gestionar una flota de servidores con kcore-provisioning",
+    "bp.prov.date": "15 de octubre de 2026",
+    "bp.prov.back": "← Volver al blog",
+
     "bp.win.title": "Windows Server 2022 en kcore",
     "bp.win.date": "29 de septiembre de 2026",
     "bp.win.back": "← Volver al blog",
@@ -5856,6 +5877,13 @@ const translations = {
     "bp.bare.title": "Des plateformes bare-metal qui ont l’air du cloud — sans la facture cloud",
     "bp.bare.date": "15 octobre 2026",
     "bp.bare.back": "← Retour au blog",
+
+    "blog.post14.title": "Gérer une flotte de serveurs avec kcore-provisioning",
+    "blog.post14.date": "15 octobre 2026",
+    "blog.post14.summary": "Images vérifiées, inventaire des machines, alimentation BMC et cibles de boot — comment le tableau de provisioning rend un rack de serveurs gérable.",
+    "bp.prov.title": "Gérer une flotte de serveurs avec kcore-provisioning",
+    "bp.prov.date": "15 octobre 2026",
+    "bp.prov.back": "← Retour au blog",
 
     "bp.win.title": "Windows Server 2022 sur kcore",
     "bp.win.date": "29 septembre 2026",
@@ -7654,6 +7682,13 @@ const translations = {
     "bp.bare.date": "15. Oktober 2026",
     "bp.bare.back": "← Zurück zum Blog",
 
+    "blog.post14.title": "Eine Serverflotte mit kcore-provisioning verwalten",
+    "blog.post14.date": "15. Oktober 2026",
+    "blog.post14.summary": "Verifizierte Images, Maschineninventar, BMC-Power und Boot-Ziele — wie das Provisioning-Dashboard ein Rack beherrschbar macht.",
+    "bp.prov.title": "Eine Serverflotte mit kcore-provisioning verwalten",
+    "bp.prov.date": "15. Oktober 2026",
+    "bp.prov.back": "← Zurück zum Blog",
+
     "bp.win.title": "Windows Server 2022 auf kcore",
     "bp.win.date": "29. September 2026",
     "bp.win.back": "← Zurück zum Blog",
@@ -9450,6 +9485,13 @@ const translations = {
     "bp.bare.title": "Plataformas bare-metal com a sensação de cloud — sem a fatura da cloud",
     "bp.bare.date": "15 de outubro de 2026",
     "bp.bare.back": "← Voltar ao blog",
+
+    "blog.post14.title": "Gerir uma frota de servidores com kcore-provisioning",
+    "blog.post14.date": "15 de outubro de 2026",
+    "blog.post14.summary": "Imagens verificadas, inventário de máquinas, energia BMC e alvos de boot — como o painel de provisioning torna um rack de servidores tratável.",
+    "bp.prov.title": "Gerir uma frota de servidores com kcore-provisioning",
+    "bp.prov.date": "15 de outubro de 2026",
+    "bp.prov.back": "← Voltar ao blog",
 
     "bp.win.title": "Windows Server 2022 no kcore",
     "bp.win.date": "29 de setembro de 2026",
@@ -11248,6 +11290,13 @@ const translations = {
     "bp.bare.date": "2026年10月15日",
     "bp.bare.back": "← ブログに戻る",
 
+    "blog.post14.title": "kcore-provisioning でサーバリソースを管理する",
+    "blog.post14.date": "2026年10月15日",
+    "blog.post14.summary": "検証済みイメージ、マシン在庫、BMC 電源、ブートターゲット — プロビジョニングダッシュボードがラックを扱いやすくする方法。",
+    "bp.prov.title": "kcore-provisioning でサーバリソースを管理する",
+    "bp.prov.date": "2026年10月15日",
+    "bp.prov.back": "← ブログに戻る",
+
     "bp.win.title": "kcore 上の Windows Server 2022",
     "bp.win.date": "2026年9月29日",
     "bp.win.back": "← ブログに戻る",
@@ -13044,6 +13093,13 @@ const translations = {
     "bp.bare.title": "像云一样的裸金属平台 — 没有云账单",
     "bp.bare.date": "2026年10月15日",
     "bp.bare.back": "← 返回博客",
+
+    "blog.post14.title": "用 kcore-provisioning 管理服务器机队",
+    "blog.post14.date": "2026年10月15日",
+    "blog.post14.summary": "已验证镜像、机器清单、BMC 电源与启动目标 — 配置面板如何让一机柜服务器变得可控。",
+    "bp.prov.title": "用 kcore-provisioning 管理服务器机队",
+    "bp.prov.date": "2026年10月15日",
+    "bp.prov.back": "← 返回博客",
 
     "bp.win.title": "在 kcore 上运行 Windows Server 2022",
     "bp.win.date": "2026年9月29日",
@@ -14842,6 +14898,13 @@ const translations = {
     "bp.bare.date": "15 oktober 2026",
     "bp.bare.back": "← Terug naar blog",
 
+    "blog.post14.title": "Een servervloot beheren met kcore-provisioning",
+    "blog.post14.date": "15 oktober 2026",
+    "blog.post14.summary": "Geverifieerde images, machine-inventaris, BMC-power en boot targets — hoe het provisioning-dashboard een rack hanteerbaar maakt.",
+    "bp.prov.title": "Een servervloot beheren met kcore-provisioning",
+    "bp.prov.date": "15 oktober 2026",
+    "bp.prov.back": "← Terug naar blog",
+
     "bp.win.title": "Windows Server 2022 op kcore",
     "bp.win.date": "29 september 2026",
     "bp.win.back": "← Terug naar blog",
@@ -16639,6 +16702,13 @@ const translations = {
     "bp.bare.date": "15 października 2026",
     "bp.bare.back": "← Wróć do bloga",
 
+    "blog.post14.title": "Zarządzanie flotą serwerów z kcore-provisioning",
+    "blog.post14.date": "15 października 2026",
+    "blog.post14.summary": "Zweryfikowane obrazy, inwentarz maszyn, zasilanie BMC i cele boot — jak panel provisioningu czyni szafę serwerów możliwą do ogarnięcia.",
+    "bp.prov.title": "Zarządzanie flotą serwerów z kcore-provisioning",
+    "bp.prov.date": "15 października 2026",
+    "bp.prov.back": "← Wróć do bloga",
+
     "bp.win.title": "Windows Server 2022 na kcore",
     "bp.win.date": "29 września 2026",
     "bp.win.back": "← Wróć do bloga",
@@ -18435,6 +18505,13 @@ const translations = {
     "bp.bare.title": "क्लाउड जैसी लगने वाली bare-metal प्लेटफ़ॉर्म — बिना क्लाउड बिल के",
     "bp.bare.date": "15 अक्टूबर 2026",
     "bp.bare.back": "← ब्लॉग पर वापस",
+
+    "blog.post14.title": "kcore-provisioning से सर्वर फ़्लीट प्रबंधित करें",
+    "blog.post14.date": "15 अक्टूबर 2026",
+    "blog.post14.summary": "सत्यापित images, मशीन इन्वेंटरी, BMC पावर और boot targets — provisioning डैशबोर्ड एक रैक को कैसे संभालने योग्य बनाता है।",
+    "bp.prov.title": "kcore-provisioning से सर्वर फ़्लीट प्रबंधित करें",
+    "bp.prov.date": "15 अक्टूबर 2026",
+    "bp.prov.back": "← ब्लॉग पर वापस",
 
     "bp.win.title": "kcore पर Windows Server 2022",
     "bp.win.date": "29 September 2026",
