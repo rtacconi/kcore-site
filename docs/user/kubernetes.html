@@ -209,7 +209,7 @@ spec:
                     <tr><td><code>workerNodes</code></td><td data-i18n="userdoc.k8s.f.wk">Same node fields. Stored as join members.</td></tr>
                     <tr><td><code>highAvailability</code></td><td data-i18n-html="userdoc.k8s.f.ha">enabled, vipAddress, and vipInterface. kctl sets the method to keepalived.</td></tr>
                     <tr><td><code>scheduleOnControlPlane</code></td><td data-i18n="userdoc.k8s.f.sched">When true, control-plane nodes accept pods.</td></tr>
-                    <tr><td><code>localProvisioner</code></td><td data-i18n-html="userdoc.k8s.f.local">enabled, storageClassName (default local-path), mode (shared or lvm), and volumes. See volumes below.</td></tr>
+                    <tr><td><code>localProvisioner</code></td><td data-i18n-html="userdoc.k8s.f.local">enabled, storageClassName (default local-path), mode (shared or lvm), and volumes. The filesystem behind local-path is a kcore volume in this list. A TopoLVM data volume stays out of this list and is managed in Kubernetes only.</td></tr>
                 </tbody>
             </table>
 
@@ -258,8 +258,13 @@ spec:
             <p data-i18n="userdoc.k8s.cilium.pool">The pool and the policy are both named kcore. This example uses 192.168.40.220/29. Pick a range that does not overlap the VIP or node addresses. A service is announced when loadBalancerClass is empty or io.cilium/l2-announcer. interfaces is a regular expression. The controller writes this manifest to /etc/kubernetes/cilium-l2.yaml and applies it.</p>
 
             <h2 data-i18n="userdoc.k8s.h2.vol">Volumes, LVM and ZFS</h2>
+            <p data-i18n="userdoc.k8s.vol.two">Pods get disk in one of two ways.</p>
             <p data-i18n-html="userdoc.k8s.vol.lead"><code>localProvisioner.enabled</code> is required when volumes are listed. Mode empty or <code>shared</code> is the default. Mode <code>lvm</code> is a thin pool and does not serve claims.</p>
+
+            <h3 data-i18n="userdoc.k8s.vol.h3.kcore">kcore volumes</h3>
+            <p data-i18n-html="userdoc.k8s.vol.kcore">kcore installs the Rancher <code>local-path</code> provisioner. A claim is a directory on a filesystem. That filesystem is a kcore volume in this manifest. Do not create it with <code>kubectl</code>. Do not point <code>local-path</code> at a directory you mounted yourself.</p>
             <p data-i18n-html="userdoc.k8s.vol.shared">Shared mode creates one LVM logical volume or one ZFS zvol on the named node, formats it, and mounts it. <code>storageClass</code> is <code>lvm</code> or <code>zfs</code>, and the node's storage backend must already be that class. <code>sizeBytes</code> must be positive. An empty <code>fsType</code> becomes ext4. The other accepted value is xfs. An empty role becomes filesystem. The default mount path is <code>/mnt/kcore/&lt;cluster&gt;/&lt;name&gt;</code>.</p>
+            <p data-i18n="userdoc.k8s.vol.rules">The node must already be a member of the cluster. The same volume name may be listed on different nodes. The same name twice on one node is rejected. Two volumes on one node cannot share a mount path. After the volume is formatted, a later change of fsType is rejected.</p>
             <p data-i18n-html="userdoc.k8s.vol.claims">The control plane then applies the Rancher local-path provisioner, image <code>rancher/local-path-provisioner:v0.0.30</code>, from <code>/etc/kubernetes/provisioner.yaml</code>. The oneshot unit is <code>kcore-kubernetes-provisioner</code>. The StorageClass name defaults to <code>local-path</code>. A claim is a directory on that filesystem. The size on the claim is not a quota. To give the directories more room, raise <code>sizeBytes</code> and apply again. Shrinking is rejected. Another volume adds a path to the same StorageClass. It does not create a second StorageClass.</p>
             <p data-i18n-html="userdoc.k8s.vol.names">The controller volume name is <code>k8s-&lt;cluster&gt;-&lt;node&gt;-&lt;volume&gt;</code>. The LVM device is <code>/dev/&lt;vg&gt;/&lt;lv&gt;</code>. The ZFS device is <code>/dev/zvol/&lt;pool&gt;/&lt;dataset&gt;</code>.</p>
             <p data-i18n="userdoc.k8s.vol.zfs">A ZFS volume uses the same shared provisioner. Set storageClass to zfs on a node whose storage backend is zfs.</p>
@@ -268,7 +273,25 @@ spec:
         storageClass: zfs
         sizeBytes: 53687091200
         fsType: ext4</code></pre>
-            <p data-i18n-html="userdoc.k8s.vol.lvm"><code>mode: lvm</code> creates one thin pool of the declared size. Every listed node must use the same name, volume group, size, and filesystem. The role is pool. <code>volumeGroup</code> is required. Leave <code>mountPath</code> empty. kcore does not install a provisioner and does not install a CSI driver. Do not create a CSI driver's pool with this API. kcore deletes only volumes it created. An operator who wants one block device per claim installs that driver and points it at a pool the driver owns.</p>
+            <p data-i18n-html="userdoc.k8s.vol.pvc">The StorageClass uses <code>volumeBindingMode: WaitForFirstConsumer</code>. The helper creates the claim directory with mode 0777. Deleting the claim deletes that directory. The kcore volume stays mounted. The <code>storage</code> request is recorded and is not a quota.</p>
+            <pre><code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi</code></pre>
+
+            <h3 data-i18n="userdoc.k8s.vol.h3.topo">TopoLVM</h3>
+            <p data-i18n-html="userdoc.k8s.vol.topo">Leave that data out of <code>localProvisioner.volumes</code>. Install TopoLVM yourself and manage the data volume with Kubernetes only. kcore does not install TopoLVM and does not create its StorageClass or its pool.</p>
+            <p data-i18n="userdoc.k8s.vol.topo2">Make the pool with TopoLVM, or with LVM on the node, outside this API. kcore deletes only volumes it created. A logical volume TopoLVM creates is left in place. Install TopoLVM on the primary cluster, the one whose API port is 6443, where pods can reach ClusterIP. An extra cluster uses a bridge and has no kube-proxy, so a chart that calls ClusterIP will not work there. One TopoLVM owns a volume group. A second copy on another cluster on the same hosts would manage the same disks.</p>
+
+            <h3 data-i18n="userdoc.k8s.vol.h3.lvm">mode lvm</h3>
+            <p data-i18n-html="userdoc.k8s.vol.lvm"><code>mode: lvm</code> creates one thin pool of the declared size. Nothing in Kubernetes consumes that pool. This mode does not install local-path and it is not TopoLVM. Do not use this pool as TopoLVM's pool. Every listed node must use the same name, volume group, size, and filesystem. The role is pool. <code>volumeGroup</code> is required. Leave <code>mountPath</code> empty.</p>
             <pre><code>localProvisioner:
   enabled: true
   mode: lvm
@@ -305,7 +328,7 @@ spec:
                 <li data-i18n="userdoc.k8s.lim1">Membership is fixed at create. Scale records nodes and does not join or remove them.</li>
                 <li data-i18n="userdoc.k8s.lim2">The VIP heartbeat is a keepalived unicast advertisement every second. It is not a check of port 6443.</li>
                 <li data-i18n="userdoc.k8s.lim3">Cilium runs only on the primary cluster, the one whose API port is 6443. An empty loadBalancerIpPools list still installs Cilium and does not create an L2 pool.</li>
-                <li data-i18n-html="userdoc.k8s.lim4">Shared volumes are directories on one filesystem. Claim size is not a quota. <code>mode: lvm</code> does not bind claims.</li>
+                <li data-i18n-html="userdoc.k8s.lim4">local-path claims are directories on a kcore volume. Claim size is not a quota. A TopoLVM data volume is managed in Kubernetes only. <code>mode: lvm</code> does not bind claims.</li>
                 <li data-i18n="userdoc.k8s.lim5">A cluster whose API port is not 6443 is stored with bridge CNI, not Cilium.</li>
                 <li data-i18n="userdoc.k8s.lim6">Terraform provider 0.5.0 has no Kubernetes cluster resource.</li>
             </ul>
