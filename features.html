@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore kcore features - atomic updates, declarative infrastructure, and bare-metal virtualization">
+    <meta name="description" content="A failed host update boots the previous generation. Windows guests run. One physical GPU goes to one VM. Live migration needs Ceph.">
     <title>Features - kcore hypervisor</title>
     <link rel="canonical" href="https://kcorehypervisor.com/features.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="Features - kcore hypervisor">
-    <meta property="og:description" content="Explore kcore features - atomic updates, declarative infrastructure, and bare-metal virtualization">
+    <meta property="og:description" content="A failed host update boots the previous generation. Windows guests run. One physical GPU goes to one VM. Live migration needs Ceph.">
     <meta property="og:url" content="https://kcorehypervisor.com/features.html">
-    <meta property="og:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/rtacconi/kcore/main/assets/kcore-logo.png">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <link rel="stylesheet" href="css/styles.css">
     <style>
         .features-hero {
@@ -34,6 +34,16 @@
             color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto;
+        }
+
+        .lead-facts {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .lead-facts li {
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
         .feature-section {
@@ -242,28 +252,23 @@
         <div class="container">
             <h1 data-i18n="fp.title">What kcore does</h1>
             <p data-i18n="fp.subtitle">
-                An honest look at the platform. Here's what's built, what works,
-                and why we made the choices we did.
+                A failed host update boots the previous generation. Windows guests run. The evaluation ISO is free.
             </p>
         </div>
     </section>
 
-    <!-- Stats Section -->
     <section class="feature-section">
         <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">&lt;5s</div>
-                    <div class="stat-label" data-i18n="fp.stat1">VM Provisioning Time</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label" data-i18n="fp.stat2">Rollback Success Rate</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label" data-i18n="fp.stat3">Downtime Updates</div>
-                </div>
+            <div class="lead-facts">
+                <h2 data-i18n="fp.lead.title">Read this first</h2>
+                <ul class="feature-list-items">
+                    <li data-i18n="fp.lead.updates">A failed host update boots the previous generation.</li>
+                    <li data-i18n="fp.lead.windows">Windows Server and Windows desktop guests run.</li>
+                    <li data-i18n="fp.lead.gpu">One physical GPU can be assigned to one VM. NVIDIA vGPU, many VMs on one card, is not available.</li>
+                    <li data-i18n="fp.lead.live">Live migration needs shared Ceph storage. Control-plane replication across datacenters is not vSphere HA.</li>
+                    <li data-i18n-html="fp.lead.import">kcore-migrate inventories vCenter or Proxmox and converts exported disks to qcow2 or raw. It does not read disks straight from vCenter. Cutover is a project. See the <a href="docs/user/import.html">import guide</a> and <a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a>.</li>
+                    <li data-i18n-html="fp.lead.price">Price is per CPU socket per year. The evaluation ISO is free. Download it from <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a>.</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -333,6 +338,15 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-section">
+        <div class="container">
+            <div class="lead-facts">
+                <h2 data-i18n="fp.platform.title">For platform teams</h2>
+                <p data-i18n="fp.platform.desc">Terraform, the API, and MCP come after the limits above. They do not remove those limits.</p>
             </div>
         </div>
     </section>
@@ -545,11 +559,11 @@
     <section class="cta" style="margin-top: 0;">
         <div class="container">
             <div class="cta-content">
-                <h2 data-i18n="fp.cta.title">Give it a spin</h2>
-                <p data-i18n="fp.cta.desc">The docs walk you through building the ISO and booting your first node.</p>
+                <h2 data-i18n="fp.cta.title">Download the evaluation ISO</h2>
+                <p data-i18n="fp.cta.desc">The evaluation ISO is on GitHub Releases. You do not build it.</p>
                 <div class="cta-buttons">
-                    <a href="docs.html" class="btn btn-primary btn-large" data-i18n="fp.cta.docs">Read the Docs</a>
-                    <a href="index.html#get-started" class="btn btn-secondary btn-large" data-i18n="nav.getStarted">Get Started</a>
+                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-primary btn-large" data-i18n="fp.cta.download">Download the evaluation ISO</a>
+                    <a href="docs.html" class="btn btn-secondary btn-large" data-i18n="fp.cta.docs">Read the Docs</a>
                 </div>
             </div>
         </div>
@@ -582,7 +596,9 @@
                     <ul>
                         <li><a href="about.html" data-i18n="footer.about">About</a></li>
                         <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
-                        <li><a href="https://github.com/rtacconi/kcore">GitHub</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
+                        <li><a href="partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="trademark.html" data-i18n="footer.trademark">Trademark</a></li>
                         <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
                 </div>
