@@ -30,7 +30,7 @@ The HTML homepage embeds an asciinema of install, node approval, SSH key, Debian
 
 ## Source and APIs
 
-- Product repo: [github.com/rtacconi/kcore](https://github.com/rtacconi/kcore)
+- Product repo: [github.com/kcorehypervisor/kcore](https://github.com/kcorehypervisor/kcore)
 - Management plane APIs are **gRPC** to **your** controller, not REST on `kcorehypervisor.com`. See the repository for `.proto` files and design documentation.
 
 ## Machine-readable discovery

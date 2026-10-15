@@ -6,7 +6,7 @@ kcore is a NixOS-based hypervisor: declarative VMs, gRPC API, Terraform provider
 
 - Marketing and docs hub: https://kcorehypervisor.com/
 - User documentation index: https://kcorehypervisor.com/docs/user/index.html
-- Product source and technical docs: https://github.com/rtacconi/kcore
+- Product source and technical docs: https://github.com/kcorehypervisor/kcore
 
 ## API surface
 
