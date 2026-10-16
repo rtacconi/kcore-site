@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Stay on Proxmox when the web UI is the product. Move when you need an API, Terraform, and a written path off the inventory.">
+    <meta name="description" content="Proxmox already has an API and a UI. Leave when a reviewed diff is the product, and only after you count PBS, LXC, and live migration without Ceph.">
     <title>When Proxmox is no longer the operating model - kcore hypervisor</title>
     <link rel="canonical" href="https://kcorehypervisor.com/blog/when-proxmox-is-no-longer-the-model.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="When Proxmox is no longer the operating model">
-    <meta property="og:description" content="Stay on Proxmox when the web UI is the product. Move when you need an API, Terraform, and a written path off the inventory.">
+    <meta property="og:description" content="Proxmox already has an API and a UI. Leave when a reviewed diff is the product, and only after you count PBS, LXC, and live migration without Ceph.">
     <meta property="og:url" content="https://kcorehypervisor.com/blog/when-proxmox-is-no-longer-the-model.html">
     <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
@@ -147,28 +147,77 @@
         <a href="../blog.html" class="back-link" data-i18n-html="bp.px.back">← Back to blog</a>
 
         <p>
-            Proxmox is a sensible choice for a small estate, a lab, or a team that wants KVM without a large platform group. The reason to leave is not that it fails. The operating model stopped fitting.
-        </p>
-        <h2>Where Proxmox fits</h2>
-        <p>
-            One cluster. Operators who live in the web UI. Backups you already understand. No requirement that every VM be a Terraform resource. If that is still the job, stay. A migration only to seem modern is a waste.
-        </p>
-        <h2>Where teams get stuck</h2>
-        <p>
-            The next requirement is usually one of these: an API a pipeline can call, YAML and Terraform as the review path, a written route from a Proxmox inventory to guest definitions on the destination, or a host update that boots the previous generation if it fails. Proxmox can be scripted. kcore&#x27;s default path is the API. Provider kcorehypervisor/kcore is a Go provider, not a shell wrapper. kctl and YAML cover the resources provider 0.5.0 does not include.
+            Proxmox is a good hypervisor. The usual reason to leave is a bad one, and the usual reason to stay is a bad one too. Leaving because a slide called the UI legacy is a bad reason. Staying because the cluster already works, and therefore the operating model must be fine, is the other one. The operating model is what fails first.
         </p>
         <p>
-            kcore-migrate inventories Proxmox as well as vCenter. It converts exported disks to qcow2 or raw. It does not read disks straight from the source as a magic cutover. You still plan the window. The steps are in the <a href="../docs/user/import.html">import guide</a>.
+            Proxmox VE is Debian, KVM, LXC, and a web UI on port 8006. The API is real. <code>pvesh</code> is real. Community Terraform providers exist. If your operators live in that UI, your backups are Proxmox Backup Server, and nobody is asking for a diff when a VM changes, stay. A migration whose aim is to look modern costs a quarter you do not get back.
         </p>
-        <h2>A fair test</h2>
-        <ul>
-            <li>Export one disk and convert it. Time the steps. That is the project, multiplied.</li>
-            <li>Recreate the guest with Terraform or YAML and see whether your review process accepts it.</li>
-            <li>Break a host update in a lab and see whether the previous generation boots.</li>
-            <li>Check Windows guests and the GPU limit: one physical GPU per VM, no NVIDIA vGPU.</li>
-        </ul>
+        <h2>The fork is what a change means</h2>
         <p>
-            If the UI was the product you wanted, you have your answer. If the reviewable text and the migration output were the product, try the evaluation ISO on the converted guest before you move the cluster.
+            The fork is not whether an API exists. Both sides have one. The fork is what a change is allowed to mean.
+        </p>
+        <p>
+            On Proxmox the cluster is the source of truth. The UI and the API change it. A script can make the same change. After the call, the thing you can review is the cluster. You can dump the config. You can keep a ticket. You do not, by default, have a file that was reviewed before the machine changed.
+        </p>
+        <p>
+            On kcore the host is a NixOS generation pinned to a flake revision. A failed host update boots the previous generation. That property belongs to the host. It is not a guest snapshot, and it is not a backup of the VM disk. Guests come back because the host came back. Their data is still the disk, plus whatever backup you actually run.
+        </p>
+        <p>
+            Guest desired state is text. <code>kctl</code> and YAML cover the product. Provider <code>kcorehypervisor/kcore</code> 0.5.0 is a Go provider on the Terraform Plugin SDK. It is not a shell wrapper. It creates VMs, volumes, clusters, and nodes. It does not inventory Proxmox. It has no migrate or drain resource, no Kubernetes resource, no PostgreSQL resource, and no GPU attribute. Those stay on <code>kctl</code> or YAML. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs. Ceph for the VM is a <code>kctl</code> flag. A Ceph data disk is a <code>kcore_volume</code> with storage class ceph.
+        </p>
+        <p>
+            If you need the file more than the UI, keep reading. If you need the UI, you already have it. You installed Proxmox.
+        </p>
+        <h2>What you give up</h2>
+        <p>
+            The losses are specific. If they match the estate, stop on this page.
+        </p>
+        <p>
+            Proxmox Backup Server is a product. kcore does not have one. <code>kctl backup</code> writes a copy of the controller database. <code>kctl restore controller</code> replaces that database. Guest backup stays with your current tool. If PBS is why the estate is calm, do not trade it for a generation boot.
+        </p>
+        <p>
+            LXC is a Proxmox workload. <code>kcore-migrate</code> lists those containers in <code>gaps.md</code>. It does not turn them into kcore VMs. kcore containers are OCI images through nerdctl or docker. The docs call that early phase: a lab workflow, not a platform. If the estate is LXC, the gap report is the decision, and the decision is to stay.
+        </p>
+        <p>
+            Live migration on Proxmox covers the storage types Proxmox supports. On kcore, live migration needs shared Ceph RBD. Both nodes map the same image, and memory moves over TCP. Local filesystem, LVM, and ZFS disks do not move. A cold drain stops the guest and starts it somewhere else. A node that misses heartbeats for 90 seconds is marked not-ready. The controller then cold-moves each Ceph VM onto another member of the same cluster. It does not contact the failed node. Filesystem, LVM, and ZFS VMs stay where they are. That is not Proxmox HA. Control-plane replication across datacenters is not vSphere HA either.
+        </p>
+        <p>
+            One physical GPU per VM. There is no NVIDIA vGPU. A GPU guest can move cold onto a free card of the same family.
+        </p>
+        <p>
+            Windows Server and desktop guests run. That is not a Microsoft certification.
+        </p>
+        <h2>Three jobs, not a button</h2>
+        <p>
+            Inventory reads the Proxmox API. The password comes from <code>PROXMOX_PASSWORD</code>, not from a command-line flag. A host with no port is read on 8006. The reader lists QEMU virtual machines and LXC containers. Disks stay on the node. It writes <code>guests.tf</code> and <code>gaps.md</code>. <code>guests.tf</code> has one <code>kcore_vm</code> per guest: name, CPU, memory, the first disk size, and NICs. <code>image_path</code> is empty. <code>storage_backend</code> is filesystem until you change it. <code>gaps.md</code> holds the extra disks, the LXC containers, and the VLAN tags. Read <code>gaps.md</code> before <code>guests.tf</code>. If the gaps are the estate, stop. The commands are in the <a href="../docs/user/import.html">import guide</a>.
+        </p>
+        <p>
+            Convert does not fetch the disk. You export it. A Proxmox qcow2, raw, or img file goes through <code>qemu-img</code>, which only changes the container format. An OVA or VMDK goes through <code>virt-v2v</code>. Then set <code>image_path</code> and <code>image_format</code> to qcow2 or raw. <code>kctl</code> accepts those two.
+        </p>
+        <p>
+            Cutover is a window you plan. Pick the slot, the address change, the test that says the guest is up, and a backout that does not need the new platform to be healthy. Live migration inside kcore does not lift a guest off Proxmox. The guest is created from the converted disk.
+        </p>
+        <h2>One node, then a decision</h2>
+        <p>
+            Run that on one node before you name a programme.
+        </p>
+        <p>
+            If <code>gaps.md</code> is longer than the announcement you were about to make, believe the file.
+        </p>
+        <p>
+            Export one disk. Convert it. Time the copy. That number, times the estate, is the length of the project.
+        </p>
+        <p>
+            Apply one guest with Terraform or YAML. If the team will not review the diff, you have rebuilt the same operating model with extra steps.
+        </p>
+        <p>
+            Fail a host update in a lab. The pass condition is that the previous generation boots, and that generation has to be one you are willing to run.
+        </p>
+        <p>
+            Then compare the money without comparing screenshots. Community Edition is Apache-2.0. The evaluation ISO and <code>kctl</code> are on <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a>, with no subscription. Production support is per physical CPU socket per year, not per core. Enterprise has an 8-socket minimum. Proxmox subscriptions are per socket too. Put both yearly figures on one line. The operating model is the rest of the decision.
+        </p>
+        <p>
+            If PBS, LXC, or live migration without shared Ceph is load-bearing, stay. If what you needed was a reviewed file and a host that boots the last good generation, try the evaluation ISO on that one converted guest before you touch the cluster.
         </p>
 
         <div class="cta-row">
