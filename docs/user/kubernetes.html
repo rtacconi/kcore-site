@@ -114,7 +114,7 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
 
             <h1 data-i18n="userdoc.k8s.h1">Kubernetes</h1>
-            <p data-i18n="userdoc.k8s.intro">kcore creates a Kubernetes cluster on nodes that are already members of the kcore cluster. The first apply stores the cluster, generates certificates, and deploys kubelet, etcd, and the API server. Put every member in that first manifest.</p>
+            <p data-i18n="userdoc.k8s.intro.join">kcore creates a Kubernetes cluster on nodes that are already members of the kcore cluster. The first apply stores the cluster, generates certificates, and deploys kubelet, etcd, and the API server. Later members join with kctl kubernetes scale or with a manifest that lists them.</p>
             <p class="note" data-i18n="userdoc.k8s.note">Addresses on this page are examples. Pick free addresses on your own network.</p>
 
             <h2 data-i18n="userdoc.k8s.h2.create">Create a cluster</h2>
@@ -127,31 +127,21 @@ kctl kubernetes health lab</code></pre>
             </div>
             <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code>. <code>kctl apply -f</code> does not accept this kind.</p>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.k8s">Provider 0.5.0 has no Kubernetes cluster resource. Declare the cluster with CLI or YAML. <code>kcore_cluster_update</code> can store <code>kubernetes_version</code> on a tested OS pin. That field does not install Kubernetes.</p>
-<pre><code>resource "kcore_cluster_update" "os" {
-  name                    = "release-0-5-0"
-  version                 = "0.5.0"
-  flake_ref               = "github:kcorehypervisor/kcore"
-  flake_rev               = "&lt;full-git-sha&gt;"
-  nixpkgs_rev             = "&lt;nixpkgs-rev&gt;"
-  all_nodes               = true
-  strategy                = "one-at-a-time"
-  max_unavailable         = 1
-  batch_size              = 1
-  drain_vms               = false
-  activation              = "auto"
-  update_kind             = "kcore"
-  schema_version          = 59
-  previous_schema_version = 56
-  min_compatible_reader   = 56
-  approval                = "manual"
-  approve                 = false
+            <p data-i18n-html="docs.mode.tf.k8s.join"><code>kcore_kubernetes_cluster</code> declares the cluster. Create and a membership change wait until phase is ready. Destroy deletes the cluster record. It does not uninstall Kubernetes from the nodes. <code>kcore_cluster_update</code> can store <code>kubernetes_version</code> on a tested OS pin. That field does not install Kubernetes. <code>drain_vms</code> drains virtual machines. It does not drain Kubernetes.</p>
+<pre><code>resource "kcore_kubernetes_cluster" "lab" {
+  name                = "lab"
+  cluster_cidr        = "10.244.0.0/16"
+  service_cidr        = "10.96.0.0/12"
+  api_server_endpoint = "192.168.40.200:6443"
 
-  tested_os_pins {
-    nixpkgs_rev        = "&lt;nixpkgs-rev&gt;"
-    ceph_rev           = "&lt;ceph-rev&gt;"
-    ceph_sha256        = "&lt;ceph-sha256&gt;"
-    kubernetes_version = "1.37.0"
+  control_plane_node {
+    node_id           = "node-105"
+    advertise_address = "192.168.40.105"
+  }
+
+  worker_node {
+    node_id           = "node-103"
+    advertise_address = "192.168.40.103"
   }
 }</code></pre>
             </div>
@@ -313,13 +303,13 @@ spec:
       volumeGroup: vg_kcore</code></pre>
             </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.k8svol">Those volumes are fields of the Kubernetes manifest. Provider 0.5.0 has no resource for them. <code>kcore_volume</code> is a VM data disk, not this local-path filesystem.</p>
+            <p data-i18n-html="docs.mode.tf.k8svol.join">Those volumes are fields of <code>kcore_kubernetes_cluster</code>. <code>kcore_volume</code> is a VM data disk, not this local-path filesystem.</p>
             </div>
 
             <h2 data-i18n="userdoc.k8s.h2.up">Upgrades</h2>
-            <p data-i18n-html="userdoc.k8s.up.pin">Kubernetes binaries come from <code>pkgs.kubernetes</code> on the host NixOS pin. There is no separate Kubernetes upgrade command and no cordon-and-drain roller. Move the pin with a ClusterUpdate. See <a href="cluster-and-node-upgrades.html">cluster and node upgrades</a>.</p>
-            <p data-i18n-html="userdoc.k8s.up.reapply">A second <code>kctl kubernetes apply</code> updates CIDRs, DNS, the API endpoint, CNI, Cilium settings, the VIP, local volumes, and <code>scheduleOnControlPlane</code>. It redeploys node certificates and node configuration. It does not change cluster membership. It does not cordon or drain nodes. Success returns the phase to ready when the previous phase was updating or degraded. A volume or deploy error sets the phase to degraded.</p>
-            <p data-i18n-html="userdoc.k8s.up.scale"><code>kctl kubernetes scale --add-control-plane node-id:address</code> and <code>--add-workers node-id:address</code> record those members and set the phase to scaling. The interface on that command is fixed to enp6s0. The orchestrator only bootstraps clusters in phase bootstrapping, so a scale does not join the new nodes. If the existing etcd quorum and API are already healthy, the phase is set back to ready without adding those nodes. <code>--remove</code> logs the node id and does not delete the membership row. Put every member in the first manifest.</p>
+            <p data-i18n-html="userdoc.k8s.up.pin.join">Kubernetes binaries come from <code>pkgs.kubernetes</code> on the host NixOS pin. There is no second updater that copies binaries into <code>/usr/local/bin</code>. A ClusterUpdate of a member cordons and drains that node before the generation activates, then uncordons it after the node is Ready. One member at a time, including when the selector is all nodes. See <a href="cluster-and-node-upgrades.html">cluster and node upgrades</a>.</p>
+            <p data-i18n-html="userdoc.k8s.up.reapply.join">A second <code>kctl kubernetes apply</code> updates CIDRs, DNS, the API endpoint, CNI, Cilium settings, the VIP, local volumes, and <code>scheduleOnControlPlane</code>. A membership difference is a scale, not a second bootstrap. A config-only change does not cordon nodes. A host generation update cordons and drains members. Success of a config-only update returns the phase to ready when the previous phase was updating or degraded. A volume or deploy error sets the phase to degraded.</p>
+            <p data-i18n-html="userdoc.k8s.up.scale.join"><code>kctl kubernetes scale --add-control-plane node-id:address</code> and <code>--add-workers node-id:address</code> join that node. Workers are kubelet members and do not join etcd. A control-plane node joins etcd with <code>initial-cluster-state=existing</code> and runs the API server. The interface on that command is fixed to enp6s0. <code>--remove</code> cordons, drains, and deletes the node. A control-plane node leaves the etcd member list first. The command refuses a removal that would drop etcd below quorum, and it refuses to remove the last control-plane node.</p>
 
             <h2 data-i18n="userdoc.k8s.h2.cmd">Commands</h2>
             <table>
@@ -330,19 +320,19 @@ spec:
                     <tr><td data-i18n="userdoc.k8s.cmd.list">List</td><td><code>kctl kubernetes list</code></td></tr>
                     <tr><td data-i18n="userdoc.k8s.cmd.health">Health</td><td><code>kctl kubernetes health lab</code></td></tr>
                     <tr><td data-i18n="userdoc.k8s.cmd.delete">Delete the cluster row</td><td><code>kctl kubernetes delete lab</code></td></tr>
-                    <tr><td data-i18n="userdoc.k8s.cmd.scale">Record a member change</td><td><code>kctl kubernetes scale lab --add-workers node-103:192.168.40.103</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.scale.join">Join or remove a member</td><td><code>kctl kubernetes scale lab --add-workers node-103:192.168.40.103</code></td></tr>
                 </tbody>
             </table>
             <p data-i18n-html="userdoc.k8s.delete.p"><code>kctl kubernetes delete lab</code> removes the cluster row from the controller. <code>--force</code> is accepted. Deleting the row does not by itself turn Kubernetes off on the nodes.</p>
 
             <h2 data-i18n="userdoc.k8s.h2.lim">Limits</h2>
             <ul>
-                <li data-i18n="userdoc.k8s.lim1">Membership is fixed at create. Scale records nodes and does not join or remove them.</li>
+                <li data-i18n="userdoc.k8s.lim1.join">The node must already be an approved kcore node. Scale does not invent one. Deleting the cluster record does not uninstall Kubernetes from the nodes.</li>
                 <li data-i18n="userdoc.k8s.lim2">The VIP heartbeat is a keepalived unicast advertisement every second. It is not a check of port 6443.</li>
                 <li data-i18n="userdoc.k8s.lim3">Cilium runs only on the primary cluster, the one whose API port is 6443. An empty loadBalancerIpPools list still installs Cilium and does not create an L2 pool.</li>
                 <li data-i18n-html="userdoc.k8s.lim4">Shared volumes are directories on one filesystem. Claim size is not a quota. <code>mode: lvm</code> does not bind claims.</li>
                 <li data-i18n="userdoc.k8s.lim5">A cluster whose API port is not 6443 is stored with bridge CNI, not Cilium.</li>
-                <li data-i18n="userdoc.k8s.lim6">Terraform provider 0.5.0 has no Kubernetes cluster resource.</li>
+                <li data-i18n-html="userdoc.k8s.lim6.join"><code>kcore_kubernetes_cluster</code> declares the cluster. Create and a membership change wait until phase is ready. Destroy deletes the cluster record and does not uninstall Kubernetes from the nodes.</li>
             </ul>
         </main>
     </div>
