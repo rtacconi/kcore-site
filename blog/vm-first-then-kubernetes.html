@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create a Kubernetes cluster on nodes that are already in the kcore cluster. Membership is fixed at create. Not an OpenShift-first rewrite.">
+    <title>Stay VM-first, then add Kubernetes - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/vm-first-then-kubernetes.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Stay VM-first, then add Kubernetes">
+    <meta property="og:description" content="Create a Kubernetes cluster on nodes that are already in the kcore cluster. Membership is fixed at create. Not an OpenShift-first rewrite.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/vm-first-then-kubernetes.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-hero-image {
+            display: block;
+            width: min(960px, 100%);
+            margin: 1.75rem auto 0;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.55rem; }
+        .post-content figure {
+            margin: 1.75rem 0 2rem;
+        }
+        .post-content figure img {
+            display: block;
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content figcaption {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.55rem;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
+            margin: 1.75rem 0 0.5rem;
+        }
+        .cta-row a {
+            display: inline-block;
+            padding: 0.65rem 1.1rem;
+            border-radius: 0.45rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .cta-row a.primary {
+            background: var(--accent-gradient, var(--accent-primary));
+            color: #fff;
+        }
+        .cta-row a.secondary {
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.vmk8s.title">Stay VM-first, then add Kubernetes</h1>
+            <p class="post-meta" data-i18n="bp.vmk8s.date">11 August 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.vmk8s.back">← Back to blog</a>
+
+        <p>
+            Some estates are Kubernetes-first. Many are not. They still run most of the business as virtual machines and want Kubernetes only where it pays for itself. Putting every application on OpenShift on day one is a different project from replacing VMware.
+        </p>
+        <h2>The path on kcore</h2>
+        <p>
+            kcore creates a Kubernetes cluster on nodes that are already members of the kcore cluster. The first apply stores the cluster, generates certificates, and deploys kubelet, etcd, and the API server. Put every member in that first manifest. Membership is fixed at create. kctl kubernetes scale records nodes. It does not join or remove them.
+        </p>
+        <p>
+            An API VIP can run with keepalived. Cilium is installed on the primary cluster, the one whose API port is 6443. A second cluster on the same hosts must not run a second Cilium. The agents would share BPF pins. Volumes can be LVM or ZFS directories through the local-path provisioner, or an LVM thin pool that does not bind claims. The <a href="../docs/user/kubernetes.html">Kubernetes</a> page states those limits in full.
+        </p>
+        <p>
+            Terraform provider 0.5.0 has no Kubernetes cluster resource. The manifest and kctl kubernetes apply are the path. A ClusterUpdate moves the host NixOS pin, which is where the Kubernetes binaries come from. There is no separate cordon-and-drain roller.
+        </p>
+        <h2>How to decide</h2>
+        <ul>
+            <li>VM-first, Kubernetes later, same metal: this model.</li>
+            <li>Kubernetes is already the operating system and VMs are the exception: look at a Kubernetes-first product and be honest about the staff you have.</li>
+            <li>You think you need a second Cilium on the same hosts: do not.</li>
+        </ul>
+        <p>
+            Stay on VMs until the cluster manifest is something you can re-apply. Then add the workers in that first manifest, not as a surprise scale later.
+        </p>
+
+        <div class="cta-row">
+            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a class="secondary" href="../pricing.html">See pricing</a>
+            <a class="secondary" href="../docs.html">Read the docs</a>
+            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+        </div>
+        <p>
+            Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="../partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="../trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

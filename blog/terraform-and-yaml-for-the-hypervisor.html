@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Provider kcorehypervisor/kcore 0.5.0 is a Go provider over gRPC. What it includes, and which jobs stay on kctl and YAML.">
+    <title>Terraform and YAML for the hypervisor - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/terraform-and-yaml-for-the-hypervisor.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Terraform and YAML for the hypervisor">
+    <meta property="og:description" content="Provider kcorehypervisor/kcore 0.5.0 is a Go provider over gRPC. What it includes, and which jobs stay on kctl and YAML.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/terraform-and-yaml-for-the-hypervisor.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .post-hero-image {
+            display: block;
+            width: min(960px, 100%);
+            margin: 1.75rem auto 0;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+        .post-content h2 {
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-size: 1.03rem;
+        }
+        .post-content a { color: var(--accent-primary); }
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 1.4rem;
+        }
+        .post-content li { margin-bottom: 0.55rem; }
+        .post-content figure {
+            margin: 1.75rem 0 2rem;
+        }
+        .post-content figure img {
+            display: block;
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-primary);
+        }
+        .post-content figcaption {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.55rem;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
+            margin: 1.75rem 0 0.5rem;
+        }
+        .cta-row a {
+            display: inline-block;
+            padding: 0.65rem 1.1rem;
+            border-radius: 0.45rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .cta-row a.primary {
+            background: var(--accent-gradient, var(--accent-primary));
+            color: #fff;
+        }
+        .cta-row a.secondary {
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1 data-i18n="bp.tf.title">Terraform and YAML for the hypervisor</h1>
+            <p class="post-meta" data-i18n="bp.tf.date">18 August 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.tf.back">← Back to blog</a>
+
+        <p>
+            Platform teams leave a hypervisor console for the same reason they leave a cloud console: every change should be a diff. kcore treats virtual machines as resources. You write HCL, run terraform apply, and provider kcorehypervisor/kcore talks to the API over gRPC. It is a Go provider using the Terraform Plugin SDK, not a shell wrapper around SSH.
+        </p>
+        <p>
+            YAML is the other text path. kctl apply and kctl create read manifests. HCL and YAML are files. You can review them.
+        </p>
+        <h2>What provider 0.5.0 actually includes</h2>
+        <p>
+            Version 0.5.0 is the provider this site documents. It creates VMs, volumes, clusters, nodes, and the related resources the docs show in Terraform mode. It does not include everything the CLI can do.
+        </p>
+        <ul>
+            <li>There is no Kubernetes cluster resource. Declare the cluster with kctl kubernetes and YAML.</li>
+            <li>There is no PostgreSQL resource. Declare the database with CLI or YAML. It runs on the node from the NixOS package, one database per node, Unix socket in v1.</li>
+            <li>There is no migrate or drain resource.</li>
+            <li>kcore_vm storage_backend is filesystem, lvm, or zfs. Ceph on the VM is a kctl flag. A Ceph data disk is kcore_volume with storage class ceph.</li>
+            <li>kcore_vm has no GPU attribute. Assign the card with CLI or YAML.</li>
+            <li>Provider 0.5.0 does not inventory VMware or Proxmox. kcore-migrate writes guests.tf. After convert, set image_path and image_format on kcore_vm.</li>
+        </ul>
+        <h2>How to work</h2>
+        <p>
+            Put the provider in the repo next to the rest of your infrastructure. Pin version 0.5.0 until you have tested a newer one. Use YAML where the provider has no resource, and say so in the module README so the next person does not invent an attribute.
+        </p>
+        <p>
+            Terraform does not remove the product limits. Live migration still needs Ceph. A failed host update still boots the previous generation. Windows guests still run as guests, not as a managed SQL service. The text workflow comes after those limits. It does not erase them. The field lists are in the <a href="../docs.html">docs</a>.
+        </p>
+
+        <div class="cta-row">
+            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a class="secondary" href="../pricing.html">See pricing</a>
+            <a class="secondary" href="../docs.html">Read the docs</a>
+            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+        </div>
+        <p>
+            Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="../partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="../trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
