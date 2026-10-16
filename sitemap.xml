@@ -10,6 +10,16 @@
   <url><loc>https://kcorehypervisor.com/roadmap.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://kcorehypervisor.com/blog.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/vcsp-exit-before-march-2027.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/windows-guests-without-vmware.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/live-migration-without-vsphere-ha.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/terraform-and-yaml-for-the-hypervisor.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/failed-update-boots-previous-generation.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/vm-first-then-kubernetes.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/per-socket-versus-per-core.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/when-proxmox-is-no-longer-the-model.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/vmware-import-inventory-convert-cutover.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/partner-terms-official-builds.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/kcore-provisioning-fleet.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/bare-metal-declarative-platform.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/vmware-exit-strategy.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
