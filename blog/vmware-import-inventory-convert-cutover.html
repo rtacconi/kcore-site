@@ -146,42 +146,42 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.imp.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.imp.b01">
             Import is three jobs that get sold as one button. Inventory, disk conversion, and cutover are different. Mixing them up is how a weekend plan becomes a quarter.
         </p>
-        <h2>Inventory</h2>
-        <p>
+        <h2 data-i18n="bp.imp.b02">Inventory</h2>
+        <p data-i18n="bp.imp.b03">
             kcore-migrate inventories vCenter or Proxmox and can write Terraform for kcore, plus a gap report. The gap report tells you which guests do not map. Read it before you tell anyone the date. Provider 0.5.0 does not inventory VMware or Proxmox by itself. The migrate tool writes guests.tf. After convert, set image_path and image_format on kcore_vm.
         </p>
-        <h2>Convert</h2>
-        <p>
+        <h2 data-i18n="bp.imp.b04">Convert</h2>
+        <p data-i18n="bp.imp.b05">
             convert takes an exported disk and writes qcow2 or raw with virt-v2v or qemu-img. It does not pull the disk bytes straight from vCenter. Someone still exports, copies, and checks the image. That is a capacity and time problem. Size the pipe and the disk before you promise the window.
         </p>
-        <h2>Cutover</h2>
-        <p>
+        <h2 data-i18n="bp.imp.b06">Cutover</h2>
+        <p data-i18n="bp.imp.b07">
             Cutover is still a project. You choose the maintenance window, the DNS or VIP change, the test that says the guest is up, and the backout. Live migration inside kcore does not move a guest off VMware. The guest is created on kcore from the converted disk. Shared Ceph matters after it is already a kcore VM, if you need to move it between kcore hosts without copying blocks.
         </p>
-        <h2>Checklist</h2>
+        <h2 data-i18n="bp.imp.b08">Checklist</h2>
         <ul>
-            <li>Inventory and gap report, with an owner.</li>
-            <li>An export path and a tested convert for one Windows guest and one Linux guest.</li>
-            <li>An image format that matches what kcore_vm or kctl expects.</li>
-            <li>A network plan: which NIC, which address, and what breaks if the old MAC changes.</li>
-            <li>A backup of the source that you have restored once.</li>
-            <li>A backout that does not depend on the new platform being healthy.</li>
-            <li>A second guest only after the first one has run for a real workday.</li>
+            <li data-i18n="bp.imp.b09">Inventory and gap report, with an owner.</li>
+            <li data-i18n="bp.imp.b10">An export path and a tested convert for one Windows guest and one Linux guest.</li>
+            <li data-i18n="bp.imp.b11">An image format that matches what kcore_vm or kctl expects.</li>
+            <li data-i18n="bp.imp.b12">A network plan: which NIC, which address, and what breaks if the old MAC changes.</li>
+            <li data-i18n="bp.imp.b13">A backup of the source that you have restored once.</li>
+            <li data-i18n="bp.imp.b14">A backout that does not depend on the new platform being healthy.</li>
+            <li data-i18n="bp.imp.b15">A second guest only after the first one has run for a real workday.</li>
         </ul>
-        <p>
+        <p data-i18n-html="bp.imp.b16">
             The longer explanation of tool categories is <a href="vmware-migration-tools.html">Three kinds of VMware migration tool</a>. The commands are in the <a href="../docs/user/import.html">import guide</a>. Use the checklist in the project plan, not as a slide.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.imp.b17" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.imp.b18" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.imp.b19" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.imp.b20" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.imp.b21">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

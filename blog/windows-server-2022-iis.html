@@ -135,14 +135,14 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.win.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.win.b01">
             Windows Server runs on kcore as a normal VM. The guest disk is built once, outside the
             cluster, from installation media you are licensed to use. The node then boots that disk
             on Cloud Hypervisor. Three things have to be true or Windows stops at the boot manager:
             the kcore ISO must include the VM module, every guest must get Hyper-V CPU enlightenments,
             and the uploaded image must already contain virtio drivers.
         </p>
-        <p>
+        <p data-i18n-html="bp.win.b02">
             The disk recipe is
             <a href="https://github.com/kcorehypervisor/windows-guest">kcorehypervisor/windows-guest</a>.
             It installs Server 2022 under QEMU with virtio-win 0.1.240, turns on the serial console
@@ -153,8 +153,8 @@
             After that, the VM is declared in Terraform and boots.
         </p>
 
-        <h2>1. Download the evaluation ISO</h2>
-        <p>
+        <h2 data-i18n="bp.win.b03">1. Download the evaluation ISO</h2>
+        <p data-i18n-html="bp.win.b04">
             The installer ISO is a NixOS image. It copies the <code>ch-vm</code> module onto the node,
             including the Cloud Hypervisor unit that every VM uses.
             The recording builds that ISO from a checkout. For an install, download the evaluation ISO.
@@ -162,8 +162,8 @@
         </p>
         <div id="windows-iso-cast" class="demo-wrap"></div>
 
-        <h2>2. Declare the VM in Terraform</h2>
-        <p>
+        <h2 data-i18n="bp.win.b05">2. Declare the VM in Terraform</h2>
+        <p data-i18n-html="bp.win.b06">
             You do not edit the node. A current kcore image already starts every guest with
             Hyper-V CPU enlightenments, which Windows needs and Linux ignores. The configuration
             you write is a <code>kcore_vm</code> resource. Point it at the image uploaded to the
@@ -226,7 +226,7 @@ resource "kcore_vm" "win11" {
 
   desired_state = "running"
 }</code></pre>
-        <p>
+        <p data-i18n-html="bp.win.b07">
             <code>storage_size_bytes</code> is the virtual size of the disk, 40 GiB here, not the
             size of the compact qcow2 file. <code>terraform apply</code> creates the VM on the controller.
             Windows 11 does not need another provider argument. Upload its qcow2 and change
@@ -234,8 +234,8 @@ resource "kcore_vm" "win11" {
         </p>
         <div id="windows-config-cast" class="demo-wrap"></div>
 
-        <h2>3. Create the Windows VM</h2>
-        <p>
+        <h2 data-i18n="bp.win.b08">3. Create the Windows VM</h2>
+        <p data-i18n-html="bp.win.b09">
             Upload the qcow2 from the recipe, then create the VM. <code>--storage-size-bytes</code> is
             the virtual size of the disk (40 GiB here), not the size of the compact file. LVM converts
             that qcow2 to a raw volume before Cloud Hypervisor opens it. The guest address on a NAT
@@ -255,17 +255,17 @@ kctl create vm win-01 \
   --image-format qcow2</code></pre>
         <div id="windows-vm-cast" class="demo-wrap"></div>
 
-        <h2>4. IIS from the command line</h2>
-        <p>IIS is an inbox feature. From an Administrator command prompt on the guest:</p>
+        <h2 data-i18n="bp.win.b10">4. IIS from the command line</h2>
+        <p data-i18n="bp.win.b11">IIS is an inbox feature. From an Administrator command prompt on the guest:</p>
 <pre><code>powershell -Command "Install-WindowsFeature Web-Server -IncludeManagementTools"</code></pre>
-        <p>
+        <p data-i18n-html="bp.win.b12">
             The page below is the stock IIS welcome site. The workstation cannot open the guest
             address directly, so the browser is pointed at a port forward through the node
             (<code>ssh -N -L 8080:&lt;guest-ip&gt;:80 root@&lt;node&gt;</code>).
         </p>
 
         <figure>
-            <img src="../assets/windows-server-2022-iis.png" alt="Default IIS welcome page on Windows Server 2022">
+            <img src="../assets/windows-server-2022-iis.png" alt="Default IIS welcome page on Windows Server 2022" data-i18n-alt="bp.win.alt1">
             <figcaption data-i18n="bp.win.caption">Default IIS welcome page on Windows Server 2022.</figcaption>
         </figure>
     </article>

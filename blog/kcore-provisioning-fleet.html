@@ -140,95 +140,95 @@
         <div class="container">
             <h1 data-i18n="bp.prov.title">Manage a server fleet with kcore-provisioning</h1>
             <p class="post-meta" data-i18n="bp.prov.date">15 October 2026</p>
-            <img class="post-hero-image" src="../assets/kcore-provisioning-overview.png" alt="kcore-provisioning overview dashboard with image and machine counters" width="1440" height="900">
+            <img class="post-hero-image" src="../assets/kcore-provisioning-overview.png" alt="kcore-provisioning overview dashboard with image and machine counters" width="1440" height="900" data-i18n-alt="bp.prov.alt1">
         </div>
     </section>
 
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.prov.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.prov.b01">
             It is fine to install one kcore node from an evaluation ISO in a lab, but a rack of PowerEdge boxes is a different matter. You need a list of machines, a verified image, a boot target, and a way to power the BMC without walking the aisle with a KVM.
         </p>
-        <p>
+        <p data-i18n-html="bp.prov.b02">
             That is what <strong>kcore-provisioning</strong> is for. The provisioner sets up servers using IPMI and Redfish and netboots kcore via UEFI HTTP boot. The dashboard below is the operator view of that controller: images, machines, boot configurations, and power. The screenshots are from a lab install; the layout of the UI is what matters.
         </p>
 
-        <h2>What the dashboard shows</h2>
-        <p>
+        <h2 data-i18n="bp.prov.b03">What the dashboard shows</h2>
+        <p data-i18n="bp.prov.b04">
             The overview is one page for fleet health. It shows total and verified OS images, total machines, and how many are provisioned, provisioning, or failed. It refreshes every ten seconds from the provisioning controller API. Quick links go to Images, Machines, and Boot Configs. Recent activity lists the latest provisioning events when any exist.
         </p>
-        <p>
+        <p data-i18n="bp.prov.b05">
             You do not open a spreadsheet to find out which hosts are ready. You open Overview.
         </p>
 
-        <h2>Feature list</h2>
+        <h2 data-i18n="bp.prov.b06">Feature list</h2>
         <ul>
-            <li><strong>Verified OS images</strong> — downloaded images with name, version, architecture, type, verification status, size, and created time. Filter by verified, pending, or failed.</li>
-            <li><strong>Machine inventory</strong> — registered physical servers with name, MAC, IP, state, power state, manufacturer, model, and assigned boot target.</li>
-            <li><strong>BMC / iDRAC detail</strong> — per machine: manufacturer, model, serial, CPU, cores, memory, BMC IP and firmware, NIC MACs, and storage devices from the BMC.</li>
-            <li><strong>Power control</strong> — Power On, Power Off, and Reset from the machine page. The dashboard footer states this UI is power control for interactive actions; install progress still comes from the provisioner pipeline.</li>
-            <li><strong>Drive health</strong> — ask the BMC about each drive and re-check without a separate hardware tool.</li>
-            <li><strong>Boot configurations</strong> — which machine boots which image, with MAC, kernel parameters when set, and a config URL you can view or download.</li>
-            <li><strong>Netboot path</strong> — UEFI HTTP boot of kcore after BMC configuration over IPMI or Redfish, not a USB stick per host.</li>
-            <li><strong>API-backed</strong> — the page reads the provisioning controller API, so the same facts can feed automation instead of living only in a console.</li>
+            <li data-i18n-html="bp.prov.b07"><strong>Verified OS images</strong> — downloaded images with name, version, architecture, type, verification status, size, and created time. Filter by verified, pending, or failed.</li>
+            <li data-i18n-html="bp.prov.b08"><strong>Machine inventory</strong> — registered physical servers with name, MAC, IP, state, power state, manufacturer, model, and assigned boot target.</li>
+            <li data-i18n-html="bp.prov.b09"><strong>BMC / iDRAC detail</strong> — per machine: manufacturer, model, serial, CPU, cores, memory, BMC IP and firmware, NIC MACs, and storage devices from the BMC.</li>
+            <li data-i18n-html="bp.prov.b10"><strong>Power control</strong> — Power On, Power Off, and Reset from the machine page. The dashboard footer states this UI is power control for interactive actions; install progress still comes from the provisioner pipeline.</li>
+            <li data-i18n-html="bp.prov.b11"><strong>Drive health</strong> — ask the BMC about each drive and re-check without a separate hardware tool.</li>
+            <li data-i18n-html="bp.prov.b12"><strong>Boot configurations</strong> — which machine boots which image, with MAC, kernel parameters when set, and a config URL you can view or download.</li>
+            <li data-i18n-html="bp.prov.b13"><strong>Netboot path</strong> — UEFI HTTP boot of kcore after BMC configuration over IPMI or Redfish, not a USB stick per host.</li>
+            <li data-i18n-html="bp.prov.b14"><strong>API-backed</strong> — the page reads the provisioning controller API, so the same facts can feed automation instead of living only in a console.</li>
         </ul>
 
         <figure>
-            <img src="../assets/kcore-provisioning-images.png" alt="OS Images table with three verified kcoreos images" width="1440" height="900">
-            <figcaption>Images: verified kcoreos builds ready to assign as boot targets.</figcaption>
+            <img src="../assets/kcore-provisioning-images.png" alt="OS Images table with three verified kcoreos images" width="1440" height="900" data-i18n-alt="bp.prov.alt2">
+            <figcaption data-i18n="bp.prov.b15">Images: verified kcoreos builds ready to assign as boot targets.</figcaption>
         </figure>
 
-        <h2>Why a fleet is easier this way</h2>
-        <p>
+        <h2 data-i18n="bp.prov.b16">Why a fleet is easier this way</h2>
+        <p data-i18n="bp.prov.b17">
             Manual installation does not scale past a few nodes. Someone has to image each disk, set the boot order, and track which MAC got which build. With kcore-provisioning the loop is shorter:
         </p>
         <ul>
-            <li>Register or discover the machine once. The inventory stores MAC, BMC address, model, and NICs.</li>
-            <li>Keep a small set of verified images. Operators pick a known-good version instead of copying ISOs by hand.</li>
-            <li>Attach a boot configuration to the machine. The target image is explicit and downloadable.</li>
-            <li>Power the host from the same page when you need to reboot into the netboot path.</li>
-            <li>Watch Overview for provisioned versus failed while the controller does the work.</li>
+            <li data-i18n="bp.prov.b18">Register or discover the machine once. The inventory stores MAC, BMC address, model, and NICs.</li>
+            <li data-i18n="bp.prov.b19">Keep a small set of verified images. Operators pick a known-good version instead of copying ISOs by hand.</li>
+            <li data-i18n="bp.prov.b20">Attach a boot configuration to the machine. The target image is explicit and downloadable.</li>
+            <li data-i18n="bp.prov.b21">Power the host from the same page when you need to reboot into the netboot path.</li>
+            <li data-i18n="bp.prov.b22">Watch Overview for provisioned versus failed while the controller does the work.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.prov.b23">
             That is the same idea as launching a cloud instance — desired image, inventory, and power — on hardware you already own.
         </p>
 
         <figure>
-            <img src="../assets/kcore-provisioning-machines.png" alt="Machines table listing three Dell PowerEdge T140 servers" width="1440" height="900">
-            <figcaption>Machines: three Dell PowerEdge T140 hosts in DISCOVERED state with boot targets assigned.</figcaption>
+            <img src="../assets/kcore-provisioning-machines.png" alt="Machines table listing three Dell PowerEdge T140 servers" width="1440" height="900" data-i18n-alt="bp.prov.alt3">
+            <figcaption data-i18n="bp.prov.b24">Machines: three Dell PowerEdge T140 hosts in DISCOVERED state with boot targets assigned.</figcaption>
         </figure>
 
-        <h2>A machine page in practice</h2>
-        <p>
+        <h2 data-i18n="bp.prov.b25">A machine page in practice</h2>
+        <p data-i18n="bp.prov.b26">
             Opening one host shows why this is faster than a BMC-only workflow. Power controls sit next to drive health. System information, CPU and memory, BMC firmware, NICs, and storage are on one screen. Provisioning status links the boot target and lets you download the config. You are not bouncing between iDRAC, a PXE server UI, and a wiki page for the kernel line.
         </p>
 
         <figure>
-            <img src="../assets/kcore-provisioning-machine-detail.png" alt="Machine details with power control and BMC information" width="1440" height="1600">
-            <figcaption>Machine details: power control, BMC data, NICs, storage, and boot target on one page.</figcaption>
+            <img src="../assets/kcore-provisioning-machine-detail.png" alt="Machine details with power control and BMC information" width="1440" height="1600" data-i18n-alt="bp.prov.alt4">
+            <figcaption data-i18n="bp.prov.b27">Machine details: power control, BMC data, NICs, storage, and boot target on one page.</figcaption>
         </figure>
 
-        <h2>Where this sits in kcore</h2>
-        <p>
+        <h2 data-i18n="bp.prov.b28">Where this sits in kcore</h2>
+        <p data-i18n-html="bp.prov.b29">
             Day to day, after nodes are installed, VM and cluster work still goes through <code>kctl</code>, YAML, and the Terraform provider. The provisioner is the entry point for getting bare metal into that fleet. Community Edition install from the evaluation ISO remains the path for a single host or a small lab. The provisioner is the path when the unit of work is a rack, not a laptop.
         </p>
-        <p>
+        <p data-i18n-html="bp.prov.b30">
             For IPMI, Redfish, and UEFI HTTP boot, see <a href="../features.html">features</a>. For node join and approval after install, see the <a href="../docs/user/add-node.html">add-node</a> and <a href="../docs/user/installation.html">installation</a> guides.
         </p>
 
-        <h2>Conclusion</h2>
-        <p>
+        <h2 data-i18n="bp.prov.b31">Conclusion</h2>
+        <p data-i18n="bp.prov.b32">
             Fleet management on bare metal fails when inventory, images, boot targets, and power live in four tools. kcore-provisioning puts those facts in one controller and one dashboard. Verified images, discovered machines, boot configs, and BMC power are enough to stop treating every new server as a special project.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../features.html">See features</a>
-            <a class="secondary" href="../docs/user/installation.html">Installation guide</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.prov.b33" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.prov.b34" class="secondary" href="../features.html">See features</a>
+            <a data-i18n="bp.prov.b35" class="secondary" href="../docs/user/installation.html">Installation guide</a>
+            <a data-i18n="bp.prov.b36" class="secondary" href="../pricing.html">See pricing</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.prov.b37">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

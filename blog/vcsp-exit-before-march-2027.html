@@ -146,46 +146,46 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.vcsp.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.vcsp.b01">
             Hosting providers on a VMware Cloud Service Provider contract have a date problem, not a feature problem. Most of those contracts that Broadcom will not renew end on 31 March 2027. Current customer contracts can still run. New commitment contracts and renewals cannot. That date is not the end of VMware, and it is not an on-prem renewal date. Check the contract in front of you.
         </p>
-        <h2>What the exit actually is</h2>
-        <p>
+        <h2 data-i18n="bp.vcsp.b02">What the exit actually is</h2>
+        <p data-i18n="bp.vcsp.b03">
             Leaving VCSP is an estate move. You still have to inventory the guests, convert the disks, choose storage, and cut over in a window the customer will accept. A blog post does not do that work. A credible plan names who inventories, who converts the disks, and who owns the cutover.
         </p>
-        <p>
+        <p data-i18n-html="bp.vcsp.b04">
             kcore-migrate inventories vCenter or Proxmox and converts exported disks to qcow2 or raw. It does not read disks straight from vCenter. Cutover stays a project. The steps are in the <a href="../docs/user/import.html">import guide</a>.
         </p>
-        <h2>Why the commercial shape matters</h2>
-        <p>
+        <h2 data-i18n="bp.vcsp.b05">Why the commercial shape matters</h2>
+        <p data-i18n="bp.vcsp.b06">
             On-prem Broadcom quotes are usually per core, often with a 72-core minimum. kcore production subscriptions are per physical CPU socket per year, not per core. Enterprise has an 8-socket minimum. The evaluation ISO is free on GitHub Releases. That does not make the migration free. It changes the renewal figure you put next to the Broadcom number before you pick the next platform.
         </p>
-        <h2>What you should not buy by accident</h2>
-        <p>
+        <h2 data-i18n="bp.vcsp.b07">What you should not buy by accident</h2>
+        <p data-i18n="bp.vcsp.b08">
             Nutanix keeps an appliance operating model and a bill that looks like the one you are leaving. OpenStack is a private cloud for teams who already staff it. OpenShift Virtualization assumes Kubernetes is the main model. Proxmox is a reasonable KVM box for a small site, and a weak fit when the next step is an API, Terraform, and a written migration path.
         </p>
-        <p>
+        <p data-i18n="bp.vcsp.b09">
             kcore is the VM-first option in that list: guests through kctl, YAML, and Terraform provider kcorehypervisor/kcore, Windows guests included, live migration only when the disks are on shared Ceph. Control-plane replication across datacenters is not vSphere HA. One physical GPU can be assigned to one VM. NVIDIA vGPU is not available.
         </p>
-        <h2>A practical sequence</h2>
+        <h2 data-i18n="bp.vcsp.b10">A practical sequence</h2>
         <ul>
-            <li>Read the contract end date and the customer commitments that still run.</li>
-            <li>Count sockets, Windows guests, and Linux guests. That is the assessment form on the <a href="../index.html#get-started">homepage</a>.</li>
-            <li>Inventory with kcore-migrate and read the gap report before you promise a weekend cutover.</li>
-            <li>Price per socket against the quote you actually have. See <a href="../pricing.html">pricing</a>.</li>
-            <li>Install the evaluation ISO on a slice of the estate before you move the first paying guest.</li>
+            <li data-i18n="bp.vcsp.b11">Read the contract end date and the customer commitments that still run.</li>
+            <li data-i18n-html="bp.vcsp.b12">Count sockets, Windows guests, and Linux guests. That is the assessment form on the <a href="../index.html#get-started">homepage</a>.</li>
+            <li data-i18n="bp.vcsp.b13">Inventory with kcore-migrate and read the gap report before you promise a weekend cutover.</li>
+            <li data-i18n-html="bp.vcsp.b14">Price per socket against the quote you actually have. See <a href="../pricing.html">pricing</a>.</li>
+            <li data-i18n="bp.vcsp.b15">Install the evaluation ISO on a slice of the estate before you move the first paying guest.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.vcsp.b16">
             If you need NetApp, Veeam, or another vendor&#x27;s certification as a hard gate, check that vendor&#x27;s matrix. Do not treat this page as the matrix.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.vcsp.b17" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.vcsp.b18" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.vcsp.b19" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.vcsp.b20" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.vcsp.b21">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

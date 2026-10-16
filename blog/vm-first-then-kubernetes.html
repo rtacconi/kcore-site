@@ -146,36 +146,36 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.vmk8s.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.vmk8s.b01">
             Some estates are Kubernetes-first. Many are not. They still run most of the business as virtual machines and want Kubernetes only where it pays for itself. Putting every application on OpenShift on day one is a different project from replacing VMware.
         </p>
-        <h2>The path on kcore</h2>
-        <p>
+        <h2 data-i18n="bp.vmk8s.b02">The path on kcore</h2>
+        <p data-i18n="bp.vmk8s.b03">
             kcore creates a Kubernetes cluster on nodes that are already members of the kcore cluster. The first apply stores the cluster, generates certificates, and deploys kubelet, etcd, and the API server. Put every member in that first manifest. Membership is fixed at create. kctl kubernetes scale records nodes. It does not join or remove them.
         </p>
-        <p>
+        <p data-i18n-html="bp.vmk8s.b04">
             An API VIP can run with keepalived. Cilium is installed on the primary cluster, the one whose API port is 6443. A second cluster on the same hosts must not run a second Cilium. The agents would share BPF pins. Volumes can be LVM or ZFS directories through the local-path provisioner, or an LVM thin pool that does not bind claims. The <a href="../docs/user/kubernetes.html">Kubernetes</a> page states those limits in full.
         </p>
-        <p>
+        <p data-i18n="bp.vmk8s.b05">
             Terraform provider 0.5.0 has no Kubernetes cluster resource. The manifest and kctl kubernetes apply are the path. A ClusterUpdate moves the host NixOS pin, which is where the Kubernetes binaries come from. There is no separate cordon-and-drain roller.
         </p>
-        <h2>How to decide</h2>
+        <h2 data-i18n="bp.vmk8s.b06">How to decide</h2>
         <ul>
-            <li>VM-first, Kubernetes later, same metal: this model.</li>
-            <li>Kubernetes is already the operating system and VMs are the exception: look at a Kubernetes-first product and be honest about the staff you have.</li>
-            <li>You think you need a second Cilium on the same hosts: do not.</li>
+            <li data-i18n="bp.vmk8s.b07">VM-first, Kubernetes later, same metal: this model.</li>
+            <li data-i18n="bp.vmk8s.b08">Kubernetes is already the operating system and VMs are the exception: look at a Kubernetes-first product and be honest about the staff you have.</li>
+            <li data-i18n="bp.vmk8s.b09">You think you need a second Cilium on the same hosts: do not.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.vmk8s.b10">
             Stay on VMs until the cluster manifest is something you can re-apply. Then add the workers in that first manifest, not as a surprise scale later.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.vmk8s.b11" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.vmk8s.b12" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.vmk8s.b13" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.vmk8s.b14" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.vmk8s.b15">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

@@ -146,40 +146,40 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.live.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.live.b01">
             “Can you live-migrate?” is the wrong first question. The useful question is whether the disk is shared, and whether you are buying vSphere HA or a VM move.
         </p>
-        <h2>What ships</h2>
-        <p>
+        <h2 data-i18n="bp.live.b02">What ships</h2>
+        <p data-i18n="bp.live.b03">
             Live migration on kcore needs shared Ceph storage. The disk is an RBD image. Changing hosts does not copy guest blocks, because both nodes map the same image during cutover. The command is kctl migrate vm. Memory streams over TCP. A cold move is kctl drain node: the control plane reassigns the VMs, Nix stops them on the source and starts them on the destination. kctl migrate vm --allow-cold-fallback tries live, then cold, for that VM.
         </p>
-        <p>
+        <p data-i18n="bp.live.b04">
             Local backends — filesystem, LVM, and ZFS — keep the disk on the host that runs the guest. Those are the right choice when latency matters. They are the wrong choice if the requirement is that this VM must move without a copy.
         </p>
-        <h2>What this is not</h2>
-        <p>
+        <h2 data-i18n="bp.live.b05">What this is not</h2>
+        <p data-i18n="bp.live.b06">
             Control-plane replication across datacenters is not vSphere HA. A second site that receives control-plane state does not restart your guests the way vSphere HA does. Do not put that sentence in a customer proposal.
         </p>
-        <p>
+        <p data-i18n="bp.live.b07">
             Terraform provider 0.5.0 has no migrate or drain resource. Those stay kctl commands. A Ceph data disk can be a kcore_volume with storage class ceph. On that provider, kcore_vm storage_backend is filesystem, lvm, or zfs. The ceph flag on the VM is kctl.
         </p>
-        <h2>How to choose</h2>
+        <h2 data-i18n="bp.live.b08">How to choose</h2>
         <ul>
-            <li>An application server that should fail over: Ceph RBD, then a live or cold migrate.</li>
-            <li>A database that needs local NVMe: LVM or ZFS, and a planned stop if the host is drained.</li>
-            <li>A multi-site “HA” slide: read the limit again before you draw the arrow.</li>
+            <li data-i18n="bp.live.b09">An application server that should fail over: Ceph RBD, then a live or cold migrate.</li>
+            <li data-i18n="bp.live.b10">A database that needs local NVMe: LVM or ZFS, and a planned stop if the host is drained.</li>
+            <li data-i18n="bp.live.b11">A multi-site “HA” slide: read the limit again before you draw the arrow.</li>
         </ul>
-        <p>
+        <p data-i18n-html="bp.live.b12">
             The operator runbook is the <a href="../docs/user/vm-migration.html">VM migration</a> page. Ceph layout is on the <a href="../docs/user/storage-vsan.html">kcore SAN</a> page. Read those before you promise a maintenance window of zero.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.live.b13" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.live.b14" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.live.b15" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.live.b16" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.live.b17">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>
