@@ -146,41 +146,41 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.winguest.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.winguest.b01">
             A lot of VMware exits stall on Windows. The Linux estate is easy to picture somewhere else. The domain controllers, the IIS sites, and the Windows desktops are why the renewal gets signed. kcore runs Windows Server and Windows desktop guests. That is a statement about guests, not a Microsoft certification claim.
         </p>
-        <h2>What “runs” means</h2>
-        <p>
+        <h2 data-i18n="bp.winguest.b02">What “runs” means</h2>
+        <p data-i18n-html="bp.winguest.b03">
             You create the VM through the controller API: kctl, a YAML manifest, or Terraform provider kcorehypervisor/kcore 0.5.0. The Windows disk is an image you supply. Two walkthroughs on this blog show the shape of the work: <a href="windows-server-2022-iis.html">Windows Server 2022</a> with the default IIS page, and a <a href="windows-10-desktop.html">Windows 10 Pro desktop</a> reached through an SSH port forward. Follow those pages for the commands. This page is the buying question.
         </p>
-        <p>
+        <p data-i18n="bp.winguest.b04">
             Hyper-V CPU enlightenments are part of the Server walkthrough. They are a performance detail, not a support contract with Microsoft.
         </p>
-        <h2>GPU, and what is not included</h2>
-        <p>
+        <h2 data-i18n="bp.winguest.b05">GPU, and what is not included</h2>
+        <p data-i18n="bp.winguest.b06">
             One physical GPU can be assigned to one VM. NVIDIA vGPU, many VMs on one card, is not available. If the estate depends on shared vGPU, say so before you move that guest. A single passthrough card for one workstation VM is a different conversation.
         </p>
-        <h2>What still sits outside the guest</h2>
-        <p>
+        <h2 data-i18n="bp.winguest.b07">What still sits outside the guest</h2>
+        <p data-i18n="bp.winguest.b08">
             Live migration of a Windows VM needs the same thing as any other guest: shared Ceph storage. Local filesystem, LVM, or ZFS disks do not move between hosts. A failed host update boots the previous generation of kcoreOS. That protects the host. It is not a Windows snapshot product. There is no integrated backup product yet. kctl backup copies the controller database. Guest backup stays with your existing tool, and you should confirm that tool supports the disk format you chose.
         </p>
-        <h2>Who this is for</h2>
+        <h2 data-i18n="bp.winguest.b09">Who this is for</h2>
         <ul>
-            <li>Teams whose blocker is Windows Server, not a Kubernetes rewrite.</li>
-            <li>Desktop pools that can live with one GPU per VM.</li>
-            <li>Operators who will follow the IIS and Windows 10 posts instead of assuming a vCenter wizard.</li>
+            <li data-i18n="bp.winguest.b10">Teams whose blocker is Windows Server, not a Kubernetes rewrite.</li>
+            <li data-i18n="bp.winguest.b11">Desktop pools that can live with one GPU per VM.</li>
+            <li data-i18n="bp.winguest.b12">Operators who will follow the IIS and Windows 10 posts instead of assuming a vCenter wizard.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.winguest.b13">
             Download the evaluation ISO, build one Windows guest the way the walkthroughs describe, and only then talk about the rest of the estate.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.winguest.b14" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.winguest.b15" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.winguest.b16" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.winguest.b17" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.winguest.b18">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

@@ -125,81 +125,81 @@
         <div class="container">
             <h1 data-i18n="bp.bare.title">Bare-metal platforms that feel like the cloud — without the cloud bill</h1>
             <p class="post-meta" data-i18n="bp.bare.date">15 October 2026</p>
-            <img class="post-hero-image" src="../assets/bare-metal-declarative-platform.jpg" alt="Industrial circuit board with thick cables in a factory setting" width="640" height="640">
+            <img class="post-hero-image" src="../assets/bare-metal-declarative-platform.jpg" alt="Industrial circuit board with thick cables in a factory setting" width="640" height="640" data-i18n-alt="bp.bare.alt1">
         </div>
     </section>
 
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.bare.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.bare.b01">
             Cloud bills are going up and many teams are now asking a simple question: can we set up a bare-metal platform which still has a declarative feel—using Kubernetes, shared storage, object storage, and databases—without having to pay the markups imposed by the hyperscalers for every CPU hour?
         </p>
-        <p>
+        <p data-i18n="bp.bare.b02">
             It's not a case of longing for racks; it's a decision regarding cost and control. The cloud has caused operators to learn how to describe their infrastructure in textual form, to review changes, and then have the control plane match the desired state. The next thing that many people want is the same workflow to be applied to the hardware that they already have.
         </p>
-        <h2>What “like the cloud” means on bare metal</h2>
-        <p>
+        <h2 data-i18n="bp.bare.b03">What “like the cloud” means on bare metal</h2>
+        <p data-i18n="bp.bare.b04">
             With a public cloud you usually don't SSH directly into a hypervisor in order to create a disk. Instead, you declare a virtual machine, a volume, a load balancer, or a managed database, and then an API carries out the action. What's useful about this approach is not the name of the brand but the contract: the desired state expressed in YAML or Terraform, an API that takes responsibility for the lifecycle, and machines that boot using a known generation if an update fails.
         </p>
-        <p>
+        <p data-i18n="bp.bare.b05">
             A bare-metal platform which provides nothing but a web console doesn't meet that criterion. Likewise, a collection of shell scripts also fails the test. The standard must be a reviewable configuration and a genuine provider, not a demo that wraps SSH.
         </p>
-        <h2>Bare-metal Kubernetes without a second estate</h2>
-        <p>
+        <h2 data-i18n="bp.bare.b06">Bare-metal Kubernetes without a second estate</h2>
+        <p data-i18n="bp.bare.b07">
             A large number of estates continue to run their various workloads as virtual machines and would like to have Kubernetes once it starts to pay for itself. It isn't always appropriate to require that every application be placed on OpenShift from the very beginning. A sensible approach is to use a virtual machine-first host platform which is able to set up a Kubernetes cluster on nodes that are already part of the cluster: by deploying the kubelet, etcd, and the API server from a manifest, together with an API VIP and Cilium whenever L2 announcements are needed.
         </p>
-        <p>
+        <p data-i18n-html="bp.bare.b08">
             That is what kcore does with <code>kctl kubernetes</code> and a <code>KubernetesCluster</code> manifest. Membership is fixed at create. Since the Terraform provider 0.5.0 does not include a Kubernetes cluster resource, the path is CLI or YAML. For buyers the key issue is the operating model: a single bare-metal fleet, with VMs first and Kubernetes only when you declare it—rather than a separate appliance for each layer.
         </p>
-        <h2>Shared block (SAN-style) and local disks</h2>
-        <p>
+        <h2 data-i18n="bp.bare.b09">Shared block (SAN-style) and local disks</h2>
+        <p data-i18n="bp.bare.b10">
             The habit that people tend to overlook is using cloud block storage. On kcore, the local backends—namely the filesystem, LVM, and ZFS—hold the VM disks on the host machine that is running the guest; this should be the default setting when latency is a concern.
         </p>
-        <p>
+        <p data-i18n-html="bp.bare.b11">
             kcore SAN includes Ceph as shared block storage. You declare a <code>CephCluster</code>, bootstrap the MON, MGR and OSD components using the day-2 YAML file, and then place the VM disks on RBD. When performing a cold drain or a live migration, the virtual machines can be moved without having to copy their guest blocks since the image is already present in the cluster. This is the kind of result that teams have in mind when they talk about having shared storage on their physical hardware: redundant block storage, not a fibre-channel catalog from 2008.
         </p>
-        <p>
+        <p data-i18n="bp.bare.b12">
             People still select on a per-VM basis. A database which needs local NVMe can remain on LVM. An application server which should fail over cleanly can be placed on Ceph.
         </p>
-        <h2>Object storage: say what ships</h2>
-        <p>
+        <h2 data-i18n="bp.bare.b13">Object storage: say what ships</h2>
+        <p data-i18n="bp.bare.b14">
             S3-compatible object storage fits into the same buyer narrative. The kcore control plane has an ObjectStore resource designed for Ceph RGW. This should be seen as ongoing control-plane development, not as a complete replacement for all the features available in cloud buckets. Currently, you can plan for Ceph-backed block storage for VMs, with object storage progressing in the same declarative manner as the rest of the platform. Never base a decision to migrate on a blog post alone — instead refer to the documentation for the phase in question.
         </p>
-        <h2>PostgreSQL as a declared service</h2>
-        <p>
+        <h2 data-i18n="bp.bare.b15">PostgreSQL as a declared service</h2>
+        <p data-i18n-html="bp.bare.b16">
             One of the reasons why people remain on a cloud bill is managed Postgres. Using kcore, one PostgreSQL database can be declared per node via the NixOS postgresql package. The service operates on the host operating system rather than within a guest VM. You use <code>kctl apply</code> to apply a YAML manifest, select a package pin like postgresql_16, and then connect via the node's Unix socket.
         </p>
-        <p>
+        <p data-i18n="bp.bare.b17">
             It is important to consider the current limitations. Version 1 does not include a TCP listener or a password configuration. Each node has at most one database; a multi-node Postgres cluster is intended for Q1 2027. Should you require a full RDS substitute today, make it known in the assessment. And if you need a declarative database situated next to the hypervisor for use by both the application and control plane, the appropriate option is already provided.
         </p>
-        <h2>The cost shape</h2>
-        <p>
+        <h2 data-i18n="bp.bare.b18">The cost shape</h2>
+        <p data-i18n="bp.bare.b19">
             Hyperscalers charge for almost everything. kcore production subscriptions are based on each physical CPU socket per year rather than per core, and a free evaluation ISO is available on GitHub Releases under the Apache-2.0 license. This does not mean that electricity or disks are free. What it does is get rid of the habit of having to pay a premium for each vCPU of steady-state virtualization that you could run on your own hardware.
         </p>
-        <h2>Who this article is for</h2>
+        <h2 data-i18n="bp.bare.b20">Who this article is for</h2>
         <ul>
-            <li>Platform teams who wish to use bare-metal hosts where the standard workflow is Terraform and YAML.</li>
-            <li>Operators who want to run Kubernetes on the same physical hardware as their VMs, without having to reorganize their existing setup around a product that works only with Kubernetes.</li>
-            <li>Storage buyers who, when they refer to SAN, mean shared Ceph RBD, and who will also keep an eye on object storage as it becomes more entrenched.</li>
-            <li>Teams who wish for PostgreSQL to be declared alongside the node and should be aware of the limitations of Unix-socket v1.</li>
+            <li data-i18n="bp.bare.b21">Platform teams who wish to use bare-metal hosts where the standard workflow is Terraform and YAML.</li>
+            <li data-i18n="bp.bare.b22">Operators who want to run Kubernetes on the same physical hardware as their VMs, without having to reorganize their existing setup around a product that works only with Kubernetes.</li>
+            <li data-i18n="bp.bare.b23">Storage buyers who, when they refer to SAN, mean shared Ceph RBD, and who will also keep an eye on object storage as it becomes more entrenched.</li>
+            <li data-i18n="bp.bare.b24">Teams who wish for PostgreSQL to be declared alongside the node and should be aware of the limitations of Unix-socket v1.</li>
         </ul>
-        <h2>Conclusion</h2>
-        <p>
+        <h2 data-i18n="bp.bare.b25">Conclusion</h2>
+        <p data-i18n="bp.bare.b26">
             The declarative desired state is the pattern worth keeping. The bill worth leaving is the one which charges cloud rates for capacity that you already have on premises. kcore is a bare-metal hypervisor product designed for this kind of situation: you install it on the physical hardware, manage the VMs via an API, add Ceph when you need shared block storage, set up Kubernetes on the same nodes, and then declare a PostgreSQL database where the documentation states it will fit.
         </p>
-        <p>
+        <p data-i18n="bp.bare.b27">
             Before you rewrite the operating model, download the evaluation ISO, read the Kubernetes, SAN, and PostgreSQL guides, and check your current cloud or VMware line items against the socket quote.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../docs/user/kubernetes.html">Kubernetes guide</a>
-            <a class="secondary" href="../docs/user/storage-vsan.html">kcore SAN (Ceph)</a>
-            <a class="secondary" href="../docs/user/postgresql.html">PostgreSQL guide</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.bare.b28" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.bare.b29" class="secondary" href="../docs/user/kubernetes.html">Kubernetes guide</a>
+            <a data-i18n="bp.bare.b30" class="secondary" href="../docs/user/storage-vsan.html">kcore SAN (Ceph)</a>
+            <a data-i18n="bp.bare.b31" class="secondary" href="../docs/user/postgresql.html">PostgreSQL guide</a>
+            <a data-i18n="bp.bare.b32" class="secondary" href="../pricing.html">See pricing</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.bare.b33">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

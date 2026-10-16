@@ -146,39 +146,39 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.tf.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.tf.b01">
             Platform teams leave a hypervisor console for the same reason they leave a cloud console: every change should be a diff. kcore treats virtual machines as resources. You write HCL, run terraform apply, and provider kcorehypervisor/kcore talks to the API over gRPC. It is a Go provider using the Terraform Plugin SDK, not a shell wrapper around SSH.
         </p>
-        <p>
+        <p data-i18n="bp.tf.b02">
             YAML is the other text path. kctl apply and kctl create read manifests. HCL and YAML are files. You can review them.
         </p>
-        <h2>What provider 0.5.0 actually includes</h2>
-        <p>
+        <h2 data-i18n="bp.tf.b03">What provider 0.5.0 actually includes</h2>
+        <p data-i18n="bp.tf.b04">
             Version 0.5.0 is the provider this site documents. It creates VMs, volumes, clusters, nodes, and the related resources the docs show in Terraform mode. It does not include everything the CLI can do.
         </p>
         <ul>
-            <li>There is no Kubernetes cluster resource. Declare the cluster with kctl kubernetes and YAML.</li>
-            <li>There is no PostgreSQL resource. Declare the database with CLI or YAML. It runs on the node from the NixOS package, one database per node, Unix socket in v1.</li>
-            <li>There is no migrate or drain resource.</li>
-            <li>kcore_vm storage_backend is filesystem, lvm, or zfs. Ceph on the VM is a kctl flag. A Ceph data disk is kcore_volume with storage class ceph.</li>
-            <li>kcore_vm has no GPU attribute. Assign the card with CLI or YAML.</li>
-            <li>Provider 0.5.0 does not inventory VMware or Proxmox. kcore-migrate writes guests.tf. After convert, set image_path and image_format on kcore_vm.</li>
+            <li data-i18n="bp.tf.b05">There is no Kubernetes cluster resource. Declare the cluster with kctl kubernetes and YAML.</li>
+            <li data-i18n="bp.tf.b06">There is no PostgreSQL resource. Declare the database with CLI or YAML. It runs on the node from the NixOS package, one database per node, Unix socket in v1.</li>
+            <li data-i18n="bp.tf.b07">There is no migrate or drain resource.</li>
+            <li data-i18n="bp.tf.b08">kcore_vm storage_backend is filesystem, lvm, or zfs. Ceph on the VM is a kctl flag. A Ceph data disk is kcore_volume with storage class ceph.</li>
+            <li data-i18n="bp.tf.b09">kcore_vm has no GPU attribute. Assign the card with CLI or YAML.</li>
+            <li data-i18n="bp.tf.b10">Provider 0.5.0 does not inventory VMware or Proxmox. kcore-migrate writes guests.tf. After convert, set image_path and image_format on kcore_vm.</li>
         </ul>
-        <h2>How to work</h2>
-        <p>
+        <h2 data-i18n="bp.tf.b11">How to work</h2>
+        <p data-i18n="bp.tf.b12">
             Put the provider in the repo next to the rest of your infrastructure. Pin version 0.5.0 until you have tested a newer one. Use YAML where the provider has no resource, and say so in the module README so the next person does not invent an attribute.
         </p>
-        <p>
+        <p data-i18n-html="bp.tf.b13">
             Terraform does not remove the product limits. Live migration still needs Ceph. A failed host update still boots the previous generation. Windows guests still run as guests, not as a managed SQL service. The text workflow comes after those limits. It does not erase them. The field lists are in the <a href="../docs.html">docs</a>.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.tf.b14" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.tf.b15" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.tf.b16" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.tf.b17" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.tf.b18">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

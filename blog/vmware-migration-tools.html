@@ -116,23 +116,23 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.mig.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.mig.b01">
             A question we get is whether kcore is the only tool that turns a VMware estate into Terraform.
             It is not. Plenty of products move VMware virtual machines, and some of them write Terraform.
             Almost none of them write Terraform for a hypervisor that is not VMware.
         </p>
-        <p>
+        <p data-i18n="bp.mig.b02">
             The names get mixed together because each one is called a migration tool.
             They do three different jobs.
         </p>
 
         <figure>
-            <img src="../assets/vmware-migration-three-paths.jpg" alt="Three routes leaving one inventory: one stays put, one ends at a disk, one ends at a document and a disk">
+            <img src="../assets/vmware-migration-three-paths.jpg" alt="Three routes leaving one inventory: one stays put, one ends at a disk, one ends at a document and a disk" data-i18n-alt="bp.mig.alt1">
             <figcaption data-i18n="bp.mig.caption">Three routes from one inventory: stay and describe it, move the disks, or write Terraform for another hypervisor. The indigo route is the third.</figcaption>
         </figure>
 
-        <h2>Stay on VMware, and describe it in Terraform</h2>
-        <p>
+        <h2 data-i18n="bp.mig.b03">Stay on VMware, and describe it in Terraform</h2>
+        <p data-i18n-html="bp.mig.b04">
             The official <a href="https://registry.terraform.io/providers/vmware/vsphere/latest/docs">vSphere provider</a>
             manages virtual machines, networks, and datastores that remain on vSphere.
             You can import a VM you already know by inventory path, and
@@ -140,42 +140,42 @@
             The guest does not leave VMware. The provider still does not list a whole estate for you.
             Operators enumerate with <code>govc</code> or PowerCLI, then write the import blocks.
         </p>
-        <p>
+        <p data-i18n-html="bp.mig.b05">
             <a href="https://github.com/GoogleCloudPlatform/terraformer">Terraformer</a> is the tool people
             mean when they say “turn live infrastructure into Terraform.” It never really supported vSphere,
             and Google archived the repository on 16 March 2026. Articles that show a
             <code>terraformer import vsphere</code> command are describing a command that is not in the tool.
         </p>
 
-        <h2>Leave VMware, without writing Terraform</h2>
-        <p>
+        <h2 data-i18n="bp.mig.b06">Leave VMware, without writing Terraform</h2>
+        <p data-i18n="bp.mig.b07">
             This is the crowded category, and it is the one that actually copies disks.
         </p>
         <ul>
-            <li><a href="https://github.com/kubev2v/forklift">Forklift</a>, Red Hat’s Migration Toolkit for Virtualization, moves guests to KubeVirt. It uses virt-v2v, and it can warm-migrate with changed-block tracking.</li>
-            <li><a href="https://github.com/harvester/vm-import-controller">Harvester’s importer</a> does the same job toward a Harvester cluster, as Kubernetes resources.</li>
-            <li><a href="https://github.com/soyrageagency/vmware-to-proxmox">V2P</a> inventories vCenter, scores compatibility, and writes a Proxmox shell runbook. The output is a script, not Terraform.</li>
-            <li>Azure Migrate, AWS Application Migration Service, Google Migration Center, and Nutanix Move move the disks onto those platforms.</li>
+            <li data-i18n-html="bp.mig.b08"><a href="https://github.com/kubev2v/forklift">Forklift</a>, Red Hat’s Migration Toolkit for Virtualization, moves guests to KubeVirt. It uses virt-v2v, and it can warm-migrate with changed-block tracking.</li>
+            <li data-i18n-html="bp.mig.b09"><a href="https://github.com/harvester/vm-import-controller">Harvester’s importer</a> does the same job toward a Harvester cluster, as Kubernetes resources.</li>
+            <li data-i18n-html="bp.mig.b10"><a href="https://github.com/soyrageagency/vmware-to-proxmox">V2P</a> inventories vCenter, scores compatibility, and writes a Proxmox shell runbook. The output is a script, not Terraform.</li>
+            <li data-i18n="bp.mig.b11">Azure Migrate, AWS Application Migration Service, Google Migration Center, and Nutanix Move move the disks onto those platforms.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.mig.b12">
             Several of those destinations can later be represented in Terraform.
             The migrator itself lands the VM as a disk, a YAML object, or a cloud instance.
         </p>
 
-        <h2>Leave VMware, and emit Terraform for the destination</h2>
-        <p>
+        <h2 data-i18n="bp.mig.b13">Leave VMware, and emit Terraform for the destination</h2>
+        <p data-i18n-html="bp.mig.b14">
             This is the thin slice. A few small generators aim at Azure.
             There is no maintained product that inventories vCenter and emits Terraform for another
             on-prem hypervisor. That is the gap <a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a> is written for.
         </p>
-        <p>
+        <p data-i18n-html="bp.mig.b15">
             It reads a vCenter, or a Proxmox cluster, and writes <code>guests.tf</code> for the
             kcore Terraform provider, plus a <code>gaps.md</code> for anything the provider cannot
             express yet. <code>convert</code> then calls virt-v2v or qemu-img on a disk you have
             already exported. It does not pull disk bytes out of vCenter. Forklift does that pull.
             kcore-migrate does not.
         </p>
-        <p>
+        <p data-i18n-html="bp.mig.b16">
             The practical order is the same one the diagram shows. Inventory the estate.
             Read the gaps. Convert an exported disk to qcow2 or raw. Apply the Terraform.
             A whole-estate cutover is still a project. The commands are in the

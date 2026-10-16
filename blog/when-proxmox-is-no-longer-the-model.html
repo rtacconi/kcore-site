@@ -146,38 +146,38 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.px.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.px.b01">
             Proxmox is a sensible choice for a small estate, a lab, or a team that wants KVM without a large platform group. The reason to leave is not that it fails. The operating model stopped fitting.
         </p>
-        <h2>Where Proxmox fits</h2>
-        <p>
+        <h2 data-i18n="bp.px.b02">Where Proxmox fits</h2>
+        <p data-i18n="bp.px.b03">
             One cluster. Operators who live in the web UI. Backups you already understand. No requirement that every VM be a Terraform resource. If that is still the job, stay. A migration only to seem modern is a waste.
         </p>
-        <h2>Where teams get stuck</h2>
-        <p>
+        <h2 data-i18n="bp.px.b04">Where teams get stuck</h2>
+        <p data-i18n="bp.px.b05">
             The next requirement is usually one of these: an API a pipeline can call, YAML and Terraform as the review path, a written route from a Proxmox inventory to guest definitions on the destination, or a host update that boots the previous generation if it fails. Proxmox can be scripted. kcore&#x27;s default path is the API. Provider kcorehypervisor/kcore is a Go provider, not a shell wrapper. kctl and YAML cover the resources provider 0.5.0 does not include.
         </p>
-        <p>
+        <p data-i18n-html="bp.px.b06">
             kcore-migrate inventories Proxmox as well as vCenter. It converts exported disks to qcow2 or raw. It does not read disks straight from the source as a magic cutover. You still plan the window. The steps are in the <a href="../docs/user/import.html">import guide</a>.
         </p>
-        <h2>A fair test</h2>
+        <h2 data-i18n="bp.px.b07">A fair test</h2>
         <ul>
-            <li>Export one disk and convert it. Time the steps. That is the project, multiplied.</li>
-            <li>Recreate the guest with Terraform or YAML and see whether your review process accepts it.</li>
-            <li>Break a host update in a lab and see whether the previous generation boots.</li>
-            <li>Check Windows guests and the GPU limit: one physical GPU per VM, no NVIDIA vGPU.</li>
+            <li data-i18n="bp.px.b08">Export one disk and convert it. Time the steps. That is the project, multiplied.</li>
+            <li data-i18n="bp.px.b09">Recreate the guest with Terraform or YAML and see whether your review process accepts it.</li>
+            <li data-i18n="bp.px.b10">Break a host update in a lab and see whether the previous generation boots.</li>
+            <li data-i18n="bp.px.b11">Check Windows guests and the GPU limit: one physical GPU per VM, no NVIDIA vGPU.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.px.b12">
             If the UI was the product you wanted, you have your answer. If the reviewable text and the migration output were the product, try the evaluation ISO on the converted guest before you move the cluster.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.px.b13" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.px.b14" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.px.b15" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.px.b16" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.px.b17">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

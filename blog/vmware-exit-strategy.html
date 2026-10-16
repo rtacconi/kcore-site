@@ -125,7 +125,7 @@
         <div class="container">
             <h1 data-i18n="bp.exit.title">VMware exit strategy: choosing the right platform</h1>
             <p class="post-meta" data-i18n="bp.exit.date">15 October 2026</p>
-            <img class="post-hero-image" src="../assets/vmware-exit-strategy.jpg" alt="A person in a suit running through an open doorway into a bright field" width="960" height="540">
+            <img class="post-hero-image" src="../assets/vmware-exit-strategy.jpg" alt="A person in a suit running through an open doorway into a bright field" width="960" height="540" data-i18n-alt="bp.exit.alt1">
         </div>
     </section>
 
@@ -134,93 +134,93 @@
 
         
 
-        <p>
+        <p data-i18n="bp.exit.b01">
             When comparing kcore to Proxmox, Nutanix, OpenShift Virtualization, OpenStack, and OpenNebula one should consider the need of teams for a genuine alternative to VMware.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b02">
             The situation in the VMware market has changed and many organizations are now considering other options. For a long time VMware had been the standard when it came to enterprise virtualization. The system was well developed, the tools were well known, and administrators were familiar with the way it worked. Because of the licensing arrangements, the commercial flexibility, and the strategic control involved, a new question arose: not just 'what will replace VMware?' but 'what kind of operating model do we want in the future?'
         </p>
-        <p>
+        <p data-i18n="bp.exit.b03">
             That distinction matters.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b04">
             Leaving VMware is not the same as switching hypervisors. It involves making a decision regarding cost structure, the skills required, automation, integration with storage and networking, the level of migration risk, and how much vendor lock-in you are willing to accept on the next platform. The correct choice will depend on whether you need simple virtualization, a Kubernetes-first approach, a complete private-cloud control plane, or a VM-first platform which still provides APIs and Terraform.
         </p>
-        <h2>The real criteria for a VMware replacement</h2>
-        <p>
+        <h2 data-i18n="bp.exit.b05">The real criteria for a VMware replacement</h2>
+        <p data-i18n="bp.exit.b06">
             Headline feature lists are a poor filter; instead, the new solution must include all the tasks you currently carry out—that is, creating and assigning VMs, attaching storage and networks, ensuring that the virtual machines remain available, backing them up, and supporting the hardware that your applications require, including the GPUs when they are needed.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b07">
             That is just the first layer.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b08">
             Teams also desire operations that are similar to those offered by the cloud: an API, declarative configuration, changes that can be reviewed, and a workflow which does not require each change to go through a proprietary console. Terraform and YAML are important in this context since they convert the environment into text which can be diffed and audited.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b09">
             It is important to have Kubernetes support, but this has to be considered in the specific situation. In some cases organizations are already taking a Kubernetes-first approach, while in many others a large number of virtual machines are still in use and therefore they need a platform that will allow Kubernetes to be introduced later on without being forced to redesign every workload from the very beginning.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b10">
             The migration tools are involved when choosing a platform; inventory taking, disk conversion, and cutover constitute separate tasks. In order to be credible, an exit plan must specify who is responsible for each task and what stays part of the project.
         </p>
-        <h2>The platform landscape</h2>
-        <p>
+        <h2 data-i18n="bp.exit.b11">The platform landscape</h2>
+        <p data-i18n="bp.exit.b12">
             A number of platforms are vying for attention, each with its own center of gravity.
         </p>
         <ul>
-            <li>If you want to remain within VMware, the best option is VMware Cloud Foundation since it preserves your current operating model and ecosystem, as well as the commercial exposure which was the reason the exit talks began.</li>
-            <li>Nutanix is a good choice when the main concern is having an appliance-style setup, since its integration offers an appealing advantage. However, the typical compromises that teams face when they leave VMware are high costs and platform dependence.</li>
-            <li>Proxmox is attractive to smaller environments, labs, and teams who want simple KVM virtualization at a lower cost since simplicity is one of its advantages; however, it is not as suitable when one requires a first-class API, uses Terraform as the default workflow, and has a productized route from inventory to guest definitions on a different hypervisor.</li>
-            <li>Red Hat OpenStack is suitable for large IaaS environments due to the dedicated platform engineering it provides. The level of operational responsibility is genuine, and most teams will not be able to justify the cost of the lifecycle unless they already have OpenStack skills in-house.</li>
-            <li>Red Hat OpenShift Virtualization is an option that starts with Kubernetes. It is appropriate in cases where Kubernetes is already the primary operating model and VMs play a secondary role. However, it is not always the most natural choice when replacing a VM-first VMware setup.</li>
-            <li>OpenNebula is aimed at enterprises which want VM operations together with a more extensive private-cloud and multi-tenant approach, this including elastic Kubernetes as part of that offering. When your need is for a complete open private cloud of that type, you should assess it on the basis of those criteria.</li>
+            <li data-i18n="bp.exit.b13">If you want to remain within VMware, the best option is VMware Cloud Foundation since it preserves your current operating model and ecosystem, as well as the commercial exposure which was the reason the exit talks began.</li>
+            <li data-i18n="bp.exit.b14">Nutanix is a good choice when the main concern is having an appliance-style setup, since its integration offers an appealing advantage. However, the typical compromises that teams face when they leave VMware are high costs and platform dependence.</li>
+            <li data-i18n="bp.exit.b15">Proxmox is attractive to smaller environments, labs, and teams who want simple KVM virtualization at a lower cost since simplicity is one of its advantages; however, it is not as suitable when one requires a first-class API, uses Terraform as the default workflow, and has a productized route from inventory to guest definitions on a different hypervisor.</li>
+            <li data-i18n="bp.exit.b16">Red Hat OpenStack is suitable for large IaaS environments due to the dedicated platform engineering it provides. The level of operational responsibility is genuine, and most teams will not be able to justify the cost of the lifecycle unless they already have OpenStack skills in-house.</li>
+            <li data-i18n="bp.exit.b17">Red Hat OpenShift Virtualization is an option that starts with Kubernetes. It is appropriate in cases where Kubernetes is already the primary operating model and VMs play a secondary role. However, it is not always the most natural choice when replacing a VM-first VMware setup.</li>
+            <li data-i18n="bp.exit.b18">OpenNebula is aimed at enterprises which want VM operations together with a more extensive private-cloud and multi-tenant approach, this including elastic Kubernetes as part of that offering. When your need is for a complete open private cloud of that type, you should assess it on the basis of those criteria.</li>
         </ul>
-        <h2>Where kcore fits</h2>
-        <p>
+        <h2 data-i18n="bp.exit.b19">Where kcore fits</h2>
+        <p data-i18n-html="bp.exit.b20">
             kcore is a hypervisor product that takes a virtual machine-first approach for those who want to avoid VMware's pricing without having to switch to another closed-appliance stack. Guests can be managed using <code>kctl</code>, YAML manifests, and the Terraform provider <code>kcorehypervisor/kcore</code>, which communicates with the kcore API via gRPC. This represents a standard IaC workflow, not something that relies on a shell wrapper.
         </p>
-        <p>
+        <p data-i18n-html="bp.exit.b21">
             The price is based on each physical CPU socket per year, not on each core. The Community Edition ISO and <code>kctl</code> are available through <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a> under the Apache-2.0 license. The paid tiers finance the signed distribution, the enterprise update channel, and commercial support. For details on pricing, see <a href="../pricing.html">pricing</a>.
         </p>
-        <p>
+        <p data-i18n-html="bp.exit.b22">
             The system for issuing host updates is set up in such a way that if an update fails, the previous version of the system will be booted and Windows Server and Windows desktop guests will then continue to operate. For a virtual machine to be live migrated, shared Ceph storage is required; control-plane replication between data centers is not achieved through vSphere HA. Only one physical GPU can be allocated to a single VM; NVIDIA vGPU is not available. These limitations are listed on the <a href="../features.html">features</a> page so that you can make realistic plans.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b23">
             Kubernetes can be made available in the form of clusters on nodes that are already part of the kcore cluster, thus allowing for a step-by-step approach in which VM-first operations are maintained before Kubernetes is introduced where it is beneficial. The fact is not that all features of a Kubernetes-first platform become available on day one.
         </p>
-        <p>
+        <p data-i18n-html="bp.exit.b24">
             When it comes to migration, <a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a> creates inventories for either vCenter or Proxmox and then generates Terraform code for kcore, along with a gap report. The <code>convert</code> tool converts an exported disk into qcow2 or raw format using either <code>virt-v2v</code> or <code>qemu-img</code>; it does not directly retrieve the disk's bytes from vCenter. Cutover is still considered a project. The steps that the operator needs to follow are given in the <a href="../docs/user/import.html">import guide</a>. A more detailed separation of the inventory tools, the disk movers, and the Terraform generators is described in <a href="vmware-migration-tools.html">Three kinds of VMware migration tool</a>.
         </p>
-        <h2>Match the platform to the operating model</h2>
-        <p>
+        <h2 data-i18n="bp.exit.b25">Match the platform to the operating model</h2>
+        <p data-i18n="bp.exit.b26">
             The more appropriate comparison is not one of having the most features. It should be about what kind of operating model we aim to adopt for the next five years.
         </p>
         <ul>
-            <li>Proxmox is often chosen by small environments and technical teams.</li>
-            <li>HCI in the form of an appliance usually ends up with Nutanix.</li>
-            <li>Large engineering-focused IaaS often uses OpenStack.</li>
-            <li>Organizations that adopt a Kubernetes-first approach tend to end up choosing OpenShift Virtualization.</li>
-            <li>The needs relating to private clouds and multi-tenant IaaS are usually met using OpenNebula or similar systems.</li>
-            <li>Estate projects that are based on VMs and wish to obtain commercial terms on a per-socket basis, and who have reviewable Terraform and YAML files, a free evaluation ISO, and a migration pathway that generates destination HCL, end up choosing kcore.</li>
+            <li data-i18n="bp.exit.b27">Proxmox is often chosen by small environments and technical teams.</li>
+            <li data-i18n="bp.exit.b28">HCI in the form of an appliance usually ends up with Nutanix.</li>
+            <li data-i18n="bp.exit.b29">Large engineering-focused IaaS often uses OpenStack.</li>
+            <li data-i18n="bp.exit.b30">Organizations that adopt a Kubernetes-first approach tend to end up choosing OpenShift Virtualization.</li>
+            <li data-i18n="bp.exit.b31">The needs relating to private clouds and multi-tenant IaaS are usually met using OpenNebula or similar systems.</li>
+            <li data-i18n="bp.exit.b32">Estate projects that are based on VMs and wish to obtain commercial terms on a per-socket basis, and who have reviewable Terraform and YAML files, a free evaluation ISO, and a migration pathway that generates destination HCL, end up choosing kcore.</li>
         </ul>
-        <p>
+        <p data-i18n="bp.exit.b33">
             If you require NetApp, Veeam, or certification from another vendor as part of your hard gate, then you should refer to that vendor's support matrix for the platform you have chosen. Never assume that a blog post takes the place of carrying out this check.
         </p>
-        <h2>Conclusion</h2>
-        <p>
+        <h2 data-i18n="bp.exit.b34">Conclusion</h2>
+        <p data-i18n="bp.exit.b35">
             Deciding to leave VMware is a strategic choice concerning infrastructure, not merely a matter of cost. If the right replacement isn't made, lock-in will be recreated, additional operational burden will be imposed that you can't staff, or an operating model will be forced upon you which doesn't suit the workloads you still need to run.
         </p>
-        <p>
+        <p data-i18n="bp.exit.b36">
             The most suitable option is the one that matches your architecture, skills, commercial objectives, and cloud timeline; kcore was designed for the approach that teams want which involves a practical exit based on virtual machines with API and Terraform used as normal tools.
         </p>
 
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs/user/import.html">Read the import guide</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.exit.b37" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.exit.b38" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.exit.b39" class="secondary" href="../docs/user/import.html">Read the import guide</a>
+            <a data-i18n="bp.exit.b40" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.exit.b41">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>

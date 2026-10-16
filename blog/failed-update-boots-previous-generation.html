@@ -146,38 +146,38 @@
     <article class="post-content">
         <a href="../blog.html" class="back-link" data-i18n-html="bp.edge.back">← Back to blog</a>
 
-        <p>
+        <p data-i18n="bp.edge.b01">
             Remote sites punish a bad update. A retail closet, a plant rack, and a small POP do not have someone standing there with a USB stick. The question is what the host boots when the update fails.
         </p>
-        <h2>The behaviour</h2>
-        <p>
+        <h2 data-i18n="bp.edge.b02">The behaviour</h2>
+        <p data-i18n="bp.edge.b03">
             A failed kcore host update boots the previous generation. The update is a transaction. If it does not complete, the machine comes back on the generation that was already running. That is the reason to look at kcore for sites where a failed update is an outage you cannot drive to.
         </p>
-        <p>
+        <p data-i18n="bp.edge.b04">
             It is a host property. It is not application rollback, and it is not a guest snapshot. Windows and Linux guests come back because the host came back. Their data still depends on the disk and on whatever backup you run.
         </p>
-        <h2>What you still plan for</h2>
+        <h2 data-i18n="bp.edge.b05">What you still plan for</h2>
         <ul>
-            <li>The previous generation has to be one you are willing to run. Do not treat rollback as a test suite.</li>
-            <li>Shared Ceph is optional. An edge node on local LVM or ZFS is a normal layout when the VM does not need to move.</li>
-            <li>Kubernetes on that node is a later choice. The host update does not require a cluster.</li>
-            <li>There is no integrated backup product yet. kctl backup copies the controller database. Guest backups stay with your tool.</li>
+            <li data-i18n="bp.edge.b06">The previous generation has to be one you are willing to run. Do not treat rollback as a test suite.</li>
+            <li data-i18n="bp.edge.b07">Shared Ceph is optional. An edge node on local LVM or ZFS is a normal layout when the VM does not need to move.</li>
+            <li data-i18n="bp.edge.b08">Kubernetes on that node is a later choice. The host update does not require a cluster.</li>
+            <li data-i18n="bp.edge.b09">There is no integrated backup product yet. kctl backup copies the controller database. Guest backups stay with your tool.</li>
         </ul>
-        <h2>Who should care</h2>
-        <p>
+        <h2 data-i18n="bp.edge.b10">Who should care</h2>
+        <p data-i18n="bp.edge.b11">
             Teams comparing hypervisor updates for unattended sites. If the failure mode is “the ISO update wedged and the shop is dark,” boot-the-previous-generation is the feature to test on one site before you standardise.
         </p>
-        <p>
+        <p data-i18n="bp.edge.b12">
             Download the evaluation ISO, update a lab host, and break an update on purpose. The pass condition is the previous generation, not a green dashboard.
         </p>
 
         <div class="cta-row">
-            <a class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
-            <a class="secondary" href="../pricing.html">See pricing</a>
-            <a class="secondary" href="../docs.html">Read the docs</a>
-            <a class="secondary" href="../index.html#get-started">Book a migration assessment</a>
+            <a data-i18n="bp.edge.b13" class="primary" href="https://github.com/kcorehypervisor/kcore/releases">Download the evaluation ISO</a>
+            <a data-i18n="bp.edge.b14" class="secondary" href="../pricing.html">See pricing</a>
+            <a data-i18n="bp.edge.b15" class="secondary" href="../docs.html">Read the docs</a>
+            <a data-i18n="bp.edge.b16" class="secondary" href="../index.html#get-started">Book a migration assessment</a>
         </div>
-        <p>
+        <p data-i18n-html="bp.edge.b17">
             Questions: <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>.
         </p>
     </article>
