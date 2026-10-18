@@ -1,6 +1,12 @@
 {
-  "latest": "0.5.0",
+  "latest": "0.6.1",
   "versions": [
+    {
+      "version": "0.6.1",
+      "schemaVersion": 59,
+      "iso": "kcoreos-0.6.1-x86_64-linux.iso",
+      "docsUrl": "https://kcorehypervisor.com/docs/0.6.1/"
+    },
     {
       "version": "0.5.0",
       "schemaVersion": 59,
