@@ -6,6 +6,8 @@
   <url><loc>https://kcorehypervisor.com/pricing.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://kcorehypervisor.com/partners.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://kcorehypervisor.com/trademark.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://kcorehypervisor.com/pitch.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://kcorehypervisor.com/assets/kcore-hypervisor-pitch-deck.pdf</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://kcorehypervisor.com/docs.html</loc><changefreq>weekly</changefreq><priority>0.95</priority></url>
   <url><loc>https://kcorehypervisor.com/roadmap.html</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/about.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
