@@ -419,6 +419,9 @@
                                     <li>Cloud Hypervisor runtime</li>
                                     <li>YAML manifest support (<code>kctl create vm -f</code>)</li>
                                     <li>Wait for boot / SSH readiness</li>
+                                    <li>Windows Server and Windows desktop guests</li>
+                                    <li>Serial console (<code>kctl console</code> and the dashboard)</li>
+                                    <li>One physical GPU assigned to one VM</li>
                                 </ul>
                             </div>
                             <div class="shipped-area">
@@ -466,8 +469,11 @@
                                     <li>Capacity-aware scheduler (most-free-first)</li>
                                     <li>Image management (URL+SHA256, upload, pull)</li>
                                     <li>SSH key management</li>
-                                    <li>Dashboard (web UI)</li>
+                                    <li>Dashboard (web UI), with password and TOTP sign-in</li>
                                     <li>Terraform provider (separate repo)</li>
+                                    <li>MCP server for agents, calling the same API</li>
+                                    <li>Host updates as one transaction (<code>ClusterUpdate</code>). A failed boot returns to the previous generation</li>
+                                    <li><code>kcore-infect</code> installs kcoreOS on an existing systemd Linux host</li>
                                 </ul>
                             </div>
                         </div>
@@ -781,6 +787,18 @@
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
                                 <span>Cloud Hypervisor live migration over shared RBD</span>
                             </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Volumes: create, attach, detach, resize, snapshot, restore, and flatten</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>New clusters encrypt OSD disks (<code>encryptOsds</code>, immutable after create)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
+                                <span>CephFS (<code>SharedFilesystem</code>) and S3 via RGW (<code>ObjectStore</code>, <code>ObjectUser</code>) are in the API. MDS and RGW lab automation is still incomplete, and VM virtio-fs is not in yet</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -801,7 +819,7 @@
                         <ul class="detail-list">
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
-                                <span>Events: <code>node.heartbeat.missed</code>, <code>cert.expiry.warning</code>, <code>vm.state.changed</code></span>
+                                <span>Events: <code>node.heartbeat.missed</code>, <code>cert.expiry.warning</code>, <code>vm.created</code>, <code>vm.deleted</code>, <code>vm.state.changed</code>, <code>vm.migrated</code>, <code>ingress.waf.blocked</code>, <code>ingress.waf.detected</code>, <code>ingress.vip.moved</code></span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
@@ -880,24 +898,172 @@
                 </div>
 
                 <!-- =============================== -->
-                <!-- Q4 2026: MIGRATIONS -->
+                <!-- NOV 2026: STORAGE DAY-2 + MOBILITY -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Q4 2026 &mdash; Planned</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">November 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128260;</span> Migrations</h3>
+                        <h3><span class="card-icon shipped">&#128190;</span> Volume snapshots and local-disk migration</h3>
                         <p>
-                            Importers that bring existing guests into kcore. Still to do in Q4.
+                            Day-2 disks beyond the first Ceph fabric. Snapshots cover Ceph RBD, ZFS,
+                            and LVM. A filesystem disk is not snapshotted. LVM and ZFS guests can
+                            move while they run; a filesystem disk stays on its node.
                         </p>
                         <ul class="detail-list">
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>VMware importer</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Snapshot, clone, restore, and flatten for Ceph RBD, ZFS, and LVM. <code>SnapshotPolicy</code> prunes on a schedule</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Changed-block export and import (<code>ListVolumeChangedExtents</code>, <code>ReadVolumeBlocks</code>, <code>WriteVolumeBlocks</code>) for an external backup tool</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>LUKS on an RBD volume (<code>kctl encrypt volume</code>)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Live migration of LVM and ZFS disks: a device-mapper mirror resyncs, then Cloud Hypervisor sends memory. Cold copy remains the fallback</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-entry">
+                    <div class="timeline-dot in-progress"></div>
+                    <div class="timeline-date in-progress">November 2026 &mdash; In progress</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon in-progress">&#127918;</span> GPU</h3>
+                        <p>
+                            One physical GPU can be assigned to one VM. NVIDIA vGPU slices a card
+                            across guests. The slice needs an NVIDIA AI Enterprise vGPU manager
+                            package on the host. Live migration does not move a passed-through device.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>PCI passthrough (<code>--pci</code>). One card, one VM</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>NVIDIA vGPU host and slices (<code>NodeVgpu</code>, <code>kctl node vgpu enable</code>)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-in-progress">In Progress</span></span>
+                                <span>Intel and AMD SR-IOV slices use the same manifest. They have not been run on lab hardware</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-entry">
+                    <div class="timeline-dot in-progress"></div>
+                    <div class="timeline-date in-progress">November 2026 &mdash; In progress</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon in-progress">&#128279;</span> Ingress gateway</h3>
+                        <p>
+                            North-south HTTPS terminates on the cluster. Caddy presents the
+                            certificate, Coraza inspects the request, and keepalived holds the
+                            VIP. A route can target a VM, an external address, or a Kubernetes Service.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>IngressGateway</code>, <code>IngressRoute</code>, and <code>WafPolicy</code> from <code>kctl</code>, the dashboard, MCP, and Terraform</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>ACME (including DNS-01 and wildcards), TCP and SNI routes, rate limits, IP allow and deny lists</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>WAF detect and block modes, with <code>ingress.waf.*</code> webhooks and Caddy metrics in VictoriaMetrics</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Proxmox importer</span>
+                                <span>Container backends, a Gateway API <code>HTTPRoute</code>, and certificates issued by the kcore PKI</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-entry">
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">November 2026 &mdash; Shipped</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon shipped">&#128225;</span> DNS and DHCP provisioner</h3>
+                        <p>
+                            VM networks still get an address from dnsmasq on the host bridge.
+                            A separate provisioner runs PowerDNS and Kea for the networks it owns,
+                            and can read a RouterOS export.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Multi-network PowerDNS and Kea</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>List the leases Kea holds</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Import a RouterOS configuration into the provisioner</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-entry">
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">November 2026 &mdash; Shipped</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon shipped">&#128421;</span> Slurm on kcoreOS</h3>
+                        <p>
+                            Slurm runs on the nodes, not inside a guest. Compute members are
+                            cordoned, so the VM scheduler leaves them to <code>slurmd</code>.
+                            A node belongs to one Slurm cluster.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>SlurmCluster</code>: controller, optional backup controller, login, accounting (<code>slurmdbd</code> and MariaDB), and compute</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>kctl slurm plan</code>, then apply. The dashboard, MCP, and Terraform provider cover the same resource</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- =============================== -->
+                <!-- Q4 2026: MIGRATIONS -->
+                <!-- =============================== -->
+                <div class="timeline-entry">
+                    <div class="timeline-dot in-progress"></div>
+                    <div class="timeline-date in-progress">November 2026 &mdash; In progress</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon in-progress">&#128260;</span> Migrations</h3>
+                        <p>
+                            <code>kcore-migrate</code> inventories a vCenter or Proxmox estate and
+                            converts disks you have already exported. It does not read disk bytes
+                            out of the datastore. Cutover stays a project.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>VMware and Proxmox inventory, a gap report, and Terraform for <code>kcore_vm</code></span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Convert an exported OVA, VMDK, qcow2, or raw disk to qcow2 or raw</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
+                                <span>Read disks straight from vCenter</span>
                             </li>
                         </ul>
                     </div>
@@ -907,21 +1073,25 @@
                 <!-- Q4 2026: OBSERVABILITY -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Q4 2026 &mdash; Planned</div>
+                    <div class="timeline-dot in-progress"></div>
+                    <div class="timeline-date in-progress">November 2026 &mdash; In progress</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128200;</span> Observability &amp; Logging</h3>
+                        <h3><span class="card-icon in-progress">&#128200;</span> Observability &amp; Logging</h3>
                         <p>
-                            Metrics and logs from the controller and the nodes. Still to do in Q4.
+                            Host metrics are scraped inside the cluster. There is no central log store yet.
                         </p>
                         <ul class="detail-list">
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Observability for cluster and node health</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Prometheus <code>node_exporter</code> on every node (TCP 9100) and VictoriaMetrics on controller nodes (TCP 8428, including vmui)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>kctl get cluster-health</code> for nodes, leftover VMs, certificate expiry, and replication conflicts</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Logging from the controller and node agents</span>
+                                <span>Central logging from the controller and node agents</span>
                             </li>
                         </ul>
                     </div>
@@ -931,27 +1101,31 @@
                 <!-- Q4 2026: BARE-METAL -->
                 <!-- =============================== -->
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Q4 2026 &mdash; Planned</div>
+                    <div class="timeline-dot in-progress"></div>
+                    <div class="timeline-date in-progress">November 2026 &mdash; In progress</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128421;</span> Bare-Metal</h3>
+                        <h3><span class="card-icon in-progress">&#128421;</span> Bare-Metal</h3>
                         <p>
-                            PostgreSQL, MySQL, and Kubernetes installed on kcoreOS itself.
-                            Each one is a declarative NixOS service on the node, the same way
-                            the rest of the host is configured. They do not run inside a VM.
+                            PostgreSQL, Kubernetes, and ClickHouse run on kcoreOS itself, declared
+                            through kcore and applied on the node. They do not run inside a VM.
+                            MySQL is the same shape and is not built yet.
                         </p>
                         <ul class="detail-list">
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>PostgreSQL from the NixOS <code>services.postgresql</code> package, declared through kcore and applied on the node</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>PostgreSQL from the NixOS <code>services.postgresql</code> package. One database per node (<code>kind: PostgreSQL</code>)</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Kubernetes on kcoreOS with Cilium, an API VIP, and LVM or ZFS volumes. <code>kctl kubernetes</code>, the dashboard, MCP, and Terraform</span>
                             </li>
                             <li>
                                 <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
                                 <span>MySQL from the NixOS package, declared and applied on the node the same way</span>
                             </li>
                             <li>
-                                <span class="item-status"><span class="status-badge status-planned">Planned</span></span>
-                                <span>Kubernetes from the NixOS package, running on kcoreOS rather than in a guest</span>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>ClickHouse on kcoreOS (<code>kind: ClickhouseCluster</code>): shards, replicas, and ClickHouse Keeper. <code>kctl clickhouse</code> plans, applies, scales, replaces a replica, upgrades, and deletes. A rollout keeps one healthy replica of each shard and Keeper quorum. MCP and the dashboard cover the same resource</span>
                             </li>
                         </ul>
                     </div>
@@ -1018,14 +1192,30 @@
                 </div>
 
                 <div class="timeline-entry">
-                    <div class="timeline-dot planned"></div>
-                    <div class="timeline-date planned">Planned</div>
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">November 2026 &mdash; Shipped</div>
                     <div class="timeline-card">
-                        <h3><span class="card-icon planned">&#128190;</span> Immutable backups</h3>
+                        <h3><span class="card-icon shipped">&#128190;</span> Immutable backups</h3>
                         <p>
-                            Backups that cannot be changed after they are written.
-                            This is not shipped. <code>kctl backup</code> today copies the controller database.
+                            kcore Vault is a separate appliance. It snapshots the guest disks,
+                            pulls the changed blocks, and stores chunks that cannot be deleted
+                            before <code>retain_until</code>. <code>kctl backup</code> is still
+                            only a copy of the controller database.
                         </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Vault 0.1.1: policies, jobs, restore, and a browser console with TOTP</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Immutability: appliance-enforced retention on the ZFS repository, and S3 Object Lock in COMPLIANCE mode</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Incremental backups from changed extents. A restore writes the volume back as Ceph, LVM, or ZFS</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
