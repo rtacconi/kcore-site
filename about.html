@@ -152,6 +152,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
                 <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html">Roadmap</a></li>
@@ -181,12 +182,12 @@
                     We help teams design, build, and operate reliable platforms, and accelerate
                     software delivery with spec-driven code generation and pragmatic AI workflows.
                 </p>
-                <p data-i18n-html="about.desc2">
+                <p>
                     kcore grew out of our infrastructure work. We kept running into the same problem:
                     managing VMs on bare metal was either too manual or required buying into a
-                    heavyweight platform. So we built something that fits how we actually work &mdash;
-                    declarative, API-driven, and simple enough to run on a single node or scale
-                    across many.
+                    heavyweight platform. So we built one that is declarative and API-driven, runs on
+                    a single node, and scales to a cluster with HA, live migration, and Ceph. We run
+                    it in our own lab.
                 </p>
 
                 <div class="services-grid">
@@ -209,8 +210,8 @@
                 </div>
 
                 <h2 data-i18n="about.openCoreTitle">Open core and licensing</h2>
-                <p data-i18n="about.openCoreLead">
-                    kcore uses an open-core model: the platform core is Apache-2.0, and subscriptions cover the official supported distribution, curated production updates, and commercial support. Pricing is per physical CPU socket; details are on the pricing page.
+                <p>
+                    The hypervisor is open core. The platform core is Apache-2.0, and subscriptions cover the signed distribution, the update channel, and support. Pricing is per physical CPU socket. kcore Vault (immutable backups) and kcore Provisioning (bare-metal automation) are separate paid products. See <a href="products.html" class="contact-link">Products</a>.
                 </p>
                 <p style="margin-bottom: 2rem;">
                     <a href="pricing.html" class="contact-link" data-i18n="about.openCoreLink">Pricing and editions</a>
@@ -271,6 +272,9 @@
                         <li><a href="features.html" data-i18n="nav.features">Features</a></li>
                         <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                         <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
