@@ -127,7 +127,7 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
 
             <h1>kcore Vault</h1>
-            <p>kcore Vault 0.1.1 is the backup appliance. It is a separate machine from the hypervisor nodes. This page is the 0.6.1 operator guide: what the dashboard shows, how a backup is built, how immutability is enforced, and how the offsite copy is stored on ZFS or in S3.</p>
+            <p>kcore Vault 0.1.1 is the backup appliance. It is a separate machine from the hypervisor nodes. It is a paid product, versioned on its own, and works with kcore 0.7.0. For the threat model, see <a href="ransomware-resistance.html">Ransomware resistance</a>. This page is the operator guide: what the dashboard shows, how a backup is built, how immutability is enforced, and how the offsite copy is stored on ZFS or in S3.</p>
 
             <h2>Open the console</h2>
             <p>The console listens on <code>https://&lt;appliance-ip&gt;/</code> (port 443). Sign in as <code>admin</code>. The first password is the installer password, <code>kcore</code>, unless <code>services.kcore-vault.dashboard.adminPasswordFile</code> sets another. Change it after the first login. Admin and restore roles must enroll TOTP before the console opens.</p>

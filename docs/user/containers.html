@@ -125,7 +125,7 @@
             
             <h1 data-i18n="userdoc.containers.h1">Container lifecycle</h1>
             <p data-i18n="userdoc.containers.intro">kcore supports running OCI containers alongside VMs. Container support uses nerdctl (preferred) or docker as the runtime backend.</p>
-            <p class="note" data-i18n="userdoc.containers.note">Container support is in early phase. Treat it as an operator workflow for labs and controlled environments, not a full orchestration platform.</p>
+            <p class="note" data-i18n="userdoc.containers.note">Containers run on a single node next to VMs. They are not scheduled across nodes. For that, use a Kubernetes cluster.</p>
 
             <h2 data-i18n="userdoc.containers.h2.direct">Create a container (direct node API)</h2>
             <p data-i18n="userdoc.containers.direct.p">Send a container creation request directly to a specific node agent:</p>
@@ -150,7 +150,7 @@ spec:
             <p>Apply: <code>kctl apply -f container.yaml</code></p>
             </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
             <p data-i18n-html="docs.mode.tf.workload"><code>kcore_workload</code> is the controller workload API. The direct node <code>create container</code> command is kctl only.</p>
 <pre><code>resource "kcore_workload" "my_app" {
   name    = "my-app"
@@ -240,7 +240,7 @@ spec:
             <p class="note">Container storage fields are not yet exposed in the YAML manifest format. Use the CLI to attach storage to containers.</p>
             </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.containerstorage">Provider 0.5.0 has no storage size attribute on <code>kcore_workload</code>.</p>
+            <p data-i18n-html="docs.mode.tf.containerstorage">Provider 0.7.0 has no storage size attribute on <code>kcore_workload</code>.</p>
             </div>
 
             <h2 data-i18n="userdoc.containers.h2.limitations">Current limitations</h2>

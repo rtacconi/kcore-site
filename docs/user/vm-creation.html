@@ -129,10 +129,10 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             
             <h1 data-i18n="userdoc.vmcreate.h1">VM creation modes</h1>
-            <p data-i18n-html="userdoc.vmcreate.intro">VMs are created through the controller API. The patterns below are <code>kcore-kctl create vm</code>, YAML, and Terraform provider <code>kcorehypervisor/kcore</code> 0.5.0.</p>
+            <p data-i18n-html="userdoc.vmcreate.intro">VMs are created through the controller API. The patterns below are <code>kcore-kctl create vm</code>, YAML, and Terraform provider <code>kcorehypervisor/kcore</code> 0.7.0.</p>
             <p class="docs-mode-hint docs-cli-only">Showing <strong>CLI</strong> examples below. Use the toggle above to switch to YAML manifests.</p>
             <p class="docs-mode-hint docs-yaml-only">Showing <strong>YAML</strong> examples below. Use the toggle above for raw <code>kctl</code> commands.</p>
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
 
             <h2 data-i18n="userdoc.vmcreate.h2.req">Requirements</h2>
             <ul>
@@ -217,7 +217,7 @@ spec:
     network = "default"
   }
 }</code></pre>
-            <p data-i18n-html="userdoc.vmcreate.tf.sched">Pin placement with <code>target_node</code> or <code>target_dc</code>. <code>nodeLabels</code> and <code>antiAffinity</code> are CLI and YAML only in provider 0.5.0. Register a key with <code>kcore_ssh_key</code> and set <code>ssh_key_names</code>. <code>cloud_init_user_data</code> is the cloud-init YAML string.</p>
+            <p data-i18n-html="userdoc.vmcreate.tf.sched">Pin placement with <code>target_node</code> or <code>target_dc</code>. <code>nodeLabels</code> and <code>antiAffinity</code> are CLI and YAML only in provider 0.7.0. Register a key with <code>kcore_ssh_key</code> and set <code>ssh_key_names</code>. <code>cloud_init_user_data</code> is the cloud-init YAML string.</p>
             </div>
             <h2 data-i18n="userdoc.vmcreate.h2.ssh">SSH access patterns</h2>
             <ul>

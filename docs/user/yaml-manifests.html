@@ -128,7 +128,7 @@
 <pre><code>kctl apply -f &lt;file.yaml&gt;</code></pre>
 </div>
             <p class="docs-mode-hint docs-cli-only">You are browsing in <strong>CLI</strong> mode. This page is the YAML manifest reference—switch the toggle above to <strong>YAML</strong> for the intended view, or open the <a href="kctl-reference.html">kctl CLI reference</a> for commands only.</p>
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
 
             <!-- ======= VM ======= -->
             <h2>VM manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: VM)</span></h2>
@@ -419,19 +419,21 @@ spec:
             <h3>ClusterUpdate example</h3>
 <pre class="docs-yaml-only"><code>kind: ClusterUpdate
 metadata:
-  name: release-0-4-2
+  name: release-0-7-0
 spec:
   target:
-    version: "0.4.2"
+    version: "0.7.0"
     flakeRef: github:kcorehypervisor/kcore
     flakeRev: "&lt;full-git-sha&gt;"
   selector:
     allNodes: true
   strategy:
-    strategyType: one-at-a-time
+    strategyType: canary
+    canarySoakSeconds: 3600
     maxUnavailable: 1
   approvalPolicy: manual
   updateKind: kcore</code></pre>
+            <p>For a release you rarely need this file. <code>kctl update version set v0.7.0</code> resolves the tag and creates the rollout, canary first. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
             <p>Plan: <code>kctl update cluster plan -f rollout.yaml</code>. Apply: <code>kctl update cluster apply -f rollout.yaml</code>. Other: <code>kctl update cluster get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>reboot</code>.</p>
 
             <!-- ======= Cluster ======= -->
@@ -614,16 +616,16 @@ unchanged VM 'web-01'</code></pre>
 
             <div class="docs-tf-only">
             <h2>Terraform</h2>
-            <p data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
-            <p data-i18n-html="docs.mode.tf.pg">Provider 0.5.0 has no PostgreSQL resource. Declare the database with CLI or YAML.</p>
-            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
+            <p data-i18n-html="docs.mode.tf.pg">Declare the database with <code>kcore_postgresql</code>. Only <code>port</code> changes in place.</p>
+            <p data-i18n-html="docs.mode.tf.gpu">On <code>kcore_vm</code>, <code>gpus</code> takes GPU, NIC, or NVMe names such as <code>radeon0</code>, <code>vgpus</code> takes slices such as <code>A2-4C</code>, and <code>pci_devices</code> takes raw PCI addresses. Use one of the three. The VM must be stopped to change them. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
             <p data-i18n-html="docs.mode.tf.join"><code>kcore_node</code> takes one <code>join_controller</code>, the bootstrap controller address. A list of join controllers is CLI and YAML only.</p>
             <p data-i18n-html="docs.mode.tf.disk"><code>kcore_disk_layout</code> takes <code>layout_nix</code>, a disko expression. The structured <code>spec.diskLayout</code> object is YAML only. <code>layoutNixFile</code> is not a provider attribute.</p>
 <pre><code>terraform {
   required_providers {
     kcore = {
       source  = "kcorehypervisor/kcore"
-      version = "0.5.0"
+      version = "0.7.0"
     }
   }
 }
@@ -757,21 +759,18 @@ resource "kcore_disk_layout" "prod_data_pool" {
 }
 
 resource "kcore_cluster_update" "os" {
-  name                    = "release-0-5-0"
-  version                 = "0.5.0"
+  name                    = "release-0-7-0"
+  version                 = "0.7.0"
   flake_ref               = "github:kcorehypervisor/kcore"
   flake_rev               = "&lt;full-git-sha&gt;"
   nixpkgs_rev             = "&lt;nixpkgs-rev&gt;"
   all_nodes               = true
-  strategy                = "one-at-a-time"
+  strategy                = "canary"
+  canary_soak_seconds     = 3600
   max_unavailable         = 1
-  batch_size              = 1
   drain_vms               = false
   activation              = "auto"
   update_kind             = "kcore"
-  schema_version          = 59
-  previous_schema_version = 56
-  min_compatible_reader   = 56
   approval                = "manual"
   approve                 = false
 

@@ -188,7 +188,18 @@ spec:
   storageSizeBytes: 21474836480</code></pre>
             </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.gpu">On <code>kcore_vm</code>, <code>gpus</code> takes GPU, NIC, or NVMe names such as <code>radeon0</code>, <code>vgpus</code> takes slices such as <code>A2-4C</code>, and <code>pci_devices</code> takes raw PCI addresses. Use one of the three. The VM must be stopped to change them. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+<pre><code>resource "kcore_vm" "gpu_guest" {
+  name               = "gpu-guest"
+  cpu                = 8
+  memory_bytes       = 34359738368
+  storage_backend    = "zfs"
+  storage_size_bytes = 107374182400
+  gpus               = ["radeon0"]
+  image_url          = "https://images.example.com/ubuntu-24.04.qcow2"
+  image_sha256       = "&lt;64-char hex digest&gt;"
+  nic { network = "default" }
+}</code></pre>
             </div>
             <p data-i18n-html="userdoc.gpu.assignPci"><code>--pci 0000:03:00.0</code> still works when you need a raw address. Prefer <code>--gpu</code>.</p>
 
@@ -199,7 +210,7 @@ spec:
 kctl migrate vm gpu-guest --target-node node-b --gpu radeon1</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.gpumigrate">Migration stays <code>kctl migrate vm</code>. Changing <code>gpus</code> on a running VM is refused.</p>
             </div>
             <p data-i18n-html="userdoc.gpu.migrateDisk">The guest disk is not copied. Cold migration of a GPU VM needs the same shared RBD disk as any other cross-node move. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
 

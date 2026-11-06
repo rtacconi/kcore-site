@@ -206,7 +206,9 @@
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.update.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.update.vm.desc">Resize CPU / memory of a VM. Supports <code>--target-node</code>.</td></tr>
-                <tr><td><code>cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>os</code>)</span></td><td>Host OS rollout: <code>plan</code>, <code>apply</code>, <code>get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code> — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</td></tr>
+                <tr><td><code>cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>os</code>)</span></td><td>Host OS rollout: <code>plan</code>, <code>apply</code>, <code>get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>promote</code>, <code>reboot</code> — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</td></tr>
+                <tr><td><code>version set TAG</code></td><td>Move every node to a release tag, canary first. Flags: <code>--dry-run</code>, <code>--drain-vms</code>, <code>--soak 2h</code>, <code>--canary NODE</code>, <code>--no-canary</code>, <code>--flake-ref</code>. Upgrades and downgrades.</td></tr>
+                <tr><td><code>version get</code></td><td>The version set last, and what each node runs.</td></tr>
             </table>
 
             <h2 data-i18n="userdoc.kctlref.h2.node">node</h2>
@@ -248,6 +250,8 @@
                 <tr><td data-i18n-html="userdoc.kctlref.operator.grantrole.cmd"><code>grant-role</code></td><td data-i18n-html="userdoc.kctlref.operator.grantrole.desc">Grant a role. <code>--role</code> is required and takes <code>read-only</code>, <code>vm-admin</code>, or <code>cluster-admin</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.operator.revokerole.cmd"><code>revoke-role</code></td><td data-i18n-html="userdoc.kctlref.operator.revokerole.desc">Remove one role from an operator, named with <code>--role</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.operator.delete.cmd"><code>delete</code></td><td data-i18n="userdoc.kctlref.operator.delete.desc">Delete an operator and all of its role assignments</td></tr>
+                <tr><td><code>set-password NAME</code></td><td>Set the password the operator uses to sign in to the <a href="dashboard.html">dashboard</a>. The operator enrols TOTP on first sign-in.</td></tr>
+                <tr><td><code>reset-2fa NAME</code></td><td>Clear the operator&rsquo;s TOTP and recovery codes and end their web sessions.</td></tr>
             </table>
             <p class="note" data-i18n-html="userdoc.kctlref.operator.note">Removing a role is not the same as revoking the certificate. <code>revoke-role</code> changes what an identity is allowed to do; the certificate itself stays valid until you revoke it with <code>kctl revoke cert --subject kctl:&lt;name&gt;</code>. Revocation takes effect on the next RPC the operator makes, not during the TLS handshake. See <a href="certificates.html">certificates &amp; encryption</a>.</p>
 
@@ -302,6 +306,9 @@
 
             <h2 data-i18n="userdoc.kctlref.h2.diff">diff</h2>
             <p data-i18n-html="userdoc.kctlref.diff.p">Show what applying a manifest would change, without changing anything. <code>-f</code> / <code>--filename</code> is required. Only <code>kind: DiskLayout</code> is supported today &mdash; any other kind exits with an error rather than guessing. See <a href="storage-day2.html">Day-2 operations</a>.</p>
+
+            <h2>agent</h2>
+            <p><code>kctl agent</code> opens a chat page on <code>127.0.0.1</code> where a model drives the cluster with the same tools as <a href="ai-agent.html">kcore MCP</a>. Every change waits for your approval. Flags: <code>--port</code>, <code>--no-browser</code>, <code>--provisioning HOST:PORT</code>, <code>--role read-only|vm-admin</code>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.version">version</h2>
             <p data-i18n-html="userdoc.kctlref.version.p">Print the <code>kctl</code> client version. Takes no flags and does not contact a controller.</p>
