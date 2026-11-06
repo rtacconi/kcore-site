@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore Vault architecture, immutability, ZFS repository, and S3 Object Lock offsite.">
+    <title>kcore Vault - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.6.1/user/vault.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="kcore Vault - kcore documentation">
+    <meta property="og:description" content="kcore Vault architecture, immutability, ZFS repository, and S3 Object Lock offsite.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.6.1/user/vault.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Backup</h4><ul>
+                <li><a href="vault.html" class="active">kcore Vault</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.6.1"></p>
+
+            <h1>kcore Vault</h1>
+            <p>kcore Vault 0.1.1 is the backup appliance. It is a separate machine from the hypervisor nodes. This page is the 0.6.1 operator guide: what the dashboard shows, how a backup is built, how immutability is enforced, and how the offsite copy is stored on ZFS or in S3.</p>
+
+            <h2>Open the console</h2>
+            <p>The console listens on <code>https://&lt;appliance-ip&gt;/</code> (port 443). Sign in as <code>admin</code>. The first password is the installer password, <code>kcore</code>, unless <code>services.kcore-vault.dashboard.adminPasswordFile</code> sets another. Change it after the first login. Admin and restore roles must enroll TOTP before the console opens.</p>
+            <p>The header is the same shape as the provisioning dashboard: the word <strong>kcore</strong> in blue, then <strong>Vault</strong>. Pages are Overview, Inventory, Policies, Jobs, Restore, Files, Verify, Reports, Licence, and Settings. Job rows, toasts, and the active-job tray update from a server-sent event stream. You do not reload the page to see a phase change.</p>
+            <p>Roles are <code>viewer</code>, <code>backup-operator</code>, <code>restore-operator</code>, <code>admin</code>, and <code>security-officer</code>. Deleting a target, lowering retention, installing a licence, or changing a role waits for a security officer. OIDC is optional (<code>dashboard.oidcIssuer</code>).</p>
+
+            <h2>What is installed</h2>
+            <p>The live ISO is not the hypervisor. <code>install-vault</code> erases the OS disk and, when you pass data disks, builds ZFS pool <code>vault</code>.</p>
+            <table>
+                <tr><th>Piece</th><th>On the Lenovo used for 0.1.1</th></tr>
+                <tr><td>OS disk</td><td>Samsung SSD. 512 MB EFI at <code>/boot</code>. The rest is LUKS, then ext4 at <code>/</code>. The initrd unlocks it with <code>/etc/kcore/recovery/crypto_keyfile.bin</code>. A copy of that key is <code>/root/luks-recovery-key.txt</code>.</td></tr>
+                <tr><td>Repository</td><td>Toshiba and Kioxia NVMe drives, one ZFS pool named <code>vault</code>. Dataset <code>vault/repo</code> is mounted at <code>/var/lib/kcore-vault</code>. Compression is <code>zstd</code>. <code>atime</code> is off. <code>ashift</code> is 12.</td></tr>
+            </table>
+            <p>Two data disks of the same size become one striped pool. The pool on this machine is about 476 GB raw and about 462 GB usable. A stripe uses both disks for capacity. Losing either NVMe disk loses the pool. A mirror would keep one copy of every block and would hold about half of that. The installer does not create the mirror for you.</p>
+            <p>The dataset mountpoint is <code>legacy</code>. NixOS mounts it from the filesystem table. A native ZFS mountpoint makes systemd fail the boot and drop to emergency mode, which is what the first reboot of this machine did.</p>
+
+            <h2>Architecture</h2>
+            <pre><code>operator workstation
+    browser https://appliance/  -->  console :443
+                           |
+                           | gRPC
+                           v
+kcore cluster                         kcore Vault appliance
+controller :50051  &lt;-- mTLS --  coordinator :9191
+  backup-operator role                 sqlite catalog
+  client CN kctl:vault                 engine: chunk, encrypt, sign
+node agent                               |
+  freeze, snapshot, expose               +-- fs repository
+  CBT extents                            |     /var/lib/kcore-vault
+  mover :9192  &lt;-- pull -- coordinator   |     ZFS pool vault
+                                         |
+                                         +-- offsite target
+                                               S3 Object Lock
+                                               or another fs path</code></pre>
+            <table>
+                <tr><th>Process</th><th>Port</th><th>Job</th></tr>
+                <tr><td><code>kcore-vault-coordinator</code></td><td>9191</td><td>gRPC API <code>kcore.vault.Vault</code>. Jobs, policies, catalogue, licence.</td></tr>
+                <tr><td><code>kcore-vault-dashboard</code></td><td>443</td><td>HTTPS console. JSON API and the embedded SPA.</td></tr>
+                <tr><td><code>kcore-vault-mover</code></td><td>9192</td><td>Optional reader on a hypervisor node. The coordinator pulls extents. The node does not push.</td></tr>
+                <tr><td><code>kcore-vault</code></td><td></td><td>CLI. Same RPCs as the dashboard.</td></tr>
+            </table>
+            <p>The coordinator talks to the kcore controller with a client certificate. The certificate common name is <code>kctl:vault</code> and the controller role is <code>backup-operator</code>. Set these on the appliance:</p>
+            <pre><code>export KCORE_CONTROLLER_ENDPOINT=https://controller:50051
+export KCORE_CONTROLLER_CA=/etc/kcore/ca.pem
+export KCORE_CONTROLLER_CERT=/etc/kcore/vault.crt
+export KCORE_CONTROLLER_KEY=/etc/kcore/vault.key</code></pre>
+            <p>One backup of a VM runs in this order:</p>
+            <ol>
+                <li>Optional freeze, so the guest filesystem is quiet.</li>
+                <li>Snapshot the volumes on the cluster.</li>
+                <li>Expose the snapshot on the node that holds the disk.</li>
+                <li>Ask for changed-block extents. The first backup of a volume has no parent, so it is a full read.</li>
+                <li>Pull the bytes. <code>--mover auto</code> uses the mover on that node. Otherwise the coordinator calls <code>ReadVolumeBlocks</code>. Blocks on the wire are 1 MiB. Each request window is 64 MiB, because the node holds that window in memory.</li>
+                <li>Chunk, encrypt, and pack the bytes into the repository. The manifest is signed.</li>
+                <li>Unexpose the snapshot.</li>
+            </ol>
+            <p>The next backup of the same VM stores a parent id. Unchanged chunks are not copied again. The catalogue row points at the parent so a restore can rebuild the volume.</p>
+
+            <h2>How immutability works</h2>
+            <p>Every stored object has a <code>retain_until</code> time. Vault will not delete it before that time. Retention only moves forward. A later job can extend the date. It cannot shorten it.</p>
+            <p>There are three grades. The dashboard target table shows the grade for each target.</p>
+            <table>
+                <tr><th>Grade</th><th>Where</th><th>What actually stops a delete</th></tr>
+                <tr><td><code>appliance-enforced</code></td><td><code>fs</code> repository, including the ZFS dataset on the appliance</td><td>The coordinator. Each object has a sibling file <code>&lt;key&gt;.retain</code> containing the unix time. <code>delete_if_expired</code> returns <code>StillLocked</code> until that time. The same bytes written again do not replace the object; only the retention date can move later. With <code>chattr +i</code> enabled, the file is also marked immutable on disk. Root on the appliance can still remove the dataset. ZFS does not add a second lock of its own.</td></tr>
+                <tr><td><code>storage-enforced</code></td><td>S3 bucket created with Object Lock</td><td>The bucket. Vault writes <code>x-amz-object-lock-mode: COMPLIANCE</code> and a retain-until date. COMPLIANCE mode refuses delete and overwrite until that date, including a request from the account that wrote the object. Vault calls <code>PutObjectRetention</code> only to extend the date.</td></tr>
+                <tr><td><code>none</code></td><td>S3 without Object Lock</td><td>Nothing in the bucket. Vault still writes a <code>&lt;key&gt;.retain</code> sidecar and its own delete path checks it. A client with the bucket keys can delete the object directly. Do not use this grade for a backup you have to keep.</td></tr>
+            </table>
+            <p>Pack files, indexes, volume indexes, and the signed backup manifest are the objects. The sqlite file on the appliance is the catalogue. It is not the backup. Deleting a catalogue row does not delete a locked object.</p>
+            <p>GFS retention is a catalogue mark, not a delete. The reconciler runs every 60 seconds (<code>--reconcile-secs</code>). For each policy it keeps the newest hourly backups inside 48 hours, the newest daily for each day, weekly, monthly, and yearly, using the counts on the policy. Anything outside those sets is marked expired. <code>kcore-vault gc run --target local</code> then deletes pack objects whose retention has passed and which no live backup still references. A live backup keeps every object it names. GC will not remove those.</p>
+            <p><code>kcore-vault verify create --full --target local</code> reads the objects back and checks them. A failed verify is a broken backup, not a retention event.</p>
+
+            <h2>Offsite tier</h2>
+            <p>A target is either <code>fs</code> or <code>s3</code>. Those are the only backends the coordinator accepts.</p>
+            <h3>ZFS, as the fs repository</h3>
+            <p>The appliance store is an <code>fs</code> target whose directory is the ZFS dataset. The default location is <code>/var/lib/kcore-vault</code>. The grade is <code>appliance-enforced</code>. ZFS gives you checksums, compression, and a pool that can span the data disks. It does not give you Object Lock. There is no <code>zfs send</code> job in Vault. If you want a second ZFS copy, mount that dataset on a path and register another <code>fs</code> target:</p>
+            <pre><code>kcore-vault target apply local --backend fs --location /var/lib/kcore-vault
+kcore-vault target apply zfs-offsite --backend fs --location /mnt/offsite-zfs/vault</code></pre>
+            <p><code>zfs-offsite</code> is still appliance-enforced. The machine that holds that directory can delete it. Use it when the second copy is another Vault host, or a ZFS dataset you replicate yourself with <code>zfs send</code> outside Vault. Vault will not run that send.</p>
+            <h3>S3 Object Lock</h3>
+            <p>Create the bucket with Object Lock turned on before the first upload. Vault cannot enable Object Lock on a bucket that already has objects. Then:</p>
+            <pre><code>export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_ACCESS_KEY=...
+export AWS_ENDPOINT_URL=https://rgw.example:7480
+export AWS_REGION=us-east-1
+export AWS_S3_FORCE_PATH_STYLE=true
+
+kcore-vault target apply offsite --backend s3 --location s3://vault-backups/prod</code></pre>
+            <p><code>AWS_ENDPOINT_URL</code> is optional. Set it for MinIO, Ceph RGW, or any other S3 API. Leave it unset for AWS. Path-style addressing is required for most on-prem gateways. On NixOS the same values are files and an endpoint, not shell exports:</p>
+            <pre><code>services.kcore-vault.aws = {
+  accessKeyIdFile = "/run/secrets/s3-access-key";
+  secretAccessKeyFile = "/run/secrets/s3-secret-key";
+  endpointUrl = "https://rgw.example:7480";
+};</code></pre>
+            <p>The coordinator reads those files as root and copies them into mode <code>0600</code> files owned by the <code>kcore-vault</code> user. Each object is locked until its own <code>retain_until</code>. That date comes from the backup policy, not from a single bucket default. COMPLIANCE is the mode Vault writes. Governance mode is not used, because governance can be removed by a privileged user.</p>
+            <p>A bucket without Object Lock can still be registered. Pass the CLI flag that grades the target <code>none</code> (the <code>kcore-vault target apply</code> help calls it out as s3 without Object Lock). The dashboard will show grade <code>none</code>. Treat that target as a cache, not as a record.</p>
+            <h3>Copy the local pool to offsite</h3>
+            <pre><code>kcore-vault replicate create --source local --dest offsite
+kcore-vault catalog import --target offsite</code></pre>
+            <p><code>replicate</code> copies the sealed objects. The destination keeps the source encryption keys, because the repository <code>config</code> object is copied as bytes. <code>catalog import</code> reads the manifests on that target and inserts catalogue rows so the next backup can use them as parents. Run the import after the replicate, on the appliance that should list those backups.</p>
+            <p>You can replicate <code>fs</code> to <code>fs</code> (local ZFS to another ZFS path) or <code>fs</code> to <code>s3</code>. The destination grade is the destination's grade. A ZFS path stays appliance-enforced. An Object Lock bucket becomes storage-enforced even when the source was only appliance-enforced.</p>
+
+            <h2>Policies, restore, verify</h2>
+            <pre><code>kcore-vault policy apply nightly --schedule @daily --vm web1 --target local \
+  --keep-daily 14 --keep-weekly 8 --keep-monthly 12</code></pre>
+            <p>The schedule is the reconciler's clock. <code>@daily</code> enqueues a job when the last successful backup for that policy is older than a day. <code>--keep-*</code> is the GFS set described above. The dashboard Policies page writes the same record.</p>
+            <p>Restore writes a volume back through the cluster API. On the Restore page you name the backup id, the source volume, and the destination. The storage class on that form is where the hypervisor puts the restored disk: <code>ceph</code>, <code>lvm</code>, or <code>zfs</code>. That class is the cluster disk, not the Vault pool. For <code>lvm</code> and <code>zfs</code> you also name the node.</p>
+            <p>A file restore, used by the CLI against a path, writes the bytes to a file on the appliance. It does not create a VM.</p>
+
+            <h2>Licence</h2>
+            <p>The licence is a signed JSON document. The fields covered by the Ed25519 signature are <code>customer</code>, <code>expires_unix</code>, <code>limit_tib</code>, <code>limit_vms</code>, and <code>mode</code>. The signature is hex, over the canonical JSON of those fields, checked with <code>KCORE_VAULT_LICENCE_PUBKEY</code>.</p>
+            <p>With no row in the database the status is <strong>missing</strong>. The Overview pill is red. After a signature check that passes, and the expiry is still in the future, the status is <strong>ok</strong> on the dashboard (the API word is <code>valid</code>) and the pill is green. <strong>expired</strong> is red.</p>
+            <p><code>mode</code> is <code>advisory</code> or <code>enforce</code>. Advisory mode records the licence and still accepts backup jobs when the licence is missing or expired. Enforce mode rejects new backup jobs unless the status is valid. Restores are not gated by that check. Set <code>services.kcore-vault.enforceLicence = true</code> on the appliance when a missing licence must stop backups.</p>
+            <p>Install the document from the Licence page, or with <code>kcore-vault licence install</code>. The text is either JSON or a small set of <code>key = value</code> lines: <code>customer</code>, <code>expires_unix</code>, <code>mode</code>, <code>limit_vms</code>, <code>limit_tib</code>, <code>signature</code>.</p>
+
+            <h2>Ports on the appliance</h2>
+            <table>
+                <tr><th>Port</th><th>Bind</th><th>Process</th></tr>
+                <tr><td>22</td><td>all interfaces</td><td>SSH</td></tr>
+                <tr><td>443</td><td>0.0.0.0</td><td>console</td></tr>
+                <tr><td>9191</td><td>all interfaces</td><td>coordinator</td></tr>
+                <tr><td>9091</td><td>all interfaces, live ISO only</td><td>installer. Gone after the installed system boots.</td></tr>
+            </table>
+            <p>The local screen on the appliance is the vault console. It is read-only. Administration is the browser at <code>https://&lt;appliance-ip&gt;/</code>, or <code>kcore-vault</code> over SSH.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom">
+        <p><a href="../../partners.html" data-i18n="footer.partners">Partners</a> · <a href="../../trademark.html" data-i18n="footer.trademark">Trademark</a></p>
+        <p>&copy; 2026 Tacconi Consulting Ltd.</p>
+    </div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

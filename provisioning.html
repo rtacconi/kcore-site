@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bare-metal automation for kcore. Redfish and IPMI, UEFI HTTP boot, BIOS and RAID profiles, disk verification, and DHCP and DNS from one controller.">
+    <title>kcore Provisioning - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/provisioning.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="kcore Provisioning - kcore hypervisor">
+    <meta property="og:description" content="Bare-metal automation for kcore. Redfish and IPMI, UEFI HTTP boot, BIOS and RAID profiles, disk verification, and DHCP and DNS from one controller.">
+    <meta property="og:url" content="https://kcorehypervisor.com/provisioning.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/code-color.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>kcore Provisioning</h1>
+            <p class="page-lead">Racked servers become kcore nodes without a keyboard, a USB stick, or a trip to the machine room. It talks to the BMC and hands finished nodes to your cluster.</p>
+            <div class="cta-row">
+                <a class="btn btn-primary" href="mailto:team@tacconiconsulting.com?subject=kcore%20Provisioning%20quote">Ask for a quote</a>
+                <a class="btn btn-secondary" href="docs/user/provisioning.html">Operator guide</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <h2>What it does</h2>
+            <div class="product-grid">
+                <article class="product-card"><h3>Discovers</h3><p>Redfish returns CPU, memory, drives, NICs, serial number, and BMC firmware. A machine is known by serial or any NIC MAC.</p></article>
+                <article class="product-card"><h3>Boots</h3><p>UEFI HTTP boot, no TFTP. The machine fetches a per-machine GRUB config and a checksummed kcoreOS image.</p></article>
+                <article class="product-card"><h3>Controls power</h3><p>On, off, reset, and one-time boot override over Redfish. IPMI for BMCs that do not speak Redfish.</p></article>
+                <article class="product-card"><h3>Configures</h3><p>BIOS attributes, RAID volumes, non-RAID mode, and virtual media. Planning shows the difference before it applies.</p></article>
+                <article class="product-card"><h3>Checks disks</h3><p>Write, power-cycle, verify on every drive, with a verdict each. An optional wipe runs only after all drives verified.</p></article>
+                <article class="product-card"><h3>Runs the network</h3><p>Kea and PowerDNS for the networks it owns: reservations, leases, and records, with a view in the dashboard.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container content-narrow">
+            <h2>From rack to node</h2>
+            <ol>
+                <li>Register an image. The controller checks its SHA-256. An unverified image cannot be a boot target.</li>
+                <li>Discover the machine from its BMC.</li>
+                <li>Run the disk check. Stop if a drive fails.</li>
+                <li>Apply a machine profile for BIOS and RAID.</li>
+                <li>Boot kcoreOS, install, and approve the node into the cluster with <code>kctl</code>.</li>
+            </ol>
+            <h2>Limits</h2>
+            <ul>
+                <li>One controller with a local SQLite database. It is not an HA service.</li>
+                <li>Server vendors differ in Redfish. Test a profile on one machine before a rack.</li>
+                <li>Provisioning 0.1.0 is versioned separately from kcore. It is documented against 0.7.0. Price is by quote.</li>
+            </ul>
+            <div class="cta-row"><a class="btn btn-primary" href="mailto:team@tacconiconsulting.com?subject=kcore%20Provisioning%20quote">Ask for a quote</a><a class="btn btn-secondary" href="products.html">All products</a></div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
+                        <li><a href="partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/code-color.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

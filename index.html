@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Leave costly VMware renewals behind. kcore is an open-core NixOS hypervisor with Windows guests, GPU passthrough, atomic updates, and migration help from VMware and Proxmox.">
-    <title>kcore hypervisor — VMware alternative for edge &amp; datacenters</title>
+    <meta name="description" content="kcore is a NixOS hypervisor with HA VMs, live migration, Ceph storage, canary updates that roll back, a dashboard, Terraform, and MCP. Optional Vault backups and bare-metal Provisioning.">
+    <title>kcore hypervisor — HA, live migration, Ceph, and updates that roll back</title>
     <link rel="canonical" href="https://kcorehypervisor.com/">
     <meta name="robots" content="index, follow">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://kcorehypervisor.com/sitemap.xml">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="kcore hypervisor">
-    <meta property="og:title" content="kcore hypervisor — VMware alternative for edge &amp; datacenters">
-    <meta property="og:description" content="Open-core NixOS hypervisor: Windows guests, GPU passthrough, atomic rollback. Migrate from VMware or Proxmox.">
+    <meta property="og:title" content="kcore hypervisor — HA, live migration, Ceph, and updates that roll back">
+    <meta property="og:description" content="NixOS hypervisor with HA VMs, live migration, Ceph, canary updates, dashboard, Terraform, and MCP. Vault backups and bare-metal Provisioning.">
     <meta property="og:url" content="https://kcorehypervisor.com/">
     <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta property="og:locale" content="en_GB">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="kcore hypervisor">
-    <meta name="twitter:description" content="Open-core hypervisor for VMware exit: Windows, GPU passthrough, atomic updates. Hire us to migrate.">
+    <meta name="twitter:description" content="HA VMs, live migration, Ceph, canary updates that roll back. Vault and Provisioning as add-ons.">
     <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <script type="application/ld+json">
     {"@context":"https://schema.org","@graph":[
-      {"@type":"WebSite","name":"kcore hypervisor","url":"https://kcorehypervisor.com/","description":"Open-core virtualization for edge and datacenters. VMware and Proxmox migration.","publisher":{"@type":"Organization","name":"Tacconi Consulting Ltd","url":"https://kcorehypervisor.com/about.html","email":"team@tacconiconsulting.com"}},
-      {"@type":"SoftwareApplication","name":"kcore","applicationCategory":"BusinessApplication","operatingSystem":"NixOS","license":"https://www.apache.org/licenses/LICENSE-2.0","description":"Open-core hypervisor with Windows guest support, GPU passthrough, and declarative operations.","url":"https://kcorehypervisor.com/","codeRepository":"https://github.com/kcorehypervisor/kcore","downloadUrl":"https://github.com/kcorehypervisor/kcore/releases"}
+      {"@type":"WebSite","name":"kcore hypervisor","url":"https://kcorehypervisor.com/","description":"Hypervisor with HA, live migration, Ceph, and updates that roll back. Vault backups and bare-metal Provisioning.","publisher":{"@type":"Organization","name":"Tacconi Consulting Ltd","url":"https://kcorehypervisor.com/about.html","email":"team@tacconiconsulting.com"}},
+      {"@type":"SoftwareApplication","name":"kcore","applicationCategory":"BusinessApplication","operatingSystem":"NixOS","license":"https://www.apache.org/licenses/LICENSE-2.0","softwareVersion":"0.7.0","description":"NixOS hypervisor with HA VMs, live migration, Ceph storage, canary updates, a dashboard, Terraform, and MCP.","url":"https://kcorehypervisor.com/","codeRepository":"https://github.com/kcorehypervisor/kcore","downloadUrl":"https://github.com/kcorehypervisor/kcore/releases"}
     ]}
     </script>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/code-color.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.0/dist/bundle/asciinema-player.css">
     <style>
         .quickstart-demo {
@@ -161,6 +162,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
                 <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
@@ -175,22 +177,22 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title" data-i18n-html="hero.title">
-                    A practical exit from<br>
-                    <span class="gradient-text">VMware pricing</span>
+                <p class="hero-secondary-link"><a href="docs/user/whats-new-0-7-0.html">kcore 0.7.0: canary updates, automatic revert, vGPU</a></p>
+                <h1 class="hero-title">
+                    A hypervisor for<br>
+                    <span class="gradient-text">real infrastructure</span>
                 </h1>
-                <p class="hero-subtitle" data-i18n="hero.subtitle">
-                    Per-socket licensing, hosts that boot the previous generation if an update fails, and Windows guests. Download the evaluation ISO, or hire us to move an estate from VMware or Proxmox.
+                <p class="hero-subtitle">
+                    VMs, containers, and Kubernetes on one immutable NixOS base. HA with fenced failover, live migration, Ceph storage, and updates that try one node first and put it back if it fails. Run it from a dashboard, <code>kctl</code>, Terraform, or an AI agent that asks before it acts.
                 </p>
                 <div class="hero-buttons">
-                    <a href="#get-started" class="btn btn-primary" data-i18n="hero.hire">Book a migration assessment</a>
-                    <a href="pricing.html" class="btn btn-secondary" data-i18n="hero.pricing">See pricing</a>
+                    <a href="https://github.com/kcorehypervisor/kcore/releases" class="btn btn-primary">Download the ISO</a>
+                    <a href="products.html" class="btn btn-secondary">Products and pricing</a>
                 </div>
                 <p class="hero-secondary-link">
-                    <a href="https://github.com/kcorehypervisor/kcore/releases" data-i18n="hero.download">Download the evaluation ISO</a>
-                </p>
-                <p class="hero-secondary-link" data-i18n-html="hero.techHint">
-                    The install walkthrough is further down this page. API and Terraform detail is in <a href="docs.html">Docs</a>.
+                    <a href="#get-started">Book a migration assessment</a>
+                    &middot;
+                    <a href="docs.html">Read the docs</a>
                 </p>
             </div>
         </div>
@@ -202,21 +204,33 @@
     <section class="audience" id="who">
         <div class="container">
             <div class="section-header">
-                <h2 data-i18n="audience.title">Three decisions this page is for</h2>
-                <p data-i18n="audience.subtitle">Pick the one that matches the renewal in front of you.</p>
+                <h2>One platform, several jobs</h2>
+                <p>The same cluster runs the private cloud, the edge rack, and the GPU box.</p>
             </div>
             <div class="audience-grid">
                 <article class="audience-card">
-                    <h3 data-i18n="audience.csp.title">Hosting providers leaving VCSP</h3>
-                    <p data-i18n="audience.csp.desc">Current customer contracts can still run. New commitment contracts and renewals cannot. We assess the estate and quote a move onto kcore before the term ends.</p>
+                    <h3>Private cloud in a datacenter</h3>
+                    <p>Three or more hosts, shared Ceph, VMs that restart on another host when one dies, and live migration to empty a node for maintenance.</p>
                 </article>
                 <article class="audience-card">
-                    <h3 data-i18n="audience.onprem.title">On-prem estates facing a Broadcom quote</h3>
-                    <p data-i18n="audience.onprem.desc">kcore is priced per CPU socket per year, not per core, and there is no 72-core order minimum. Compare that number with the renewal before you re-platform.</p>
+                    <h3>Leaving VMware or Proxmox</h3>
+                    <p>Priced per CPU socket, not per core. Windows guests run next to Linux. kcore-migrate inventories the estate and converts exported disks. A hosting provider facing the VCSP end date can ask for an estate assessment below.</p>
                 </article>
                 <article class="audience-card">
-                    <h3 data-i18n="audience.edge.title">Sites where a bad update is an outage</h3>
-                    <p data-i18n="audience.edge.desc">Each host update is one transaction. If it fails, the machine boots the previous generation. That is the reason to look at kcore for retail, plant, and remote racks.</p>
+                    <h3>Edge and remote sites</h3>
+                    <p>The host is immutable. An update soaks on one node first and a failed boot returns to the previous generation without a call-out. Provisioning brings a rack up over the BMC.</p>
+                </article>
+                <article class="audience-card">
+                    <h3>GPU and AI work</h3>
+                    <p>Whole-GPU passthrough, NVIDIA vGPU slices, and Slurm clusters as host services. A model can drive the cluster through MCP.</p>
+                </article>
+                <article class="audience-card">
+                    <h3>Kubernetes and databases</h3>
+                    <p>Kubernetes clusters on kcore nodes with Cilium and local or Ceph storage. A PostgreSQL database is one manifest.</p>
+                </article>
+                <article class="audience-card">
+                    <h3>Sites that have to prove things</h3>
+                    <p>mTLS on every call, roles, an append-only audit log, a compliance report, an SBOM, and immutable backups that a stolen credential cannot delete.</p>
                 </article>
             </div>
         </div>
@@ -226,110 +240,146 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <h2 data-i18n="features.title">What you are actually buying</h2>
-                <p data-i18n="features.subtitle">Outcomes a renewal conversation can use. Stack detail stays in the docs.</p>
+                <h2>What is in the box</h2>
+                <p>Everything here ships in 0.7.0. Limits are listed further down.</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                     </div>
-                    <h3 data-i18n="features.atomic.title">A failed update boots the last good host</h3>
-                    <p data-i18n="features.atomic.desc">Every host change is one transaction. If an update breaks the machine, it boots the previous generation. The host operating system is immutable.</p>
+                    <h3>Updates that roll back</h3>
+                    <p><code>kctl update version set v0.7.0</code> updates one canary node, compares it with the rest, then moves on one node at a time. A node that fails its health check boots the previous generation.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
                     </div>
-                    <h3 data-i18n="features.windows.title">Windows guests</h3>
-                    <p data-i18n="features.windows.desc">Windows Server and Windows desktop guests run next to Linux. A mixed estate does not have to split platforms to leave VMware.</p>
+                    <h3>HA for VMs</h3>
+                    <p>A host that stops heartbeating is fenced at the storage layer, then its VMs restart on the survivors by priority. Anti-affinity and admission control are built in.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-                            <path d="M9 9h6v6H9z"></path>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     </div>
-                    <h3 data-i18n="features.gpu.title">One physical GPU per VM</h3>
-                    <p data-i18n="features.gpu.desc">A physical GPU can be assigned to one VM. Licensed NVIDIA vGPU, where many VMs share one card, is not available yet.</p>
+                    <h3>Live migration</h3>
+                    <p>Cloud Hypervisor streams memory over TCP while both hosts map the same Ceph image. Drain a node and its VMs move.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                            <path d="M2 17l10 5 10-5"></path>
-                            <path d="M2 12l10 5 10-5"></path>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
                     </div>
-                    <h3 data-i18n="features.ha.title">Move VMs when the disk is shared</h3>
-                    <p data-i18n="features.ha.desc">VMs move between hosts when their disks are on shared Ceph storage. The control plane can replicate across datacenters. This is not vSphere HA, and live migration needs Ceph.</p>
+                    <h3>kcore SAN on Ceph</h3>
+                    <p>A <code>CephCluster</code> resource builds the cluster: encrypted OSDs, a replicated pool, RBD disks, snapshots, and member removal that waits for the data to move.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                     </div>
-                    <h3 data-i18n="features.migrate.title">Migration is a project, not a button</h3>
-                    <p data-i18n="features.migrate.desc">kcore-migrate inventories a vCenter or Proxmox estate and converts exported disks to qcow2 or raw. It does not pull disks straight from vCenter. Cutover of a whole estate is still a project.</p>
+                    <h3>Dashboard</h3>
+                    <p>Sign in with a password and TOTP. VMs, nodes, storage, releases, HA events, and a serial console in the browser. Every page names its <code>kctl</code> command.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     </div>
-                    <h3 data-i18n="features.cost.title">Per socket, not per core</h3>
-                    <p data-i18n="features.cost.desc">You pay per CPU socket per year. The evaluation ISO is free. There is no per-core meter and no 72-core minimum.</p>
+                    <h3>API, Terraform, YAML</h3>
+                    <p>One controller API behind <code>kctl</code>, the dashboard, and a Terraform provider with resources for VMs, networks, Ceph, Kubernetes, ingress, updates, and backups.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M9 9h6v6H9z"></path></svg>
+                    </div>
+                    <h3>MCP and an AI agent</h3>
+                    <p>Editors speak MCP. <code>kctl agent</code> is a chat page in the binary. Both ask, show a plan, and change nothing until you approve.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M9 9h6v6H9z"></path></svg>
+                    </div>
+                    <h3>GPUs</h3>
+                    <p>Name a GPU and give it to a VM. Slice an NVIDIA card into vGPUs. Cold migration lands the guest on a free card of the same family. Intel and AMD SR-IOV slices use the same manifest and are not yet run on lab hardware.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
+                    <h3>Windows, Linux, containers</h3>
+                    <p>Windows Server and desktop guests, Linux guests, OCI containers on a node, and Kubernetes clusters, managed with the same tools.</p>
                 </div>
             </div>
             <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
-                <span data-i18n="features.techMore">API, Terraform, and architecture notes:</span>
+                <a href="features.html" style="color: var(--accent-primary);">Full feature list</a>
+                &middot;
                 <a href="docs.html" style="color: var(--accent-primary);">Docs</a>
-                ·
-                <a href="features.html" style="color: var(--accent-primary);">Features</a>
             </p>
         </div>
     </section>
 
-    <!-- Honest capability status -->
-    <section id="capability" class="features" style="padding-top: 2rem; padding-bottom: 3rem; background: var(--bg-secondary); border-top: 1px solid var(--border-primary); border-bottom: 1px solid var(--border-primary);">
+    <section id="products" class="features" style="padding-top: 3rem; padding-bottom: 3rem; background: var(--bg-secondary); border-top: 1px solid var(--border-primary); border-bottom: 1px solid var(--border-primary);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Three products, one platform</h2>
+                <p>The hypervisor is open core. Backup and bare-metal provisioning are paid products that plug into it.</p>
+            </div>
+            <div class="product-grid">
+                <article class="product-card">
+                    <h3>kcore hypervisor</h3>
+                    <p class="product-kind">Open core</p>
+                    <p>The controller, node agent, <code>kctl</code>, the dashboard, and the provider. The community ISO is free. Signed ISOs and support are per socket.</p>
+                    <div class="product-links"><a class="btn btn-secondary" href="products.html#hypervisor">Details</a><a class="btn btn-secondary" href="pricing.html">Pricing</a></div>
+                </article>
+                <article class="product-card">
+                    <h3>kcore Vault</h3>
+                    <p class="product-kind">Paid</p>
+                    <p>A backup appliance on its own machine. Encrypted, signed, retention that only moves forward, and an offsite copy in an S3 bucket with Object Lock.</p>
+                    <div class="product-links"><a class="btn btn-secondary" href="vault.html">Details</a><a class="btn btn-secondary" href="docs/user/ransomware-resistance.html">Ransomware resistance</a></div>
+                </article>
+                <article class="product-card">
+                    <h3>kcore Provisioning</h3>
+                    <p class="product-kind">Paid</p>
+                    <p>Bare metal over the BMC. Redfish and IPMI, UEFI HTTP boot, BIOS and RAID profiles, disk write-verify, and DHCP and DNS records. A rack goes from power-off to approved nodes.</p>
+                    <div class="product-links"><a class="btn btn-secondary" href="provisioning.html">Details</a><a class="btn btn-secondary" href="docs/user/provisioning.html">Docs</a></div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="capability" class="features" style="padding-top: 3rem; padding-bottom: 3rem;">
         <div class="container">
             <div class="section-header" style="max-width: 800px; margin: 0 auto 2rem; text-align: center;">
-                <h2 data-i18n="capability.title">What works today — and what we are building</h2>
-                <p data-i18n="capability.subtitle">Straight answers for people evaluating a VMware exit</p>
+                <h2>Where the edges are</h2>
+                <p>Read these before you plan a move.</p>
             </div>
-            <div style="max-width: 880px; margin: 0 auto; display: grid; gap: 1rem;">
-                <div style="padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem;">
-                    <strong style="color: var(--success);">Available now</strong>
-                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0; line-height: 1.65;" data-i18n="capability.now">
-                        Evaluation ISO and kctl on GitHub Releases. Windows guests. A physical GPU assigned to one VM. Atomic host updates and rollback. Multi-node clusters. Live migration when disks are on Ceph. Control-plane replication across datacenters. A provisioner configures servers over IPMI and Redfish and netboots kcore with UEFI HTTP boot.
-                    </p>
+            <div class="status-columns">
+                <div class="status-col">
+                    <h3 style="color: var(--success);">Needs shared storage</h3>
+                    <ul>
+                        <li>Live migration and failover need the disk on Ceph.</li>
+                        <li>A ZFS VM with a current replica restarts on its replica node. Other local disks stay on their host.</li>
+                        <li>Devices passed through with VFIO do not live-migrate. Intel and AMD vGPU slices are untested on hardware.</li>
+                    </ul>
                 </div>
-                <div style="padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem;">
-                    <strong style="color: var(--accent-primary);">In progress / under planning</strong>
-                    <p style="color: var(--text-secondary); margin: 0.5rem 0 0; line-height: 1.65;" data-i18n="capability.soon">kcore-migrate inventories VMware and Proxmox and converts exported disks. A direct vCenter disk read is not included. NVIDIA vGPU is not shipped. There is no integrated backup product yet. Immutable backups are planned. kctl backup copies the controller database.</p>
+                <div class="status-col">
+                    <h3 style="color: var(--accent-primary);">Operations</h3>
+                    <ul>
+                        <li>Dashboard sign-in is password and TOTP. There is no SSO yet.</li>
+                        <li>Update bundles for air-gapped sites are designed, not shipped. Use a tag mirror.</li>
+                        <li>A 0.6.x cluster takes one hand-written update to reach 0.7.0.</li>
+                    </ul>
                 </div>
-                <p style="text-align: center; margin-top: 0.5rem;">
-                    <a href="#get-started" class="btn btn-primary" data-i18n="capability.hire">Book a migration assessment</a>
-                    <a href="docs.html" class="btn btn-secondary" style="margin-left: 0.5rem;" data-i18n="capability.docs">Technical docs</a>
-                </p>
+                <div class="status-col">
+                    <h3 style="color: var(--text-primary);">Migration</h3>
+                    <ul>
+                        <li>kcore-migrate inventories vCenter and Proxmox and converts exported disks. It does not read disks straight from vCenter.</li>
+                        <li>Moving a whole estate is still a project. We run it with you.</li>
+                    </ul>
+                </div>
             </div>
+            <p style="text-align: center; margin-top: 1.5rem;">
+                <a href="#get-started" class="btn btn-primary">Book a migration assessment</a>
+                <a href="docs.html" class="btn btn-secondary" style="margin-left: 0.5rem;">Technical docs</a>
+            </p>
         </div>
     </section>
 
@@ -424,28 +474,27 @@ Created:     2026-03-10 14:23:45</span>
         </div>
     </section>
 
-    <!-- Platform teams (tech depth lives in Docs) -->
     <section id="ai" class="ai-section">
         <div class="container">
             <div class="section-header" style="text-align: center; max-width: 720px; margin: 0 auto 2rem;">
-                <h2 data-i18n="ai.title">Built for platform teams too</h2>
-                <p class="section-lead" data-i18n="ai.subtitle">
-                    Declarative APIs, Terraform, and an MCP server for AI agents. Deep reference material is in Docs—this homepage stays focused on operators leaving VMware.
+                <h2>Automate it, or ask it</h2>
+                <p class="section-lead">
+                    Terraform and YAML for review. An MCP server for Cursor, VS Code, and Claude Desktop. <code>kctl agent</code> for a chat page that drives the cluster with your role and your approval on every change.
                 </p>
-                <a href="docs.html" class="btn btn-secondary" data-i18n="ai.docsCta">Open documentation</a>
+                <a href="docs/user/ai-agent.html" class="btn btn-secondary">MCP and the agent</a>
+                <a href="docs/user/terraform.html" class="btn btn-secondary" style="margin-left: 0.5rem;">Terraform provider</a>
             </div>
         </div>
     </section>
 
-    <!-- Open core & licensing -->
     <section id="licensing" class="features" style="padding-top: 2.5rem; padding-bottom: 2.5rem; background: var(--bg-secondary); border-top: 1px solid var(--border-primary); border-bottom: 1px solid var(--border-primary);">
         <div class="container">
             <div class="section-header" style="max-width: 760px; margin: 0 auto; text-align: center;">
-                <h2 data-i18n="opencore.title">Open core pricing</h2>
-                <p class="section-lead" data-i18n="opencore.subtitle" style="margin-top: 0.75rem;">
-                    Community ISO free on GitHub Releases. Standard, Premium, and Enterprise per CPU socket for signed ISOs, the enterprise channel, and support.
+                <h2>Pricing</h2>
+                <p class="section-lead" style="margin-top: 0.75rem;">
+                    The community ISO is free on GitHub Releases. Standard, Premium, and Enterprise are per CPU socket per year, for signed ISOs, the enterprise channel, and support. Vault and Provisioning are quoted separately.
                 </p>
-                <a href="pricing.html" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;" data-i18n="opencore.cta">Pricing and Buy</a>
+                <a href="pricing.html" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;">Pricing and Buy</a>
             </div>
         </div>
     </section>
@@ -454,8 +503,8 @@ Created:     2026-03-10 14:23:45</span>
     <section id="get-started" class="cta">
         <div class="container">
             <div class="cta-content">
-                <h2 data-i18n="cta.title">Get a fit or a no-fit</h2>
-                <p data-i18n="cta.desc">Send socket count, roughly how many Windows and Linux guests, and whether you are a hosting provider or an on-prem estate. We reply with whether kcore is a sensible target and what a migration project looks like.</p>
+                <h2>Tell us about your estate</h2>
+                <p>Send socket count, roughly how many Windows and Linux guests, and what you are moving from. We reply with whether kcore fits, what a project looks like, and which of the three products you need.</p>
                 <form id="assessment" class="assessment-form">
                     <label>
                         <span data-i18n="assess.name">Name</span>
@@ -518,6 +567,9 @@ Created:     2026-03-10 14:23:45</span>
                         <li><a href="features.html" data-i18n="nav.features">Features</a></li>
                         <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                         <li><a href="roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -534,6 +586,7 @@ Created:     2026-03-10 14:23:45</span>
                         <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
                         <li><a href="https://github.com/kcorehypervisor/kcore/releases">Download ISO</a></li>
                         <li><a href="partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="pitch.html">Pitch deck</a></li>
                         <li><a href="trademark.html" data-i18n="footer.trademark">Trademark</a></li>
                         <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
                     </ul>
@@ -592,6 +645,7 @@ Created:     2026-03-10 14:23:45</span>
     <script src="js/commerce.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/code-color.js"></script>
     <script>
         (function () {
             function pinHeader() {

@@ -17,6 +17,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/code-color.css">
     <link rel="stylesheet" href="../../css/docs-mode.css">
     <script src="../../js/docs-mode.js"></script>
     <style>
@@ -43,7 +44,7 @@
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
+        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../products.html" data-i18n="nav.products">Products</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
     </div></nav>
 
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
@@ -59,23 +60,62 @@
 
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
-                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
                 <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html" class="active">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" class="active" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
             <p class="docs-version-banner" data-docs-version="latest"></p>
@@ -122,26 +162,63 @@
             </table>
 
             <h3 data-i18n="userdoc.storage.filesystemExample">Filesystem example</h3>
+<div class="docs-cli-only">
 <pre><code>kctl node install \
   --os-disk /dev/sda \
   --data-disk /dev/sdb \
   --storage-backend filesystem</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>resource "kcore_node" "files" {
+  bootstrap       = true
+  address         = "192.168.40.107:9091"
+  os_disk         = "/dev/sda"
+  data_disk       = ["/dev/sdb"]
+  storage_backend = "filesystem"
+  certs_dir       = "${path.module}/certs"
+  run_controller  = true
+}</code></pre>
+</div>
 
             <h3 data-i18n="userdoc.storage.lvmExample">LVM example</h3>
+<div class="docs-cli-only">
 <pre><code>kctl node install \
   --os-disk /dev/sda \
   --data-disk /dev/sdb \
   --storage-backend lvm \
   --lvm-vg-name vg_kcore \
   --lvm-lv-prefix kcore-</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>resource "kcore_node" "lvm" {
+  address         = "192.168.40.105:9091"
+  os_disk         = "/dev/sda"
+  data_disk       = ["/dev/sdb"]
+  storage_backend = "lvm"
+  certs_dir       = "${path.module}/certs"
+  join_controller = "192.168.40.107:9090"
+}</code></pre>
+</div>
 
             <h3 data-i18n="userdoc.storage.zfsExample">ZFS example</h3>
+<div class="docs-cli-only">
 <pre><code>kctl node install \
   --os-disk /dev/sda \
   --data-disk /dev/sdb --data-disk /dev/sdc \
   --storage-backend zfs \
   --zfs-pool-name tank0 \
   --zfs-dataset-prefix kcore/</code></pre>
+</div>
+<div class="docs-tf-only">
+<pre><code>resource "kcore_node" "zfs" {
+  address         = "192.168.40.103:9091"
+  os_disk         = "/dev/sda"
+  data_disk       = ["/dev/sdb", "/dev/sdc"]
+  storage_backend = "zfs"
+  certs_dir       = "${path.module}/certs"
+  join_controller = "192.168.40.107:9090"
+}</code></pre>
+</div>
 
             <h2 data-i18n="userdoc.storage.luksEncryption">LUKS disk encryption</h2>
             <p data-i18n-html="userdoc.storage.luksEncryptionP1">The OS disk is always encrypted with <strong>LUKS2</strong>. When <code>/sys/class/tpm/tpm0</code> exists on the node, the key is TPM2-sealed for automatic unlock on boot. Otherwise a key-file is used.</p>
@@ -149,18 +226,22 @@
 
             <h2 data-i18n="userdoc.storage.storageClasses">Storage classes</h2>
             <p data-i18n="userdoc.storage.storageClassesP1">Storage classes in kcore are derived from node registration — they are not a separate API object. Each node reports its configured backend, and the controller aggregates them.</p>
+<div class="docs-cli-only">
 <pre><code>$ kctl get storage-class
 NAME          NODES
 filesystem    3
 lvm           2
 zfs           1
 unspecified   0</code></pre>
+</div>
             <p data-i18n="userdoc.storage.storageClassesP2">To see which nodes use a specific backend:</p>
+<div class="docs-cli-only">
 <pre><code>$ kctl describe storage-class lvm
 Storage class: lvm
 Nodes (2):
   - node-ab12cd34
   - node-ef56gh78</code></pre>
+</div>
 
             <h2 data-i18n="userdoc.storage.nodeAgentConfig">Node-agent configuration</h2>
             <p data-i18n-html="userdoc.storage.nodeAgentConfigP1">The node-agent reads its storage settings from <code>/etc/kcore/node-agent.yaml</code>:</p>
@@ -193,7 +274,7 @@ spec:
             <p>Apply: <code>kctl apply -f vm.yaml</code></p>
             </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
             <p data-i18n-html="userdoc.vmcreate.tf.p"><code>image_url</code> and <code>image_path</code> are mutually exclusive. URL mode needs <code>image_sha256</code>. <code>cpu</code> and <code>memory_bytes</code> are required.</p>
 <pre><code>resource "kcore_vm" "my_vm" {
   name               = "my-vm"
@@ -207,6 +288,13 @@ spec:
   nic {
     network = "default"
   }
+}
+
+resource "kcore_volume" "data" {
+  name          = "my-vm-data"
+  size_bytes    = 10737418240
+  storage_class = "lvm"
+  vm            = kcore_vm.my_vm.id
 }</code></pre>
             </div>
 
@@ -216,6 +304,7 @@ spec:
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/code-color.js"></script>
     <script src="../../js/docs-version.js"></script>
     <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

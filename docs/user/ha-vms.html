@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How kcore detects a dead host, fences its storage, and restarts VMs elsewhere.">
+    <title>High availability for VMs - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/ha-vms.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="High availability for VMs - kcore documentation">
+    <meta property="og:description" content="How kcore detects a dead host, fences its storage, and restarts VMs elsewhere.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/ha-vms.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/code-color.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../products.html" data-i18n="nav.products">Products</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html" class="active">High availability</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            <h1>High availability for VMs</h1>
+
+            <p>When a host stops heartbeating, the controller fences its storage, then restarts its protected VMs on the surviving hosts. Nobody has to do anything. This page covers what is protected, how fast it happens, the knobs, and the cases HA does not cover.</p>
+
+            <h2>What is protected</h2>
+            <table>
+                <tr><th>VM storage</th><th>When the host dies</th></tr>
+                <tr><td><code>ceph</code> (kcore SAN)</td><td>Protected. The image is fenced, then the VM restarts on another host.</td></tr>
+                <tr><td><code>zfs</code> with a replica node</td><td>Protected, with a stated data-loss window. The VM starts on the replica node from the last common snapshot.</td></tr>
+                <tr><td><code>zfs</code> without a replica, <code>lvm</code>, <code>filesystem</code></td><td>Not protected. The disk is on the dead host, so the VM stays there until the host comes back or you restore from backup.</td></tr>
+            </table>
+            <p>The protection level shows on every VM listing: <code>kctl get vms</code>, the dashboard, and the API (<code>ha_protection</code>). You do not find out after the outage.</p>
+
+            <h2>What happens when a host dies</h2>
+            <ol>
+                <li><strong>Detect.</strong> Node agents heartbeat every 15 seconds. A host with no heartbeat for <code>nodeTimeoutSecs</code> (default 30) is marked lost. A detector checks every <code>detectIntervalSecs</code> (default 5).</li>
+                <li><strong>Fence.</strong> The controller asks a healthy Ceph member to blocklist the lost host&rsquo;s clients, per image and by address range. A host that returns cannot write to an image that has moved. Nothing is reassigned until the fence holds.</li>
+                <li><strong>Choose what restarts.</strong> The controller restarts what was running at the last sync, plus anything with <code>autoStart</code>. A VM that was stopped stays stopped.</li>
+                <li><strong>Order.</strong> VMs restart by <code>restartPriority</code> (<code>high</code>, <code>medium</code>, <code>low</code>), then by memory, largest first. Priority decides who gets capacity first when capacity is short.</li>
+                <li><strong>Start.</strong> Each target host gets its configuration once and starts the guests. The event trail records detect, fence, reassign, and apply, with durations.</li>
+            </ol>
+            <p>In a lab run with Ceph at the older 90-second timeout, the guest was booted on its new host about 20 seconds after the fence. With the 30-second default, expect the fence about 30 to 35 seconds after the last heartbeat, plus guest boot time. Measure your own cluster: <code>kctl get ha-events</code> carries <code>failover_duration_seconds</code> for each move.</p>
+
+            <h2>A returning host cannot start a stale guest</h2>
+            <p>A host that rebooted boots its old NixOS generation, where the moved VM is still an <code>autoStart</code> unit. kcore closes that path two ways.</p>
+            <ul>
+                <li><strong>Placement gate.</strong> Every <code>kcore-vm-*</code> unit waits for <code>kcore-placement-confirmed.target</code>. The node agent reaches it only after a controller confirms which VMs belong on this host. A VM the controller no longer assigns here is stopped and masked. A Ceph VM stays held if no controller answers. Non-Ceph VMs start after <code>ha.placementTimeoutSecs</code> (default 300) in the node agent configuration, because nobody else can run them.</li>
+                <li><strong>Fence by address.</strong> The blocklist covers the host&rsquo;s whole address range, so a client whose watch already expired is still refused.</li>
+            </ul>
+
+            <h2>Isolation response</h2>
+            <p>A host that lost every controller but still holds running guests would keep them with a fenced disk. After <code>ha.isolationTimeoutSecs</code> (default 60, node agent configuration), the node agent powers off protected Ceph guests it can no longer write, but only when Ceph shows the host is fenced or Ceph itself is unreachable. Local-disk VMs are left alone. Set <code>isolationResponse</code> to <code>leaveRunning</code> (controller <code>failover</code> block, and <code>ha</code> block on the node) if your controller link is flakier than your storage network. The controller-side fence protects the image either way.</p>
+
+            <h2>Admission control</h2>
+            <p>kcore refuses a placement that would leave protected VMs without a surviving host. <code>hostFailuresToTolerate</code> defaults to 1. For the largest hosts, the remaining hosts must have free memory and CPU for their protected VMs, counting overcommit. <code>CreateVm</code>, <code>SetVmDesiredState</code>, <code>MigrateVm</code>, and <code>DrainNode</code> run the check and answer <code>FAILED_PRECONDITION</code> naming the shortfall. A cluster too small to reserve that capacity is exempt. <code>--ignore-admission-control</code> overrides the check, and the override is audited.</p>
+            <pre><code>kctl get ha            # failover on or off, lease holder, tolerated host failures, headroom
+kctl get ha-events     # detected, fenced, reassigned, applied, failed, skipped
+kctl get ha-events --node node-3
+kctl get cluster-health</code></pre>
+
+            <h2>Redundant failover</h2>
+            <p>With replicated controllers, one controller holds a failover lease and runs the detector and the mover. The lease is a replicated register, renewed every <code>leaseRenewSecs</code> (default 5). If the holder dies, another controller claims it after expiry and resumes from the last recorded event instead of fencing twice. A controller whose replication has fallen behind steps down.</p>
+
+            <h2>Configure it</h2>
+            <p>Controller settings live in <code>controller.yaml</code>. These are the defaults.</p>
+            <pre><code>failover:
+  enabled: true
+  nodeTimeoutSecs: 30        # at least two heartbeat intervals (30)
+  detectIntervalSecs: 5
+  isolationResponse: powerOff   # or leaveRunning
+  leaseRenewSecs: 5
+  admissionControl:
+    hostFailuresToTolerate: 1   # 0 to 5; 0 turns it off</code></pre>
+            <p>Per VM, in a manifest or on <code>kctl create vm</code>:</p>
+            <pre><code>kind: VM
+metadata:
+  name: db-1
+spec:
+  cpu: 8
+  memoryBytes: "16G"
+  storageBackend: ceph
+  storageSizeBytes: "200G"
+  restartPriority: high          # --restart-priority
+  antiAffinity: db-tier          # --anti-affinity; spreads the group over hosts
+  vmMonitoring: restart          # --vm-monitoring off|restart; restart when the guest stops answering
+  vmMonitoringSecs: 120          # --vm-monitoring-secs, at least 30</code></pre>
+            <p>A ZFS VM can keep an asynchronous replica on another node. The listing shows it as an asynchronous replica instead of unprotected.</p>
+            <pre><code>kctl create vm app-1 --storage-backend zfs \
+  --replica-node node-2 --replica-interval 300 ...   # 60 s to 1 day</code></pre>
+            <p>Webhooks fire for <code>node.lost</code>, <code>vm.failover.started</code>, <code>vm.failover.completed</code>, and <code>vm.failover.failed</code>, and <code>vm.migrated</code> carries <code>mode: failover</code>.</p>
+
+            <h2>What HA does not do</h2>
+            <ul>
+                <li>It does not protect <code>lvm</code>, <code>filesystem</code>, or unreplicated <code>zfs</code> VMs. That is the same rule as shared-datastore HA elsewhere. The listing says so.</li>
+                <li>A ZFS replica is asynchronous. You lose writes since the last send. The interval is the recovery point.</li>
+                <li>It is not full vSphere HA parity. There is no proactive HA on hardware health and no per-VM network isolation policy.</li>
+                <li>Passthrough GPUs and PCI devices do not fail over by themselves. The destination needs a free matching device, and the VM must be remapped.</li>
+                <li>Heartbeat detection is a heuristic. A host that is slow but alive for longer than the timeout is treated as lost. That is why the fence comes first.</li>
+            </ul>
+            <p>Related: <a href="vm-migration.html">VM migration</a>, <a href="storage-vsan.html">kcore SAN</a>, <a href="cluster-and-node-upgrades.html">cluster updates</a>, and <a href="vault.html">kcore Vault</a> for the copy that does not live on the cluster.</p>
+
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom">
+        <p><a href="../../partners.html" data-i18n="footer.partners">Partners</a> · <a href="../../trademark.html" data-i18n="footer.trademark">Trademark</a></p>
+        <p>&copy; 2026 Tacconi Consulting Ltd.</p>
+    </div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/code-color.js"></script>
+    <script src="../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

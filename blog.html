@@ -17,6 +17,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/code-color.css">
     <style>
         .blog-hero {
             padding: 8rem 0 4rem;
@@ -106,6 +107,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
                 <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html">Roadmap</a></li>
@@ -128,11 +130,42 @@
         <div class="container">
             <div class="blog-list">
                 <div class="blog-post">
-                    <h2><a href="blog/windows-10-desktop.html">Windows 10 on kcore</a></h2>
-                    <span class="blog-date">10 October 2026</span>
+                    <h2><a href="blog/kcore-0-7-0.html">kcore 0.7.0: updates by tag, canary, and revert</a></h2>
+                    <span class="blog-date">6 November 2026</span>
                     <p>
-                        Build a Windows 10 Pro disk, create the VM with kctl, and open the desktop
-                        through an SSH port forward.
+                        One command moves the cluster to a new version, one node at a time.
+                        A bad canary rolls back and stops the rollout. Plus what else is in 0.7.0.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/kcore-provisioning-fleet.html" data-i18n="blog.post14.title">Manage a server fleet with kcore-provisioning</a></h2>
+                    <span class="blog-date" data-i18n="blog.post14.date">15 October 2026</span>
+                    <p data-i18n="blog.post14.summary">
+                        Verified images, machine inventory, BMC power, and boot targets —
+                        how the provisioning dashboard makes a rack of servers tractable.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/bare-metal-declarative-platform.html" data-i18n="blog.post13.title">Bare-metal platforms that feel like the cloud — without the cloud bill</a></h2>
+                    <span class="blog-date" data-i18n="blog.post13.date">15 October 2026</span>
+                    <p data-i18n="blog.post13.summary">
+                        Declarative Kubernetes, Ceph SAN, object storage, and PostgreSQL on owned hardware —
+                        cloud-style workflows without hyperscaler markups.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/vmware-exit-strategy.html" data-i18n="blog.post12.title">VMware exit strategy: choosing the right platform</a></h2>
+                    <span class="blog-date" data-i18n="blog.post12.date">15 October 2026</span>
+                    <p data-i18n="blog.post12.summary">
+                        How to compare Proxmox, Nutanix, OpenShift Virtualization, OpenStack, OpenNebula, and kcore
+                        when leaving VMware — and which operating model each one fits.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/windows-10-desktop.html" data-i18n="blog.w10.title">Windows 10 on kcore</a></h2>
+                    <span class="blog-date" data-i18n="blog.w10.date">10 October 2026</span>
+                    <p data-i18n="blog.w10.summary">
+                        Build a Windows 10 Pro disk, create the VM with kctl, and open the desktop through an SSH port forward.
                     </p>
                 </div>
                 <div class="blog-post">
@@ -149,6 +182,76 @@
                     <p data-i18n="blog.post10.summary">
                         Build the kcore ISO, turn on Hyper-V CPU enlightenments, create a Windows Server 2022 VM,
                         and serve the default IIS page.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/vcsp-exit-before-march-2027.html" data-i18n="blog.post15.title">A VCSP exit plan before 31 March 2027</a></h2>
+                    <span class="blog-date" data-i18n="blog.post15.date">28 August 2026</span>
+                    <p data-i18n="blog.post15.summary">
+                        Contract end date, inventory, disk convert, and a per-socket quote — a VCSP exit plan that does not pretend cutover is a button.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/windows-guests-without-vmware.html" data-i18n="blog.post16.title">Windows guests without a VMware licence</a></h2>
+                    <span class="blog-date" data-i18n="blog.post16.date">25 August 2026</span>
+                    <p data-i18n="blog.post16.summary">
+                        Windows Server and desktop guests run. One GPU per VM. Live migration still needs Ceph. Not a Microsoft certification claim.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/live-migration-without-vsphere-ha.html" data-i18n="blog.post17.title">Live migration without calling it vSphere HA</a></h2>
+                    <span class="blog-date" data-i18n="blog.post17.date">21 August 2026</span>
+                    <p data-i18n="blog.post17.summary">
+                        Shared Ceph for a VM move. Cold drain when you can stop. Multi-site control-plane replication is not vSphere HA.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/terraform-and-yaml-for-the-hypervisor.html" data-i18n="blog.post18.title">Terraform and YAML for the hypervisor</a></h2>
+                    <span class="blog-date" data-i18n="blog.post18.date">18 August 2026</span>
+                    <p data-i18n="blog.post18.summary">
+                        A real Terraform provider for VMs, plus the 0.5.0 gaps: no Kubernetes, PostgreSQL, migrate, or GPU attribute.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/failed-update-boots-previous-generation.html" data-i18n="blog.post19.title">When a failed host update must boot the previous generation</a></h2>
+                    <span class="blog-date" data-i18n="blog.post19.date">14 August 2026</span>
+                    <p data-i18n="blog.post19.summary">
+                        A failed kcore host update boots the previous generation. That is the host, not a guest snapshot or a backup product.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/vm-first-then-kubernetes.html" data-i18n="blog.post20.title">Stay VM-first, then add Kubernetes</a></h2>
+                    <span class="blog-date" data-i18n="blog.post20.date">11 August 2026</span>
+                    <p data-i18n="blog.post20.summary">
+                        VMs first. Kubernetes on the same metal when you declare it. One Cilium on the primary cluster. No surprise scale-in.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/per-socket-versus-per-core.html" data-i18n="blog.post21.title">Per-socket licensing versus a per-core quote</a></h2>
+                    <span class="blog-date" data-i18n="blog.post21.date">7 August 2026</span>
+                    <p data-i18n="blog.post21.summary">
+                        Per socket, not per core. Enterprise has an 8-socket minimum. Convert both quotes to a yearly figure before you argue features.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/when-proxmox-is-no-longer-the-model.html" data-i18n="blog.post22.title">When Proxmox is no longer the operating model</a></h2>
+                    <span class="blog-date" data-i18n="blog.post22.date">5 August 2026</span>
+                    <p data-i18n="blog.post22.summary">
+                        Proxmox fits a small UI-driven estate. Leave when the next step is an API, reviewable Terraform, and a tested convert.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/vmware-import-inventory-convert-cutover.html" data-i18n="blog.post23.title">VMware import: inventory, convert, cutover</a></h2>
+                    <span class="blog-date" data-i18n="blog.post23.date">3 August 2026</span>
+                    <p data-i18n="blog.post23.summary">
+                        Three jobs, not one button: inventory and a gap report, an exported-disk convert, then a cutover you can back out.
+                    </p>
+                </div>
+                <div class="blog-post">
+                    <h2><a href="blog/partner-terms-official-builds.html" data-i18n="blog.post24.title">Partner terms: official builds, not a fork</a></h2>
+                    <span class="blog-date" data-i18n="blog.post24.date">1 August 2026</span>
+                    <p data-i18n="blog.post24.summary">
+                        10% referral, reseller margin with deal registration, MSP per socket. White-label is the official bits, not a fork.
                     </p>
                 </div>
                 <div class="blog-post">
@@ -254,6 +357,9 @@
                         <li><a href="features.html" data-i18n="nav.features">Features</a></li>
                         <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                         <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -282,6 +388,7 @@
 
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/code-color.js"></script>
     <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

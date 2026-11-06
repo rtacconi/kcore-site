@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Community Edition is Apache-2.0, with no subscription. Production subscriptions are per physical CPU socket.">
+    <title>Licensing and editions - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.6.1/user/licensing.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Licensing and editions - kcore documentation">
+    <meta property="og:description" content="Community Edition is Apache-2.0, with no subscription. Production subscriptions are per physical CPU socket.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.6.1/user/licensing.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Backup</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" class="active" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.6.1"></p>
+            
+            <h1 data-i18n="userdoc.licensing.h1">Licensing &amp; editions</h1>
+
+            <p data-i18n-html="userdoc.licensing.p1">Community Edition is <strong>Apache-2.0</strong>. The ISO and <code>kctl</code> are on <a href="https://github.com/kcorehypervisor/kcore/releases" style="color:var(--accent-primary)">GitHub Releases</a>. There is no subscription. It is for labs, evaluation, and contributors.</p>
+
+            <p data-i18n-html="userdoc.licensing.p2">A subscription pays for the signed distribution, the enterprise update channel, tested releases, and support. It does not change the Apache-2.0 licence on the public core.</p>
+
+            <table>
+                <tr><th data-i18n="userdoc.licensing.th.context">Context</th><th data-i18n="userdoc.licensing.th.edition">Edition</th></tr>
+                <tr><td data-i18n="userdoc.licensing.tr.community">Labs, evaluation, and contributors</td><td data-i18n="userdoc.licensing.tr.community.ed">Community Edition, Apache-2.0, no subscription</td></tr>
+                <tr><td data-i18n="userdoc.licensing.tr.prod">Production</td><td data-i18n="userdoc.licensing.tr.prod.ed">Standard, Premium, or Enterprise, per physical CPU socket, not per core. Enterprise has an 8-socket minimum.</td></tr>
+            </table>
+
+            <p data-i18n-html="userdoc.licensing.p3">Tickets and response times are on the <a href="../../pricing.html" style="color:var(--accent-primary)">Pricing</a> page.</p>
+
+            <p data-i18n-html="userdoc.licensing.p4">Partners: see the <a href="../../partners.html" style="color:var(--accent-primary)">partner program</a>. The name and the logo are on the <a href="../../trademark.html" style="color:var(--accent-primary)">trademark</a> page.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom">
+        <p><a href="../../partners.html" data-i18n="footer.partners">Partners</a> · <a href="../../trademark.html" data-i18n="footer.trademark">Trademark</a></p>
+        <p>&copy; 2026 Tacconi Consulting Ltd.</p>
+    </div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

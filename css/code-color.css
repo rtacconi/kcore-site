@@ -1,0 +1,15 @@
+pre,
+pre code {
+    color: #e7e5e4;
+}
+
+:not(pre) > code {
+    color: #d8b4fe;
+}
+
+.code-comment { color: #9ca3af; }
+.code-keyword { color: #c4b5fd; }
+.code-string { color: #6ee7b7; }
+.code-number { color: #fbbf24; }
+.code-property { color: #93c5fd; }
+.code-flag { color: #a5b4fc; }
