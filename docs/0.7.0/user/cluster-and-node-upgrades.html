@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore cluster and node upgrades: flake-pinned ClusterUpdate rollouts, kctl update cluster, approval and phases.">
+    <title>Cluster &amp; node upgrades - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.7.0/user/cluster-and-node-upgrades.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Cluster &amp; node upgrades - kcore documentation">
+    <meta property="og:description" content="Flake-pinned NixOS rollouts via ClusterUpdate: plan, apply, approve, observe per-node status.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.7.0/user/cluster-and-node-upgrades.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/code-color.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../../products.html" data-i18n="nav.products">Products</a></li>
+            <li><a href="../../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" class="active" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.7.0"></p>
+            <h1>Cluster &amp; node upgrades</h1>
+
+            <p>kcore nodes run NixOS. A release is a git tag, <code>vX.Y.Z</code>. You tell the controller which tag the cluster should run. It updates one canary node first, watches it, and then updates the others one at a time. A node that does not come back healthy goes back to the generation it ran before. Guests are not touched by the update itself. With <code>drainVms</code> they are migrated off a node before it reboots.</p>
+
+            <h2>Set the cluster version</h2>
+            <div class="docs-cli-only">
+<pre><code># Resolve the tag and compare it with each node. Changes nothing.
+kctl update version set v0.7.0 --dry-run
+
+# Start the rollout: canary, soak, then one node at a time
+kctl update version set v0.7.0 --drain-vms
+
+# What was set last, and what each node runs
+kctl update version get
+
+# Watch it
+kctl update cluster get version-v0-7-0</code></pre>
+            </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
+<pre><code>resource "kcore_cluster_version" "this" {
+  version             = "v0.7.0"
+  drain_vms           = true
+  canary_soak_seconds = 14400
+  canary_node         = "node-b"
+}</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+            <p class="note">A release is not a manifest any more. Use <code>kctl update version set</code>, or the Terraform resource. A hand-written <code>ClusterUpdate</code> is still accepted, see <a href="#manual">below</a>.</p>
+            </div>
+
+            <p>The controller does this, in order:</p>
+            <ol>
+                <li>Resolves the tag with <code>nix flake metadata</code> in <code>--flake-ref</code> (default <code>github:kcorehypervisor/kcore</code>). An unknown tag is refused.</li>
+                <li>Reads the version and the controller database schema the tag declares. The version must match the tag. A tag whose controller cannot read this database is refused. Tags cut before this feature carry no such declaration and are refused too.</li>
+                <li>Compares the tag with the version each node reports. Nodes already on it are left alone. The answer is <code>upgrade</code>, <code>downgrade</code>, <code>mixed</code>, or <code>unchanged</code>.</li>
+                <li>Starts a ClusterUpdate named <code>version-vX-Y-Z</code>. Setting the same tag again while it runs returns that update. Another tag is refused until it finishes or is cancelled.</li>
+            </ol>
+            <p>Downgrade is the same command with a lower tag. An air-gapped site resolves tags against a mirror with <code>--flake-ref git+https://git.example/kcore</code>. Nodes still fetch build inputs from <code>cache.nixos.org</code> until signed update bundles ship.</p>
+
+            <h2>Canary</h2>
+            <p>The first node of a rollout is the canary. It updates like any other node and then soaks: it stays on the new version while the rest of the cluster waits. While it soaks, the controller compares it with the other nodes on every reconcile:</p>
+            <ul>
+                <li>It must still run the target version. A node that went back or rebooted into the old generation fails.</li>
+                <li>It must keep sending heartbeats while other nodes do.</li>
+                <li>Its share of <code>autoStart</code> guests that are not running must not exceed the others&rsquo; by more than 10 percentage points.</li>
+                <li>Its node agent must not fail more of the controller&rsquo;s calls than the other agents do, by more than 10 percentage points and at least 5 failures.</li>
+                <li>If it hosts Ceph OSDs, their median commit latency over the last 15 minutes must stay below twice that of the other OSDs, or 20 ms above it, whichever is larger.</li>
+            </ul>
+            <p>The first five minutes are not judged, so guests can start and Ceph can settle after the reboot. A failed comparison fails the canary and rolls it back. Nodes not started are cancelled. If the soak ends healthy, the rest update one at a time. If there is nothing to compare against, the canary waits in <code>awaiting_promotion</code> and you decide:</p>
+            <div class="docs-cli-only">
+<pre><code>kctl update cluster get version-v0-7-0        # the canary and the reason
+kctl update cluster promote version-v0-7-0    # continue with the other nodes
+kctl update cluster cancel version-v0-7-0     # stop. The canary keeps the update
+kctl update cluster rollback version-v0-7-0   # roll the canary back</code></pre>
+            </div>
+            <p><code>promote</code> also ends a soak early. It needs the <code>cluster-admin</code> role.</p>
+            <p>The canary is, in order: the node named with <code>--canary</code>, a node labelled <code>kcore.io/update-canary=true</code>, or the first node in rollout order. A node that runs a controller is not picked unless every node does. Controllers update last. A one-node rollout has no canary.</p>
+            <p>The soak lasts one hour, or 24 hours when the release moves NixOS to a new release. Change it:</p>
+            <div class="docs-cli-only">
+<pre><code>kctl update version set v0.7.0 --soak 4h --canary node-b
+kctl update version set v0.7.0 --no-canary</code></pre>
+            </div>
+            <p><code>--soak</code> takes <code>90s</code>, <code>45m</code>, <code>2h</code>, <code>1d</code>, at most 7 days.</p>
+
+            <h2>One node, one transaction</h2>
+            <p>The rollout stops at the first node that fails. Nodes not started are cancelled, nodes already updated stay on the new version, and the failed node is left on, or put back on, its previous generation. Set the previous tag to move the rest back.</p>
+            <p>On each node:</p>
+            <ul>
+                <li><strong>Prepare.</strong> The node copies <code>/etc/nixos</code> aside, writes the release flake, and builds it. It checks that the lock pins the commit the controller resolved. A failed build changes nothing.</li>
+                <li><strong>Switch</strong>, when the kernel and every VM unit are unchanged. The new flake files go into <code>/etc/nixos</code>, the old ones to <code>previous/</code>, and a guard timer is armed. A failed switch makes the guard restore the old files and switch back at once. The agent confirms the switch after its checks pass three times in a row. If it never does, the guard switches back after 15 minutes.</li>
+                <li><strong>Boot</strong>, when the kernel or a VM unit changed. The new generation is staged as a one-shot boot entry, with the running one still the default until the new one is confirmed. With <code>drainVms</code> the controller migrates the guests off first and then reboots the node.</li>
+                <li><strong>After the reboot</strong>, <code>kcore-boot-confirm</code> waits for the node agent (and the controller, where it runs) to stay up. If it does, the new generation becomes the default. If not within the timeout, the node records why and reboots into the previous generation. A kernel that panics or hangs never reaches the check. systemd-boot falls back to the previous entry because the new one was only a one-shot.</li>
+            </ul>
+            <p>None of this needs the controller to be reachable while a node reboots, which is what edge and air-gapped nodes need. A node that does not return on the staged generation within 30 minutes is told by the controller to roll back. Database schema changes run inside the controller and are reversed before a controlled rollback when the step is reversible.</p>
+            <p class="note">A 0.6.x controller has no <code>update version</code> command and refuses <code>canary</code>. Move a 0.6.x cluster to 0.7.0 once with a hand-written <code>ClusterUpdate</code> that names the commit of the <code>v0.7.0</code> tag. After that, <code>kctl update version set</code> works. See <a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a>.</p>
+
+            <h2 id="manual">Hand-written rollouts</h2>
+            <p>A <code>kind: ClusterUpdate</code> manifest still works for scoped rollouts and for <code>updateKind: nixpkgs</code> (move a tested OS pin only). The selector decides scope:</p>
+            <ul>
+                <li><code>selector.allNodes: true</code> for the whole cluster, optionally with labels or a datacenter.</li>
+                <li><code>selector.controllersOnly: true</code> for controllers.</li>
+                <li><code>selector.nodeIds: ["&lt;uuid&gt;", …]</code> for one or a few nodes.</li>
+            </ul>
+            <div class="docs-cli-only">
+<pre><code>kctl update cluster plan -f rollout.yaml
+kctl update cluster apply -f rollout.yaml
+kctl update cluster get my-update
+kctl update cluster list
+kctl update cluster approve my-update     # when approvalPolicy is manual
+kctl update cluster cancel my-update
+kctl update cluster rollback my-update
+kctl update cluster reboot my-update --node &lt;node-id&gt;</code></pre>
+            </div>
+            <div class="docs-yaml-only">
+<pre><code>kind: ClusterUpdate
+metadata:
+  name: my-update
+spec:
+  target:
+    version: "0.7.0"
+    flakeRef: github:kcorehypervisor/kcore
+    flakeRev: "&lt;full-git-sha&gt;"
+  selector:
+    allNodes: true
+  strategy:
+    strategyType: canary
+    canarySoakSeconds: 3600
+    canaryNode: node-b
+  drainVms: true
+  activation:
+    mode: auto
+  approvalPolicy: manual
+  updateKind: kcore</code></pre>
+            </div>
+            <div class="docs-tf-only">
+            <p>Reboot stays <code>kctl update cluster reboot</code>. Destroy cancels the rollout.</p>
+<pre><code>resource "kcore_cluster_update" "os" {
+  name                = "my-update"
+  version             = "0.7.0"
+  flake_ref           = "github:kcorehypervisor/kcore"
+  flake_rev           = "&lt;full-git-sha&gt;"
+  all_nodes           = true
+  strategy            = "canary"
+  canary_soak_seconds = 3600
+  canary_node         = "node-b"
+  drain_vms           = true
+  activation          = "auto"
+  update_kind         = "kcore"
+  approval            = "manual"
+}</code></pre>
+            </div>
+            <p><code>strategyType</code> is <code>one-at-a-time</code> or <code>canary</code>. <code>batch</code> and <code>per-dc</code> are refused. With <code>approvalPolicy: manual</code> the controller waits for <code>kctl update cluster approve</code> before it rolls. The phase is <code>pending</code>, <code>rolling_out</code>, <code>awaiting_promotion</code>, <code>succeeded</code>, or <code>failed</code>. Each node row shows its own step and error.</p>
+
+            <h2>Dashboard</h2>
+            <p>The <strong>Release</strong> page is the same operation with a form: release tag, canary node, soak, <em>No canary</em>, <em>Drain VMs</em>, <em>Dry run</em>, and a <em>Promote canary</em> button. The <strong>Cluster updates</strong> page lists every rollout and its nodes. See <a href="dashboard.html">Dashboard</a>.</p>
+
+            <h2>Before you start</h2>
+            <ul>
+                <li>Take a Vault backup of the VMs that matter. See <a href="vault.html">kcore Vault</a>.</li>
+                <li>Run with <code>--dry-run</code> first. It prints what each node would do.</li>
+                <li>Keep at least one spare node&rsquo;s worth of capacity if you use <code>drainVms</code>, because guests move while a node reboots.</li>
+                <li>Update controllers last, and never all at once. The rollout does this for you.</li>
+            </ul>
+
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/code-color.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

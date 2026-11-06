@@ -46,7 +46,7 @@ mkdir -p "${DEST}"
 cp -a docs/user/. "${DEST}/"
 
 python3 - "${VERSION}" <<'PY'
-import pathlib, sys
+import pathlib, re, sys
 version = sys.argv[1]
 banner = (
     f'<p class="docs-version-banner" data-docs-version="{version}"></p>\n            '
@@ -54,6 +54,7 @@ banner = (
 script = '<script src="../../../js/docs-version.js"></script>'
 for path in pathlib.Path(f"docs/{version}/user").glob("*.html"):
     text = path.read_text()
+    text = re.sub(r'(href|src)="(?:\.\./){2}(?!\.\./)', r'\1="../../../', text)
     text = text.replace('href="../../css/', 'href="../../../css/')
     text = text.replace('href="../../js/', 'href="../../../js/')
     text = text.replace('src="../../js/', 'src="../../../js/')
