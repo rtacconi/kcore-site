@@ -1,10 +1,14 @@
 # kcore hypervisor
 
-> Declarative virtualization on NixOS: VMs as code, gRPC API, Terraform provider, optional MCP server with the product (not hosted on this domain).
+> Declarative virtualization on NixOS, version 0.7.0: HA restart, live migration, Ceph shared storage, canary updates with automatic revert, a dashboard, a Terraform provider, an MCP server and AI agent shipped with the product (not hosted on this domain). Two separate paid products: kcore Vault (immutable backups) and kcore Provisioning (bare-metal automation through the BMC).
 
 ## Read first
 
 - [Documentation hub](https://kcorehypervisor.com/docs.html)
+- [What is new in 0.7.0](https://kcorehypervisor.com/docs/user/whats-new-0-7-0.html)
+- [Products](https://kcorehypervisor.com/products.html)
+- [kcore Vault](https://kcorehypervisor.com/vault.html)
+- [kcore Provisioning](https://kcorehypervisor.com/provisioning.html)
 - [User guides](https://kcorehypervisor.com/docs/user/index.html)
 - [Product repository](https://github.com/kcorehypervisor/kcore)
 

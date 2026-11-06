@@ -44,6 +44,7 @@
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
             <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../products.html" data-i18n="nav.products">Products</a></li>
             <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
             <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
             <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
@@ -66,15 +67,22 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
-                <li><a href="appliance-console.html" data-i18n="docs.nav.appliance">Appliance console</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                 <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
                 <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
@@ -106,6 +114,11 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" class="active" data-i18n="docs.nav.k8s">Clusters</a></li>
             </ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
                 <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
             </ul></div>
@@ -127,31 +140,37 @@ kctl kubernetes health lab</code></pre>
             </div>
             <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code>. <code>kctl apply -f</code> does not accept this kind.</p>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.k8s">Provider 0.5.0 has no Kubernetes cluster resource. Declare the cluster with CLI or YAML. <code>kcore_cluster_update</code> can store <code>kubernetes_version</code> on a tested OS pin. That field does not install Kubernetes.</p>
-<pre><code>resource "kcore_cluster_update" "os" {
-  name                    = "release-0-5-0"
-  version                 = "0.5.0"
-  flake_ref               = "github:kcorehypervisor/kcore"
-  flake_rev               = "&lt;full-git-sha&gt;"
-  nixpkgs_rev             = "&lt;nixpkgs-rev&gt;"
-  all_nodes               = true
-  strategy                = "one-at-a-time"
-  max_unavailable         = 1
-  batch_size              = 1
-  drain_vms               = false
-  activation              = "auto"
-  update_kind             = "kcore"
-  schema_version          = 59
-  previous_schema_version = 56
-  min_compatible_reader   = 56
-  approval                = "manual"
-  approve                 = false
+            <p data-i18n-html="docs.mode.tf.k8s">Declare the cluster with <code>kcore_kubernetes_cluster</code>. <code>kcore_cluster_update</code> can store <code>kubernetes_version</code> on a tested OS pin. That field does not install Kubernetes.</p>
+<pre><code>resource "kcore_kubernetes_cluster" "lab" {
+  name                      = "lab"
+  cluster_cidr              = "10.244.0.0/16"
+  service_cidr              = "10.96.0.0/12"
+  api_server_endpoint       = "192.168.40.220:6443"
+  schedule_on_control_plane = true
 
-  tested_os_pins {
-    nixpkgs_rev        = "&lt;nixpkgs-rev&gt;"
-    ceph_rev           = "&lt;ceph-rev&gt;"
-    ceph_sha256        = "&lt;ceph-sha256&gt;"
-    kubernetes_version = "1.37.0"
+  control_plane_node {
+    node_id           = "node-107"
+    advertise_address = "192.168.40.107"
+    initial_cluster   = true
+  }
+
+  cilium {
+    load_balancer_ip_pool = ["192.168.40.220/29"]
+  }
+
+  local_provisioner {
+    enabled            = true
+    mode               = "shared"
+    storage_class_name = "local-path"
+
+    volume {
+      name          = "kcore-kdata"
+      node_id       = "node-107"
+      storage_class = "lvm"
+      size_bytes    = "53687091200"
+      fs_type       = "ext4"
+      role          = "filesystem"
+    }
   }
 }</code></pre>
             </div>
@@ -313,7 +332,7 @@ spec:
       volumeGroup: vg_kcore</code></pre>
             </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.k8svol">Those volumes are fields of the Kubernetes manifest. Provider 0.5.0 has no resource for them. <code>kcore_volume</code> is a VM data disk, not this local-path filesystem.</p>
+            <p data-i18n-html="docs.mode.tf.k8svol">Those volumes are fields of the Kubernetes manifest. In Terraform they are <code>volume</code> blocks inside <code>local_provisioner</code> on <code>kcore_kubernetes_cluster</code>. <code>kcore_volume</code> is a VM data disk, not this local-path filesystem.</p>
             </div>
 
             <h2 data-i18n="userdoc.k8s.h2.up">Upgrades</h2>
@@ -342,7 +361,7 @@ spec:
                 <li data-i18n="userdoc.k8s.lim3">Cilium runs only on the primary cluster, the one whose API port is 6443. An empty loadBalancerIpPools list still installs Cilium and does not create an L2 pool.</li>
                 <li data-i18n-html="userdoc.k8s.lim4">Shared volumes are directories on one filesystem. Claim size is not a quota. <code>mode: lvm</code> does not bind claims.</li>
                 <li data-i18n="userdoc.k8s.lim5">A cluster whose API port is not 6443 is stored with bridge CNI, not Cilium.</li>
-                <li data-i18n="userdoc.k8s.lim6">Terraform provider 0.5.0 has no Kubernetes cluster resource.</li>
+                <li data-i18n="userdoc.k8s.lim6">Terraform manages a cluster with <code>kcore_kubernetes_cluster</code>.</li>
             </ul>
         </main>
     </div>

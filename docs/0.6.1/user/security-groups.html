@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore security groups: YAML manifests, ingress rules, DNAT, VM and network attachment.">
+    <title>Security groups - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.6.1/user/security-groups.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Security groups - kcore documentation">
+    <meta property="og:description" content="kcore security groups: YAML manifests, ingress rules, DNAT, VM and network attachment.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.6.1/user/security-groups.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
+    </div></nav>
+
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html" class="active">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Backup</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.6.1"></p>
+            
+            <h1 data-i18n="userdoc.sg.h1">Security groups</h1>
+            <p data-i18n="userdoc.sg.intro">Security groups control ingress traffic to VMs and networks on NAT-backed overlays. Rules are rendered as nftables chains on each node.</p>
+
+            <h2 data-i18n="userdoc.sg.h2.yaml">YAML manifest</h2>
+            <div class="docs-yaml-only">
+<pre><code>kind: SecurityGroup
+metadata:
+  name: expose-nginx
+spec:
+  rules:
+    - protocol: tcp
+      hostPort: 8080
+      targetPort: 80
+      sourceCidr: "0.0.0.0/0"
+      enableDnat: true
+  attachments:
+    - kind: vm
+      target: web-01</code></pre>
+            </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+<pre><code>resource "kcore_security_group" "expose_nginx" {
+  name = "expose-nginx"
+
+  rule {
+    protocol    = "tcp"
+    host_port   = 8080
+    target_port = 80
+    source_cidr = "0.0.0.0/0"
+    enable_dnat = true
+  }
+}
+
+resource "kcore_security_group_attachment" "web" {
+  security_group = kcore_security_group.expose_nginx.name
+  target_kind    = "vm"
+  target_id      = "web-01"
+}</code></pre>
+            </div>
+
+            <h2 data-i18n="userdoc.sg.h2.rules">Rules</h2>
+            <table>
+                <thead><tr><th data-i18n="userdoc.sg.th.field">Field</th><th data-i18n="userdoc.sg.th.desc">Description</th></tr></thead>
+                <tbody>
+                    <tr><td data-i18n-html="userdoc.sg.td.protocol"><code>protocol</code></td><td data-i18n-html="userdoc.sg.td.protocol.desc"><code>tcp</code> or <code>udp</code></td></tr>
+                    <tr><td data-i18n-html="userdoc.sg.td.hostport"><code>hostPort</code></td><td data-i18n="userdoc.sg.td.hostport.desc">Port exposed on the host</td></tr>
+                    <tr><td data-i18n-html="userdoc.sg.td.targetport"><code>targetPort</code></td><td data-i18n-html="userdoc.sg.td.targetport.desc">Port inside the VM (optional, defaults to <code>hostPort</code>)</td></tr>
+                    <tr><td data-i18n-html="userdoc.sg.td.sourcecidr"><code>sourceCidr</code></td><td data-i18n-html="userdoc.sg.td.sourcecidr.desc">Allowed source CIDR (default <code>0.0.0.0/0</code>)</td></tr>
+                    <tr><td data-i18n-html="userdoc.sg.td.targetvm"><code>targetVm</code></td><td data-i18n="userdoc.sg.td.targetvm.desc">Optional — restrict rule to a specific VM</td></tr>
+                    <tr><td data-i18n-html="userdoc.sg.td.enablednat"><code>enableDnat</code></td><td data-i18n="userdoc.sg.td.enablednat.desc">Enable DNAT from host port to VM private IP</td></tr>
+                </tbody>
+            </table>
+
+            <h2 data-i18n="userdoc.sg.h2.attach">Attachments</h2>
+            <p data-i18n="userdoc.sg.attach.p">Each attachment binds the security group to a workload:</p>
+            <ul>
+                <li data-i18n-html="userdoc.sg.attach.vm"><strong>kind: vm</strong> — <code>target</code> is the VM name.</li>
+                <li data-i18n-html="userdoc.sg.attach.net"><strong>kind: network</strong> — <code>target</code> is the network name and <code>targetNode</code> is required.</li>
+            </ul>
+
+            <h2 data-i18n="userdoc.sg.h2.cli">CLI operations</h2>
+            <div class="docs-cli-only">
+<pre><code># Create a security group from a manifest
+kctl sg create -f sg.yaml
+
+# Reconcile (create-or-update)
+kctl sg apply -f sg.yaml
+
+# List all security groups
+kctl sg list
+
+# Get details for a single security group
+kctl sg get &lt;name&gt;
+
+# Delete a security group
+kctl sg delete &lt;name&gt;
+
+# Attach a security group to a VM
+kctl sg attach --name &lt;sg&gt; --kind vm --target &lt;vm&gt;
+
+# Detach a security group
+kctl sg detach --name &lt;sg&gt; --kind vm --target &lt;vm&gt;</code></pre>
+            </div>
+
+            <h2 data-i18n="userdoc.sg.h2.dataplane">Data plane</h2>
+            <p data-i18n-html="userdoc.sg.dataplane.p">The controller resolves security-group rules to Nix configuration at <code>ch-vm.vms.networks.&lt;name&gt;.securityGroupRules</code>. Rules are applied as nftables rules in the NAT pipeline on each affected node.</p>
+            <p>When the network sets <code>eastWestFirewall</code>, those same rules that name a <code>targetIp</code> are also accepted on the bridge before other VM-to-VM traffic is dropped. Rules without a target IP stay north-south. See <a href="networks.html">Networks</a>.</p>
+
+            <h2 data-i18n="userdoc.sg.h2.apply">Apply via kctl apply</h2>
+<div class="docs-cli-only">
+<pre><code>kctl apply -f sg.yaml</code></pre>
+</div>
+            <p data-i18n-html="userdoc.sg.apply.p"><code>kctl apply</code> auto-detects <code>kind: SecurityGroup</code> and routes to the security group handler.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

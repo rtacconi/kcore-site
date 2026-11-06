@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore YAML manifest reference: VM and SecurityGroup manifest fields, types, and examples.">
+    <title>YAML manifest reference - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/0.6.1/user/yaml-manifests.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="YAML manifest reference - kcore documentation">
+    <meta property="og:description" content="kcore YAML manifest reference: VM and SecurityGroup manifest fields, types, and examples.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/0.6.1/user/yaml-manifests.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/docs-mode.css">
+    <script src="../../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
+    </div></nav>
+    <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
+        <div class="container docs-mode-strip-inner">
+            <span class="docs-mode-strip-label">Show examples as</span>
+            <div class="docs-mode-toggle" role="group" aria-label="CLI, YAML, or Terraform examples">
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="cli" aria-pressed="false">CLI</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="yaml" aria-pressed="false">YAML</button>
+                <button type="button" class="docs-mode-tab" data-docs-mode-value="terraform" aria-pressed="false">Terraform</button>
+            </div>
+        </div>
+    </div>
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li><li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html" class="active">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Backup</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="0.6.1"></p>
+            
+            <h1>YAML manifest reference</h1>
+            <p>kcore supports declarative resource creation via YAML manifests. Every resource that can be created with <code>kctl</code> CLI flags can also be expressed as a YAML manifest, making manifests the preferred way to manage infrastructure as code.</p>
+            <p>All manifest kinds are auto-detected and applied with a single command:</p>
+<div class="docs-cli-only">
+<pre><code>kctl apply -f &lt;file.yaml&gt;</code></pre>
+</div>
+<div class="docs-yaml-only">
+<pre><code>kctl apply -f &lt;file.yaml&gt;</code></pre>
+</div>
+            <p class="docs-mode-hint docs-cli-only">You are browsing in <strong>CLI</strong> mode. This page is the YAML manifest reference—switch the toggle above to <strong>YAML</strong> for the intended view, or open the <a href="kctl-reference.html">kctl CLI reference</a> for commands only.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+
+            <!-- ======= VM ======= -->
+            <h2>VM manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: VM)</span></h2>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"VM"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of the VM</td></tr>
+                <tr><td><code>spec.cpu</code></td><td>integer</td><td>Number of vCPUs (default 2)</td></tr>
+                <tr><td><code>spec.memoryBytes</code></td><td>string | integer</td><td>RAM size, e.g. <code>"4G"</code> or raw bytes</td></tr>
+                <tr><td><code>spec.desiredState</code></td><td>string</td><td><code>running</code> | <code>stopped</code>. Omit to preserve the current state on re-apply.</td></tr>
+                <tr><td><code>spec.storageBackend</code></td><td>string</td><td><code>filesystem</code> | <code>lvm</code> | <code>zfs</code></td></tr>
+                <tr><td><code>spec.storageSizeBytes</code></td><td>integer | string</td><td>Root disk size in bytes or human-readable, e.g. <code>"20G"</code></td></tr>
+                <tr><td><code>spec.targetNode</code></td><td>string</td><td>Pin VM to a specific node (optional)</td></tr>
+                <tr><td><code>spec.gpus</code></td><td>string[]</td><td>Named GPUs on that node, e.g. <code>radeon0</code>. Requires <code>spec.targetNode</code>. See <a href="gpu-passthrough.html">GPU passthrough</a>.</td></tr>
+                <tr><td><code>spec.dc</code></td><td>string</td><td>Target datacenter for scheduling (optional, mutually exclusive with targetNode)</td></tr>
+                <tr><td><code>spec.sshKeys</code></td><td>string[]</td><td>List of SSH key names to inject (must exist in the cluster)</td></tr>
+                <tr><td><code>spec.cloudInitUserData</code></td><td>string</td><td>Full cloud-init user-data (multi-line YAML block)</td></tr>
+                <tr><td><code>spec.disks[]</code></td><td>array</td><td>List of disk objects</td></tr>
+                <tr><td><code>spec.disks[].backendHandle</code></td><td>string</td><td>URL or local path to disk image</td></tr>
+                <tr><td><code>spec.disks[].sha256</code></td><td>string</td><td>Hex-encoded SHA-256 checksum</td></tr>
+                <tr><td><code>spec.disks[].format</code></td><td>string</td><td><code>qcow2</code> | <code>raw</code></td></tr>
+                <tr><td><code>spec.nics[]</code></td><td>array</td><td>List of network interfaces (supports multiple NICs)</td></tr>
+                <tr><td><code>spec.nics[].network</code></td><td>string</td><td>Network name (default <code>"default"</code>)</td></tr>
+                <tr><td><code>spec.nics[].model</code></td><td>string</td><td>NIC model (default <code>"virtio"</code>). The guest still attaches as a virtio TAP.</td></tr>
+                <tr><td><code>spec.nics[].macAddress</code></td><td>string</td><td>Optional MAC. Generated from the VM name and NIC index when omitted.</td></tr>
+                <tr><td><code>spec.nodeLabels</code></td><td>string[]</td><td>Required node labels, each <code>key=value</code>. Also <code>spec.node_labels</code>.</td></tr>
+                <tr><td><code>spec.antiAffinity</code></td><td>string</td><td>Hard anti-affinity group. The VM is not placed on a node that already hosts the group.</td></tr>
+                <tr><td><code>spec.imageSha256</code></td><td>string</td><td>Top-level alternative to <code>disks[].sha256</code></td></tr>
+                <tr><td><code>spec.imageFormat</code></td><td>string</td><td>Top-level alternative to <code>disks[].format</code></td></tr>
+            </table>
+
+            <h3>VM examples</h3>
+            <p><strong>LVM-backed VM with SSH key injection:</strong></p>
+<pre class="docs-yaml-only"><code>kind: VM
+metadata:
+  name: web-server
+spec:
+  cpu: 4
+  memoryBytes: "4G"
+  desiredState: running
+  storageBackend: lvm
+  storageSizeBytes: "20G"
+  targetNode: kvm-node-01
+  sshKeys:
+    - my-deploy-key
+  nics:
+    - network: vxlan-prod
+    - network: nat-mgmt
+  disks:
+    - image: https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2
+      sha256: "&lt;sha256&gt;"
+      format: qcow2</code></pre>
+
+            <p><strong>ZFS-backed VM with cloud-init:</strong></p>
+<pre class="docs-yaml-only"><code>kind: VM
+metadata:
+  name: db-server
+spec:
+  cpu: 8
+  memoryBytes: "16G"
+  storageBackend: zfs
+  storageSizeBytes: "100G"
+  dc: dc-eu-west
+  sshKeys:
+    - ops-team
+  cloudInitUserData: |
+    #cloud-config
+    packages:
+      - postgresql-15
+    runcmd:
+      - systemctl enable postgresql
+      - systemctl start postgresql
+  nics:
+    - network: vxlan-prod
+  disks:
+    - image: https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2
+      sha256: "&lt;sha256&gt;"
+      format: qcow2</code></pre>
+
+            <!-- ======= Network ======= -->
+            <h2>Network manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Network)</span></h2>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"Network"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of the network</td></tr>
+                <tr><td><code>spec.type</code></td><td>string</td><td><code>nat</code> | <code>vxlan</code> | <code>bridge</code></td></tr>
+                <tr><td><code>spec.gatewayIp</code></td><td>string</td><td>Gateway IP for the internal network</td></tr>
+                <tr><td><code>spec.externalIp</code></td><td>string</td><td>External IP for NAT/bridge (optional)</td></tr>
+                <tr><td><code>spec.internalNetmask</code></td><td>string</td><td>Netmask for internal subnet (default <code>"255.255.255.0"</code>)</td></tr>
+                <tr><td><code>spec.vlanId</code></td><td>integer</td><td>VLAN tag (required for bridge networks)</td></tr>
+                <tr><td><code>spec.enableOutboundNat</code></td><td>boolean</td><td>Enable outbound NAT masquerade (default true for nat/vxlan)</td></tr>
+                <tr><td><code>spec.targetNode</code></td><td>string</td><td>Pin network to a specific node (optional, NAT only)</td></tr>
+                <tr><td><code>spec.allowedTcpPorts</code></td><td>integer[]</td><td>TCP ports to open on the network (optional)</td></tr>
+                <tr><td><code>spec.allowedUdpPorts</code></td><td>integer[]</td><td>UDP ports to open on the network (optional)</td></tr>
+                <tr><td><code>spec.ipv6Prefix</code></td><td>string</td><td>Optional IPv6 /64. Empty leaves the network IPv4-only. Also <code>spec.ipv6_prefix</code>.</td></tr>
+                <tr><td><code>spec.ipv6Gateway</code></td><td>string</td><td>Gateway on that prefix (<code>prefix::1</code>). Also <code>spec.ipv6_gateway</code>.</td></tr>
+                <tr><td><code>spec.eastWestFirewall</code></td><td>boolean</td><td>Drop VM-to-VM traffic on this bridge. Default false. Also <code>spec.east_west_firewall</code>.</td></tr>
+            </table>
+
+            <h3>Network examples</h3>
+            <p><strong>VXLAN overlay (multi-node):</strong></p>
+<pre class="docs-yaml-only"><code>kind: Network
+metadata:
+  name: vxlan-prod
+spec:
+  type: vxlan
+  gatewayIp: 10.200.0.1
+  internalNetmask: "255.255.255.0"
+  enableOutboundNat: true</code></pre>
+
+            <p><strong>NAT network (single node):</strong></p>
+<pre class="docs-yaml-only"><code>kind: Network
+metadata:
+  name: nat-mgmt
+spec:
+  type: nat
+  gatewayIp: 10.100.0.1
+  internalNetmask: "255.255.255.0"
+  targetNode: kvm-node-01</code></pre>
+
+            <p><strong>Bridge network with VLAN:</strong></p>
+<pre class="docs-yaml-only"><code>kind: Network
+metadata:
+  name: bridge-vlan100
+spec:
+  type: bridge
+  vlanId: 100
+  externalIp: 192.168.100.1
+  gatewayIp: 192.168.100.1
+  internalNetmask: "255.255.255.0"
+  enableOutboundNat: false</code></pre>
+
+            <!-- ======= SshKey ======= -->
+            <h2>SshKey manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: SshKey)</span></h2>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"SshKey"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of the SSH key (referenced by VM manifests)</td></tr>
+                <tr><td><code>spec.publicKey</code></td><td>string</td><td>The full SSH public key string</td></tr>
+            </table>
+
+            <h3>Example</h3>
+<pre class="docs-yaml-only"><code>kind: SshKey
+metadata:
+  name: my-deploy-key
+spec:
+  publicKey: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExample... ops@company.com"</code></pre>
+
+            <!-- ======= Container ======= -->
+            <h2>Container manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Container)</span></h2>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"Container"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of the container</td></tr>
+                <tr><td><code>spec.image</code></td><td>string</td><td>OCI image reference (e.g. <code>docker.io/library/nginx:latest</code>)</td></tr>
+                <tr><td><code>spec.network</code></td><td>string</td><td>Network name to attach to (optional)</td></tr>
+                <tr><td><code>spec.ports</code></td><td>string[]</td><td>Port mappings, e.g. <code>"80:80"</code></td></tr>
+                <tr><td><code>spec.env</code></td><td>map</td><td>Environment variables as key-value pairs</td></tr>
+                <tr><td><code>spec.command</code></td><td>string[]</td><td>Override container entrypoint command (optional)</td></tr>
+                <tr><td><code>spec.desiredState</code></td><td>string</td><td><code>running</code> | <code>stopped</code>. Omit to preserve the current state on re-apply.</td></tr>
+            </table>
+
+            <h3>Example</h3>
+<pre class="docs-yaml-only"><code>kind: Container
+metadata:
+  name: nginx-web
+spec:
+  image: docker.io/library/nginx:latest
+  network: nat-mgmt
+  ports:
+    - "80:80"
+    - "443:443"
+  env:
+    NGINX_HOST: example.com</code></pre>
+
+
+            <h2 data-i18n="userdoc.yaml.postgresql.h2">PostgreSQL manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Postgresql)</span></h2>
+            <p data-i18n-html="userdoc.yaml.postgresql.p">One database from the NixOS postgresql package, on the node rather than in a VM. Field reference: <a href="postgresql.html">PostgreSQL</a>.</p>
+<pre class="docs-yaml-only"><code>kind: Postgresql
+metadata:
+  name: app
+spec:
+  database: app
+  package: postgresql
+  port: 5432</code></pre>
+            <p data-i18n-html="userdoc.yaml.postgresql.apply">Apply: <code>kctl apply -f postgresql.yaml</code>. <code>kind: postgres</code> is accepted as well.</p>
+
+            <!-- ======= SecurityGroup ======= -->
+            <h2 data-i18n="userdoc.yaml.k8s.h2">KubernetesCluster manifest</h2>
+            <p data-i18n-html="userdoc.yaml.k8s.p">Creation, the API VIP, Cilium L2, and LVM or ZFS volumes are on the <a href="kubernetes.html">Kubernetes</a> page. Apply with <code>kctl kubernetes apply -f</code>. <code>kctl apply -f</code> does not accept this kind. <code>kubernetes-cluster</code> and <code>kubernetes_cluster</code> are accepted spellings of the kind.</p>
+
+            <h2>SecurityGroup manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: SecurityGroup)</span></h2>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"SecurityGroup"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of the security group</td></tr>
+                <tr><td><code>spec.description</code></td><td>string</td><td>Human-readable description</td></tr>
+                <tr><td><code>spec.rules[]</code></td><td>array</td><td>List of firewall rules</td></tr>
+                <tr><td><code>spec.rules[].protocol</code></td><td>string</td><td><code>tcp</code> | <code>udp</code></td></tr>
+                <tr><td><code>spec.rules[].hostPort</code></td><td>integer</td><td>Port on the host side</td></tr>
+                <tr><td><code>spec.rules[].targetPort</code></td><td>integer</td><td>Port inside the VM/container (optional, defaults to hostPort)</td></tr>
+                <tr><td><code>spec.rules[].sourceCidr</code></td><td>string</td><td>Allowed source CIDR (default <code>"0.0.0.0/0"</code>)</td></tr>
+                <tr><td><code>spec.rules[].targetVm</code></td><td>string</td><td>Target VM name (optional)</td></tr>
+                <tr><td><code>spec.rules[].enableDnat</code></td><td>boolean</td><td>Enable DNAT for this rule</td></tr>
+                <tr><td><code>spec.attachments[]</code></td><td>array</td><td>Resources this group is attached to</td></tr>
+                <tr><td><code>spec.attachments[].kind</code></td><td>string</td><td><code>vm</code> | <code>network</code></td></tr>
+                <tr><td><code>spec.attachments[].target</code></td><td>string</td><td>Name or ID of the target resource</td></tr>
+                <tr><td><code>spec.attachments[].targetNode</code></td><td>string</td><td>Node name (required when kind is <code>network</code>)</td></tr>
+            </table>
+
+            <h3>Example</h3>
+<pre class="docs-yaml-only"><code>kind: SecurityGroup
+metadata:
+  name: web-sg
+spec:
+  description: Allow HTTP and HTTPS traffic
+  rules:
+    - protocol: tcp
+      hostPort: 80
+      targetPort: 80
+      sourceCidr: "0.0.0.0/0"
+    - protocol: tcp
+      hostPort: 443
+      targetPort: 443
+      sourceCidr: "0.0.0.0/0"
+      enableDnat: true
+      targetVm: web-01
+  attachments:
+    - kind: vm
+      target: web-01</code></pre>
+
+            <!-- ======= DiskLayout ======= -->
+            <h2>DiskLayout manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: DiskLayout)</span></h2>
+            <p>A <code>DiskLayout</code> manifest declares day-2 partitioning for a node via the controller. Set <strong>exactly one</strong> of <code>spec.diskLayout</code> (structured YAML that <code>kctl</code> expands to disko Nix), <code>spec.layoutNix</code> (inline Nix), or <code>spec.layoutNixFile</code> (path relative to the manifest). Full workflow and classifier behaviour are documented in <a href="storage-day2.html">Storage day-2 operations</a>.</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"DiskLayout"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Name of this layout resource</td></tr>
+                <tr><td><code>spec.nodeId</code></td><td>string</td><td>Target node id in the controller</td></tr>
+                <tr><td><code>spec.diskLayout</code></td><td>object</td><td>Structured disk / GPT / partition tree (mutually exclusive with the other two)</td></tr>
+                <tr><td><code>spec.diskLayout.disks[]</code></td><td>array</td><td>Each item: <code>name</code>, <code>device</code> (<code>/dev/…</code>), <code>gpt.partitions[]</code></td></tr>
+                <tr><td><code>spec.diskLayout.disks[].gpt.partitions[].content</code></td><td>object</td><td>Tag <code>type</code>: <code>filesystem</code> | <code>lvm_pv</code> | <code>zfs</code> with the matching fields</td></tr>
+                <tr><td><code>spec.diskLayout.lvmVolumeGroups[]</code></td><td>array</td><td>Optional stubs: <code>name</code> for each volume group referenced by <code>lvm_pv</code></td></tr>
+                <tr><td><code>spec.diskLayout.zfsPools[]</code></td><td>array</td><td>Optional stubs: <code>name</code> for each pool referenced by <code>zfs</code> partition content</td></tr>
+                <tr><td><code>spec.layoutNix</code></td><td>string</td><td>Multi-line Nix defining <code>disko.devices</code> (mutually exclusive)</td></tr>
+                <tr><td><code>spec.layoutNixFile</code></td><td>string</td><td>Path to a <code>.nix</code> file (mutually exclusive)</td></tr>
+            </table>
+            <h3>DiskLayout example (<code>spec.diskLayout</code>)</h3>
+<pre class="docs-yaml-only"><code>kind: DiskLayout
+metadata:
+  name: prod-data-pool
+spec:
+  nodeId: kvm-node-192-168-40-105
+  diskLayout:
+    disks:
+      - name: data1
+        device: /dev/nvme1n1
+        gpt:
+          partitions:
+            - name: kcore0
+              size: "100%"
+              content:
+                type: filesystem
+                format: ext4
+                mountpoint: /var/lib/kcore/volumes1</code></pre>
+            <p>Apply: <code>kctl diff -f disk-layout.yaml</code> then <code>kctl apply -f disk-layout.yaml</code>. Other commands: <code>kctl get disk-layouts</code>, <code>kctl describe disk-layout &lt;name&gt;</code>, <code>kctl delete disk-layout &lt;name&gt;</code>.</p>
+
+            <!-- ======= ClusterUpdate ======= -->
+            <h2 id="clusterupdate-manifest-kind-clusterupdate">ClusterUpdate manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: ClusterUpdate)</span></h2>
+            <p>A <code>ClusterUpdate</code> manifest declares a <strong>flake-pinned</strong> host OS rollout for one or more nodes. It is submitted with <code>kctl update cluster</code>, not <code>kctl apply</code>. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"ClusterUpdate"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Stable name for this rollout</td></tr>
+                <tr><td><code>spec.target.version</code></td><td>string</td><td>Human version label</td></tr>
+                <tr><td><code>spec.target.flakeRef</code></td><td>string</td><td>Flake URI without the commit (<code>github:kcorehypervisor/kcore</code>). <code>flake_ref</code> is accepted.</td></tr>
+                <tr><td><code>spec.target.flakeRev</code></td><td>string</td><td>40-character git commit. The node fetches <code>flakeRef/flakeRev</code>.</td></tr>
+                <tr><td><code>spec.target.nixpkgsRev</code></td><td>string</td><td>nixpkgs commit. Required when <code>updateKind</code> is <code>nixpkgs</code>.</td></tr>
+                <tr><td><code>spec.updateKind</code></td><td>string</td><td><code>kcore</code> or <code>nixpkgs</code></td></tr>
+                <tr><td><code>spec.testedOsPins</code></td><td>list</td><td>Pins from <code>kcore-X.Y.Z-release.json</code></td></tr>
+                <tr><td><code>spec.schemaVersion</code></td><td>integer</td><td>Schema the release's controller writes</td></tr>
+                <tr><td><code>spec.selector</code></td><td>object</td><td><code>nodeIds</code>, <code>allNodes</code>, <code>controllersOnly</code>, <code>labels</code>, <code>datacenters</code></td></tr>
+                <tr><td><code>spec.strategy</code></td><td>object</td><td><code>strategyType</code> (<code>one-at-a-time</code>), <code>maxUnavailable</code> (<code>1</code>), <code>batchSize</code></td></tr>
+                <tr><td><code>spec.drainVms</code></td><td>boolean</td><td>Migrate guests before a reboot</td></tr>
+                <tr><td><code>spec.activation.mode</code></td><td>string</td><td><code>test</code> | <code>switch</code> | <code>boot</code> | <code>auto</code></td></tr>
+                <tr><td><code>spec.approvalPolicy</code></td><td>string</td><td><code>manual</code> | <code>auto-non-disruptive</code> | <code>auto</code></td></tr>
+            </table>
+            <h3>ClusterUpdate example</h3>
+<pre class="docs-yaml-only"><code>kind: ClusterUpdate
+metadata:
+  name: release-0-4-2
+spec:
+  target:
+    version: "0.4.2"
+    flakeRef: github:kcorehypervisor/kcore
+    flakeRev: "&lt;full-git-sha&gt;"
+  selector:
+    allNodes: true
+  strategy:
+    strategyType: one-at-a-time
+    maxUnavailable: 1
+  approvalPolicy: manual
+  updateKind: kcore</code></pre>
+            <p>Plan: <code>kctl update cluster plan -f rollout.yaml</code>. Apply: <code>kctl update cluster apply -f rollout.yaml</code>. Other: <code>kctl update cluster get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>reboot</code>.</p>
+
+            <!-- ======= Cluster ======= -->
+            <h2>Cluster manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: Cluster)</span></h2>
+            <p>A <code>Cluster</code> manifest creates the cluster PKI on the operator workstation. This is a <strong>local operation</strong> that does not require a running controller.</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"Cluster"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Context name for this cluster (stored in <code>~/.kcore/config</code>)</td></tr>
+                <tr><td><code>spec.controller</code></td><td>string</td><td>Address of the first controller, e.g. <code>192.168.40.107:9090</code></td></tr>
+                <tr><td><code>spec.certsDir</code></td><td>string</td><td>Directory to write PKI files (default <code>~/.kcore/&lt;context-name&gt;</code>)</td></tr>
+                <tr><td><code>spec.force</code></td><td>boolean</td><td>Overwrite existing PKI (default <code>false</code>)</td></tr>
+            </table>
+
+            <h3>Cluster example</h3>
+<pre class="docs-yaml-only"><code>kind: Cluster
+metadata:
+  name: prod
+spec:
+  controller: 192.168.40.107:9090</code></pre>
+            <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
+
+            <!-- ======= NodeInstall ======= -->
+            <h2>NodeInstall manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: NodeInstall)</span></h2>
+            <p>A <code>NodeInstall</code> manifest drives the ISO installer on a booted node. It talks to the live-ISO <strong>node-agent</strong> and optionally contacts a controller for certificate issuance.</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"NodeInstall"</code></td></tr>
+                <tr><td><code>metadata.name</code></td><td>string</td><td>Node identifier (optional)</td></tr>
+                <tr><td><code>spec.node</code></td><td>string</td><td>Node-agent address, e.g. <code>192.168.40.107:9091</code></td></tr>
+                <tr><td><code>spec.osDisk</code></td><td>string</td><td>Target OS disk (required), e.g. <code>/dev/sda</code></td></tr>
+                <tr><td><code>spec.dataDisks</code></td><td>string[]</td><td>Additional data disks (optional)</td></tr>
+                <tr><td><code>spec.runController</code></td><td>boolean</td><td>Start a controller process on this node (default <code>false</code>)</td></tr>
+                <tr><td><code>spec.joinControllers</code></td><td>string[]</td><td>Existing controller addresses to join (repeatable)</td></tr>
+                <tr><td><code>spec.storageBackend</code></td><td>string</td><td><code>filesystem</code> | <code>lvm</code> | <code>zfs</code></td></tr>
+                <tr><td><code>spec.dataDiskMode</code></td><td>string</td><td>Storage mode for data disks: <code>filesystem</code>, <code>lvm</code>, <code>zfs</code></td></tr>
+                <tr><td><code>spec.lvmVgName</code></td><td>string</td><td>LVM volume group name (only with lvm backend)</td></tr>
+                <tr><td><code>spec.lvmLvPrefix</code></td><td>string</td><td>LVM logical volume prefix</td></tr>
+                <tr><td><code>spec.zfsPoolName</code></td><td>string</td><td>ZFS pool name (only with zfs backend)</td></tr>
+                <tr><td><code>spec.zfsDatasetPrefix</code></td><td>string</td><td>ZFS dataset prefix</td></tr>
+                <tr><td><code>spec.dcId</code></td><td>string</td><td>Datacenter identifier (default <code>DC1</code>)</td></tr>
+                <tr><td><code>spec.hostname</code></td><td>string</td><td>Override hostname (optional)</td></tr>
+                <tr><td><code>spec.nodeId</code></td><td>string</td><td>Set a specific node UUID (optional)</td></tr>
+                <tr><td><code>spec.disableVxlan</code></td><td>boolean</td><td>Disable VXLAN overlay on this node (default <code>false</code>)</td></tr>
+                <tr><td><code>spec.insecure</code></td><td>boolean</td><td>Skip TLS verification (default <code>true</code>; required for live ISO)</td></tr>
+            </table>
+
+            <h3>NodeInstall examples</h3>
+            <p><strong>First controller node:</strong></p>
+<pre class="docs-yaml-only"><code>kind: NodeInstall
+metadata:
+  name: kvm-node-107
+spec:
+  node: 192.168.40.107:9091
+  osDisk: /dev/sda
+  runController: true
+  dcId: DC1
+  insecure: true</code></pre>
+
+            <p><strong>HA second controller joining the first:</strong></p>
+<pre class="docs-yaml-only"><code>kind: NodeInstall
+metadata:
+  name: kvm-node-105
+spec:
+  node: 192.168.40.105:9091
+  osDisk: /dev/sda
+  runController: true
+  joinControllers:
+    - 192.168.40.107:9090
+  storageBackend: lvm
+  dcId: DC1
+  insecure: true</code></pre>
+
+            <p><strong>Agent-only worker node:</strong></p>
+<pre class="docs-yaml-only"><code>kind: NodeInstall
+metadata:
+  name: kvm-node-151
+spec:
+  node: 192.168.40.151:9091
+  osDisk: /dev/sda
+  dataDisks:
+    - /dev/sdb
+  joinControllers:
+    - 192.168.40.107:9090
+    - 192.168.40.105:9090
+  storageBackend: zfs
+  zfsPoolName: tank0
+  dcId: DC1
+  insecure: true</code></pre>
+            <p>Apply: <code>kctl apply -f node.yaml</code></p>
+
+            <!-- ======= Field naming ======= -->
+            <h2>Field naming</h2>
+            <p>Both <strong>camelCase</strong> (recommended) and <strong>snake_case</strong> are accepted for most fields:</p>
+            <table>
+                <tr><th>camelCase (preferred)</th><th>snake_case alternative</th></tr>
+                <tr><td><code>storageBackend</code></td><td><code>storage_backend</code></td></tr>
+                <tr><td><code>storageSizeBytes</code></td><td><code>storage_size_bytes</code></td></tr>
+                <tr><td><code>targetNode</code></td><td><code>target_node</code></td></tr>
+                <tr><td><code>targetDc</code></td><td><code>target_dc</code></td></tr>
+                <tr><td><code>sshKeys</code></td><td><code>ssh_keys</code></td></tr>
+                <tr><td><code>cloudInitUserData</code></td><td><code>cloud_init_user_data</code></td></tr>
+                <tr><td><code>backendHandle</code></td><td><code>backend_handle</code></td></tr>
+                <tr><td><code>imageSha256</code></td><td><code>image_sha256</code></td></tr>
+                <tr><td><code>imageFormat</code></td><td><code>image_format</code></td></tr>
+                <tr><td><code>gatewayIp</code></td><td><code>gateway_ip</code></td></tr>
+                <tr><td><code>externalIp</code></td><td><code>external_ip</code></td></tr>
+                <tr><td><code>internalNetmask</code></td><td><code>internal_netmask</code></td></tr>
+                <tr><td><code>enableOutboundNat</code></td><td><code>enable_outbound_nat</code></td></tr>
+                <tr><td><code>publicKey</code></td><td><code>public_key</code></td></tr>
+                <tr><td><code>certsDir</code></td><td><code>certs_dir</code></td></tr>
+                <tr><td><code>osDisk</code></td><td><code>os_disk</code></td></tr>
+                <tr><td><code>dataDisks</code></td><td><code>data_disks</code></td></tr>
+                <tr><td><code>runController</code></td><td><code>run_controller</code></td></tr>
+                <tr><td><code>joinControllers</code></td><td><code>join_controllers</code></td></tr>
+                <tr><td><code>dataDiskMode</code></td><td><code>data_disk_mode</code></td></tr>
+                <tr><td><code>lvmVgName</code></td><td><code>lvm_vg_name</code></td></tr>
+                <tr><td><code>lvmLvPrefix</code></td><td><code>lvm_lv_prefix</code></td></tr>
+                <tr><td><code>zfsPoolName</code></td><td><code>zfs_pool_name</code></td></tr>
+                <tr><td><code>zfsDatasetPrefix</code></td><td><code>zfs_dataset_prefix</code></td></tr>
+                <tr><td><code>dcId</code></td><td><code>dc_id</code></td></tr>
+                <tr><td><code>disableVxlan</code></td><td><code>disable_vxlan</code></td></tr>
+                <tr><td><code>nodeId</code></td><td><code>node_id</code></td></tr>
+            </table>
+
+            <!-- ======= Supported kinds summary ======= -->
+            <h2>Supported manifest kinds</h2>
+            <table>
+                <tr><th>Kind</th><th>Apply command</th><th>Description</th></tr>
+                <tr><td><code>Cluster</code></td><td><code>kctl apply -f</code></td><td>Create cluster PKI (local operation, no controller needed)</td></tr>
+                <tr><td><code>NodeInstall</code></td><td><code>kctl apply -f</code></td><td>Install a node from the live ISO</td></tr>
+                <tr><td><code>VM</code></td><td><code>kctl apply -f</code> or <code>kctl create vm -f</code></td><td>Create a virtual machine</td></tr>
+                <tr><td><code>Network</code></td><td><code>kctl apply -f</code></td><td>Create a NAT, VXLAN, or bridge network</td></tr>
+                <tr><td><code>SshKey</code></td><td><code>kctl apply -f</code></td><td>Register an SSH public key</td></tr>
+                <tr><td><code>Container</code></td><td><code>kctl apply -f</code></td><td>Create an OCI container</td></tr>
+                <tr><td><code>Postgresql</code></td><td><code>kctl apply -f</code></td><td data-i18n="userdoc.yaml.postgresql.kind">One PostgreSQL database on a node</td></tr>
+                <tr><td><code>KubernetesCluster</code></td><td><code>kctl kubernetes apply -f</code></td><td data-i18n="userdoc.yaml.k8s.kind">Kubernetes cluster on existing kcore nodes. Not kctl apply.</td></tr>
+                <tr><td><code>SecurityGroup</code></td><td><code>kctl apply -f</code> or <code>kctl sg apply -f</code></td><td>Create and attach firewall rules</td></tr>
+                <tr><td><code>DiskLayout</code></td><td><code>kctl diff -f</code> / <code>kctl apply -f</code></td><td>Day-2 disk layout (YAML or disko Nix)</td></tr>
+                <tr><td><code>ClusterUpdate</code></td><td><code>kctl update cluster plan -f</code> / <code>kctl update cluster apply -f</code></td><td>Host OS rollout (flake-pinned); not <code>kctl apply</code></td></tr>
+            </table>
+
+            <h2 id="idempotency-and-upsert">Idempotency and upsert</h2>
+            <p><code>kctl apply -f</code> and <code>kctl create -f</code> are idempotent. The controller performs a server-side upsert: it looks up the existing resource, diffs it against your manifest, and then creates, updates the fields that are safe to change, rejects changes to fields that would require a rebuild, or does nothing when the stored state already matches.</p>
+            <p>Every create command prints what happened:</p>
+<div class="docs-cli-only">
+<pre><code>$ kctl create vm -f vm.yaml
+updated VM 'web-01' (fields: cpu, memory_bytes, desired_state)
+  ID:   vm-…
+  Node: node-a
+  CPU:  4 cores
+  Mem:  8.0 GiB
+
+$ kctl create vm -f vm.yaml
+unchanged VM 'web-01'</code></pre>
+</div>
+
+            <h3>Mutable vs immutable fields</h3>
+            <p>A change to an immutable field is rejected with <code>InvalidArgument</code>. The fix is always: <code>kctl delete …</code> then re-apply.</p>
+            <table>
+                <tr><th>Kind</th><th>Mutable</th><th>Immutable (rejects with <code>InvalidArgument</code>)</th></tr>
+                <tr><td><code>VM</code></td><td><code>cpu</code>, <code>memoryBytes</code>, <code>desiredState</code></td><td><code>disks</code>, <code>nics</code>, <code>nodeLabels</code>, <code>antiAffinity</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>targetNode</code>, <code>sshKeys</code>, <code>cloudInitUserData</code>, <code>image_*</code></td></tr>
+                <tr><td><code>Container</code></td><td><code>desiredState</code></td><td><code>image</code>, <code>command</code>, <code>network</code>, <code>env</code>, <code>ports</code>, <code>storageBackend</code>, <code>storageSizeBytes</code>, <code>mountTarget</code></td></tr>
+                <tr><td><code>Postgresql</code></td><td data-i18n-html="userdoc.yaml.postgresql.mutable"><code>port</code></td><td data-i18n-html="userdoc.yaml.postgresql.immutable"><code>database</code>, <code>package</code>, <code>targetNode</code></td></tr>
+                <tr><td><code>Network</code></td><td>— (none in v1)</td><td>all fields</td></tr>
+                <tr><td><code>SshKey</code></td><td>— (public key immutable)</td><td><code>publicKey</code></td></tr>
+                <tr><td><code>SecurityGroup</code></td><td><code>description</code>, <code>rules</code>, attachments</td><td><code>name</code></td></tr>
+            </table>
+            <p class="note">Rationale: v1 rejects any change that would require recreating the workload or re-provisioning a disk, so reconciliation stays predictable. Future versions can promote more fields to mutable as controlled rebuild paths are added.</p>
+            <p class="note"><strong>Note:</strong> <code>targetDc</code> is <em>not</em> rejected by the diff today — the controller has no per-VM DC field to compare against. Placement is enforced once at create time via the placement preflight; changing <code>targetDc</code> on an existing VM is silently a no-op (the VM stays where it was originally placed).</p>
+
+            <h3>Terraform and Crossplane</h3>
+            <p>Because every <code>Create*</code> RPC is already a declarative upsert, a Terraform provider or Crossplane composition only needs <strong>one verb</strong> per resource:</p>
+            <ul>
+                <li><strong>Create</strong> (Terraform) / reconcile loop (Crossplane) → gRPC <code>CreateX</code> with the desired spec.</li>
+                <li><strong>Update</strong> on drift → same gRPC <code>CreateX</code>. The controller does the diff server-side and either applies the mutable fields or returns <code>InvalidArgument</code>, which the provider surfaces as a diagnostic telling the user to destroy and recreate.</li>
+                <li><strong>Delete</strong> → existing gRPC <code>DeleteX</code>.</li>
+            </ul>
+            <p>No client-side diff, no client-side tracking of which fields are mutable — the controller is the single source of truth.</p>
+
+            <div class="docs-tf-only">
+            <h2>Terraform</h2>
+            <p data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
+            <p data-i18n-html="docs.mode.tf.pg">Provider 0.5.0 has no PostgreSQL resource. Declare the database with CLI or YAML.</p>
+            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.join"><code>kcore_node</code> takes one <code>join_controller</code>, the bootstrap controller address. A list of join controllers is CLI and YAML only.</p>
+            <p data-i18n-html="docs.mode.tf.disk"><code>kcore_disk_layout</code> takes <code>layout_nix</code>, a disko expression. The structured <code>spec.diskLayout</code> object is YAML only. <code>layoutNixFile</code> is not a provider attribute.</p>
+<pre><code>terraform {
+  required_providers {
+    kcore = {
+      source  = "kcorehypervisor/kcore"
+      version = "0.5.0"
+    }
+  }
+}
+
+provider "kcore" {
+  controller_address = "192.168.40.107:9090"
+  tls_cert_path      = "${path.module}/certs/kctl.crt"
+  tls_key_path       = "${path.module}/certs/kctl.key"
+  tls_ca_path        = "${path.module}/certs/ca.crt"
+}
+
+resource "kcore_cluster" "prod" {
+  name       = "prod"
+  controller = "192.168.40.107:9090"
+  certs_dir  = "${path.module}/certs"
+}
+
+resource "kcore_node" "controller" {
+  bootstrap      = true
+  address        = "192.168.40.107:9091"
+  os_disk        = "/dev/sda"
+  certs_dir      = kcore_cluster.prod.certs_dir
+  run_controller = true
+  dc_id          = "DC1"
+  insecure       = true
+  hostname       = "kvm-node-107"
+}
+
+resource "kcore_ssh_key" "deploy" {
+  name       = "my-deploy-key"
+  public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExample... ops@company.com"
+}
+
+resource "kcore_network" "vxlan_prod" {
+  name                = "vxlan-prod"
+  network_type        = "vxlan"
+  gateway_ip          = "10.200.0.1"
+  internal_netmask    = "255.255.255.0"
+  enable_outbound_nat = true
+}
+
+resource "kcore_network" "nat_mgmt" {
+  name             = "nat-mgmt"
+  network_type     = "nat"
+  gateway_ip       = "10.100.0.1"
+  internal_netmask = "255.255.255.0"
+  target_node      = "kvm-node-01"
+}
+
+resource "kcore_vm" "web" {
+  name               = "web-server"
+  cpu                = 4
+  memory_bytes       = 4 * 1024 * 1024 * 1024
+  storage_backend    = "lvm"
+  storage_size_bytes = 20 * 1024 * 1024 * 1024
+  target_node        = "kvm-node-01"
+  ssh_key_names      = ["my-deploy-key"]
+  image_url          = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
+  image_sha256       = "&lt;sha256&gt;"
+  desired_state      = "running"
+
+  nic {
+    network = "vxlan-prod"
+  }
+
+  nic {
+    network = "nat-mgmt"
+  }
+}
+
+resource "kcore_workload" "nginx" {
+  name    = "nginx-web"
+  image   = "docker.io/library/nginx:latest"
+  network = "nat-mgmt"
+  ports   = ["80:80", "443:443"]
+
+  env = {
+    NGINX_HOST = "example.com"
+  }
+}
+
+resource "kcore_security_group" "web" {
+  name        = "web-sg"
+  description = "Allow HTTP and HTTPS traffic"
+
+  rule {
+    protocol    = "tcp"
+    host_port   = 80
+    target_port = 80
+    source_cidr = "0.0.0.0/0"
+  }
+
+  rule {
+    protocol    = "tcp"
+    host_port   = 443
+    target_port = 443
+    source_cidr = "0.0.0.0/0"
+    enable_dnat = true
+    target_vm   = "web-01"
+  }
+}
+
+resource "kcore_security_group_attachment" "web" {
+  security_group = kcore_security_group.web.name
+  target_kind    = "vm"
+  target_id      = "web-01"
+}
+
+resource "kcore_disk_layout" "prod_data_pool" {
+  name    = "prod-data-pool"
+  node_id = "kvm-node-192-168-40-105"
+  layout_nix = <<-NIX
+    {
+      disko.devices.disk.data1 = {
+        type = "disk";
+        device = "/dev/nvme1n1";
+        content = {
+          type = "gpt";
+          partitions.data = {
+            size = "100%";
+            content = {
+              type = "filesystem";
+              format = "ext4";
+              mountpoint = "/var/lib/kcore/volumes1";
+            };
+          };
+        };
+      };
+    }
+  NIX
+}
+
+resource "kcore_cluster_update" "os" {
+  name                    = "release-0-5-0"
+  version                 = "0.5.0"
+  flake_ref               = "github:kcorehypervisor/kcore"
+  flake_rev               = "&lt;full-git-sha&gt;"
+  nixpkgs_rev             = "&lt;nixpkgs-rev&gt;"
+  all_nodes               = true
+  strategy                = "one-at-a-time"
+  max_unavailable         = 1
+  batch_size              = 1
+  drain_vms               = false
+  activation              = "auto"
+  update_kind             = "kcore"
+  schema_version          = 59
+  previous_schema_version = 56
+  min_compatible_reader   = 56
+  approval                = "manual"
+  approve                 = false
+
+  tested_os_pins {
+    nixpkgs_rev        = "&lt;nixpkgs-rev&gt;"
+    ceph_rev           = "&lt;ceph-rev&gt;"
+    ceph_sha256        = "&lt;ceph-sha256&gt;"
+    kubernetes_version = "1.37.0"
+  }
+}
+resource "kcore_volume" "data" {
+  name          = "web-data"
+  size_bytes    = 10737418240
+  storage_class = "ceph"
+  vm            = kcore_vm.web.id
+}
+
+resource "kcore_volume_snapshot" "data" {
+  volume = kcore_volume.data.name
+  name   = "web-data-1"
+}
+
+resource "kcore_snapshot_policy" "daily" {
+  name            = "daily"
+  selector_volume = kcore_volume.data.name
+  schedule        = "@daily"
+  keep            = 7
+}
+
+resource "kcore_ceph_cluster" "lab" {
+  name           = "lab-san"
+  public_network = "10.10.0.0/24"
+  size           = 3
+  min_size       = 2
+
+  node {
+    node_id    = "dell-1"
+    osd_device = "/dev/nvme0n1"
+  }
+}
+
+resource "kcore_shared_filesystem" "home" {
+  name         = "home"
+  ceph_cluster = kcore_ceph_cluster.lab.name
+  fs_name      = "home"
+
+  client {
+    name  = "web"
+    paths = ["/"]
+  }
+}
+
+resource "kcore_object_store" "s3" {
+  name         = "s3"
+  ceph_cluster = kcore_ceph_cluster.lab.name
+  port         = 7480
+}
+
+resource "kcore_object_user" "app" {
+  name  = "app"
+  store = kcore_object_store.s3.name
+}
+
+resource "kcore_operator" "ci" {
+  name       = "ci"
+  roles      = ["vm-admin"]
+  issue_cert = true
+}
+
+data "kcore_nodes" "all" {}
+
+data "kcore_node" "controller" {
+  id = kcore_node.controller.node_id
+}
+
+data "kcore_vm" "web" {
+  id = kcore_vm.web.id
+}
+</code></pre>
+            </div>
+            <h2>Applying manifests</h2>
+            <p>Use <code>kctl apply -f</code> for most resource kinds; the <code>kind</code> field is auto-detected. <strong>Host OS rollouts</strong> use <code>kctl update cluster apply -f rollout.yaml</code> instead — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+<pre class="docs-cli-only"><code># Bootstrap (local / ISO operations)
+kctl apply -f cluster.yaml
+kctl apply -f node-install.yaml
+
+# Cluster resources (require controller)
+kctl apply -f vm.yaml
+kctl apply -f network.yaml
+kctl apply -f ssh-key.yaml
+kctl apply -f container.yaml
+kctl apply -f postgresql.yaml
+kctl apply -f security-group.yaml
+kctl apply -f disk-layout.yaml
+
+# Host OS upgrade (separate command — kind: ClusterUpdate)
+kctl update cluster plan -f rollout.yaml
+kctl update cluster apply -f rollout.yaml</code></pre>
+
+            <p class="note">Manifests are the recommended way to manage kcore resources. They provide a reproducible, version-controllable description of your infrastructure.</p>
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
+    <script src="../../../js/i18n.js"></script><script src="../../../js/main.js"></script>
+    <script src="../../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

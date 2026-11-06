@@ -17,6 +17,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://kcorehypervisor.com/assets/kcore-logo.png">
     <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/code-color.css">
     <link rel="stylesheet" href="../../css/docs-mode.css">
     <script src="../../js/docs-mode.js"></script>
     <style>
@@ -44,6 +45,7 @@
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
             <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../products.html" data-i18n="nav.products">Products</a></li>
             <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
             <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
             <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
@@ -66,14 +68,22 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
                 <li><a href="vm-migration.html" class="active" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                 <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
                 <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
@@ -104,6 +114,11 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
                 <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
@@ -159,7 +174,7 @@
 kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
 </div>
 <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.5.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.7.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
 <pre><code>resource "kcore_volume" "app" {
   name          = "app-data"
   size_bytes    = 107374182400
@@ -177,8 +192,8 @@ kctl drain node node-a --target-node node-b</code></pre>
             <p data-i18n="userdoc.vmmig.coldP1">Every VM on the source is reassigned in the control plane. Nix push removes units on the source and creates them on destinations. Ceph disks are remapped — not copied. Guests experience a full stop/start.</p>
 
             <h2>Automatic failover</h2>
-            <p>A node that misses heartbeats for 90 seconds is marked <code>not-ready</code>. The controller then cold-moves each Ceph VM onto another healthy member of the same cluster. It does not contact the failed node. Filesystem, LVM, and ZFS VMs stay there, and <code>kctl get cluster-health</code> lists them as VMs on a not-ready node.</p>
-            <p>When the node heartbeats again, the controller pushes a configuration that no longer starts the moved guests. Set <code>failover.enabled: false</code> in <code>controller.yaml</code> to leave every VM where it is.</p>
+            <p>When a node misses heartbeats for <code>failover.nodeTimeoutSecs</code> (default 30 seconds, checked every <code>detectIntervalSecs</code>, default 5), the controller marks it <code>not-ready</code> and moves each protected VM to another host. A Ceph guest is fenced first: the controller blocklists the lost host&rsquo;s clients on the image and its address range through a healthy Ceph member, and only then restarts the guest, in priority order. A ZFS guest with a current replica restarts on its replica node. Other local disks stay on the failed node.</p>
+            <p>When the node heartbeats again, the controller pushes a configuration that no longer starts the moved guests, so a returning node does not boot a second copy. Set <code>failover.enabled: false</code> in <code>controller.yaml</code> to leave every VM where it is. The full story, with restart priority, anti-affinity, admission control, and the isolation response, is in <a href="ha-vms.html">High availability for VMs</a>.</p>
 
             <h2 data-i18n="userdoc.vmmig.whatHappens">What happens under the hood</h2>
             <h3 data-i18n="userdoc.vmmig.whatLive">Live</h3>
@@ -219,7 +234,7 @@ kctl migrate reset-session app-1 --node node-b
 kctl migrate reset-session app-1 --node node-b --force</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.5.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.7.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
             </div>
             <p data-i18n-html="userdoc.vmmig.troubleAeP3">Per node, the inspect step reports whether a session is tracked, the reserved port and whether anything is listening on it, the receive VMM's pid and whether it is alive and really belongs to this VM (a recycled pid is reported as recycled, not as live), whether the handoff marker and API socket exist, and a verdict. A node that cannot be reached is reported rather than failing the whole report. Inspecting needs <code>read-only</code>; clearing needs <code>cluster-admin</code>.</p>
             <p data-i18n-html="userdoc.vmmig.troubleAeP4">Clearing releases the session and its port reservation, kills the receive VMM, removes the marker, pid and API socket files, and unmaps the destination's RBD image. It is idempotent, so clearing a node with no session is a success. <code>--node</code> is mandatory, and the controller refuses the node that currently owns the VM. Once the session is gone, retry the migration as normal.</p>
@@ -228,6 +243,7 @@ kctl migrate reset-session app-1 --node node-b --force</code></pre>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
     <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/code-color.js"></script>
     <script src="../../js/docs-version.js"></script>
     <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
 </body>

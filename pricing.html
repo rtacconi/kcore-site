@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="kcore open-core pricing: Community ISO free; Standard, Premium, and Enterprise per CPU socket. Migration services from VMware and Proxmox.">
+    <meta name="description" content="kcore pricing: community ISO free; Standard, Premium, and Enterprise per CPU socket. Vault backups and Provisioning are quoted. Migration services.">
     <title>Pricing &amp; licensing - kcore hypervisor</title>
     <link rel="canonical" href="https://kcorehypervisor.com/pricing.html">
     <meta name="robots" content="index, follow">
@@ -17,6 +17,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/code-color.css">
     <style>
         .pricing-hero {
             padding: 8rem 0 3rem;
@@ -174,6 +175,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
                 <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html">Roadmap</a></li>
@@ -185,9 +187,9 @@
 
     <section class="pricing-hero">
         <div class="container">
-            <h1 data-i18n="pricing.title">Open core pricing for production virtualization</h1>
-            <p data-i18n="pricing.subtitle">
-                Download the Community ISO free from GitHub Releases. Paid subscriptions fund the official signed distribution, the enterprise update channel, and commercial support.
+            <h1>Pricing</h1>
+            <p>
+                The hypervisor is open core and priced per CPU socket. Vault and Provisioning are quoted. The community ISO is free on GitHub Releases.
             </p>
         </div>
     </section>
@@ -308,6 +310,31 @@
                 Market context (Sep 2026): Proxmox VE Premium is about €1,100/socket/year with 24/7 and a 2-hour Sev-1 target; Standard about €550. Vates XCP-ng Enterprise is about $1,800/host/year. kcore Enterprise is priced to sit in that band without matching Proxmox’s full mature support org on day one—custom SLAs available by quote.
             </p>
 
+            <div class="services-box" id="addons">
+                <h2>Vault and Provisioning</h2>
+                <p>
+                    These are separate products with their own licences and version numbers. They work with any hypervisor subscription tier and are quoted, not listed.
+                </p>
+                <div class="product-grid" style="margin: 1.5rem 0;">
+                    <article class="product-card">
+                        <h3>kcore Vault</h3>
+                        <p class="product-kind">Backup appliance</p>
+                        <p>Licensed by the number of protected VMs and the TiB of repository. A signed licence document sets both limits, and a missing or expired licence can stop new backup jobs. Restores are never gated.</p>
+                        <div class="product-links"><a class="btn btn-secondary" href="vault.html">What it does</a></div>
+                    </article>
+                    <article class="product-card">
+                        <h3>kcore Provisioning</h3>
+                        <p class="product-kind">Bare-metal automation</p>
+                        <p>Tell us how many machines you manage and which BMCs they have, and we quote a number.</p>
+                        <div class="product-links"><a class="btn btn-secondary" href="provisioning.html">What it does</a></div>
+                    </article>
+                </div>
+                <p style="margin-bottom: 0;">
+                    <a href="mailto:team@tacconiconsulting.com?subject=kcore%20Vault%20or%20Provisioning%20quote" class="pricing-cta pricing-cta-primary">Ask for a quote</a>
+                    <a href="products.html" class="pricing-cta pricing-cta-secondary" style="margin-left: 0.5rem;">All products</a>
+                </p>
+            </div>
+
             <div class="services-box">
                 <h2 data-i18n="pricing.servicesTitle">Migration &amp; professional services</h2>
                 <p data-i18n-html="pricing.servicesP1">
@@ -362,6 +389,9 @@
                         <li><a href="features.html" data-i18n="nav.features">Features</a></li>
                         <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                         <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -436,6 +466,7 @@
     </script>
 
     <script src="js/main.js"></script>
+    <script src="js/code-color.js"></script>
     <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

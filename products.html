@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore hypervisor, kcore Vault, and kcore Provisioning: the hypervisor, the immutable backup appliance, and the bare-metal automation that builds the cluster.">
+    <title>Products - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/products.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Products - kcore hypervisor">
+    <meta property="og:description" content="kcore hypervisor, kcore Vault, and kcore Provisioning: the hypervisor, the immutable backup appliance, and the bare-metal automation that builds the cluster.">
+    <meta property="og:url" content="https://kcorehypervisor.com/products.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/code-color.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Three products, one way of working</h1>
+            <p class="page-lead">kcore is a hypervisor you run from files. Vault keeps backups an attacker cannot delete. Provisioning turns racked servers into nodes. Each is licensed and versioned on its own.</p>
+            <div class="cta-row">
+                <a class="btn btn-primary" href="mailto:team@tacconiconsulting.com?subject=kcore%20products%20quote">Ask for a quote</a>
+                <a class="btn btn-secondary" href="pricing.html">Hypervisor pricing</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" id="hypervisor">
+        <div class="container content-narrow">
+            <h2>kcore hypervisor</h2>
+            <p>The platform. Cloud Hypervisor on NixOS, a controller, a node agent on every host, and <code>kctl</code>. You describe VMs, networks, storage, and updates in YAML or Terraform and apply them.</p>
+            <ul>
+                <li>HA restart after node loss, live and cold migration, anti-affinity, admission control.</li>
+                <li>Ceph SAN (kcore SAN) with fencing before failover, plus LVM and ZFS local backends.</li>
+                <li>Cluster updates by release tag with a canary node, a soak, and automatic revert.</li>
+                <li>Dashboard, Terraform provider, MCP server, and an AI agent that works through the same API.</li>
+                <li>GPU passthrough, NVIDIA vGPU, Slurm, PostgreSQL, containers, and Kubernetes clusters.</li>
+            </ul>
+            <p>Open core. The community ISO is free. Signed ISOs, the update channel, and support are priced per physical CPU socket. <a href="pricing.html">Pricing</a>, <a href="features.html">features</a>, <a href="docs/user/whats-new-0-7-0.html">what is new in 0.7.0</a>.</p>
+        </div>
+    </section>
+
+    <section class="content-section" id="vault">
+        <div class="container content-narrow">
+            <h2>kcore Vault</h2>
+            <p>A backup appliance on its own machine. It pulls disk extents from the cluster, encrypts and signs them, and keeps them until a retention date that can be extended but never shortened. An offsite copy goes to an S3 bucket with Object Lock.</p>
+            <p>Built for the case where someone has an admin password or root on a hypervisor node. The nodes hold no credentials for the repository.</p>
+            <p><a href="vault.html">Vault overview</a> &middot; <a href="docs/user/vault.html">operator guide</a> &middot; <a href="docs/user/ransomware-resistance.html">ransomware resistance</a></p>
+        </div>
+    </section>
+
+    <section class="content-section" id="provisioning">
+        <div class="container content-narrow">
+            <h2>kcore Provisioning</h2>
+            <p>Bare-metal automation through the BMC. It reads hardware over Redfish, boots kcoreOS by UEFI HTTP boot, sets BIOS and RAID, checks every disk, issues node certificates, and runs DHCP and DNS for the networks it owns.</p>
+            <p>Use it to bring up a rack without a keyboard or a USB stick, or to rebuild a node after a failed disk.</p>
+            <p><a href="provisioning.html">Provisioning overview</a> &middot; <a href="docs/user/provisioning.html">operator guide</a></p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container content-narrow">
+            <h2>Which one do you need</h2>
+            <table>
+                <tr><th>You want</th><th>Start with</th></tr>
+                <tr><td>Replace VMware or Proxmox with something you can version-control</td><td>kcore hypervisor</td></tr>
+                <tr><td>Backups that survive a compromised admin account</td><td>kcore hypervisor and Vault</td></tr>
+                <tr><td>Ten or more servers racked and wired, nothing installed</td><td>Provisioning, then the hypervisor</td></tr>
+                <tr><td>A whole site from bare metal to protected VMs</td><td>All three</td></tr>
+            </table>
+            <p>Vault and Provisioning have their own release numbers. Vault 0.1.x and Provisioning 0.1.0 are documented against kcore 0.7.0. Prices for both are by quote.</p>
+            <div class="cta-row"><a class="btn btn-primary" href="mailto:team@tacconiconsulting.com?subject=kcore%20Vault%20or%20Provisioning%20quote">Ask for a quote</a></div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
+                        <li><a href="partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/code-color.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

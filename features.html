@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A failed host update boots the previous generation. Windows guests run. One physical GPU goes to one VM. Live migration needs Ceph.">
+    <meta name="description" content="HA VMs, live migration, Ceph storage, canary updates that roll back, a dashboard, Terraform, MCP, and an AI agent. Vault backups and bare-metal Provisioning as paid products.">
     <title>Features - kcore hypervisor</title>
     <link rel="canonical" href="https://kcorehypervisor.com/features.html">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="kcore hypervisor">
     <meta property="og:title" content="Features - kcore hypervisor">
-    <meta property="og:description" content="A failed host update boots the previous generation. Windows guests run. One physical GPU goes to one VM. Live migration needs Ceph.">
+    <meta property="og:description" content="HA VMs, live migration, Ceph storage, canary updates that roll back, a dashboard, Terraform, MCP, and an AI agent. Vault backups and bare-metal Provisioning as paid products.">
     <meta property="og:url" content="https://kcorehypervisor.com/features.html">
     <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <meta property="og:image:alt" content="kcore hypervisor logo">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/code-color.css">
     <style>
         .features-hero {
             padding: 8rem 0 4rem;
@@ -44,6 +45,49 @@
         .lead-facts li {
             color: var(--text-secondary);
             line-height: 1.6;
+        }
+
+        .complete-features .lede {
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin: 0 auto 2.5rem;
+            text-align: center;
+        }
+
+        .complete-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem 3rem;
+            text-align: left;
+        }
+
+        .complete-grid h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.15rem;
+        }
+
+        .complete-grid ul {
+            list-style: none;
+        }
+
+        .complete-grid li {
+            position: relative;
+            padding: 0.35rem 0 0.35rem 1.35rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .complete-grid li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+
+        @media (max-width: 800px) {
+            .complete-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .feature-section {
@@ -238,6 +282,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
                 <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html">Roadmap</a></li>
@@ -250,9 +295,9 @@
     <!-- Hero -->
     <section class="features-hero">
         <div class="container">
-            <h1 data-i18n="fp.title">What kcore does</h1>
-            <p data-i18n="fp.subtitle">
-                A failed host update boots the previous generation. Windows guests run. The evaluation ISO is free.
+            <h1>What kcore does</h1>
+            <p>
+                VMs, containers, and Kubernetes on an immutable host. HA, live migration, Ceph, and updates that roll back. Backup and bare-metal provisioning as add-on products.
             </p>
         </div>
     </section>
@@ -260,14 +305,15 @@
     <section class="feature-section">
         <div class="container">
             <div class="lead-facts">
-                <h2 data-i18n="fp.lead.title">Read this first</h2>
+                <h2>Read this first</h2>
                 <ul class="feature-list-items">
-                    <li data-i18n="fp.lead.updates">A failed host update boots the previous generation.</li>
-                    <li data-i18n="fp.lead.windows">Windows Server and Windows desktop guests run.</li>
-                    <li data-i18n="fp.lead.gpu">One physical GPU can be assigned to one VM. NVIDIA vGPU, many VMs on one card, is not available.</li>
-                    <li data-i18n="fp.lead.live">Live migration needs shared Ceph storage. Control-plane replication across datacenters is not vSphere HA.</li>
-                    <li data-i18n-html="fp.lead.import">kcore-migrate inventories vCenter or Proxmox and converts exported disks to qcow2 or raw. It does not read disks straight from vCenter. Cutover is a project. See the <a href="docs/user/import.html">import guide</a> and <a href="https://github.com/kcorehypervisor/kcore-migrate">kcore-migrate</a>.</li>
-                    <li data-i18n-html="fp.lead.price">Price is per CPU socket per year. The evaluation ISO is free. Download it from <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a>.</li>
+                    <li>An update goes to one canary node first. A node that fails its health check boots the previous generation.</li>
+                    <li>A host that dies is fenced and its VMs restart on the survivors. Live migration and failover need the disk on shared Ceph. A ZFS VM with a current replica restarts on its replica node.</li>
+                    <li>Windows Server and Windows desktop guests run next to Linux.</li>
+                    <li>A GPU goes to one VM, or an NVIDIA card is sliced into vGPUs. Intel and AMD SR-IOV slices are in the API but not yet run on lab hardware. VFIO devices do not live-migrate.</li>
+                    <li>Dashboard sign-in is password and TOTP. There is no SSO yet.</li>
+                    <li>kcore-migrate inventories vCenter or Proxmox and converts exported disks to qcow2 or raw. It does not read disks straight from vCenter. Cutover is a project. See the <a href="blog/vmware-import-inventory-convert-cutover.html">import guide</a>.</li>
+                    <li>The hypervisor is priced per CPU socket per year. The community ISO is free on <a href="https://github.com/kcorehypervisor/kcore/releases">GitHub Releases</a>. <a href="vault.html">Vault</a> and <a href="provisioning.html">Provisioning</a> are separate paid products.</li>
                 </ul>
             </div>
         </div>
@@ -275,9 +321,13 @@
 
     <section class="feature-section">
         <div class="container">
-            <div class="lead-facts">
-                <h2 data-i18n="fp.provision.title">Bare-metal install</h2>
-                <p data-i18n="fp.provision.desc">A provisioner configures servers over IPMI and Redfish. It netboots kcore with UEFI HTTP boot.</p>
+            <div class="content-narrow">
+                <h2>Three products</h2>
+                <div class="fact-grid">
+                    <div class="fact"><strong>Hypervisor</strong><span>Controller, node agent, <code>kctl</code>, dashboard, Terraform provider, MCP. Open core.</span></div>
+                    <div class="fact"><strong><a href="vault.html">Vault</a></strong><span>Immutable, encrypted backups with an Object Lock offsite copy.</span></div>
+                    <div class="fact"><strong><a href="provisioning.html">Provisioning</a></strong><span>Bare metal over BMC. Redfish, IPMI, UEFI HTTP boot, RAID and BIOS profiles.</span></div>
+                </div>
             </div>
         </div>
     </section>
@@ -286,35 +336,35 @@
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2 data-i18n="fp.atomic.title">A failed update boots the previous generation</h2>
-                    <p data-i18n="fp.atomic.desc">
-                        Host updates are one transaction. If an update fails, the machine boots the previous generation.
+                    <h2>Updates try one node first and roll back</h2>
+                    <p>
+                        <code>kctl update version set v0.7.0</code> resolves a release tag and starts a rollout. The canary soaks while the controller compares it with the other nodes. The rest follow one at a time.
                     </p>
                     <ul class="feature-list-items">
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong data-i18n="fp.atomic.f1.title">Immutable Base System</strong><br>
-                                <span style="color: var(--text-tertiary);" data-i18n="fp.atomic.f1.desc">
-                                    The host OS is read-only. Configuration lives in Nix, not scattered across /etc.
+                                <strong>Immutable base</strong><br>
+                                <span style="color: var(--text-tertiary);">
+                                    The host OS is read-only. A change is a new generation, not an edit.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong data-i18n="fp.atomic.f2.title">Boot into Previous Generation</strong><br>
-                                <span style="color: var(--text-tertiary);" data-i18n="fp.atomic.f2.desc">
-                                    Every NixOS generation is kept. Select a previous one at boot or switch remotely.
+                                <strong>Canary and soak</strong><br>
+                                <span style="color: var(--text-tertiary);">
+                                    Version, heartbeats, guest starts, agent errors, and Ceph OSD latency are compared. A bad canary rolls back and the rollout stops.
                                 </span>
                             </div>
                         </li>
                         <li>
                             <span class="icon">✓</span>
                             <div>
-                                <strong data-i18n="fp.atomic.f3.title">Download the ISO</strong><br>
-                                <span style="color: var(--text-tertiary);" data-i18n="fp.atomic.f3.desc">
-                                    Official ISOs are produced from flake.nix. Download the evaluation ISO. You do not build it.
+                                <strong>Revert without the controller</strong><br>
+                                <span style="color: var(--text-tertiary);">
+                                    A guard timer and a one-shot boot entry put the previous generation back if the node does not report healthy. A kernel that hangs falls back too.
                                 </span>
                             </div>
                         </li>
@@ -322,20 +372,20 @@
                 </div>
                 <div class="feature-visual">
                     <div class="feature-diagram">
-                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);" data-i18n="fp.diagram.current">
-                            Current generation
+                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);" >
+                            Canary node: update
                         </div>
                         <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box" style="background: rgba(139, 92, 246, 0.1);" data-i18n="fp.diagram.apply">
-                            Apply update
+                        <div class="diagram-box" style="background: rgba(139, 92, 246, 0.1);" >
+                            Soak and compare
                         </div>
                         <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box" style="background: rgba(239, 68, 68, 0.1);" data-i18n="fp.diagram.fails">
-                            Update fails
+                        <div class="diagram-box" style="background: rgba(239, 68, 68, 0.1);" >
+                            Healthy: next node, one at a time
                         </div>
                         <div class="diagram-arrow">↓</div>
-                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);" data-i18n="fp.diagram.previous">
-                            Boot the previous generation
+                        <div class="diagram-box" style="background: rgba(99, 102, 241, 0.1);" >
+                            Unhealthy: previous generation
                         </div>
                     </div>
                 </div>
@@ -346,8 +396,8 @@
     <section class="feature-section">
         <div class="container">
             <div class="lead-facts">
-                <h2 data-i18n="fp.platform.title">For platform teams</h2>
-                <p data-i18n="fp.platform.desc">Terraform, the API, and MCP come after the limits above. They do not remove those limits.</p>
+                <h2>For platform teams</h2>
+                <p>One controller API behind <code>kctl</code>, the dashboard, the Terraform provider, and an MCP server. The same roles and the same audit log apply to all of them.</p>
             </div>
         </div>
     </section>
@@ -393,7 +443,7 @@
                     </ul>
                 </div>
                 <div class="feature-visual">
-                    <pre style="margin: 0; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.6;"><code><span class="code-comment"># Provider kcorehypervisor/kcore 0.5.0</span>
+                    <pre style="margin: 0; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.6;"><code><span class="code-comment"># Provider kcorehypervisor/kcore 0.7.0</span>
 <span class="code-keyword">resource</span> <span class="code-string">"kcore_vm"</span> <span class="code-string">"web"</span> {
   <span class="code-property">name</span>               = <span class="code-string">"web"</span>
   <span class="code-property">cpu</span>                = <span class="code-number">2</span>
@@ -431,42 +481,41 @@
         <div class="container">
             <div class="feature-detail">
                 <div class="feature-detail-text">
-                    <h2 data-i18n="fp.ai.title">AI Agent Integration</h2>
-                    <p data-i18n="fp.ai.desc">
-                        kcore includes an MCP (Model Context Protocol) server. Any MCP-compatible AI agent
-                        can list nodes, create VMs, check status, and generate Terraform configs through it.
-                    </p>
-                    <ul class="feature-list-items">
-                        <li>
-                            <span class="icon">🤖</span>
-                            <div>
-                                <strong data-i18n="fp.ai.f1.title">MCP Server</strong><br>
-                                <span style="color: var(--text-tertiary);" data-i18n="fp.ai.f1.desc">
-                                    Runs alongside the controller. Exposes tools for VM and node management over MCP.
-                                </span>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="icon">💡</span>
-                            <div>
-                                <strong data-i18n="fp.ai.f2.title">Terraform Output</strong><br>
-                                <span style="color: var(--text-tertiary);" data-i18n="fp.ai.f2.desc">
-                                    Agents generate HCL you can read and modify. No black-box deployments.
-                                </span>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="icon">📈</span>
-                            <div>
-                                <strong data-i18n="fp.ai.f3.title">Query Infrastructure</strong><br>
-                                <span style="color: var(--text-tertiary);" data-i18n="fp.ai.f3.desc">
-                                    Agents can check VM status, node health, and resource usage to help you troubleshoot.
-                                </span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="feature-visual">
+                    <h2>MCP and an AI agent</h2>
+<p>
+kcore MCP works in Cursor, VS Code, Claude Desktop, and any client that speaks the Model Context Protocol. <code>kctl agent</code> is a chat page built into the binary. Both use the same tools and the same rule: ask, plan, then wait for your approval.
+</p>
+<ul class="feature-list-items">
+<li>
+<span class="icon">🤖</span>
+<div>
+<strong>Questions first</strong><br>
+<span style="color: var(--text-tertiary);">
+The agent asks for image URLs, checksums, networks, and keys. It does not guess them.
+</span>
+</div>
+</li>
+<li>
+<span class="icon">💡</span>
+<div>
+<strong>A plan you can read</strong><br>
+<span style="color: var(--text-tertiary);">
+Create, update, or refused because a field is immutable. Nothing changes until you approve.
+</span>
+</div>
+</li>
+<li>
+<span class="icon">📈</span>
+<div>
+<strong>Your role, not the model&rsquo;s</strong><br>
+<span style="color: var(--text-tertiary);">
+The agent runs with your certificate or a read-only or vm-admin operator of its own. The controller enforces it.
+</span>
+</div>
+</li>
+</ul>
+</div>
+<div class="feature-visual">
                     <div style="background: var(--bg-tertiary); border: 1px solid var(--border-primary); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;">
                         <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.5rem;">User:</div>
                         <div>"Create a web cluster with 3 servers, load balanced, with a PostgreSQL database"</div>
@@ -539,6 +588,75 @@
         </div>
     </section>
 
+    <!-- Complete features -->
+    <section class="feature-section complete-features">
+        <div class="container">
+            <h2 id="complete-features">Complete features</h2>
+            <p class="lede">
+                What ships in 0.7.0. Work that is still planned stays on the
+                <a href="roadmap.html">roadmap</a>.
+            </p>
+            <div class="complete-grid">
+                <div>
+                    <h3>Virtual machines</h3>
+                    <ul>
+                        <li>Create, update, start, stop, and delete. YAML and Terraform.</li>
+                        <li>Cloud-init, SSH keys, labels, and a wait for boot or SSH.</li>
+                        <li>Windows Server and Windows desktop guests.</li>
+                        <li>Serial console in the browser and from <code>kctl console</code>.</li>
+                        <li>A GPU passed through to one VM, by name.</li>
+                        <li>NVIDIA vGPU slices, which need an AI Enterprise vGPU manager package on the host. Intel and AMD SR-IOV slices use the same manifest and are not yet run on lab hardware.</li>
+                        <li>NAT, bridge, and VXLAN networks, extra NICs, IPv6, and VLANs.</li>
+                        <li>Security groups, DNAT, and an east-west filter on a bridge.</li>
+                        <li>Live and cold migration on Ceph, LVM, and ZFS. A filesystem disk stays put.</li>
+                        <li>HA: a dead host is fenced and its VMs restart by priority, with anti-affinity and admission control. A ZFS VM restarts from its replica.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Containers and ingress</h3>
+                    <ul>
+                        <li>OCI containers on containerd, beside VMs, on one workload API.</li>
+                        <li>Ingress on Caddy with Coraza, automatic certificates, and a keepalived VIP.</li>
+                        <li>Routes to a VM, an external address, or a Kubernetes Service.</li>
+                        <li>WAF detect and block, rate limits, and IP allow and deny lists.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Storage</h3>
+                    <ul>
+                        <li>Filesystem, LVM, ZFS, and Ceph RBD volumes, including resize.</li>
+                        <li>Snapshots, schedules, clone, restore, and flatten on Ceph, ZFS, and LVM.</li>
+                        <li>New Ceph clusters encrypt OSD disks. An RBD volume can be LUKS-encrypted.</li>
+                        <li>Ceph RBD volumes for VM disks, replicated across nodes.</li>
+                        <li>Declarative disk layouts from the installer through day-2.</li>
+                        <li>Changed-block export and import for a backup tool.</li>
+                        <li><a href="vault.html">kcore Vault</a> (paid): retain-until backups, a ZFS repository, and S3 Object Lock.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Cluster and host services</h3>
+                    <ul>
+                        <li>mTLS, RBAC, an audit log, certificate rotation, CRL, and OCSP.</li>
+                        <li>Dashboard with password and TOTP sign-in, API tokens, a serial console, release rollouts, and HA events.</li>
+                        <li>Multi-controller replication, including across datacenters.</li>
+                        <li>Scheduler: most free memory, required labels, anti-affinity, overcommit.</li>
+                        <li>ISO install, <code>kcore-infect</code>, approve, cordon, drain, and delete.</li>
+                        <li>Update by release tag with a canary soak. A failed boot uses the previous generation.</li>
+                        <li><a href="provisioning.html">kcore Provisioning</a> (paid): IPMI and Redfish, UEFI HTTP boot, BIOS and RAID profiles, disk checks, PowerDNS, and Kea.</li>
+                        <li>Appliance console on the node.</li>
+                        <li><code>node_exporter</code> and VictoriaMetrics.</li>
+                        <li>Webhooks, an MCP server, <code>kctl agent</code>, and the Terraform provider.</li>
+                        <li>PostgreSQL on the node, one database per node.</li>
+                        <li>Kubernetes on kcoreOS with Cilium.</li>
+                        <li>Slurm on kcoreOS. Compute nodes are left to <code>slurmd</code>.</li>
+                        <li>ClickHouse on kcoreOS, with Keeper. A rolling change leaves a replica of each shard up.</li>
+                        <li><code>kcore-migrate</code> inventories vCenter or Proxmox and converts exported disks.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA -->
     <section class="cta" style="margin-top: 0;">
         <div class="container">
@@ -567,6 +685,9 @@
                         <li><a href="features.html" data-i18n="nav.features">Features</a></li>
                         <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                         <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -595,6 +716,7 @@
 
     <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/code-color.js"></script>
     <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

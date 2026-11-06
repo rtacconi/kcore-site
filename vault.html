@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Immutable, encrypted backups for kcore clusters. Retention that only moves forward, S3 Object Lock offsite, two-person approval.">
+    <title>kcore Vault - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/vault.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="kcore Vault - kcore hypervisor">
+    <meta property="og:description" content="Immutable, encrypted backups for kcore clusters. Retention that only moves forward, S3 Object Lock offsite, two-person approval.">
+    <meta property="og:url" content="https://kcorehypervisor.com/vault.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/code-color.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
+                <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="roadmap.html">Roadmap</a></li>
+                <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>kcore Vault</h1>
+            <p class="page-lead">Backups that stay put when an admin account is stolen. A separate appliance pulls your disks, encrypts them, and refuses to delete anything before its retention date.</p>
+            <div class="cta-row">
+                <a class="btn btn-primary" href="mailto:team@tacconiconsulting.com?subject=kcore%20Vault%20quote">Ask for a quote</a>
+                <a class="btn btn-secondary" href="docs/user/vault.html">Operator guide</a>
+                <a class="btn btn-secondary" href="docs/user/ransomware-resistance.html">Threat model</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <h2>What stops a delete</h2>
+            <div class="product-grid">
+                <article class="product-card"><h3>Separate machine</h3><p>Vault has its own disks, accounts, and OS. A hypervisor root does not give you the repository.</p></article>
+                <article class="product-card"><h3>Pull only</h3><p>The node serves extents read-only. The appliance pulls. A node cannot push, overwrite, or delete a backup.</p></article>
+                <article class="product-card"><h3>Retention moves forward</h3><p>Every object has a <code>retain_until</code> time. A later job can extend it. Nothing can shorten it.</p></article>
+                <article class="product-card"><h3>Object Lock offsite</h3><p>The offsite copy goes into an S3 bucket in COMPLIANCE mode. The bucket refuses deletes until the date, even from the account that wrote it.</p></article>
+                <article class="product-card"><h3>Encrypted and signed</h3><p>Data is chunked, encrypted, and packed. The manifest is signed. A tampered pack fails verify instead of restoring bad data.</p></article>
+                <article class="product-card"><h3>Two people</h3><p>Deleting a target, lowering retention, installing a licence, or changing a role waits for a security officer.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container content-narrow">
+            <h2>Day to day</h2>
+            <ul>
+                <li>Policies and jobs for VM volumes on Ceph, LVM, and ZFS. Verify jobs read objects back and check them.</li>
+                <li>Restore writes a volume back through the cluster API. Practise it before you need it.</li>
+                <li>A browser console with roles (viewer, backup-operator, restore-operator, admin, security-officer) and TOTP. Reports for audit.</li>
+                <li>The coordinator reaches the cluster with a backup-operator certificate. It can snapshot and read a volume. It cannot manage the cluster.</li>
+            </ul>
+            <h2>What it does not claim</h2>
+            <p>The console shows a grade per target. <code>storage-enforced</code> means a bucket with Object Lock holds the data. <code>appliance-enforced</code> means the appliance software enforces it, and root on the appliance can still delete the files. <code>none</code> is S3 without Object Lock. Use Object Lock for anything you would be unhappy to lose.</p>
+            <p>The repository is a ZFS pool on the appliance. A two-disk stripe has no redundancy. Build a mirror if you want one. Vault does not replace an offsite copy.</p>
+            <p>Vault 0.1.x works with kcore 0.7.0 and has its own release numbers. Price is by quote.</p>
+            <div class="cta-row"><a class="btn btn-primary" href="mailto:team@tacconiconsulting.com?subject=kcore%20Vault%20quote">Ask for a quote</a><a class="btn btn-secondary" href="products.html">All products</a></div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
+                        <li><a href="partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/code-color.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
