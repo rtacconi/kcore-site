@@ -46,6 +46,7 @@
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
             <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../products.html" data-i18n="nav.products">Products</a></li>
             <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
             <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
             <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
@@ -139,7 +140,7 @@
 
             <h2>Hardware</h2>
             <ul>
-                <li><strong>vGPU on NVIDIA, Intel, and AMD.</strong> Enable a host once and give a VM a slice: <code>A2-4C</code>, <code>intel-2vf</code>, <code>radeon-4vf</code>. Intel and AMD cards are split into SR-IOV virtual functions, with a count per card. NVIDIA A2 slices boot under Cloud Hypervisor.</li>
+                <li><strong>vGPU slices.</strong> Enable a host once and give a VM a slice: <code>A2-4C</code> on NVIDIA, <code>intel-2vf</code> or <code>radeon-4vf</code> on Intel and AMD. NVIDIA A2 slices boot under Cloud Hypervisor. Intel and AMD cards are split into SR-IOV virtual functions, with a count per card. That path is built but has not been run on lab hardware.</li>
                 <li><strong>Slurm clusters</strong> run as kcoreOS host services and are managed with <code>kind: SlurmCluster</code>.</li>
                 <li><strong>Cold volume copies</strong> read the source with <code>O_DIRECT</code>.</li>
             </ul>

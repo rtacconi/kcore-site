@@ -2231,6 +2231,7 @@ const translations = {
     "userdoc.yaml.k8s.p": "Creation, the API VIP, Cilium L2, and LVM or ZFS volumes are on the <a href=\"kubernetes.html\">Kubernetes</a> page. Apply with <code>kctl kubernetes apply -f</code>. <code>kctl apply -f</code> does not accept this kind. <code>kubernetes-cluster</code> and <code>kubernetes_cluster</code> are accepted spellings of the kind.",
     "userdoc.yaml.k8s.kind": "Kubernetes cluster on existing kcore nodes. Not kctl apply.",
     "docs.mode.tf.gpumigrate": "Migration stays <code>kctl migrate vm</code>. Changing <code>gpus</code> on a running VM is refused.",
+    "nav.products": "Products",
   },
   "it": {
     "nav.features": "Funzionalità",
