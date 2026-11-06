@@ -357,6 +357,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
                 <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html">Roadmap</a></li>
@@ -371,8 +372,8 @@
         <div class="container">
             <h1>Roadmap</h1>
             <p>
-                What&rsquo;s shipped, what&rsquo;s being built right now, and what&rsquo;s next.
-                Dates reflect real engineering plans, not marketing promises.
+                What shipped in 0.7.0, what is being built now, and what comes next.
+                Dates reflect real engineering plans.
             </p>
             <div class="legend">
                 <div class="legend-item">
@@ -399,6 +400,56 @@
                 <!-- =============================== -->
                 <!-- SHIPPED -->
                 <!-- =============================== -->
+                <div class="timeline-entry">
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">0.7.0 &mdash; Shipped</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon shipped">&#128260;</span> Updates by release tag, canary, and revert</h3>
+                        <p>
+                            The cluster moves to a new version with one command. One node goes first and the rest wait for it.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>kctl update version set vX.Y.Z</code>, <code>kcore_cluster_version</code> in Terraform, and a Release page in the dashboard. Upgrade or downgrade, with a dry run.</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Canary node soaks while the controller compares version, heartbeats, guest starts, agent errors, and Ceph OSD latency. A bad canary rolls back and stops the rollout.</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>Guard timer for in-place switches and a one-shot boot entry for kernel changes put the previous generation back without the controller.</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span><code>kctl update cluster promote</code> ends a soak early. <code>--soak</code>, <code>--canary</code>, and <code>--no-canary</code> tune it.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-entry">
+                    <div class="timeline-dot shipped"></div>
+                    <div class="timeline-date shipped">0.7.0 &mdash; Shipped</div>
+                    <div class="timeline-card">
+                        <h3><span class="card-icon shipped">&#128737;</span> Paid products: Vault and Provisioning</h3>
+                        <p>
+                            Two separate products with their own licences, documented against kcore 0.7.0.
+                        </p>
+                        <ul class="detail-list">
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>kcore Vault: encrypted, signed backups with retain-until locks, a ZFS repository, S3 Object Lock offsite, roles, and TOTP. Threat model on the ransomware resistance page.</span>
+                            </li>
+                            <li>
+                                <span class="item-status"><span class="status-badge status-shipped">Shipped</span></span>
+                                <span>kcore Provisioning: Redfish and IPMI, UEFI HTTP boot, virtual media, BIOS and RAID profiles, disk write-verify with an optional wipe, and Kea and PowerDNS records.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="timeline-entry">
                     <div class="timeline-dot shipped"></div>
                     <div class="timeline-date shipped">Shipped &mdash; Live today</div>
@@ -1297,6 +1348,9 @@
                         <li><a href="features.html" data-i18n="nav.features">Features</a></li>
                         <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                         <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
