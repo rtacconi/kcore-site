@@ -214,6 +214,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="products.html" data-i18n="nav.products">Products</a></li>
                 <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                 <li><a href="docs.html" data-i18n="nav.docs">Docs</a></li>
                 <li><a href="roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
@@ -331,8 +332,28 @@
                 <h1 id="user-guides" data-i18n="docs.hub.pageTitle">Documentation</h1>
                 <p class="docs-mode-hint docs-cli-only">Example preference: <strong>CLI</strong> — guides below emphasize <code>kctl</code> commands. Switch the toggle in the bar above to prioritize YAML manifests.</p>
                 <p class="docs-mode-hint docs-yaml-only">Example preference: <strong>YAML</strong> — use declarative manifests (<code>kctl apply -f</code>) wherever possible. Switch the toggle above for raw CLI command tables.</p>
-                <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf.hub">Guides include Terraform examples for provider <code>kcorehypervisor/kcore</code> 0.5.0.</p>
+                <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf.hub">Guides include Terraform examples for provider <code>kcorehypervisor/kcore</code> 0.7.0.</p>
                 <p data-i18n-html="docs.hub.lead">Operator-focused guides for installing kcore, managing clusters, creating VMs and containers, configuring networking and storage, and securing your infrastructure. Technical architecture and contributor docs live in the <a href="https://github.com/kcorehypervisor/kcore/tree/main/docs" style="color: var(--accent-primary);">kcore repository</a>.</p>
+
+                <h2>Operate</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/whats-new-0-7-0.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">What&rsquo;s new in 0.7.0</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Canary updates by release tag, automatic revert, vGPU slices, upgrade notes.</div>
+                    </a>
+                    <a href="docs/user/dashboard.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Dashboard</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Sign-in with TOTP, roles, serial console, release rollouts, every resource page.</div>
+                    </a>
+                    <a href="docs/user/terraform.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Terraform provider</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Resources for clusters, nodes, VMs, storage, updates, and Vault policies.</div>
+                    </a>
+                    <a href="docs/user/ai-agent.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">MCP and the AI agent</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Editors and kctl agent: ask, plan, apply with human approval.</div>
+                    </a>
+                </div>
 
                 <h2 data-i18n="docs.hub.h2.gettingstarted">Getting started</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
@@ -350,7 +371,7 @@
                     </a>
                     <a href="docs/user/cluster-and-node-upgrades.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.upgrades.title">Cluster &amp; node upgrades</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.upgrades.desc">Flake-pinned NixOS rollouts via ClusterUpdate: plan, apply, approve, observe.</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.upgrades.desc">Install by release tag, canary soak, one node at a time, automatic revert on a failed boot.</div>
                     </a>
                     <a href="docs/user/appliance-console.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.appliance.title">Appliance console</div>
@@ -368,9 +389,13 @@
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.images.title">VM images</div>
                         <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.images.desc">Controller downloads, node upload, formats, and readiness checks.</div>
                     </a>
+                    <a href="docs/user/ha-vms.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">High availability</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Detect a dead host, fence its disk, restart VMs by priority.</div>
+                    </a>
                     <a href="docs/user/vm-migration.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.vmmig.title">VM migration</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vmmig.desc">Cold drain and Cloud Hypervisor live migration over shared RBD.</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vmmig.desc">Cold drain and Cloud Hypervisor live migration over shared RBD, with fenced failover.</div>
                     </a>
                     <a href="docs/user/import.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.import.title">Import from VMware or Proxmox</div>
@@ -414,19 +439,27 @@
                     </a>
                     <a href="docs/user/storage-vsan.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.vsan.title">kcore SAN (Ceph)</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vsan.desc">Shared RBD disks, cold drain, and live migration with Ceph.</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vsan.desc">Replicated Ceph pool, RBD disks, fenced failover, and safe member removal.</div>
                     </a>
                     <a href="docs/user/vm-migration.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;" data-i18n="docs.hub.card.vmmig.title">VM migration</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vmmig.desc">Cold drain and Cloud Hypervisor live migration over shared RBD.</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;" data-i18n="docs.hub.card.vmmig.desc">Cold drain and Cloud Hypervisor live migration over shared RBD, with fenced failover.</div>
                     </a>
                 </div>
 
-                <h2>Backup</h2>
+                <h2>Paid products</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
-                    <a href="docs/user/vault.html" style="background: var(--bg-card); border: 1px solid var(--border-primary); border-radius: 0.75rem; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s ease;" onmouseover="this.style.borderColor='var(--accent-primary)'" onmouseout="this.style.borderColor='var(--border-primary)'">
+                    <a href="docs/user/vault.html">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">kcore Vault</div>
                         <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Backup appliance: architecture, immutability, ZFS repository, and S3 Object Lock.</div>
+                    </a>
+                    <a href="docs/user/ransomware-resistance.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Ransomware resistance</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">What stops a delete, what does not, and what you still have to set up.</div>
+                    </a>
+                    <a href="docs/user/provisioning.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">kcore Provisioning</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Bare metal over BMC: Redfish, IPMI, UEFI HTTP boot, RAID and BIOS profiles, disk checks.</div>
                     </a>
                 </div>
 
@@ -491,6 +524,9 @@
                         <li><a href="features.html" data-i18n="nav.features">Features</a></li>
                         <li><a href="pricing.html" data-i18n="nav.pricing">Pricing</a></li>
                         <li><a href="roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="vault.html">kcore Vault</a></li>
+                        <li><a href="provisioning.html">kcore Provisioning</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">

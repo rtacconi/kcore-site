@@ -44,7 +44,7 @@
 <body class="docs-user-page">
     <nav class="navbar"><div class="container">
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
-        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
+        <ul class="nav-menu"><li><a href="../../features.html" data-i18n="nav.features">Features</a></li><li><a href="../../products.html" data-i18n="nav.products">Products</a></li><li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li><li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li><li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li><li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li><li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li></ul>
     </div></nav>
     <div class="docs-mode-strip" role="region" aria-label="Documentation examples format">
         <div class="container docs-mode-strip-inner">
@@ -58,26 +58,62 @@
     </div>
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul><li><a data-i18n="docs.nav.installation" href="installation.html">Installation</a></li><li><a data-i18n="docs.nav.firstcluster" href="first-cluster.html">First cluster</a></li><li><a data-i18n="docs.nav.addnode" href="add-node.html">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul><li><a data-i18n="docs.nav.vmcreation" href="vm-creation.html">VM creation</a></li><li><a data-i18n="docs.nav.vmimages" href="images.html">VM images</a></li>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
-                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li><li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul><li><a data-i18n="docs.nav.containerlifecycle" href="containers.html">Container lifecycle</a></li></ul></div>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
                 <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul><li><a data-i18n="docs.nav.networks" href="networks.html">Networks</a></li><li><a data-i18n="docs.nav.vxlanoverlay" href="overlay-vxlan.html">VXLAN overlay</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul><li><a data-i18n="docs.nav.storagebackends" href="storage.html">Storage backends</a></li><li><a data-i18n="docs.nav.day2" href="storage-day2.html">Day-2 operations</a></li><li><a data-i18n="docs.nav.vsan" href="storage-vsan.html">kcore SAN (Ceph)</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul><li><a data-i18n="docs.nav.securitygroups" href="security-groups.html">Security groups</a></li><li><a data-i18n="docs.nav.compliance" href="compliance.html">Compliance</a></li><li><a data-i18n="docs.nav.certificates" href="certificates.html">Certificates &amp; encryption</a></li></ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul><li><a data-i18n="docs.nav.kctl" href="kctl-reference.html" class="active">kctl CLI</a></li><li><a data-i18n="docs.nav.yamlmanifests" href="yaml-manifests.html">YAML manifests</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" class="active" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Backup</h4><ul>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul><li><a data-i18n="docs.nav.editions" href="licensing.html">Editions &amp; pricing</a></li></ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
         </nav></aside>
         <main class="docs-content">
             <p class="docs-version-banner" data-docs-version="latest"></p>
@@ -170,7 +206,9 @@
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.update.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.update.vm.desc">Resize CPU / memory of a VM. Supports <code>--target-node</code>.</td></tr>
-                <tr><td><code>cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>os</code>)</span></td><td>Host OS rollout: <code>plan</code>, <code>apply</code>, <code>get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code> — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</td></tr>
+                <tr><td><code>cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>os</code>)</span></td><td>Host OS rollout: <code>plan</code>, <code>apply</code>, <code>get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>promote</code>, <code>reboot</code> — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</td></tr>
+                <tr><td><code>version set TAG</code></td><td>Move every node to a release tag, canary first. Flags: <code>--dry-run</code>, <code>--drain-vms</code>, <code>--soak 2h</code>, <code>--canary NODE</code>, <code>--no-canary</code>, <code>--flake-ref</code>. Upgrades and downgrades.</td></tr>
+                <tr><td><code>version get</code></td><td>The version set last, and what each node runs.</td></tr>
             </table>
 
             <h2 data-i18n="userdoc.kctlref.h2.node">node</h2>
@@ -212,6 +250,8 @@
                 <tr><td data-i18n-html="userdoc.kctlref.operator.grantrole.cmd"><code>grant-role</code></td><td data-i18n-html="userdoc.kctlref.operator.grantrole.desc">Grant a role. <code>--role</code> is required and takes <code>read-only</code>, <code>vm-admin</code>, or <code>cluster-admin</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.operator.revokerole.cmd"><code>revoke-role</code></td><td data-i18n-html="userdoc.kctlref.operator.revokerole.desc">Remove one role from an operator, named with <code>--role</code>.</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.operator.delete.cmd"><code>delete</code></td><td data-i18n="userdoc.kctlref.operator.delete.desc">Delete an operator and all of its role assignments</td></tr>
+                <tr><td><code>set-password NAME</code></td><td>Set the password the operator uses to sign in to the <a href="dashboard.html">dashboard</a>. The operator enrols TOTP on first sign-in.</td></tr>
+                <tr><td><code>reset-2fa NAME</code></td><td>Clear the operator&rsquo;s TOTP and recovery codes and end their web sessions.</td></tr>
             </table>
             <p class="note" data-i18n-html="userdoc.kctlref.operator.note">Removing a role is not the same as revoking the certificate. <code>revoke-role</code> changes what an identity is allowed to do; the certificate itself stays valid until you revoke it with <code>kctl revoke cert --subject kctl:&lt;name&gt;</code>. Revocation takes effect on the next RPC the operator makes, not during the TLS handshake. See <a href="certificates.html">certificates &amp; encryption</a>.</p>
 
@@ -266,6 +306,9 @@
 
             <h2 data-i18n="userdoc.kctlref.h2.diff">diff</h2>
             <p data-i18n-html="userdoc.kctlref.diff.p">Show what applying a manifest would change, without changing anything. <code>-f</code> / <code>--filename</code> is required. Only <code>kind: DiskLayout</code> is supported today &mdash; any other kind exits with an error rather than guessing. See <a href="storage-day2.html">Day-2 operations</a>.</p>
+
+            <h2>agent</h2>
+            <p><code>kctl agent</code> opens a chat page on <code>127.0.0.1</code> where a model drives the cluster with the same tools as <a href="ai-agent.html">kcore MCP</a>. Every change waits for your approval. Flags: <code>--port</code>, <code>--no-browser</code>, <code>--provisioning HOST:PORT</code>, <code>--role read-only|vm-admin</code>.</p>
 
             <h2 data-i18n="userdoc.kctlref.h2.version">version</h2>
             <p data-i18n-html="userdoc.kctlref.version.p">Print the <code>kctl</code> client version. Takes no flags and does not contact a controller.</p>

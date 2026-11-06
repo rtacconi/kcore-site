@@ -46,6 +46,7 @@
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
             <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../products.html" data-i18n="nav.products">Products</a></li>
             <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
             <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
             <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
@@ -68,14 +69,22 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                 <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
                 <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
@@ -107,8 +116,10 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Backup</h4><ul>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
                 <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
@@ -118,15 +129,15 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             
             <h1 data-i18n-html="userdoc.storagevsan.title">kcore SAN (Ceph)</h1>
-            <p class="note" data-i18n="userdoc.storagevsan.notePlanned">Phases 1–2 (CephCluster fabric + RBD VM disks / cold drain) and live migration over shared RBD ship in kcore.</p>
-            <p data-i18n="userdoc.storagevsan.intro">kcore currently supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. <strong>kcore SAN</strong> adds distributed shared block storage using Ceph, so VM disks are replicated across nodes and can move with the workload.</p>
+            <p class="note" data-i18n="userdoc.storagevsan.notePlanned">kcore SAN ships with kcore. A CephCluster builds the cluster, RBD images hold VM disks, and VMs move between hosts, live or cold, without copying disks.</p>
+            <p data-i18n="userdoc.storagevsan.intro">kcore supports local storage backends (filesystem, LVM, ZFS) where VM disks live on the host running the VM. kcore SAN adds shared block storage on Ceph. VM disks are replicated across hosts, a host failure does not lose a disk, and a VM can move or restart on another host.</p>
 
-            <h2 data-i18n="userdoc.storagevsan.vision">Vision</h2>
+            <h2 data-i18n="userdoc.storagevsan.vision">What you get</h2>
             <ul>
-                <li data-i18n="userdoc.storagevsan.visionLi1">Distributed block storage across cluster nodes.</li>
+                <li data-i18n="userdoc.storagevsan.visionLi1">Shared block storage across cluster nodes.</li>
                 <li data-i18n-html="userdoc.storagevsan.visionLi2">Ceph OSDs on dedicated data disks, managed by a declarative <code>CephCluster</code> resource.</li>
-                <li data-i18n="userdoc.storagevsan.visionLi3">RBD (RADOS Block Device) volumes serve as VM disks.</li>
-                <li data-i18n="userdoc.storagevsan.visionLi4">Storage is replicated across nodes for redundancy.</li>
+                <li data-i18n="userdoc.storagevsan.visionLi3">RBD (RADOS Block Device) images are the VM disks.</li>
+                <li data-i18n="userdoc.storagevsan.visionLi4">Data is replicated across hosts. The default pool keeps three copies and accepts writes with two.</li>
             </ul>
 
             <h2 data-i18n="userdoc.storagevsan.plannedIntegration">How it integrates</h2>
@@ -136,6 +147,16 @@
                 <li data-i18n-html="userdoc.storagevsan.integrationLi3"><strong>Shipped:</strong> dedicated Ceph cluster/replication network (e.g. 10Gb fabric) separate from the public/client path.</li>
                 <li data-i18n-html="userdoc.storagevsan.integrationLi4"><strong>Live migration (shipped):</strong> Cloud Hypervisor live migration on shared RBD (<code>kctl migrate vm</code>). See <a href="vm-migration.html">VM migration</a>.</li>
             </ul>
+
+            <h2>Safe by default</h2>
+            <ul>
+                <li><strong>Fence before failover.</strong> When a host dies, the controller blocklists its clients on the image through a healthy Ceph member before any other host starts the VM. A host that comes back cannot write to an image that moved. See <a href="ha-vms.html">High availability for VMs</a>.</li>
+                <li><strong>Encrypted OSDs.</strong> <code>encryptOsds</code> defaults to true and cannot change after create. It protects a pulled disk. It does not protect against a compromised monitor or host. Per-volume encryption (<code>--encrypt</code>) formats LUKS2 on the host over the mapped image.</li>
+                <li><strong>Members leave one at a time.</strong> Removing a node from <code>spec.nodes</code> is refused unless the survivors number at least the replica count, the cluster is <code>HEALTH_OK</code>, and no earlier removal is running. The controller drains the host&rsquo;s OSDs and waits for every placement group to be <code>active+clean</code> before it purges anything.</li>
+                <li><strong>No stranded VMs.</strong> Deleting a <code>CephCluster</code> is refused while a Ceph VM still lives on one of its members, and the error names them.</li>
+                <li><strong>Snapshots and policies.</strong> <code>kctl snapshot volume</code>, clones, restore, resize (grow only), and <code>kctl create snapshot-policy</code>. For a backup that survives the cluster, use <a href="vault.html">kcore Vault</a>.</li>
+            </ul>
+            <p class="note">Live migration needs TCP 18000&ndash;18127 open between members. Keep Ceph replication off a congested management NIC and give it a fabric of its own.</p>
 
             <h2 data-i18n="userdoc.storagevsan.opsMigrate">Moving VMs (cold and live)</h2>
             <p data-i18n-html="userdoc.storagevsan.opsMigrateP1">Because the disk is an RBD image in pool <code>kcore-vms</code>, changing hosts does not copy guest blocks. Choose the mode that matches your downtime budget:</p>
@@ -197,8 +218,8 @@ spec:
       osdDevice: /dev/nvme0n1</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.5.0.</p>
-            <p data-i18n-html="docs.mode.tf.cephvm">Provider 0.5.0 cannot set <code>storage_backend</code> to ceph on <code>kcore_vm</code>. That flag is kctl. <code>kcore_vm</code> accepts filesystem, lvm, or zfs.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
+            <p data-i18n-html="docs.mode.tf.cephvm"><code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs. Put a VM on Ceph with <code>kctl create vm --storage-backend ceph</code> or a VM manifest. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph, and <code>kcore_ceph_cluster</code> creates the cluster.</p>
 <pre><code>resource "kcore_ceph_cluster" "lab_san" {
   name            = "lab-san"
   public_network  = "10.10.0.0/24"

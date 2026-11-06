@@ -1,6 +1,6 @@
 # kcore hypervisor — site overview for agents
 
-kcore is a NixOS-based hypervisor: declarative VMs, gRPC API, Terraform provider, and optional MCP integration.
+kcore is a NixOS-based hypervisor (0.7.0): declarative VMs, HA, live migration, Ceph storage, canary updates, gRPC API, Terraform provider, MCP integration. kcore Vault and kcore Provisioning are separate paid products.
 
 ## Canonical entry points
 

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore MCP for editors and kctl agent: ask, plan, apply with human approval.">
+    <title>MCP and the AI agent - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/ai-agent.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="MCP and the AI agent - kcore documentation">
+    <meta property="og:description" content="kcore MCP for editors and kctl agent: ask, plan, apply with human approval.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/ai-agent.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/code-color.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../products.html" data-i18n="nav.products">Products</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html" class="active">AI agent &amp; MCP</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            <h1>MCP and the AI agent</h1>
+
+            <p>kcore has two ways to let a model work on a cluster. Both use the same tools and the same rule: the model asks questions, shows a plan, and changes nothing until a person says yes.</p>
+            <ul>
+                <li><strong>kcore MCP</strong> is a server for editors and chat clients that speak the Model Context Protocol: Cursor, VS Code, Claude Desktop, Zed, Continue.</li>
+                <li><strong><code>kctl agent</code></strong> is a chat page in the <code>kctl</code> binary. Nothing else to install.</li>
+            </ul>
+
+            <h2>The rule: ask, plan, apply</h2>
+            <ol>
+                <li><code>kcore_advise</code> returns the questions an operator still has to answer: image URL, checksum, network, SSH key, node, disk. The model must put them to you. It does not guess.</li>
+                <li><code>kcore_plan</code> shows the diff against the controller: create, update, or refused because a field is immutable.</li>
+                <li><code>kcore_apply</code>, <code>kcore_delete</code>, and <code>kcore_operation</code> run only after you approve. Apply is an upsert: it creates what is missing, updates mutable fields, and rejects immutable changes.</li>
+            </ol>
+            <p>Node installs partition disks. They need the exact phrase <code>wipe the selected disks</code> in the spec, typed by the operator.</p>
+
+            <h2>Tools</h2>
+            <table>
+                <tr><th>Tool</th><th>What it does</th></tr>
+                <tr><td><code>kcore_catalog</code></td><td>Resource kinds and which fields can change.</td></tr>
+                <tr><td><code>kcore_advise</code></td><td>Questions to ask before a change. Read-only.</td></tr>
+                <tr><td><code>kcore_plan</code></td><td>Local diff, plus a controller read.</td></tr>
+                <tr><td><code>kcore_apply</code></td><td>Declarative apply after <code>confirm: true</code>.</td></tr>
+                <tr><td><code>kcore_read</code></td><td>Get and describe calls.</td></tr>
+                <tr><td><code>kcore_delete</code></td><td>Delete, or cancel a cluster update that has not finished.</td></tr>
+                <tr><td><code>kcore_operation</code></td><td>Power, migrate, drain, cordon, approve a node, set the cluster version (canary by default), approve, promote, cancel, or roll back an update, install a node.</td></tr>
+                <tr><td><code>kcore_rpc</code></td><td>Any unary controller, node agent, Provisioning, or Vault RPC. Calls that are not a get, list, classify, check, or plan need <code>confirm: true</code>.</td></tr>
+            </table>
+            <p>With <code>kcore_rpc</code> the same assistant that creates a VM can list a Provisioning machine, read a Vault inventory, or start a restore, with the same approval step.</p>
+
+            <h2>kcore MCP in an editor</h2>
+            <p>The server runs on your machine over stdio and reads <code>~/.kcore/config</code>, the file <code>kctl</code> uses. It presents your client certificate to the controller, so the roles you have are the roles the model has. It can also bootstrap a first cluster, writing the CA, controller certificate, and client certificate into <code>~/.kcore</code>.</p>
+            <pre><code>{
+  "mcpServers": {
+    "kcore": {
+      "command": "npx",
+      "args": ["-y", "kcore-mcp"]
+    }
+  }
+}</code></pre>
+            <p>Needs Node.js 20 or newer. <code>KCORE_CONFIG</code> points at another config file. <code>KCORE_PROVISIONING</code> sets the default Provisioning address. The Vault address defaults to <code>127.0.0.1:9191</code>. The same server ships as a Cursor plugin with an operator skill that tells the agent to ask, plan, then apply, and as a VS Code extension for Copilot agent mode.</p>
+
+            <h2><code>kctl agent</code></h2>
+            <pre><code>kctl agent
+kctl agent --role read-only
+kctl agent --role vm-admin --port 8123 --no-browser</code></pre>
+            <p>A browser tab opens on <code>127.0.0.1</code>. Sessions are on the left, the chat is in the middle, and each tool call is a card. A change shows an approval card with the exact request. You can approve, decline, or stop. You can say &ldquo;create a VM for the build runner&rdquo;, and the agent asks for the image, network, and key in a form with pick lists filled from the cluster.</p>
+            <ul>
+                <li><strong>Models.</strong> OpenAI (ChatGPT sign-in or API key), Anthropic (API key), DeepSeek (API key), OpenCode.</li>
+                <li><strong>Clusters.</strong> Every context in <code>~/.kcore/config</code> is a cluster. A session is bound to one cluster and saved with it.</li>
+                <li><strong>Least privilege.</strong> <code>--role read-only</code> or <code>--role vm-admin</code> runs the agent as its own operator, <code>agent-&lt;login&gt;</code>, with a certificate of its own. Controller roles limit it whatever the model writes.</li>
+                <li><strong>Plan view.</strong> The plan renders as a diff in a sandboxed frame. The frame has no network and cannot approve anything.</li>
+            </ul>
+
+            <h2>What keeps it safe</h2>
+            <ul>
+                <li>The model never sees a <code>confirm</code> argument. The session sets it only after you approve.</li>
+                <li>The agent listens on loopback only, with a one-time 256-bit session token. Reach it from another machine through an SSH tunnel.</li>
+                <li>Certificates and provider keys stay in the <code>kctl</code> process and in files at mode 0600. The browser holds only the session token.</li>
+                <li>Tool output is redacted (key data, cloud-init secrets, tokens) before it reaches the transcript or the page.</li>
+                <li>Everything the agent does is an ordinary controller call as an operator, so it is in the audit log.</li>
+            </ul>
+
+            <h2>Limits</h2>
+            <ul>
+                <li>Your prompts and tool results go to the model provider you chose. Pick a provider you are allowed to send them to. A read-only role limits what can be changed, not what is read.</li>
+                <li>Pick lists exist for networks, SSH keys, nodes, VMs, and images. Ceph members and node disks are text fields.</li>
+                <li>Without <code>--role</code> or <code>--as</code>, the agent uses your context&rsquo;s identity. Use a role for anything but a single-operator lab.</li>
+            </ul>
+
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom">
+        <p><a href="../../partners.html" data-i18n="footer.partners">Partners</a> · <a href="../../trademark.html" data-i18n="footer.trademark">Trademark</a></p>
+        <p>&copy; 2026 Tacconi Consulting Ltd.</p>
+    </div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/code-color.js"></script>
+    <script src="../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -45,6 +45,7 @@
         <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
         <ul class="nav-menu">
             <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../products.html" data-i18n="nav.products">Products</a></li>
             <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
             <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
             <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
@@ -67,14 +68,22 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
                 <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
                 <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
                 <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
                 <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
                 <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
                 <li><a href="gpu-passthrough.html" class="active" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
@@ -106,8 +115,10 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4>Backup</h4><ul>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
                 <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
@@ -178,7 +189,18 @@ spec:
   storageSizeBytes: 21474836480</code></pre>
             </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.gpu">On <code>kcore_vm</code>, <code>gpus</code> takes GPU, NIC, or NVMe names such as <code>radeon0</code>, <code>vgpus</code> takes slices such as <code>A2-4C</code>, and <code>pci_devices</code> takes raw PCI addresses. Use one of the three. The VM must be stopped to change them. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+<pre><code>resource "kcore_vm" "gpu_guest" {
+  name               = "gpu-guest"
+  cpu                = 8
+  memory_bytes       = 34359738368
+  storage_backend    = "zfs"
+  storage_size_bytes = 107374182400
+  gpus               = ["radeon0"]
+  image_url          = "https://images.example.com/ubuntu-24.04.qcow2"
+  image_sha256       = "&lt;64-char hex digest&gt;"
+  nic { network = "default" }
+}</code></pre>
             </div>
             <p data-i18n-html="userdoc.gpu.assignPci"><code>--pci 0000:03:00.0</code> still works when you need a raw address. Prefer <code>--gpu</code>.</p>
 
@@ -189,7 +211,7 @@ spec:
 kctl migrate vm gpu-guest --target-node node-b --gpu radeon1</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.gpu">Provider 0.5.0 has no GPU attribute on <code>kcore_vm</code>. Assign the card with CLI or YAML. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.gpumigrate">Migration stays <code>kctl migrate vm</code>. Changing <code>gpus</code> on a running VM is refused.</p>
             </div>
             <p data-i18n-html="userdoc.gpu.migrateDisk">The guest disk is not copied. Cold migration of a GPU VM needs the same shared RBD disk as any other cross-node move. See <a href="storage-vsan.html">kcore SAN (Ceph)</a>.</p>
 
