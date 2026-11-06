@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="How kcore Vault and immutable nodes keep backups out of reach of a stolen credential.">
+    <title>Ransomware resistance - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/ransomware-resistance.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Ransomware resistance - kcore documentation">
+    <meta property="og:description" content="How kcore Vault and immutable nodes keep backups out of reach of a stolen credential.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/ransomware-resistance.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/code-color.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html" class="active">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            <h1>Ransomware resistance</h1>
+
+            <p>Ransomware that reaches a hypervisor encrypts the guests and then looks for the backups. This page says what kcore does so the backups are still there, what it does not do, and what you have to set up yourself. The backup half is <a href="vault.html">kcore Vault</a>. The hypervisor half is the way kcore nodes are built and updated.</p>
+
+            <h2>The attacker you are planning for</h2>
+            <p>Someone has an operator password, a stolen client certificate, or root on a hypervisor node. They want to delete or overwrite every copy of your data before they demand money. A backup that the same credentials can reach is not a backup.</p>
+
+            <h2>Vault: what stops a delete</h2>
+            <table>
+                <tr><th>Control</th><th>What it does</th></tr>
+                <tr><td>Separate machine</td><td>Vault runs on its own appliance, not on a hypervisor node. Its disks, accounts, and OS are not the cluster&rsquo;s.</td></tr>
+                <tr><td>Pull only</td><td>The mover on a node serves extents read-only. The appliance pulls. A node holds no credentials for the repository and cannot push, overwrite, or delete a backup.</td></tr>
+                <tr><td>Retention only moves forward</td><td>Every stored object has a <code>retain_until</code> time. A later job can extend it. Nothing can shorten it. Delete before that time returns <em>still locked</em>.</td></tr>
+                <tr><td>Object Lock offsite</td><td>An S3 bucket with Object Lock takes each object in COMPLIANCE mode. The bucket itself refuses delete and overwrite until the date, including from the account that wrote the object. This is the grade called <code>storage-enforced</code>.</td></tr>
+                <tr><td>Encrypted and signed</td><td>Data is chunked, encrypted, and packed. The manifest is signed. A tampered pack or manifest fails <code>verify</code> instead of restoring bad data.</td></tr>
+                <tr><td>Two-person approval</td><td>Deleting a target, lowering retention, installing a licence, and changing a role wait for a security officer, a different role from the person asking.</td></tr>
+                <tr><td>Roles and TOTP</td><td>Viewer, backup-operator, restore-operator, admin, security-officer. Admin and restore roles must enrol TOTP before the console opens.</td></tr>
+                <tr><td>Own credentials</td><td>The coordinator reaches the cluster with a certificate whose role is <code>backup-operator</code>: it can snapshot and read a volume, not manage the cluster. A cluster admin does not get Vault access from that.</td></tr>
+                <tr><td>Verify and restore drills</td><td><code>verify create --full</code> reads objects back and checks them. A restore writes a volume back through the cluster API to Ceph, LVM, or ZFS. Practise it.</td></tr>
+            </table>
+
+            <h3>Grades are honest</h3>
+            <p>The console shows a grade per target. <code>appliance-enforced</code> (a ZFS dataset on the appliance) is enforced by the coordinator software. Someone with root on that appliance can delete the files. <code>storage-enforced</code> (Object Lock) is enforced by the bucket. <code>none</code> (S3 without Object Lock) is a cache. For a copy that survives a root compromise of the appliance, replicate to a locked bucket:</p>
+            <pre><code>kcore-vault target apply offsite --backend s3 --location s3://vault-backups/prod
+kcore-vault replicate create --source local --dest offsite
+kcore-vault catalog import --target offsite</code></pre>
+            <p>Create the bucket with Object Lock turned on before the first upload. It cannot be switched on later for a bucket that already has objects. The bucket owner&rsquo;s credentials and who can delete the bucket itself are your problem, so keep them in a different account from the cluster&rsquo;s.</p>
+
+            <h2>The hypervisor side</h2>
+            <ul>
+                <li><strong>Immutable nodes.</strong> A kcore node is a NixOS system built from a release tag. The root is rebuilt on update and rolled back on a failed boot. There is no package manager to run on the host, and a change to the system is a new generation, not an edit. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</li>
+                <li><strong>Canary updates.</strong> One node takes a release first and soaks while the controller compares it with the rest. A release that makes the canary unhealthy does not go further.</li>
+                <li><strong>mTLS everywhere.</strong> Controller, node agents, and <code>kctl</code> authenticate with certificates from your own CA, which you can rotate and revoke. See <a href="certificates.html">Certificates</a>.</li>
+                <li><strong>Roles and an audit log.</strong> A <code>vm-admin</code> cannot rewrite the cluster. The audit log is append-only, with its own page in the <a href="dashboard.html">dashboard</a>.</li>
+                <li><strong>Snapshots on Ceph.</strong> Volume snapshots and snapshot policies are fast local recovery points. They live in the same cluster, so they are not a defence against someone who controls the cluster. That is what Vault is for.</li>
+            </ul>
+
+            <h2>What you still have to do</h2>
+            <ul>
+                <li>Put Vault on a different network segment and a different admin domain from the hypervisors. Close what you do not use: the coordinator listens on 9191 on all interfaces, and the console on 443.</li>
+                <li>Change the installer password on the first login and set <code>adminPasswordFile</code>.</li>
+                <li>Keep the repository key material and the licence somewhere outside the appliance. A replicated copy uses the source repository&rsquo;s encryption keys, so losing the appliance without them means losing the ability to read the offsite copy.</li>
+                <li>On a two-disk appliance the default is a stripe. Losing one disk loses the pool. Ask for a mirror, or keep the Object Lock copy.</li>
+                <li>Test a restore on a schedule. A backup you have not restored is a guess.</li>
+                <li>Keep the cluster certificates&rsquo; private keys off laptops that browse the web.</li>
+            </ul>
+
+            <h2>What this does not cover</h2>
+            <p>kcore does not scan guests for malware. It does not stop an attacker who owns your cloud account that holds the locked bucket, or a security officer who approves what they should not. It makes the destructive path longer, noisier, and impossible for a single stolen credential.</p>
+
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom">
+        <p><a href="../../partners.html" data-i18n="footer.partners">Partners</a> · <a href="../../trademark.html" data-i18n="footer.trademark">Trademark</a></p>
+        <p>&copy; 2026 Tacconi Consulting Ltd.</p>
+    </div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/code-color.js"></script>
+    <script src="../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

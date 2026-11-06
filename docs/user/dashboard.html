@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The kcore dashboard: sign-in with TOTP, roles, serial console, release rollouts, and every resource page.">
+    <title>Dashboard - kcore documentation</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/docs/user/dashboard.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="kcore hypervisor">
+    <meta property="og:title" content="Dashboard - kcore documentation">
+    <meta property="og:description" content="The kcore dashboard: sign-in with TOTP, roles, serial console, release rollouts, and every resource page.">
+    <meta property="og:url" content="https://kcorehypervisor.com/docs/user/dashboard.html">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <meta property="og:image:alt" content="kcore hypervisor logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kcorehypervisor/kcore/main/assets/kcore-logo.png">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/code-color.css">
+    <link rel="stylesheet" href="../../css/docs-mode.css">
+    <script src="../../js/docs-mode.js"></script>
+    <style>
+        .docs-layout{display:grid;grid-template-columns:240px 1fr;gap:2rem;max-width:1200px;margin:0 auto;padding:2rem 1rem 4rem;margin-top:80px}
+        .docs-sidebar{position:sticky;top:80px;height:fit-content;padding-top:1rem}
+        .docs-nav-section{margin-bottom:1.25rem}.docs-nav-section h4{color:var(--text-primary);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .docs-nav ul{list-style:none;padding:0;margin:0}.docs-nav li{margin-bottom:.15rem}
+        .docs-nav a{color:var(--text-secondary);font-size:.88rem;text-decoration:none;display:block;padding:.2rem 0;transition:color .15s}
+        .docs-nav a:hover,.docs-nav a.active{color:var(--accent-primary)}
+        .docs-content h1{margin-bottom:.75rem}.docs-content h2{margin-top:2rem;margin-bottom:.75rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-primary)}
+        .docs-content h3{margin-top:1.5rem;margin-bottom:.5rem}
+        .docs-content p,.docs-content li{color:var(--text-secondary);line-height:1.8;font-size:1.02rem}
+        .docs-content ul,.docs-content ol{padding-left:1.25rem;margin-bottom:1rem}
+        .docs-content pre{background:var(--bg-card);border:1px solid var(--border-primary);border-radius:.5rem;padding:1.25rem;overflow-x:auto;margin:1rem 0 1.5rem}
+        .docs-content code{background:var(--bg-card);border:1px solid var(--border-primary);padding:2px 6px;border-radius:4px;font-size:.9em}
+        .docs-content pre code{background:none;border:none;padding:0}
+        .note{border-left:3px solid var(--accent-primary);padding-left:1rem;color:var(--text-secondary);margin:1.25rem 0;font-size:.95rem}
+        table{width:100%;border-collapse:collapse;font-size:.95rem;color:var(--text-secondary);margin:1rem 0}
+        th,td{border:1px solid var(--border-primary);padding:.5rem .75rem;text-align:left}th{background:var(--bg-card);color:var(--text-primary)}
+        .roadmap-badge{display:inline-block;background:var(--warning);color:#000;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+        @media(max-width:868px){.docs-layout{grid-template-columns:1fr}.docs-sidebar{position:static}}
+    </style>
+</head>
+<body class="docs-user-page">
+    <nav class="navbar"><div class="container">
+        <div class="nav-brand"><a href="../../index.html" style="color:inherit;text-decoration:none"><span class="logo">kcore</span><span class="logo-tag">hypervisor</span></a></div>
+        <ul class="nav-menu">
+            <li><a href="../../features.html" data-i18n="nav.features">Features</a></li>
+            <li><a href="../../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+            <li><a href="../../docs.html" data-i18n="nav.docs">Docs</a></li>
+            <li><a href="../../roadmap.html" data-i18n="nav.roadmap">Roadmap</a></li>
+            <li><a href="../../blog.html" data-i18n="footer.blog">Blog</a></li>
+            <li><a href="../../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+        </ul>
+    </div></nav>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar"><nav class="docs-nav">
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
+                <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
+                <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="appliance-console.html">Appliance console</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Operate</h4><ul>
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="terraform.html">Terraform provider</a></li>
+                <li><a href="ai-agent.html">AI agent &amp; MCP</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.virtualmachines">Virtual machines</h4><ul>
+                <li><a href="vm-creation.html" data-i18n="docs.nav.vmcreation">VM creation</a></li>
+                <li><a href="images.html" data-i18n="docs.nav.vmimages">VM images</a></li>
+                <li><a href="ha-vms.html">High availability</a></li>
+                <li><a href="vm-migration.html" data-i18n="docs.nav.vmmigration">VM migration</a></li>
+                <li><a href="import.html" data-i18n="docs.nav.import">Import from VMware or Proxmox</a></li>
+                <li><a href="gpu-passthrough.html" data-i18n="docs.nav.gpu">GPU passthrough</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
+                <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
+                <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
+                <li><a href="overlay-vxlan.html" data-i18n="docs.nav.vxlanoverlay">VXLAN overlay</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.storage">Storage</h4><ul>
+                <li><a href="storage.html" data-i18n="docs.nav.storagebackends">Storage backends</a></li>
+                <li><a href="storage-day2.html" data-i18n="docs.nav.day2">Day-2 operations</a></li>
+                <li><a href="storage-vsan.html" data-i18n="docs.nav.vsan">kcore SAN (Ceph)</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.security">Security</h4><ul>
+                <li><a href="security-groups.html" data-i18n="docs.nav.securitygroups">Security groups</a></li>
+                <li><a href="compliance.html" data-i18n="docs.nav.compliance">Compliance</a></li>
+                <li><a href="certificates.html" data-i18n-html="docs.nav.certificates">Certificates &amp; encryption</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.reference">Reference</h4><ul>
+                <li><a href="kctl-reference.html" data-i18n="docs.nav.kctl">kctl CLI</a></li>
+                <li><a href="yaml-manifests.html" data-i18n="docs.nav.yamlmanifests">YAML manifests</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
+                <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4>Paid products</h4><ul>
+                <li><a href="vault.html">kcore Vault</a></li>
+                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
+                <li><a href="provisioning.html">kcore Provisioning</a></li>
+            </ul></div>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
+                <li><a href="licensing.html" data-i18n="docs.nav.editions">Editions &amp; pricing</a></li>
+            </ul></div>
+        </nav></aside>
+        <main class="docs-content">
+            <p class="docs-version-banner" data-docs-version="latest"></p>
+            <h1>Dashboard</h1>
+
+            <p>The dashboard is the browser view of the same controller API that <code>kctl</code> and Terraform use. It runs inside the controller process. There is no second service to install. Anything you can see or change there, you can also do from the command line, and every page names the matching <code>kctl</code> command and Terraform resource.</p>
+
+            <h2>Open it</h2>
+            <p>The controller serves the console over HTTPS on <code>web.listenAddr</code>, by default <code>0.0.0.0:9443</code>. Open <code>https://&lt;controller&gt;:9443/</code>. The NixOS module turns it on with <code>services.kcore.dashboard.enable</code> and sets the address with <code>services.kcore.dashboard.listenAddress</code>. A controller run by hand needs <code>web.enabled: true</code> in <code>controller.yaml</code>.</p>
+
+            <h2>Sign in</h2>
+            <p>An operator signs in with a password and a TOTP code. There is no shared admin account and no SSO yet (no OIDC, SAML, or WebAuthn).</p>
+            <ol>
+                <li>A cluster-admin sets the first password with a certificate: <code>kctl operator set-password alice</code>.</li>
+                <li>On first sign-in the dashboard shows a QR code. Scan it with an authenticator app and enter the first code. The dashboard then shows ten recovery codes, once.</li>
+                <li>After that, every sign-in asks for the password, then a six-digit code or one recovery code.</li>
+            </ol>
+            <p>If a phone is lost, <code>kctl operator reset-2fa alice</code> clears TOTP and the recovery codes and ends the operator&rsquo;s web sessions. After <code>maxFailedLogins</code> wrong attempts in a row (default 5) the operator is locked for <code>lockoutSecs</code> (default 900). Sessions last 12 hours with a one-hour idle limit by default.</p>
+            <p>The <strong>Account</strong> page changes the password and sets up TOTP. The <strong>API tokens</strong> page creates tokens for scripts. A token is shown once, lasts 1 to 365 days (90 by default), can be capped below the operator&rsquo;s role, and does not ask for a second factor. It cannot create tokens or change the password.</p>
+
+            <h2>Roles and audit</h2>
+            <p>The dashboard calls the controller as the signed-in operator, so the same roles apply: <code>read-only</code>, <code>vm-admin</code>, <code>cluster-admin</code>. The controller refuses what a role may not do. Mutating calls and console opens are written to the append-only audit log, which has its own page and a <code>kctl get audit-events</code> twin.</p>
+
+            <h2>What is in it</h2>
+            <table>
+                <tr><th>Group</th><th>Pages</th></tr>
+                <tr><td>Overview</td><td>Cluster summary with charts.</td></tr>
+                <tr><td>Compute</td><td>Virtual machines, workloads, containers, operations (live migrations, drains, failovers in flight).</td></tr>
+                <tr><td>Network</td><td>Networks, host networking, security groups.</td></tr>
+                <tr><td>Storage</td><td>Volumes, snapshots, snapshot policies, disk layouts, host storage, storage classes, Ceph clusters, shared filesystems, object stores.</td></tr>
+                <tr><td>Ingress</td><td>Gateways, routes, WAF policies, WAF events.</td></tr>
+                <tr><td>Cluster</td><td>Nodes, Kubernetes, cluster updates, release, cluster, high availability events, replication, replication conflicts.</td></tr>
+                <tr><td>Identity</td><td>Operators, API tokens, my sessions, SSH keys, certificates, revocation list, PKI.</td></tr>
+                <tr><td>Services</td><td>Slurm, PostgreSQL.</td></tr>
+                <tr><td>Observe</td><td>GPUs, cluster health, compliance, audit log, crypto configuration, SBOM.</td></tr>
+            </table>
+            <p>Lists filter on any column, shown or hidden. A row opens a drawer with the full record, and the same drawer carries the actions for that object: start and stop a VM, migrate it, drain a node, approve a node, create or delete a resource from a form, and plan a change first where the API has a plan call.</p>
+
+            <h2>Things the dashboard does well</h2>
+            <ul>
+                <li><strong>Serial console.</strong> Each VM has a Console action: a terminal in the tab (xterm.js) over a WebSocket to the node agent&rsquo;s serial endpoint, with paste and resize. The proxy uses the same mTLS trust as the rest of the console, and each open is audited with actor, VM, and time. For a graphical desktop, run a VNC server inside the guest. kcore does not provide a hypervisor-level graphical console.</li>
+                <li><strong>Updates.</strong> The Release page shows the version the cluster is on and what each node runs. <em>Set version</em> takes a release tag, a canary node, a soak time, <em>No canary</em>, <em>Drain VMs</em>, and <em>Dry run</em>. <em>Promote canary</em> ends a soak early. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</li>
+                <li><strong>High availability.</strong> The HA page lists detected, fenced, reassigned, and applied events with the node and VM they belong to. See <a href="ha-vms.html">High availability</a>.</li>
+                <li><strong>Ceph.</strong> Cluster health, members, pools, and volumes next to the VMs that use them. See <a href="storage-vsan.html">kcore SAN</a>.</li>
+            </ul>
+
+            <h2>Limits</h2>
+            <ul>
+                <li>The dashboard speaks to the controller you reached. A web session works only against the controller where it signed in. Sessions and lockout counters are not replicated between controllers. Operator passwords, TOTP seeds, and API tokens are.</li>
+                <li>The TOTP seed is stored in the clear in the controller database, because the controller needs it to check a code. Protect the database and its backups.</li>
+                <li>Block backups are not in the console. They belong to <a href="vault.html">kcore Vault</a>, which has its own console.</li>
+                <li>Plain <code>apply</code> of a raw NixOS configuration is a <code>kctl</code> operation.</li>
+            </ul>
+
+        </main>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-bottom">
+        <p><a href="../../partners.html" data-i18n="footer.partners">Partners</a> · <a href="../../trademark.html" data-i18n="footer.trademark">Trademark</a></p>
+        <p>&copy; 2026 Tacconi Consulting Ltd.</p>
+    </div></div></footer>
+    <script src="../../js/i18n.js"></script><script src="../../js/main.js"></script>
+    <script src="../../js/code-color.js"></script>
+    <script src="../../js/docs-version.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
