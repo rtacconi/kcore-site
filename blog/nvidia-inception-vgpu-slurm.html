@@ -132,28 +132,28 @@
 
     <section class="post-hero">
         <div class="container">
-            <h1>kcore joins NVIDIA Inception: vGPU slices and Slurm on bare metal</h1>
-            <p class="post-meta">9 November 2026</p>
+            <h1 data-i18n="bp.inc.title">kcore joins NVIDIA Inception: vGPU slices and Slurm on bare metal</h1>
+            <p class="post-meta" data-i18n="bp.inc.date">9 November 2026</p>
         </div>
     </section>
 
     <article class="post-content">
-        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+        <a href="../blog.html" class="back-link" data-i18n-html="bp.inc.back">&larr; Back to blog</a>
 
         <figure class="inception-badge">
-            <a href="https://www.nvidia.com/en-us/startups/"><img src="../assets/nvidia-inception-program.png" alt="NVIDIA Inception Program logo" width="850" height="310"></a>
+            <a href="https://www.nvidia.com/en-us/startups/"><img src="../assets/nvidia-inception-program.png" alt="NVIDIA Inception Program logo" data-i18n-alt="bp.inc.alt1" width="850" height="310"></a>
         </figure>
 
-        <p>
+        <p data-i18n-html="bp.inc.b01">
             kcore has been accepted into the <a href="https://www.nvidia.com/en-us/startups/">NVIDIA Inception</a>
             program for startups. For a small team building a hypervisor, it comes at the point where
             GPU work stops being a side feature. Two things shipped in 0.7.0 make that the right time: one NVIDIA card
             can now be shared by several VMs, and a Slurm cluster runs on the hosts themselves.
         </p>
 
-        <h2>One card, several VMs</h2>
+        <h2 data-i18n="bp.inc.b02">One card, several VMs</h2>
 
-        <p>
+        <p data-i18n="bp.inc.b03">
             Until now a GPU went to one VM. That is fine for a workstation guest and wasteful for
             inference, where most guests need a few gigabytes of video memory, not a whole card.
             kcore now slices an NVIDIA card into vGPUs. You turn a node into a vGPU host once, and
@@ -166,7 +166,7 @@
 
 kctl create vm infer-01 --vgpu A2-4C ...</code></pre>
 
-        <p>
+        <p data-i18n-html="bp.inc.b04">
             The node downloads the NVIDIA Virtual GPU Manager, checks its SHA256, and loads it from
             its Nix configuration. The <code>.run</code> file never goes into git. If the card is
             still on <code>nouveau</code>, the command schedules the reboot, and a reboot is refused
@@ -174,22 +174,22 @@ kctl create vm infer-01 --vgpu A2-4C ...</code></pre>
             the controller places the VM on a ready node that can supply the profile.
         </p>
 
-        <p>
+        <p data-i18n-html="bp.inc.b05">
             The same record is <code>kind: NodeVgpu</code> for <code>kctl apply</code>,
             <code>kcore_vgpu_host</code> and <code>kcore_vm.vgpus</code> in the Terraform provider,
             and a <code>node-vgpu</code> kind in the MCP server, so an agent can see which slices
             are free. The vGPU manager needs an NVIDIA AI Enterprise entitlement.
         </p>
 
-        <p>
+        <p data-i18n-html="bp.inc.b06">
             Intel and AMD cards use plain SR-IOV with no licence. <code>intel-2vf</code> is half an
             Intel card and <code>radeon-4vf</code> a quarter of an AMD one, with a function count
             per card. The manifest is the same as for NVIDIA.
         </p>
 
-        <h2>The patches go to Cloud Hypervisor</h2>
+        <h2 data-i18n="bp.inc.b07">The patches go to Cloud Hypervisor</h2>
 
-        <p>
+        <p data-i18n-html="bp.inc.b08">
             kcore runs guests on <a href="https://www.cloudhypervisor.org/">Cloud Hypervisor</a>.
             NVIDIA's vGPU manager was written against QEMU, so making an A2 slice boot took eight
             small patches to Cloud Hypervisor and its <code>vfio-ioctls</code> crate. Each one
@@ -197,14 +197,14 @@ kctl create vm infer-01 --vgpu A2-4C ...</code></pre>
         </p>
 
         <ul>
-            <li>Install guest RAM mappings before the VFIO device is opened, because the vGPU manager takes its snapshot of guest memory at that moment.</li>
-            <li>Read region flags from the full-size <code>GET_REGION_INFO</code> answer, where the driver reports that BAR0 can be mapped.</li>
-            <li>Map the driver's sparse mmap areas even when the BAR also holds the MSI-X tables.</li>
-            <li>Write BAR addresses through to the device, and read the identity registers from the device rather than a shadow copy.</li>
-            <li>Warn instead of failing when <code>KVM_SET_TSC_KHZ</code> returns <code>EINVAL</code>. This one is not about GPUs: it lets a VM live-migrate from a host with a slower TSC to a faster one, as QEMU already does.</li>
+            <li data-i18n="bp.inc.b09">Install guest RAM mappings before the VFIO device is opened, because the vGPU manager takes its snapshot of guest memory at that moment.</li>
+            <li data-i18n-html="bp.inc.b10">Read region flags from the full-size <code>GET_REGION_INFO</code> answer, where the driver reports that BAR0 can be mapped.</li>
+            <li data-i18n="bp.inc.b11">Map the driver's sparse mmap areas even when the BAR also holds the MSI-X tables.</li>
+            <li data-i18n="bp.inc.b12">Write BAR addresses through to the device, and read the identity registers from the device rather than a shadow copy.</li>
+            <li data-i18n-html="bp.inc.b13">Warn instead of failing when <code>KVM_SET_TSC_KHZ</code> returns <code>EINVAL</code>. This one is not about GPUs: it lets a VM live-migrate from a host with a slower TSC to a faster one, as QEMU already does.</li>
         </ul>
 
-        <p>
+        <p data-i18n-html="bp.inc.b14">
             Carrying patches means rebuilding Cloud Hypervisor on every release, and it means
             kcore users run code nobody upstream has reviewed. So the plan is to submit them. The
             two <code>vfio-ioctls</code> changes go to rust-vmm first, because one Cloud Hypervisor
@@ -216,9 +216,9 @@ kctl create vm infer-01 --vgpu A2-4C ...</code></pre>
             keeps carrying it while we look for a cleaner fix.
         </p>
 
-        <h2>Slurm on the bare metal</h2>
+        <h2 data-i18n="bp.inc.b15">Slurm on the bare metal</h2>
 
-        <p>
+        <p data-i18n-html="bp.inc.b16">
             HPC and training jobs do not want a VM between them and the hardware. A
             <code>SlurmCluster</code> runs Slurm as kcoreOS host services: a controller, an
             optional backup controller, login nodes, accounting with <code>slurmdbd</code> and
@@ -243,7 +243,7 @@ spec:
         <pre><code>kctl slurm plan -f hpc-gpu.yaml
 kctl apply -f hpc-gpu.yaml</code></pre>
 
-        <p>
+        <p data-i18n-html="bp.inc.b17">
             Compute nodes are cordoned, so the VM scheduler leaves them to <code>slurmd</code>.
             Plan refuses a compute node that still hosts guests. The controller, login, and
             accounting roles can share a node with VMs. <code>gres: auto</code> writes
@@ -251,7 +251,7 @@ kctl apply -f hpc-gpu.yaml</code></pre>
             fails rather than writing a config that cannot start if the NVIDIA driver is off.
         </p>
 
-        <p>
+        <p data-i18n="bp.inc.b18">
             Cluster updates know Slurm's version rules: accounting first, then the controller,
             then compute, then login, and each compute node is drained before its rebuild. The
             munge key and the database password are generated on the controller and never
@@ -259,16 +259,16 @@ kctl apply -f hpc-gpu.yaml</code></pre>
             the same resource, so one kcore estate can hold VMs, vGPU guests, and a batch cluster.
         </p>
 
-        <h2>What is not done yet</h2>
+        <h2 data-i18n="bp.inc.b19">What is not done yet</h2>
 
         <ul>
-            <li>vGPU has been tested on one card: an NVIDIA A2 in the lab. Intel and AMD SR-IOV slices are built but have not run on lab hardware.</li>
-            <li>The Cloud Hypervisor patches have not been submitted yet. This post will be updated with links when they are.</li>
-            <li>Devices passed through with VFIO, vGPU slices included, do not live-migrate.</li>
-            <li>The Slurm resource has not yet been applied to the live lab. Shared storage is NFS from the controller, which makes the controller a single point of failure for <code>/home</code> and <code>/scratch</code>. CephFS is not wired yet.</li>
+            <li data-i18n="bp.inc.b20">vGPU has been tested on one card: an NVIDIA A2 in the lab. Intel and AMD SR-IOV slices are built but have not run on lab hardware.</li>
+            <li data-i18n="bp.inc.b21">The Cloud Hypervisor patches have not been submitted yet. This post will be updated with links when they are.</li>
+            <li data-i18n="bp.inc.b22">Devices passed through with VFIO, vGPU slices included, do not live-migrate.</li>
+            <li data-i18n-html="bp.inc.b23">The Slurm resource has not yet been applied to the live lab. Shared storage is NFS from the controller, which makes the controller a single point of failure for <code>/home</code> and <code>/scratch</code>. CephFS is not wired yet.</li>
         </ul>
 
-        <p>
+        <p data-i18n-html="bp.inc.b24">
             If you run inference or HPC workloads on VMware or bare Slurm today and want to try
             this on your own hardware, write to
             <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>. The
