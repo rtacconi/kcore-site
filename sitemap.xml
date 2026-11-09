@@ -25,6 +25,7 @@
   <url><loc>https://kcorehypervisor.com/blog/when-proxmox-is-no-longer-the-model.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/vmware-import-inventory-convert-cutover.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/partner-terms-official-builds.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kcorehypervisor.com/blog/nvidia-inception-vgpu-slurm.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/kcore-0-7-0.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/kcore-provisioning-fleet.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
   <url><loc>https://kcorehypervisor.com/blog/bare-metal-declarative-platform.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>

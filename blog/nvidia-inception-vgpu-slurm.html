@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kcore joins the NVIDIA Inception program. NVIDIA vGPU slices under Cloud Hypervisor, the patches going upstream, and Slurm clusters on bare-metal kcoreOS hosts.">
+    <title>kcore joins NVIDIA Inception: vGPU slices and Slurm on bare metal - kcore hypervisor</title>
+    <link rel="canonical" href="https://kcorehypervisor.com/blog/nvidia-inception-vgpu-slurm.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="kcore joins NVIDIA Inception: vGPU slices and Slurm on bare metal - kcore hypervisor">
+    <meta property="og:description" content="kcore joins the NVIDIA Inception program. NVIDIA vGPU slices under Cloud Hypervisor, the patches going upstream, and Slurm clusters on bare-metal kcoreOS hosts.">
+    <meta property="og:url" content="https://kcorehypervisor.com/blog/nvidia-inception-vgpu-slurm.html">
+    <meta property="og:image" content="https://kcorehypervisor.com/assets/nvidia-inception-program.png">
+    <meta property="og:image:alt" content="NVIDIA Inception Program logo">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kcorehypervisor.com/assets/nvidia-inception-program.png">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/code-color.css">
+    <style>
+        .post-hero {
+            padding: 8rem 0 4rem;
+            margin-top: 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .post-hero h1 {
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post-meta {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .post-content {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 1rem 5rem;
+        }
+
+        .post-content h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .post-content code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .post-content ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .inception-badge { margin: 0 0 2rem; text-align: center; }
+        .inception-badge img {
+            width: min(360px, 100%);
+            height: auto;
+            background: #fff;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo">kcore</span>
+                    <span class="logo-tag">hypervisor</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                <li><a href="../products.html" data-i18n="nav.products">Products</a></li>
+                <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                <li><a href="../docs.html" data-i18n="nav.docs">Docs</a></li>
+                <li><a href="../roadmap.html">Roadmap</a></li>
+                <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                <li><a href="../index.html#get-started" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="post-hero">
+        <div class="container">
+            <h1>kcore joins NVIDIA Inception: vGPU slices and Slurm on bare metal</h1>
+            <p class="post-meta">9 November 2026</p>
+        </div>
+    </section>
+
+    <article class="post-content">
+        <a href="../blog.html" class="back-link">&larr; Back to blog</a>
+
+        <figure class="inception-badge">
+            <a href="https://www.nvidia.com/en-us/startups/"><img src="../assets/nvidia-inception-program.png" alt="NVIDIA Inception Program logo" width="850" height="310"></a>
+        </figure>
+
+        <p>
+            kcore has been accepted into the <a href="https://www.nvidia.com/en-us/startups/">NVIDIA Inception</a>
+            program for startups. For a small team building a hypervisor, it comes at the point where
+            GPU work stops being a side feature. Two things shipped in 0.7.0 make that the right time: one NVIDIA card
+            can now be shared by several VMs, and a Slurm cluster runs on the hosts themselves.
+        </p>
+
+        <h2>One card, several VMs</h2>
+
+        <p>
+            Until now a GPU went to one VM. That is fine for a workstation guest and wasteful for
+            inference, where most guests need a few gigabytes of video memory, not a whole card.
+            kcore now slices an NVIDIA card into vGPUs. You turn a node into a vGPU host once, and
+            each VM asks for a profile:
+        </p>
+
+        <pre><code>kctl node vgpu enable node-193 --host-card 0000:61:00.0 \
+  --url http://mirror.lan/NVIDIA-Linux-x86_64-595.91.04-vgpu-kvm-aie.run \
+  --sha256 2bc7f9be... --file NVIDIA-Linux-x86_64-595.91.04-vgpu-kvm-aie.run
+
+kctl create vm infer-01 --vgpu A2-4C ...</code></pre>
+
+        <p>
+            The node downloads the NVIDIA Virtual GPU Manager, checks its SHA256, and loads it from
+            its Nix configuration. The <code>.run</code> file never goes into git. If the card is
+            still on <code>nouveau</code>, the command schedules the reboot, and a reboot is refused
+            while a VM is meant to be running unless you force it. Leave the target node empty and
+            the controller places the VM on a ready node that can supply the profile.
+        </p>
+
+        <p>
+            The same record is <code>kind: NodeVgpu</code> for <code>kctl apply</code>,
+            <code>kcore_vgpu_host</code> and <code>kcore_vm.vgpus</code> in the Terraform provider,
+            and a <code>node-vgpu</code> kind in the MCP server, so an agent can see which slices
+            are free. The vGPU manager needs an NVIDIA AI Enterprise entitlement.
+        </p>
+
+        <p>
+            Intel and AMD cards use plain SR-IOV with no licence. <code>intel-2vf</code> is half an
+            Intel card and <code>radeon-4vf</code> a quarter of an AMD one, with a function count
+            per card. The manifest is the same as for NVIDIA.
+        </p>
+
+        <h2>The patches go to Cloud Hypervisor</h2>
+
+        <p>
+            kcore runs guests on <a href="https://www.cloudhypervisor.org/">Cloud Hypervisor</a>.
+            NVIDIA's vGPU manager was written against QEMU, so making an A2 slice boot took eight
+            small patches to Cloud Hypervisor and its <code>vfio-ioctls</code> crate. Each one
+            fixes a place where Cloud Hypervisor and QEMU behave differently:
+        </p>
+
+        <ul>
+            <li>Install guest RAM mappings before the VFIO device is opened, because the vGPU manager takes its snapshot of guest memory at that moment.</li>
+            <li>Read region flags from the full-size <code>GET_REGION_INFO</code> answer, where the driver reports that BAR0 can be mapped.</li>
+            <li>Map the driver's sparse mmap areas even when the BAR also holds the MSI-X tables.</li>
+            <li>Write BAR addresses through to the device, and read the identity registers from the device rather than a shadow copy.</li>
+            <li>Warn instead of failing when <code>KVM_SET_TSC_KHZ</code> returns <code>EINVAL</code>. This one is not about GPUs: it lets a VM live-migrate from a host with a slower TSC to a faster one, as QEMU already does.</li>
+        </ul>
+
+        <p>
+            Carrying patches means rebuilding Cloud Hypervisor on every release, and it means
+            kcore users run code nobody upstream has reviewed. So the plan is to submit them. The
+            two <code>vfio-ioctls</code> changes go to rust-vmm first, because one Cloud Hypervisor
+            patch calls the new function. The rest follow, each opened as an issue first, as Cloud
+            Hypervisor's contribution guide asks. Each one will say plainly that it was tested on
+            one NVIDIA A2. The eighth patch keeps a QEMU-style <code>-uuid</code> on the process
+            command line because the vGPU manager reads it from there. That is a workaround for
+            the vendor manager, not something for Cloud Hypervisor's <code>main</code>, so kcore
+            keeps carrying it while we look for a cleaner fix.
+        </p>
+
+        <h2>Slurm on the bare metal</h2>
+
+        <p>
+            HPC and training jobs do not want a VM between them and the hardware. A
+            <code>SlurmCluster</code> runs Slurm as kcoreOS host services: a controller, an
+            optional backup controller, login nodes, accounting with <code>slurmdbd</code> and
+            MariaDB, and compute nodes.
+        </p>
+
+        <pre><code>kind: SlurmCluster
+metadata:
+  name: hpc-gpu
+spec:
+  clusterName: hpc-gpu
+  controller: { nodeId: node-101, address: 10.0.0.11, iface: enp6s0 }
+  accounting: { enabled: true, nodeId: node-104 }
+  gpuDriver: true
+  compute:
+    - nodeId: node-103
+      address: 10.0.0.13
+      iface: enp6s0
+      partitions: [batch, gpu]
+      gres: auto</code></pre>
+
+        <pre><code>kctl slurm plan -f hpc-gpu.yaml
+kctl apply -f hpc-gpu.yaml</code></pre>
+
+        <p>
+            Compute nodes are cordoned, so the VM scheduler leaves them to <code>slurmd</code>.
+            Plan refuses a compute node that still hosts guests. The controller, login, and
+            accounting roles can share a node with VMs. <code>gres: auto</code> writes
+            <code>gres.conf</code> from the GPU inventory the controller already has, and plan
+            fails rather than writing a config that cannot start if the NVIDIA driver is off.
+        </p>
+
+        <p>
+            Cluster updates know Slurm's version rules: accounting first, then the controller,
+            then compute, then login, and each compute node is drained before its rebuild. The
+            munge key and the database password are generated on the controller and never
+            returned by the API. The dashboard, the MCP server, and the Terraform provider cover
+            the same resource, so one kcore estate can hold VMs, vGPU guests, and a batch cluster.
+        </p>
+
+        <h2>What is not done yet</h2>
+
+        <ul>
+            <li>vGPU has been tested on one card: an NVIDIA A2 in the lab. Intel and AMD SR-IOV slices are built but have not run on lab hardware.</li>
+            <li>The Cloud Hypervisor patches have not been submitted yet. This post will be updated with links when they are.</li>
+            <li>Devices passed through with VFIO, vGPU slices included, do not live-migrate.</li>
+            <li>The Slurm resource has not yet been applied to the live lab. Shared storage is NFS from the controller, which makes the controller a single point of failure for <code>/home</code> and <code>/scratch</code>. CephFS is not wired yet.</li>
+        </ul>
+
+        <p>
+            If you run inference or HPC workloads on VMware or bare Slurm today and want to try
+            this on your own hardware, write to
+            <a href="mailto:team@tacconiconsulting.com">team@tacconiconsulting.com</a>. The
+            <a href="../docs/user/gpu-passthrough.html">GPU guide</a> covers passthrough and vGPU,
+            and the <a href="https://github.com/kcorehypervisor/kcore/blob/main/docs/user/slurm.md">Slurm guide</a>
+            has the full manifest reference.
+        </p>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>kcore</h4>
+                    <p data-i18n="footer.tagline">Declarative virtualization for edge and datacenters</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="../features.html" data-i18n="nav.features">Features</a></li>
+                        <li><a href="../pricing.html" data-i18n="nav.pricing">Pricing</a></li>
+                        <li><a href="../roadmap.html">Roadmap</a></li>
+                        <li><a href="../products.html">Products</a></li>
+                        <li><a href="../vault.html">kcore Vault</a></li>
+                        <li><a href="../provisioning.html">kcore Provisioning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.resources">Resources</h4>
+                    <ul>
+                        <li><a href="../docs.html" data-i18n="footer.documentation">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="../about.html" data-i18n="footer.about">About</a></li>
+                        <li><a href="../blog.html" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="https://github.com/kcorehypervisor/kcore">GitHub</a></li>
+                        <li><a href="../partners.html" data-i18n="footer.partners">Partners</a></li>
+                        <li><a href="../trademark.html" data-i18n="footer.trademark">Trademark</a></li>
+                        <li><a href="mailto:team@tacconiconsulting.com" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tacconi Consulting Ltd. Registered in England and Wales #16750820.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/code-color.js"></script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2bd37d513ccf45fbac6c3f92fa8f3348"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
