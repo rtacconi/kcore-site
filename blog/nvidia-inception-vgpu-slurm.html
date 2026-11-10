@@ -259,15 +259,6 @@ kctl apply -f hpc-gpu.yaml</code></pre>
             the same resource, so one kcore estate can hold VMs, vGPU guests, and a batch cluster.
         </p>
 
-        <h2 data-i18n="bp.inc.b19">What is not done yet</h2>
-
-        <ul>
-            <li data-i18n="bp.inc.b20">vGPU has been tested on one card: an NVIDIA A2 in the lab. Intel and AMD SR-IOV slices are built but have not run on lab hardware.</li>
-            <li data-i18n="bp.inc.b21">The Cloud Hypervisor patches have not been submitted yet. This post will be updated with links when they are.</li>
-            <li data-i18n="bp.inc.b22">Devices passed through with VFIO, vGPU slices included, do not live-migrate.</li>
-            <li data-i18n-html="bp.inc.b23">The Slurm resource has not yet been applied to the live lab. Shared storage is NFS from the controller, which makes the controller a single point of failure for <code>/home</code> and <code>/scratch</code>. CephFS is not wired yet.</li>
-        </ul>
-
         <p data-i18n-html="bp.inc.b24">
             If you run inference or HPC workloads on VMware or bare Slurm today and want to try
             this on your own hardware, write to
