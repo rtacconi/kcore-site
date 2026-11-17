@@ -59,7 +59,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
-                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="whats-new-0-8-0.html">What&rsquo;s new in 0.8.0</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
@@ -128,7 +128,7 @@
 <pre><code>kctl apply -f &lt;file.yaml&gt;</code></pre>
 </div>
             <p class="docs-mode-hint docs-cli-only">You are browsing in <strong>CLI</strong> mode. This page is the YAML manifest reference—switch the toggle above to <strong>YAML</strong> for the intended view, or open the <a href="kctl-reference.html">kctl CLI reference</a> for commands only.</p>
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
 
             <!-- ======= VM ======= -->
             <h2>VM manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: VM)</span></h2>
@@ -616,7 +616,7 @@ unchanged VM 'web-01'</code></pre>
 
             <div class="docs-tf-only">
             <h2>Terraform</h2>
-            <p data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
+            <p data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
             <p data-i18n-html="docs.mode.tf.pg">Declare the database with <code>kcore_postgresql</code>. Only <code>port</code> changes in place.</p>
             <p data-i18n-html="docs.mode.tf.gpu">On <code>kcore_vm</code>, <code>gpus</code> takes GPU, NIC, or NVMe names such as <code>radeon0</code>, <code>vgpus</code> takes slices such as <code>A2-4C</code>, and <code>pci_devices</code> takes raw PCI addresses. Use one of the three. The VM must be stopped to change them. <code>storage_backend</code> on that resource is filesystem, lvm, or zfs.</p>
             <p data-i18n-html="docs.mode.tf.join"><code>kcore_node</code> takes one <code>join_controller</code>, the bootstrap controller address. A list of join controllers is CLI and YAML only.</p>
