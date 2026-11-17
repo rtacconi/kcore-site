@@ -68,7 +68,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
-                <li><a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a></li>
+                <li><a href="whats-new-0-8-0.html">What&rsquo;s new in 0.8.0</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
@@ -133,10 +133,10 @@
             <h2>Set the cluster version</h2>
             <div class="docs-cli-only">
 <pre><code># Resolve the tag and compare it with each node. Changes nothing.
-kctl update version set v0.7.0 --dry-run
+kctl update version set v0.8.0 --dry-run
 
 # Start the rollout: canary, soak, then one node at a time
-kctl update version set v0.7.0 --drain-vms
+kctl update version set v0.8.0 --drain-vms
 
 # What was set last, and what each node runs
 kctl update version get
@@ -145,9 +145,9 @@ kctl update version get
 kctl update cluster get version-v0-7-0</code></pre>
             </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.7.0.</p>
+            <p class="docs-mode-hint docs-tf-only">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
 <pre><code>resource "kcore_cluster_version" "this" {
-  version             = "v0.7.0"
+  version             = "v0.8.0"
   drain_vms           = true
   canary_soak_seconds = 14400
   canary_node         = "node-b"
@@ -186,8 +186,8 @@ kctl update cluster rollback version-v0-7-0   # roll the canary back</code></pre
             <p>The canary is, in order: the node named with <code>--canary</code>, a node labelled <code>kcore.io/update-canary=true</code>, or the first node in rollout order. A node that runs a controller is not picked unless every node does. Controllers update last. A one-node rollout has no canary.</p>
             <p>The soak lasts one hour, or 24 hours when the release moves NixOS to a new release. Change it:</p>
             <div class="docs-cli-only">
-<pre><code>kctl update version set v0.7.0 --soak 4h --canary node-b
-kctl update version set v0.7.0 --no-canary</code></pre>
+<pre><code>kctl update version set v0.8.0 --soak 4h --canary node-b
+kctl update version set v0.8.0 --no-canary</code></pre>
             </div>
             <p><code>--soak</code> takes <code>90s</code>, <code>45m</code>, <code>2h</code>, <code>1d</code>, at most 7 days.</p>
 
@@ -201,7 +201,7 @@ kctl update version set v0.7.0 --no-canary</code></pre>
                 <li><strong>After the reboot</strong>, <code>kcore-boot-confirm</code> waits for the node agent (and the controller, where it runs) to stay up. If it does, the new generation becomes the default. If not within the timeout, the node records why and reboots into the previous generation. A kernel that panics or hangs never reaches the check. systemd-boot falls back to the previous entry because the new one was only a one-shot.</li>
             </ul>
             <p>None of this needs the controller to be reachable while a node reboots, which is what edge and air-gapped nodes need. A node that does not return on the staged generation within 30 minutes is told by the controller to roll back. Database schema changes run inside the controller and are reversed before a controlled rollback when the step is reversible.</p>
-            <p class="note">A 0.6.x controller has no <code>update version</code> command and refuses <code>canary</code>. Move a 0.6.x cluster to 0.7.0 once with a hand-written <code>ClusterUpdate</code> that names the commit of the <code>v0.7.0</code> tag. After that, <code>kctl update version set</code> works. See <a href="whats-new-0-7-0.html">What&rsquo;s new in 0.7.0</a>.</p>
+            <p class="note">A 0.6.x controller has no <code>update version</code> command and refuses <code>canary</code>. Move a 0.6.x cluster to 0.7.0 once with a hand-written <code>ClusterUpdate</code> that names the commit of the <code>v0.7.0</code> tag. After that, <code>kctl update version set</code> works. See <a href="whats-new-0-8-0.html">What&rsquo;s new in 0.8.0</a>.</p>
 
             <h2 id="manual">Hand-written rollouts</h2>
             <p>A <code>kind: ClusterUpdate</code> manifest still works for scoped rollouts and for <code>updateKind: nixpkgs</code> (move a tested OS pin only). The selector decides scope:</p>
@@ -226,7 +226,7 @@ metadata:
   name: my-update
 spec:
   target:
-    version: "0.7.0"
+    version: "0.8.0"
     flakeRef: github:kcorehypervisor/kcore
     flakeRev: "&lt;full-git-sha&gt;"
   selector:
@@ -245,7 +245,7 @@ spec:
             <p>Reboot stays <code>kctl update cluster reboot</code>. Destroy cancels the rollout.</p>
 <pre><code>resource "kcore_cluster_update" "os" {
   name                = "my-update"
-  version             = "0.7.0"
+  version             = "0.8.0"
   flake_ref           = "github:kcorehypervisor/kcore"
   flake_rev           = "&lt;full-git-sha&gt;"
   all_nodes           = true
