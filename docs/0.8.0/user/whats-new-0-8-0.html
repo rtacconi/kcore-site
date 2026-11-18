@@ -81,8 +81,11 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases &amp; mail</h4><ul>
                 <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+                <li><a href="postgresql-cluster.html">PostgreSQL cluster</a></li>
+                <li><a href="clickhouse-cluster.html">ClickHouse cluster</a></li>
+                <li><a href="mail.html">Mail server</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
@@ -107,7 +110,6 @@
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
-                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
                 <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
@@ -129,14 +131,14 @@
 
             <h2>Bare-metal PostgreSQL</h2>
             <ul>
-                <li><code>PostgresqlCluster</code>: Patroni primary with streaming standbys and etcd voters on kcoreOS nodes.</li>
+                <li><a href="postgresql-cluster.html"><code>PostgresqlCluster</code></a>: Patroni primary with streaming standbys and etcd voters on kcoreOS nodes.</li>
                 <li>Controller-driven create, update, upgrade, and switchover; ClusterUpdate waits for a safe Patroni switchover before reboot.</li>
-                <li><code>kctl pg-cluster</code>, MCP, and dashboard support.</li>
+                <li><code>kctl pg-cluster</code>, MCP, and dashboard support. Single-node databases remain on <a href="postgresql.html">PostgreSQL</a>.</li>
             </ul>
 
             <h2>Mail</h2>
             <ul>
-                <li><code>kcore.mail</code> runs Stalwart (SMTP, submission, IMAP, ManageSieve) with nginx TLS and Let&rsquo;s Encrypt.</li>
+                <li><a href="mail.html"><code>kcore.mail</code></a> runs Stalwart (SMTP, submission, IMAP, ManageSieve) with nginx TLS and Let&rsquo;s Encrypt.</li>
             </ul>
 
             <h2>Fixes</h2>

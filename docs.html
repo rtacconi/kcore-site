@@ -266,8 +266,11 @@
                             <li><a href="docs/user/containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
                         </ul>
                     </div>
-                    <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+                    <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases &amp; mail</h4><ul>
                         <li><a href="docs/user/postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+                        <li><a href="docs/user/postgresql-cluster.html">PostgreSQL cluster</a></li>
+                        <li><a href="docs/user/clickhouse-cluster.html">ClickHouse cluster</a></li>
+                        <li><a href="docs/user/mail.html">Mail server</a></li>
                     </ul></div>
                     <div class="docs-nav-section">
                         <h4 data-i18n="docs.nav.networking">Networking</h4>
@@ -303,9 +306,10 @@
                         <li><a href="docs/user/kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
                     </ul></div>
                     <div class="docs-nav-section">
-                        <h4>Backup</h4>
+                        <h4>Paid products</h4>
                         <ul>
                             <li><a href="docs/user/vault.html">kcore Vault</a></li>
+                            <li><a href="docs/user/provisioning.html">kcore Provisioning</a></li>
                         </ul>
                     </div>
                     <div class="docs-nav-section">
@@ -447,15 +451,31 @@
                     </a>
                 </div>
 
+                <h2>Databases &amp; mail</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
+                    <a href="docs/user/postgresql.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">PostgreSQL</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">One database on a kcoreOS node from the NixOS postgresql package.</div>
+                    </a>
+                    <a href="docs/user/postgresql-cluster.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">PostgreSQL cluster</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Patroni primary and standbys, etcd, optional writer VIP, <code>kctl pg-cluster</code>.</div>
+                    </a>
+                    <a href="docs/user/clickhouse-cluster.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">ClickHouse cluster</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Designed shards, replicas, and Keeper on kcoreOS (not in public 0.8.0 yet).</div>
+                    </a>
+                    <a href="docs/user/mail.html">
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Mail server</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Stalwart SMTP/IMAP with nginx TLS and Let&rsquo;s Encrypt (<code>kcore.mail</code>).</div>
+                    </a>
+                </div>
+
                 <h2>Paid products</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 2rem;">
                     <a href="docs/user/vault.html">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">kcore Vault</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Backup appliance: architecture, immutability, ZFS repository, and S3 Object Lock.</div>
-                    </a>
-                    <a href="docs/user/ransomware-resistance.html">
-                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">Ransomware resistance</div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">What stops a delete, what does not, and what you still have to set up.</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">Backup appliance: immutability, ZFS or S3 Object Lock, and ransomware resistance.</div>
                     </a>
                     <a href="docs/user/provisioning.html">
                         <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">kcore Provisioning</div>
