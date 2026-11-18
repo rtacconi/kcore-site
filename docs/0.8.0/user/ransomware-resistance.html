@@ -81,8 +81,11 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases &amp; mail</h4><ul>
                 <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+                <li><a href="postgresql-cluster.html">PostgreSQL cluster</a></li>
+                <li><a href="clickhouse-cluster.html">ClickHouse cluster</a></li>
+                <li><a href="mail.html">Mail server</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
@@ -107,7 +110,6 @@
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
-                <li><a href="ransomware-resistance.html" class="active">Ransomware resistance</a></li>
                 <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
@@ -117,6 +119,7 @@
         <main class="docs-content">
             <p class="docs-version-banner" data-docs-version="0.8.0"></p>
             <h1>Ransomware resistance</h1>
+            <p class="note">This is a capability of <a href="vault.html">kcore Vault</a>, not a separate product.</p>
 
             <p>Ransomware that reaches a hypervisor encrypts the guests and then looks for the backups. This page says what kcore does so the backups are still there, what it does not do, and what you have to set up yourself. The backup half is <a href="vault.html">kcore Vault</a>. The hypervisor half is the way kcore nodes are built and updated.</p>
 

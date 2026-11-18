@@ -91,8 +91,11 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases &amp; mail</h4><ul>
                 <li><a href="postgresql.html" class="active" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+                <li><a href="postgresql-cluster.html">PostgreSQL cluster</a></li>
+                <li><a href="clickhouse-cluster.html">ClickHouse cluster</a></li>
+                <li><a href="mail.html">Mail server</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
@@ -117,7 +120,6 @@
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
-                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
                 <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
@@ -128,7 +130,7 @@
             <p class="docs-version-banner" data-docs-version="0.8.0"></p>
             
             <h1 data-i18n="userdoc.postgresql.h1">PostgreSQL</h1>
-            <p data-i18n="userdoc.postgresql.intro">kcore declares one PostgreSQL database on a node from the NixOS postgresql package. The service runs on kcoreOS itself. It does not run inside a VM.</p>
+            <p data-i18n="userdoc.postgresql.intro">kcore declares one PostgreSQL database on a node from the NixOS postgresql package. The service runs on kcoreOS itself. It does not run inside a VM. For a Patroni primary with standbys, use <a href="postgresql-cluster.html">PostgreSQL cluster</a>.</p>
             <p class="note" data-i18n-html="userdoc.postgresql.note">Version 1 listens on the node's Unix socket. TCP is not enabled. On the node, connect as the postgres superuser: <code>sudo -u postgres psql -d app</code>.</p>
 
             <h2 data-i18n="userdoc.postgresql.h2.declare">Declare a database</h2>
@@ -191,7 +193,7 @@ spec:
                 <li data-i18n="userdoc.postgresql.lim1">One database per node. A second instance on the same node is rejected.</li>
                 <li data-i18n="userdoc.postgresql.lim2">No TCP listener and no password setup in v1. Reach the database from the node.</li>
                 <li data-i18n="userdoc.postgresql.lim3">The package cannot change in place. A major upgrade needs a delete and a new database.</li>
-                <li data-i18n="userdoc.postgresql.lim4">A multi-node PostgreSQL cluster is planned for Q1 2027. This page covers the single database.</li>
+                <li data-i18n="userdoc.postgresql.lim4">For a multi-node Patroni cluster, see <a href="postgresql-cluster.html">PostgreSQL cluster</a>. A node cannot host both this single-node resource and a cluster member.</li>
             </ul>
         </main>
     </div>

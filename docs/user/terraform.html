@@ -81,8 +81,11 @@
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.containers">Containers</h4><ul>
                 <li><a href="containers.html" data-i18n="docs.nav.containerlifecycle">Container lifecycle</a></li>
             </ul></div>
-            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases</h4><ul>
+            <div class="docs-nav-section"><h4 data-i18n="docs.nav.databases">Databases &amp; mail</h4><ul>
                 <li><a href="postgresql.html" data-i18n="docs.nav.postgresql">PostgreSQL</a></li>
+                <li><a href="postgresql-cluster.html">PostgreSQL cluster</a></li>
+                <li><a href="clickhouse-cluster.html">ClickHouse cluster</a></li>
+                <li><a href="mail.html">Mail server</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.networking">Networking</h4><ul>
                 <li><a href="networks.html" data-i18n="docs.nav.networks">Networks</a></li>
@@ -107,7 +110,6 @@
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
-                <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
                 <li><a href="provisioning.html">kcore Provisioning</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.licensing">Licensing</h4><ul>
@@ -118,13 +120,13 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             <h1>Terraform provider</h1>
 
-            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.7.0 that is provider 0.8.0.</p>
+            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.8.0 that is provider 0.8.0.</p>
 
             <pre><code>terraform {
   required_providers {
     kcore = {
       source  = "kcorehypervisor/kcore"
-      version = "0.7.0"
+      version = "0.8.0"
     }
   }
 }
@@ -154,7 +156,7 @@ provider "kcore" {
             <h2>Roll out a release</h2>
             <p>This is the whole update. Change the version and apply. The controller resolves the tag, updates a canary node, compares it with the others for the soak time, then updates the rest one at a time. A failed node rolls back.</p>
             <pre><code>resource "kcore_cluster_version" "this" {
-  version             = "v0.7.0"
+  version             = "v0.8.0"
   drain_vms           = true
   canary_soak_seconds = 14400   # 4 hours. 0 means 1 hour, or 24 hours across a NixOS release change
   canary_node         = "node-b"
