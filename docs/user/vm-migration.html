@@ -167,10 +167,15 @@
             </ul>
 
             <h2 data-i18n="userdoc.vmmig.live">Live migrate a VM</h2>
+            <p class="docs-yaml-only note">There is no migrate YAML kind and no <code>kctl apply -f</code> path for it. Changing <code>spec.targetNode</code> on a <code>VM</code> manifest does not live-migrate the guest. Use the commands below (or the dashboard / MCP).</p>
 <div class="docs-cli-only">
 <pre><code>kctl migrate vm app-1 --target-node node-b
 
 # If live fails, fall back to cold reassignment of that VM:
+kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
+</div>
+<div class="docs-yaml-only">
+<pre><code>kctl migrate vm app-1 --target-node node-b
 kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
 </div>
 <div class="docs-tf-only">
@@ -185,7 +190,12 @@ kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
             <p data-i18n-html="userdoc.vmmig.liveP2">Success responses report <code>mode=live</code> (or <code>mode=cold</code> when fallback ran).</p>
 
             <h2 data-i18n="userdoc.vmmig.cold">Cold drain a node</h2>
+            <p class="docs-yaml-only note">Drain is the same: an operation, not a YAML kind.</p>
 <div class="docs-cli-only">
+<pre><code>kctl drain node node-a
+kctl drain node node-a --target-node node-b</code></pre>
+</div>
+<div class="docs-yaml-only">
 <pre><code>kctl drain node node-a
 kctl drain node node-a --target-node node-b</code></pre>
 </div>
