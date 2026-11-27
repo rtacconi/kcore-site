@@ -129,6 +129,7 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             
             <h1 data-i18n="userdoc.postgresql.h1">PostgreSQL</h1>
+            <p class="note"><code>kind: PostgreSQL</code> is one database on one node. For Patroni multi-node, use <code>kind: PostgresqlCluster</code> with <code>kctl pg-cluster</code> or <code>kctl apply -f</code>. There is no Terraform <code>kcore_postgresql_cluster</code> yet (only single-node <code>kcore_postgresql</code>).</p>
             <p data-i18n="userdoc.postgresql.intro">kcore declares one PostgreSQL database on a node from the NixOS postgresql package. The service runs on kcoreOS itself. It does not run inside a VM.</p>
             <p class="note" data-i18n-html="userdoc.postgresql.note">Version 1 listens on the node's Unix socket. TCP is not enabled. On the node, connect as the postgres superuser: <code>sudo -u postgres psql -d app</code>.</p>
 
