@@ -63,7 +63,7 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Host &amp; kcore upgrades</a></li>
                 <li><a href="appliance-console.html">Appliance console</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Operate</h4><ul>
@@ -105,8 +105,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
-            </ul></div>
+                </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
                 <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
@@ -399,7 +398,7 @@ spec:
 
             <!-- ======= ClusterUpdate ======= -->
             <h2 id="clusterupdate-manifest-kind-clusterupdate">ClusterUpdate manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: ClusterUpdate)</span></h2>
-            <p>A <code>ClusterUpdate</code> manifest declares a <strong>flake-pinned</strong> host OS / kcore rollout for one or more nodes. It does not change Kubernetes. For Kubernetes, set <code>spec.version</code> on <code>KubernetesCluster</code>. Submit a ClusterUpdate with <code>kctl update cluster</code>, or <code>kctl apply -f</code>. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+            <p>A <code>ClusterUpdate</code> manifest declares a <strong>flake-pinned</strong> host OS / kcore rollout for one or more nodes. It does not change Kubernetes. For Kubernetes, set <code>spec.version</code> on <code>KubernetesCluster</code>. Submit a ClusterUpdate with <code>kctl update cluster</code>, or <code>kctl apply -f</code>. See <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</p>
             <table>
                 <tr><th>Field</th><th>Type</th><th>Description</th></tr>
                 <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"ClusterUpdate"</code></td></tr>
@@ -434,7 +433,7 @@ spec:
     maxUnavailable: 1
   approvalPolicy: manual
   updateKind: kcore</code></pre>
-            <p>For a release you rarely need this file. <code>kctl update version set v0.7.0</code> resolves the tag and creates the rollout, canary first. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+            <p>For a release you rarely need this file. <code>kctl update version set v0.7.0</code> resolves the tag and creates the rollout, canary first. See <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</p>
             <p>Plan: <code>kctl update cluster plan -f rollout.yaml</code>. Apply: <code>kctl update cluster apply -f rollout.yaml</code>. Other: <code>kctl update cluster get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>reboot</code>.</p>
 
             <!-- ======= Cluster ======= -->
@@ -769,6 +768,7 @@ resource "kcore_disk_layout" "prod_data_pool" {
   NIX
 }
 
+# Host / kcore OS rollout only — Kubernetes version is kcore_kubernetes_cluster.version
 resource "kcore_cluster_update" "os" {
   name                    = "release-0-7-0"
   version                 = "0.7.0"
@@ -873,7 +873,7 @@ data "kcore_vm" "web" {
             <p>North-south HTTPS terminates on an <code>IngressGateway</code>; routes and WAF policies are separate kinds. Apply with <code>kctl apply -f</code> or <code>kctl ingress-gateway</code> / <code>ingress-route</code> / <code>waf-policy</code>. Terraform: <code>kcore_ingress_gateway</code>, <code>kcore_ingress_route</code>, <code>kcore_waf_policy</code>.</p>
 
             <h2>Applying manifests</h2>
-            <p>Use <code>kctl apply -f</code> for most resource kinds; the <code>kind</code> field is auto-detected. <strong>Host OS rollouts</strong> use <code>kctl update cluster apply -f rollout.yaml</code> instead — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+            <p>Use <code>kctl apply -f</code> for most resource kinds; the <code>kind</code> field is auto-detected. <strong>Host OS rollouts</strong> use <code>kctl update cluster apply -f rollout.yaml</code> instead — see <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</p>
 <pre class="docs-cli-only"><code># Bootstrap (local / ISO operations)
 kctl apply -f cluster.yaml
 kctl apply -f node-install.yaml
