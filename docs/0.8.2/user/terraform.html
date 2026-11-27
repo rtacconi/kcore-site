@@ -118,7 +118,7 @@
             <p class="docs-version-banner" data-docs-version="0.8.2"></p>
             <h1>Terraform provider</h1>
 
-            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.7.0 that is provider 0.8.0.</p>
+            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.8.2 that is provider 0.8.0 (latest on the registry).</p>
 
             <pre><code>terraform {
   required_providers {
@@ -156,7 +156,7 @@ provider "kcore" {
             <p>This is the whole update. Change the version and apply. The controller resolves the tag, updates a canary node, compares it with the others for the soak time, then updates the rest one at a time. A failed node rolls back.</p>
             <pre><code># kcore/NixOS host release — not Kubernetes
 resource "kcore_cluster_version" "this" {
-  version             = "v0.7.0"
+  version             = "v0.8.2"
   drain_vms           = true
   canary_soak_seconds = 14400   # 4 hours. 0 means 1 hour, or 24 hours across a NixOS release change
   canary_node         = "node-b"
