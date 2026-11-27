@@ -69,7 +69,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
-                <li><a href="whats-new-0-8-0.html">What&rsquo;s new in 0.8.0</a></li>
+                <li><a href="whats-new-0-8-2.html">What&rsquo;s new in 0.8.2</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
@@ -218,7 +218,7 @@ spec:
       osdDevice: /dev/nvme0n1</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.2.</p>
             <p data-i18n-html="docs.mode.tf.cephvm"><code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs. Put a VM on Ceph with <code>kctl create vm --storage-backend ceph</code> or a VM manifest. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph, and <code>kcore_ceph_cluster</code> creates the cluster.</p>
 <pre><code>resource "kcore_ceph_cluster" "lab_san" {
   name            = "lab-san"
@@ -265,6 +265,19 @@ resource "kcore_object_user" "app" {
   store = kcore_object_store.s3.name
 }</code></pre>
             </div>
+
+            <h2 id="day2">Day-2 lifecycle</h2>
+            <p>After the CephCluster is healthy, drain members one at a time, put a host in maintenance, rotate keys, and finish OSD release upgrades through <code>kctl</code>.</p>
+            <ul>
+                <li><strong>Member removal.</strong> Dropping a node from <code>spec.nodes</code> needs <code>HEALTH_OK</code>, survivors at least the replica count, and no other drain in flight. The controller drains OSDs and waits for <code>active+clean</code> before purge.</li>
+                <li><strong>Maintenance.</strong> Set <code>noout</code> while a host is down for planned work so placement groups do not rebalance away.</li>
+                <li><strong>Keys.</strong> Rotate client keys and mon/dmcrypt material through the lifecycle commands. Typed health reports what is wrong.</li>
+                <li><strong>Cluster updates.</strong> A host ClusterUpdate gates on Ceph (<code>ok-to-stop</code>, <code>noout</code>, mons first). After the OSD release bump, run <code>kctl ceph finalize-osd-release --yes</code>.</li>
+            </ul>
+
+            <h2 id="csi">CSI for Kubernetes</h2>
+            <p>A <code>KubernetesCluster</code> on the same CephCluster can mount RBD and CephFS through Ceph CSI. The controller pins <code>quay.io/cephcsi/cephcsi:v3.13.1</code>. VolumeSnapshot CRDs ship with the Kubernetes cluster; use them once the CSI snapshotter is up.</p>
+            <p class="note">Some CSI and lifecycle paths are implemented and documented here; exercise them in a lab before production.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>
