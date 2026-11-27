@@ -300,6 +300,13 @@
                 <tr><td><code>health NAME</code></td><td data-i18n="userdoc.kctlref.kubernetes.health">Print control-plane, worker, etcd, and API status.</td></tr>
                 <tr><td><code>delete NAME</code></td><td data-i18n-html="userdoc.kctlref.kubernetes.delete">Delete the cluster row. <code>--force</code> is accepted. This does not turn Kubernetes off on the nodes.</td></tr>
                 <tr><td><code>scale NAME</code></td><td data-i18n-html="userdoc.kctlref.kubernetes.scale">Record added members as <code>node-id:address</code>. The orchestrator does not join them. <code>--remove</code> does not delete the membership row.</td></tr>
+                <tr><td><code>certs NAME</code></td><td>Show leaf and CA expiry.</td></tr>
+                <tr><td><code>rotate-ca NAME --step begin|reissue|retire --yes</code></td><td>Dual-CA rotation steps.</td></tr>
+                <tr><td><code>rotate-certs NAME --yes</code></td><td>Rebuild leaf certificates one node at a time.</td></tr>
+                <tr><td><code>rotate-encryption NAME --yes</code></td><td>Rotate encryption-at-rest keys.</td></tr>
+                <tr><td><code>backup create|list|delete NAME …</code></td><td>Manage etcd snapshots (policy from <code>spec.backup</code>).</td></tr>
+                <tr><td><code>upgrade rollback NAME --yes</code></td><td>Roll Kubernetes version back after an in-place upgrade.</td></tr>
+                <tr><td><code>replace-node NAME --old … --new … --yes</code></td><td>Swap a failed member for another registered node.</td></tr>
             </table>
 
 <h2 data-i18n="userdoc.kctlref.h2.apply">apply</h2>
@@ -340,6 +347,18 @@
                 <tr><td data-i18n-html="userdoc.kctlref.sg.attach.cmd"><code>attach</code></td><td data-i18n="userdoc.kctlref.sg.attach.desc">Attach a security group to a VM or network</td></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.sg.detach.cmd"><code>detach</code></td><td data-i18n="userdoc.kctlref.sg.detach.desc">Detach a security group from a VM or network</td></tr>
             </table>
+
+            <h2 id="pg-cluster">pg-cluster</h2>
+            <p><code>kctl pg-cluster</code> (alias <code>postgresql-cluster</code>) plans and applies a <code>PostgresqlCluster</code> (Patroni). Needs cluster-admin.</p>
+
+            <h2 id="slurm">slurm</h2>
+            <p><code>kctl slurm</code> plans and applies a <code>SlurmCluster</code> on kcoreOS.</p>
+
+            <h2 id="ingress-cli">ingress-gateway / ingress-route / waf-policy</h2>
+            <p>Manage <code>IngressGateway</code>, <code>IngressRoute</code>, and <code>WafPolicy</code> resources. Same kinds work with <code>kctl apply -f</code>.</p>
+
+            <h2 id="ceph-day2">ceph</h2>
+            <p>Day-2 Ceph operations on a <code>CephCluster</code>, including <code>kctl ceph finalize-osd-release --yes</code> after a host OS release that bumps OSD packages. See <a href="storage-vsan.html#day2">kcore SAN day-2</a>.</p>
         </main>
     </div>
     <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 Tacconi Consulting Ltd.</p></div></div></footer>

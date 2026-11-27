@@ -125,7 +125,7 @@
   required_providers {
     kcore = {
       source  = "kcorehypervisor/kcore"
-      version = "0.7.0"
+      version = "0.8.0"
     }
   }
 }
@@ -143,7 +143,7 @@ provider "kcore" {
             <table>
                 <tr><th>Area</th><th>Resources</th></tr>
                 <tr><td>Cluster and nodes</td><td><code>kcore_cluster</code> (CA, sub-CA, controller and kctl certificates, written where Terraform runs), <code>kcore_node</code> (install, bootstrap controller or join), <code>kcore_operator</code>, <code>kcore_ssh_key</code></td></tr>
-                <tr><td>Compute</td><td><code>kcore_vm</code> (including <code>gpus</code>, <code>vgpus</code>, <code>pci_devices</code>), <code>kcore_workload</code> (containers), <code>kcore_kubernetes_cluster</code>, <code>kcore_slurm_cluster</code>, <code>kcore_postgresql</code></td></tr>
+                <tr><td>Compute</td><td><code>kcore_vm</code> (including <code>gpus</code>, <code>vgpus</code>, <code>pci_devices</code>), <code>kcore_workload</code> (containers), <code>kcore_kubernetes_cluster</code>, <code>kcore_slurm_cluster</code>, <code>kcore_postgresql</code> (single-node only; no <code>kcore_postgresql_cluster</code> yet)</td></tr>
                 <tr><td>Network</td><td><code>kcore_network</code>, <code>kcore_security_group</code>, <code>kcore_security_group_attachment</code>, <code>kcore_ingress_gateway</code>, <code>kcore_ingress_route</code>, <code>kcore_waf_policy</code></td></tr>
                 <tr><td>Storage</td><td><code>kcore_volume</code>, <code>kcore_volume_snapshot</code>, <code>kcore_snapshot_policy</code>, <code>kcore_disk_layout</code>, <code>kcore_ceph_cluster</code>, <code>kcore_shared_filesystem</code>, <code>kcore_object_store</code>, <code>kcore_object_user</code></td></tr>
                 <tr><td>Updates</td><td><code>kcore_cluster_version</code> (move the cluster to a release tag), <code>kcore_cluster_update</code> (hand-written rollout)</td></tr>

@@ -132,7 +132,7 @@
             <h2>Kubernetes day-2</h2>
             <ul>
                 <li>In-place Kubernetes upgrades from <code>spec.version</code> on <code>KubernetesCluster</code> (not <code>ClusterUpdate</code>).</li>
-                <li>etcd snapshots to S3 with SigV4 signing.</li>
+                <li>etcd backup policy on the cluster (<code>spec.backup</code>), including S3 targets with SigV4; <code>kctl kubernetes backup create|list|delete</code>.</li>
                 <li>VolumeSnapshot CSI CRDs are embedded in the controller and applied with the cluster.</li>
                 <li>Joining waits for etcd to be ready before the new member proceeds.</li>
                 <li><code>kctl kubernetes backup</code>, <code>rotate-certs</code>, and related health commands round out day-2 ops.</li>

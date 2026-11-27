@@ -142,7 +142,7 @@ kctl kubernetes get lab
 kctl kubernetes list
 kctl kubernetes health lab</code></pre>
             </div>
-            <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code>. <code>kctl apply -f</code> does not accept this kind.</p>
+            <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code> (or <code>kctl apply -f</code>; both route this kind).</p>
             <div class="docs-tf-only">
             <p data-i18n-html="docs.mode.tf.k8s">Declare the cluster with <code>kcore_kubernetes_cluster</code>. Set <code>version</code> on that resource to pick a Kubernetes release; change it and apply again to upgrade in place. Host OS rollouts stay on <code>kcore_cluster_version</code> / <code>ClusterUpdate</code> — that is not how you change Kubernetes.</p>
 <pre><code>resource "kcore_kubernetes_cluster" "lab" {
@@ -442,29 +442,45 @@ kctl kubernetes get lab</code></pre>
 
             <h3 id="dual-ca">Dual-CA rotation</h3>
             <p>Replace the Kubernetes cluster CA (and by default the etcd CA) without a hard cutover. Nodes get a trust bundle that holds the old CA then the new one. <code>--cluster-signing-cert-file</code> stays a single active CA that matches <code>ca.key</code>. There is no Terraform resource for this; use <code>kctl</code>.</p>
-            <pre><code># Take an etcd snapshot first
-kctl kube backup lab --s3-bucket my-backups --s3-prefix etcd/
+            <pre><code># Optional: take an etcd snapshot first (uses the cluster backup policy target)
+kctl kubernetes backup create lab
 
-kctl kube rotate-ca lab --step begin --yes
-kctl kube certs lab
+kctl kubernetes rotate-ca lab --step begin --yes
+kctl kubernetes certs lab
 # Wait until the control-plane-first roll finishes
 
-kctl kube rotate-ca lab --step reissue --yes
-kctl kube certs lab
+kctl kubernetes rotate-ca lab --step reissue --yes
+kctl kubernetes certs lab
 
-kctl kube rotate-ca lab --step retire --yes
-kctl kube certs lab</code></pre>
+kctl kubernetes rotate-ca lab --step retire --yes
+kctl kubernetes certs lab</code></pre>
             <ul>
-                <li><code>begin</code> mints the next CA, stores previous material, and queues a roll that deploys the dual trust bundle.</li>
+                <li><code>begin</code> mints the next CA, stores previous material, and queues a roll that deploys the dual trust bundle. It takes a pre-rotation etcd snapshot unless you pass <code>--skip-backup</code>.</li>
                 <li><code>reissue</code> reissues leaf certificates under the new CA and switches the signing CA.</li>
                 <li><code>retire</code> drops the old CA from the trust bundle after every member has the new leaves.</li>
-                <li><code>kctl kube rotate-certs</code> (leaf-only) is refused while dual-CA is active.</li>
+                <li><code>kctl kubernetes rotate-certs</code> (leaf-only) is refused while dual-CA is active.</li>
                 <li>Node agents must accept <code>caSigningCrt</code> before you run <code>begin</code> (0.8.2).</li>
             </ul>
 
             <h3>etcd backups</h3>
-            <p>Snapshots go to S3 with SigV4 signing. Configure credentials the same way other kcore S3 callers do (environment or node secrets).</p>
-            <pre><code>kctl kube backup lab --s3-bucket my-backups --s3-prefix etcd/</code></pre>
+            <p>Configure a backup policy on the cluster with <code>spec.backup</code> (stored as JSON). Targets are <code>local</code>, <code>ceph_volume</code>, or <code>s3</code>. Then take or list snapshots with <code>kctl</code>. There are no <code>--s3-bucket</code> flags on the backup commands.</p>
+            <div class="docs-yaml-only">
+<pre><code>spec:
+  backup:
+    interval_secs: 3600
+    retain_count: 7
+    retain_days: 14
+    target:
+      kind: s3
+      bucket: my-backups
+      prefix: etcd/
+      credentials_file: /etc/kcore/s3-creds
+      endpoint: ""</code></pre>
+            </div>
+            <pre><code>kctl kubernetes backup create lab
+kctl kubernetes backup list lab
+kctl kubernetes backup delete lab &lt;snapshot-id&gt; --yes</code></pre>
+            <p class="note"><code>kctl kubernetes restore</code> exists in the CLI but is not wired yet; the command returns an error until restore ships.</p>
 
             <h3>VolumeSnapshot CSI</h3>
             <p>The controller embeds the VolumeSnapshot CSI CRDs and applies them with the cluster. Use them with a CSI driver that implements snapshots (for example Ceph CSI on a CephCluster). See <a href="storage-vsan.html#csi">kcore SAN CSI</a>.</p>
@@ -473,19 +489,22 @@ kctl kube certs lab</code></pre>
             <table>
                 <thead><tr><th data-i18n="userdoc.k8s.th.op">Operation</th><th data-i18n="userdoc.k8s.th.cmd">Command</th></tr></thead>
                 <tbody>
-                    <tr><td data-i18n="userdoc.k8s.cmd.apply">Apply</td><td><code>kctl kube apply -f cluster.yaml</code></td></tr>
-                    <tr><td data-i18n="userdoc.k8s.cmd.get">Get</td><td><code>kctl kube get lab</code></td></tr>
-                    <tr><td data-i18n="userdoc.k8s.cmd.list">List</td><td><code>kctl kube list</code></td></tr>
-                    <tr><td data-i18n="userdoc.k8s.cmd.health">Health</td><td><code>kctl kube health lab</code></td></tr>
-                    <tr><td>Certificates</td><td><code>kctl kube certs lab</code></td></tr>
-                    <tr><td>Rotate leaf certs</td><td><code>kctl kube rotate-certs lab --yes</code></td></tr>
-                    <tr><td>Rotate CA (dual-CA)</td><td><code>kctl kube rotate-ca lab --step begin|reissue|retire --yes</code></td></tr>
-                    <tr><td>etcd backup to S3</td><td><code>kctl kube backup lab --s3-bucket &hellip; --s3-prefix &hellip;</code></td></tr>
-                    <tr><td data-i18n="userdoc.k8s.cmd.delete">Delete the cluster row</td><td><code>kctl kube delete lab</code></td></tr>
-                    <tr><td data-i18n="userdoc.k8s.cmd.scale">Record a member change</td><td><code>kctl kube scale lab --add-workers node-103:192.168.40.103</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.apply">Apply</td><td><code>kctl kubernetes apply -f cluster.yaml</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.get">Get</td><td><code>kctl kubernetes get lab</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.list">List</td><td><code>kctl kubernetes list</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.health">Health</td><td><code>kctl kubernetes health lab</code></td></tr>
+                    <tr><td>Certificates</td><td><code>kctl kubernetes certs lab</code></td></tr>
+                    <tr><td>Rotate leaf certs</td><td><code>kctl kubernetes rotate-certs lab --yes</code></td></tr>
+                    <tr><td>Rotate CA (dual-CA)</td><td><code>kctl kubernetes rotate-ca lab --step begin|reissue|retire --yes</code></td></tr>
+                    <tr><td>Rotate encryption</td><td><code>kctl kubernetes rotate-encryption lab --yes</code></td></tr>
+                    <tr><td>etcd backup</td><td><code>kctl kubernetes backup create|list|delete lab …</code></td></tr>
+                    <tr><td>Upgrade rollback</td><td><code>kctl kubernetes upgrade rollback lab --yes</code></td></tr>
+                    <tr><td>Replace a member</td><td><code>kctl kubernetes replace-node lab --old node-a --new node-b --yes</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.delete">Delete the cluster row</td><td><code>kctl kubernetes delete lab</code></td></tr>
+                    <tr><td data-i18n="userdoc.k8s.cmd.scale">Record a member change</td><td><code>kctl kubernetes scale lab --add-workers node-103:192.168.40.103</code></td></tr>
                 </tbody>
             </table>
-            <p data-i18n-html="userdoc.k8s.delete.p"><code>kctl kube delete lab</code> removes the cluster row from the controller. <code>--force</code> is accepted. Deleting the row does not by itself turn Kubernetes off on the nodes.</p>
+            <p data-i18n-html="userdoc.k8s.delete.p"><code>kctl kubernetes delete lab</code> removes the cluster row from the controller. <code>--force</code> is accepted. Deleting the row does not by itself turn Kubernetes off on the nodes.</p>
 
 
 

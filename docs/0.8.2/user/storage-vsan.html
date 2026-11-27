@@ -229,7 +229,7 @@ spec:
       osdDevice: /dev/nvme0n1</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.2.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
             <p data-i18n-html="docs.mode.tf.cephvm"><code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs. Put a VM on Ceph with <code>kctl create vm --storage-backend ceph</code> or a VM manifest. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph, and <code>kcore_ceph_cluster</code> creates the cluster.</p>
 <pre><code>resource "kcore_ceph_cluster" "lab_san" {
   name            = "lab-san"
