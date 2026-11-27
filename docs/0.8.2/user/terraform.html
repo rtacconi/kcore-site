@@ -118,13 +118,13 @@
             <p class="docs-version-banner" data-docs-version="0.8.2"></p>
             <h1>Terraform provider</h1>
 
-            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.8.2 that is provider 0.8.0 (latest on the registry).</p>
+            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.8.2 that is provider 0.8.2 (latest on the registry).</p>
 
             <pre><code>terraform {
   required_providers {
     kcore = {
       source  = "kcorehypervisor/kcore"
-      version = "0.8.0"
+      version = "0.8.2"
     }
   }
 }

@@ -68,6 +68,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-8-3.html">What&rsquo;s new in 0.8.3</a></li>
                 <li><a href="whats-new-0-8-2.html">What&rsquo;s new in 0.8.2</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
@@ -128,38 +129,57 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             <h1>Host &amp; kcore upgrades</h1>
 
-            <p class="note"><strong>Not Kubernetes.</strong> This page rolls kcoreOS nodes to a kcore release (<code>kctl update version set</code>, Terraform <code>kcore_cluster_version</code>, or a hand-written <code>ClusterUpdate</code> / <code>kcore_cluster_update</code>). To create or upgrade a Kubernetes cluster, use only <code>KubernetesCluster</code> / <code>kcore_kubernetes_cluster</code> and change <code>version</code>. See <a href="kubernetes.html#version">Kubernetes version</a>.</p>
+            <p class="note"><strong>Not Kubernetes.</strong> This page rolls kcoreOS nodes to a kcore release. Prefer changing <code>spec.version</code> on the Cluster manifest (or <code>kcore_cluster.version</code>). <code>kctl update version set</code>, deprecated <code>kcore_cluster_version</code>, and hand-written <code>ClusterUpdate</code> / <code>kcore_cluster_update</code> still work. Kubernetes uses only <code>KubernetesCluster</code> / <code>kcore_kubernetes_cluster</code>. See <a href="kubernetes.html#version">Kubernetes version</a>.</p>
 
             <p>kcore nodes run NixOS. A release is a git tag, <code>vX.Y.Z</code>. You tell the controller which tag the cluster should run. It updates one canary node first, watches it, and then updates the others one at a time. A node that does not come back healthy goes back to the generation it ran before. Guests are not touched by the update itself. With <code>drainVms</code> they are migrated off a node before it reboots.</p>
 
             <h2>Set the cluster version</h2>
+            <p>Bump <code>version</code> on the Cluster and apply. The controller stores the desired record and starts a canary rollout when nodes are off-version. Changing only <code>update.reboot</code> updates the stored policy and touches no node.</p>
             <div class="docs-cli-only">
-<pre><code># Resolve the tag and compare it with each node. Changes nothing.
-kctl update version set v0.8.2 --dry-run
-
-# Start the rollout: canary, soak, then one node at a time
-kctl update version set v0.8.2 --drain-vms
-
-# What was set last, and what each node runs
-kctl update version get
-
-# Watch it
-kctl update cluster get version-v0-7-0</code></pre>
-            </div>
-            <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
-<pre><code># Rolls every node to a kcore release tag — not Kubernetes
-resource "kcore_cluster_version" "this" {
-  version             = "v0.8.2"
-  drain_vms           = true
-  canary_soak_seconds = 14400
-  canary_node         = "node-b"
-}</code></pre>
+<pre><code># Same as editing the Cluster manifest, then:
+kctl update version set v0.8.3 --drain-vms
+kctl update version set v0.8.3 --drain-vms --reboot   # force BOOT activation
+kctl update version set v0.8.3 --dry-run
+kctl update version get</code></pre>
             </div>
             <div class="docs-yaml-only">
-            <p class="note">A release is not a manifest any more. Use <code>kctl update version set</code>, or the Terraform resource. A hand-written <code>ClusterUpdate</code> is still accepted, see <a href="#manual">below</a>.</p>
+<pre><code>kind: Cluster
+metadata:
+  name: prod
+spec:
+  version: v0.8.3
+  update:
+    reboot: false
+    drainVms: true
+    soak: 1h
+    canaryNode: node-105
+  nodes:
+    - name: node-107
+      address: 192.168.40.107
+      osDisk: /dev/sda
+      controller: true</code></pre>
+            <p>Apply: <code>kctl apply -f cluster.yaml</code>. Apply does not wait for the soak.</p>
             </div>
+            <div class="docs-tf-only">
+            <p class="docs-mode-hint docs-tf-only">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.3.</p>
+<pre><code>resource "kcore_cluster" "prod" {
+  name      = "prod"
+  version   = "v0.8.3"
+  certs_dir = "${path.module}/certs"
 
+  update {
+    reboot    = false
+    drain_vms = true
+  }
+
+  node {
+    name       = "node-107"
+    address    = "192.168.40.107"
+    os_disk    = "/dev/sda"
+    controller = true
+  }
+}</code></pre>
+            </div>
             <p>The controller does this, in order:</p>
             <ol>
                 <li>Resolves the tag with <code>nix flake metadata</code> in <code>--flake-ref</code> (default <code>github:kcorehypervisor/kcore</code>). An unknown tag is refused.</li>

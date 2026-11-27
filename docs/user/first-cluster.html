@@ -68,6 +68,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-8-3.html">What&rsquo;s new in 0.8.3</a></li>
                 <li><a href="whats-new-0-8-2.html">What&rsquo;s new in 0.8.2</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" class="active" data-i18n="docs.nav.firstcluster">First cluster</a></li>
@@ -129,14 +130,20 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             
             <h1 data-i18n="userdoc.firstcluster.h1">First cluster</h1>
-            <p data-i18n="userdoc.firstcluster.p.intro">This walkthrough creates a single-node kcore cluster: one machine running both the controller and the node agent, ready to schedule VMs. The entire process takes two commands from your operator workstation.</p>
+            <p data-i18n="userdoc.firstcluster.p.intro">This walkthrough builds a cluster from one Cluster manifest: PKI, the first controller, optional workers, and the desired release.</p>
 
-            <h2 data-i18n="userdoc.firstcluster.h2.pki">1. Create the cluster PKI</h2>
-            <p data-i18n-html="userdoc.firstcluster.p.pki1">On your operator workstation (where <code>kctl</code> is installed), create the cluster trust material:</p>
+            <h2 data-i18n="userdoc.firstcluster.h2.boot">1. Boot the machines</h2>
+            <p data-i18n-html="userdoc.firstcluster.p.boot">Write the kcore ISO to USB and boot each server from it. The live agent listens on <code>:9091</code>. Optionally inspect hardware:</p>
+<div class="docs-cli-only">
+<pre><code>kctl --node 192.168.40.107:9091 -k node disks
+kctl --node 192.168.40.107:9091 -k node nics</code></pre>
+</div>
+            <p data-i18n-html="userdoc.firstcluster.p.discover">Identify the OS disk (e.g. <code>/dev/sda</code>) and any data disks.</p>
+
+            <h2 data-i18n="userdoc.firstcluster.h2.pki">2. Apply the cluster</h2>
+            <p data-i18n-html="userdoc.firstcluster.p.pki1">One file declares nodes and version:</p>
             <div class="docs-cli-only">
-<pre><code>kctl create cluster \
-  --controller 192.168.40.107:9090 \
-  --context prod</code></pre>
+<pre><code>kctl apply -f cluster.yaml</code></pre>
             </div>
             <div class="docs-yaml-only">
 <pre><code># cluster.yaml
@@ -144,88 +151,51 @@ kind: Cluster
 metadata:
   name: prod
 spec:
-  controller: 192.168.40.107:9090</code></pre>
+  version: v0.8.3
+  update:
+    reboot: false
+    drainVms: true
+    soak: 1h
+    canaryNode: node-105
+  nodes:
+    - name: node-107
+      address: 192.168.40.107
+      osDisk: /dev/sda
+      controller: true
+    - name: node-105
+      address: 192.168.40.105
+      osDisk: /dev/sda</code></pre>
             <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
             </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
-            <p data-i18n-html="docs.mode.tf.certs"><code>kcore_cluster</code> writes the trust material to <code>certs_dir</code>. The first node sets <code>bootstrap</code>. Later nodes set <code>join_controller</code> to that node's <code>controller_address</code>.</p>
-<pre><code>terraform {
-  required_providers {
-    kcore = {
-      source  = "kcorehypervisor/kcore"
-      version = "0.7.0"
-    }
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.3.</p>
+<pre><code>resource "kcore_cluster" "prod" {
+  name      = "prod"
+  version   = "v0.8.3"
+  certs_dir = "${path.module}/certs"
+
+  update {
+    reboot    = false
+    drain_vms = true
   }
-}
 
-provider "kcore" {
-  controller_address = "192.168.40.107:9090"
-  tls_cert_path      = "${path.module}/certs/kctl.crt"
-  tls_key_path       = "${path.module}/certs/kctl.key"
-  tls_ca_path        = "${path.module}/certs/ca.crt"
-}
+  node {
+    name       = "node-107"
+    address    = "192.168.40.107"
+    os_disk    = "/dev/sda"
+    controller = true
+  }
 
-resource "kcore_cluster" "prod" {
-  name       = "prod"
-  controller = "192.168.40.107:9090"
-  certs_dir  = "${path.module}/certs"
+  node {
+    name    = "node-105"
+    address = "192.168.40.105"
+    os_disk = "/dev/sda"
+  }
 }</code></pre>
             </div>
-            <p data-i18n-html="userdoc.firstcluster.p.pki2">This generates the root CA, sub-CA, controller certificate, and <code>kctl</code> client certificate. All certificate data is embedded inline in <code>~/.kcore/config</code> and the PEM files are saved to <code>~/.kcore/certs/</code>.</p>
-            <p class="note">This is a one-time operation per cluster. The context name (<code>prod</code>) is how <code>kctl</code> identifies this cluster in multi-cluster setups. If you omit <code>--context</code>, it defaults to <code>default</code>.</p>
-
-            <h2 data-i18n="userdoc.firstcluster.h2.boot">2. Boot the target machine</h2>
-            <p data-i18n-html="userdoc.firstcluster.p.boot">Write the kcore ISO to a USB drive and boot the server from it. The live environment starts a node-agent listening on <code>:9091</code>. You can optionally inspect the hardware first:</p>
-<div class="docs-cli-only">
-<pre><code>kctl --node 192.168.40.107:9091 -k node disks
-kctl --node 192.168.40.107:9091 -k node nics</code></pre>
-</div>
-            <p data-i18n-html="userdoc.firstcluster.p.discover">Identify the OS disk (e.g. <code>/dev/sda</code>) and any data disks.</p>
-
-            <h2 data-i18n="userdoc.firstcluster.h2.install">3. Install to disk</h2>
-            <p data-i18n-html="userdoc.firstcluster.p.install1">Install kcore to disk with a controller on this node:</p>
-            <div class="docs-cli-only">
-<pre><code>kctl node install \
-  --node 192.168.40.107:9091 \
-  --os-disk /dev/sda \
-  --run-controller \
-  --dc-id DC1 \
-  -k</code></pre>
-            </div>
-            <div class="docs-yaml-only">
-<pre><code># node-controller.yaml
-kind: NodeInstall
-metadata:
-  name: kvm-node-107
-spec:
-  node: 192.168.40.107:9091
-  osDisk: /dev/sda
-  runController: true
-  dcId: DC1
-  insecure: true</code></pre>
-            <p>Apply: <code>kctl apply -f node-controller.yaml</code></p>
-            </div>
-            <div class="docs-tf-only">
-<pre><code>resource "kcore_node" "controller" {
-  bootstrap      = true
-  address        = "192.168.40.107:9091"
-  os_disk        = "/dev/sda"
-  certs_dir      = kcore_cluster.prod.certs_dir
-  run_controller = true
-  dc_id          = "DC1"
-  insecure       = true
-  hostname       = "kvm-node-107"
-}</code></pre>
-            </div>
-            <p data-i18n-html="userdoc.firstcluster.p.install2">The installer wipes the disk, creates a LUKS-encrypted root partition (TPM2-sealed when available), deploys NixOS, provisions mTLS certificates, and reboots. After reboot:</p>
-            <ul>
-                <li>Controller listens on <code>:9090</code> with mTLS</li>
-                <li>Node agent listens on <code>:9091</code> with mTLS</li>
-                <li>Dashboard available at <code>http://192.168.40.107:8080</code></li>
-                <li>The node registers with its own controller and is <strong>auto-approved</strong></li>
-            </ul>
-            <p class="note">The install takes 10&ndash;20 minutes depending on network speed (the installer downloads NixOS packages from the cache). The node reboots automatically when done.</p>
+            <p data-i18n-html="userdoc.firstcluster.p.pki2">Apply creates the CA and client certs if needed, installs every live-ISO node, waits for the controller, and calls <code>SetClusterVersion</code>. It does not wait for the canary soak.</p>
+            <p data-i18n-html="userdoc.firstcluster.p.install1">Re-running the same manifest is safe: registered nodes are skipped and an unchanged version starts no rollout.</p>
+            <p data-i18n-html="userdoc.firstcluster.p.install2">After the first controller reboots: controller on <code>:9090</code>, agent on <code>:9091</code>, dashboard at <code>http://192.168.40.107:8080</code>. Nodes are auto-approved by default.</p>
 
             <h2 data-i18n="userdoc.firstcluster.h2.verify">4. Verify the cluster</h2>
             <p data-i18n-html="userdoc.firstcluster.p.verify1">After the node reboots, <code>kctl</code> connects over mTLS using the context created in step 1. No <code>-s</code> or <code>-k</code> flags needed:</p>

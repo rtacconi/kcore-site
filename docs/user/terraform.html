@@ -58,6 +58,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-8-3.html">What&rsquo;s new in 0.8.3</a></li>
                 <li><a href="whats-new-0-8-2.html">What&rsquo;s new in 0.8.2</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
@@ -118,23 +119,42 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             <h1>Terraform provider</h1>
 
-            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.8.2 that is provider 0.8.0 (latest on the registry).</p>
+            <p>The provider <code>kcorehypervisor/kcore</code> talks to the controller over gRPC, the same API <code>kctl</code> uses. It creates a cluster, installs and joins nodes, and then manages everything on it: VMs, networks, volumes, Ceph, Kubernetes clusters, ingress, host updates, and the Vault policies that protect the VMs. Use the release that matches the controller. For kcore 0.8.3 that is provider 0.8.3. Prefer one <code>kcore_cluster</code> with <code>version</code>, <code>update</code>, and <code>node</code> blocks over separate PKI, node, and version resources.</p>
 
             <pre><code>terraform {
   required_providers {
     kcore = {
       source  = "kcorehypervisor/kcore"
-      version = "0.8.0"
+      version = "0.8.3"
     }
   }
 }
 
 provider "kcore" {
   controller_address = "controller.example.com:9090"
-  tls_cert_path      = "/path/to/client.crt"
-  tls_key_path       = "/path/to/client.key"
-  tls_ca_path        = "/path/to/ca.crt"
+  # Paths may be created by kcore_cluster in the same apply; certs load at handshake.
+  tls_cert_path      = "${path.module}/certs/kctl.crt"
+  tls_key_path       = "${path.module}/certs/kctl.key"
+  tls_ca_path        = "${path.module}/certs/ca.crt"
   vault_address      = "vault.example.com:9191"   # only for kcore_vault_* resources
+}
+
+resource "kcore_cluster" "prod" {
+  name      = "prod"
+  version   = "v0.8.3"
+  certs_dir = "${path.module}/certs"
+
+  update {
+    reboot    = false
+    drain_vms = true
+  }
+
+  node {
+    name       = "node-107"
+    address    = "192.168.40.107"
+    os_disk    = "/dev/sda"
+    controller = true
+  }
 }</code></pre>
             <p>Each setting has an environment variable: <code>KCORE_CONTROLLER_ADDRESS</code>, <code>KCORE_TLS_CERT</code>, <code>KCORE_TLS_KEY</code>, <code>KCORE_TLS_CA</code>, <code>KCORE_VAULT_ENDPOINT</code>. <code>insecure</code> (<code>KCORE_INSECURE</code>) turns TLS verification off. Use it on a bench, not in production.</p>
 
@@ -142,11 +162,11 @@ provider "kcore" {
             <h2>Resources</h2>
             <table>
                 <tr><th>Area</th><th>Resources</th></tr>
-                <tr><td>Cluster and nodes</td><td><code>kcore_cluster</code> (CA, sub-CA, controller and kctl certificates, written where Terraform runs), <code>kcore_node</code> (install, bootstrap controller or join), <code>kcore_operator</code>, <code>kcore_ssh_key</code></td></tr>
+                <tr><td>Cluster and nodes</td><td><code>kcore_cluster</code> (PKI, <code>node</code> blocks, desired <code>version</code> / <code>update</code>), deprecated <code>kcore_node</code>, <code>kcore_operator</code>, <code>kcore_ssh_key</code></td></tr>
                 <tr><td>Compute</td><td><code>kcore_vm</code> (including <code>gpus</code>, <code>vgpus</code>, <code>pci_devices</code>), <code>kcore_workload</code> (containers), <code>kcore_kubernetes_cluster</code>, <code>kcore_slurm_cluster</code>, <code>kcore_postgresql</code> (single-node only; no <code>kcore_postgresql_cluster</code> yet)</td></tr>
                 <tr><td>Network</td><td><code>kcore_network</code>, <code>kcore_security_group</code>, <code>kcore_security_group_attachment</code>, <code>kcore_ingress_gateway</code>, <code>kcore_ingress_route</code>, <code>kcore_waf_policy</code></td></tr>
                 <tr><td>Storage</td><td><code>kcore_volume</code>, <code>kcore_volume_snapshot</code>, <code>kcore_snapshot_policy</code>, <code>kcore_disk_layout</code>, <code>kcore_ceph_cluster</code>, <code>kcore_shared_filesystem</code>, <code>kcore_object_store</code>, <code>kcore_object_user</code></td></tr>
-                <tr><td>Host / kcore OS</td><td><code>kcore_cluster_version</code> (roll every node to a kcore release tag, e.g. <code>v0.8.2</code>), <code>kcore_cluster_update</code> (hand-written host flake rollout). These do <strong>not</strong> change Kubernetes. Kubernetes create and version bumps are only <code>kcore_kubernetes_cluster</code> (<code>version</code>).</td></tr>
+                <tr><td>Host / kcore OS</td><td><code>kcore_cluster.version</code> (preferred), deprecated <code>kcore_cluster_version</code>, <code>kcore_cluster_update</code> for scoped hand-written rollouts. These do <strong>not</strong> change Kubernetes.</td></tr>
                 <tr><td>Hardware</td><td><code>kcore_vgpu_host</code> (NVIDIA, Intel, AMD vGPU hosts)</td></tr>
                 <tr><td>Backup</td><td><code>kcore_vault_target</code>, <code>kcore_vault_policy</code>, <code>kcore_vault_replication</code> (need <code>vault_address</code>)</td></tr>
             </table>
