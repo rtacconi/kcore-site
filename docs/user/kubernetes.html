@@ -113,7 +113,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" class="active" data-i18n="docs.nav.k8s">Clusters</a></li>
-                            <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
@@ -144,13 +144,14 @@ kctl kubernetes health lab</code></pre>
             </div>
             <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code>. <code>kctl apply -f</code> does not accept this kind.</p>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.k8s">Declare the cluster with <code>kcore_kubernetes_cluster</code>. <code>kcore_cluster_update</code> can store <code>kubernetes_version</code> on a tested OS pin. That field does not install Kubernetes.</p>
+            <p data-i18n-html="docs.mode.tf.k8s">Declare the cluster with <code>kcore_kubernetes_cluster</code>. Set <code>version</code> on that resource to pick a Kubernetes release; change it and apply again to upgrade in place. Host OS rollouts stay on <code>kcore_cluster_version</code> / <code>ClusterUpdate</code> — that is not how you change Kubernetes.</p>
 <pre><code>resource "kcore_kubernetes_cluster" "lab" {
   name                      = "lab"
   cluster_cidr              = "10.244.0.0/16"
   service_cidr              = "10.96.0.0/12"
   api_server_endpoint       = "192.168.40.220:6443"
   schedule_on_control_plane = true
+  version                   = "1.36.6"
 
   control_plane_node {
     node_id           = "node-107"
@@ -183,6 +184,7 @@ kctl kubernetes health lab</code></pre>
 metadata:
   name: lab
 spec:
+  version: "1.36.6"
   clusterCidr: 10.244.0.0/16
   serviceCidr: 10.96.0.0/12
   clusterDns: 10.96.0.10
@@ -250,6 +252,7 @@ spec:
                 <thead><tr><th data-i18n="userdoc.k8s.th.field">Field</th><th data-i18n="userdoc.k8s.th.desc">Description</th></tr></thead>
                 <tbody>
                     <tr><td><code>metadata.name</code></td><td data-i18n="userdoc.k8s.f.name">Cluster name.</td></tr>
+                    <tr><td><code>spec.version</code></td><td>Desired Kubernetes version (for example <code>1.36.6</code>). Empty uses the host nixpkgs pin (<code>1.35.2</code> today). Allowed values come from <code>modules/kubernetes-releases.json</code>. Changing it and re-applying upgrades the cluster in place.</td></tr>
                     <tr><td><code>spec.clusterCidr</code></td><td data-i18n="userdoc.k8s.f.pods">Pod CIDR. Required.</td></tr>
                     <tr><td><code>spec.serviceCidr</code></td><td data-i18n="userdoc.k8s.f.svc">Service CIDR. Required.</td></tr>
                     <tr><td><code>spec.clusterDns</code></td><td data-i18n="userdoc.k8s.f.dns">Cluster DNS address. Default 10.96.0.10.</td></tr>
@@ -406,9 +409,31 @@ spec:
 }</code></pre>
             </div>
 
-            <h2 data-i18n="userdoc.k8s.h2.up">Upgrades</h2>
-            <p data-i18n-html="userdoc.k8s.up.pin">Kubernetes binaries come from <code>pkgs.kubernetes</code> on the host NixOS pin. There is no separate Kubernetes upgrade command and no cordon-and-drain roller. Move the pin with a ClusterUpdate. See <a href="cluster-and-node-upgrades.html">cluster and node upgrades</a>.</p>
-            <p data-i18n-html="userdoc.k8s.up.reapply">A second <code>kctl kubernetes apply</code> updates CIDRs, DNS, the API endpoint, CNI, Cilium settings, the VIP, local volumes, and <code>scheduleOnControlPlane</code>. It redeploys node certificates and node configuration. It does not change cluster membership. It does not cordon or drain nodes. Success returns the phase to ready when the previous phase was updating or degraded. A volume or deploy error sets the phase to degraded.</p>
+            <h2 id="version" data-i18n="userdoc.k8s.h2.up">Kubernetes version</h2>
+            <p>Set <code>spec.version</code> on the same <code>KubernetesCluster</code> manifest. Re-apply with <code>kctl kubernetes apply -f</code>. The controller rolls control planes first, then workers, one node at a time (drain when the node runs pods). Empty <code>version</code> means the host nixpkgs pin. Do not use <code>kind: ClusterUpdate</code> to change Kubernetes — that resource is for host OS / kcore releases only. See <a href="cluster-and-node-upgrades.html">cluster and node upgrades</a> for host rollouts.</p>
+            <div class="docs-yaml-only">
+<pre><code>kind: KubernetesCluster
+metadata:
+  name: lab
+spec:
+  version: "1.36.6"
+  # …rest of the cluster unchanged…</code></pre>
+            </div>
+            <div class="docs-tf-only">
+<pre><code>resource "kcore_kubernetes_cluster" "lab" {
+  # …
+  version = "1.36.6"
+}</code></pre>
+            </div>
+            <div class="docs-cli-only">
+<pre><code># Edit version in the manifest, then:
+kctl kubernetes apply -f cluster.yaml
+kctl kubernetes get lab</code></pre>
+            </div>
+            <p>Shipped allowlist today: <code>1.35.10</code>, <code>1.36.6</code>, <code>1.37.2</code> (plus empty → host pin <code>1.35.2</code>). Skipping a minor or downgrading needs <code>--force</code> on apply.</p>
+
+            <h2>Re-apply and scale</h2>
+            <p data-i18n-html="userdoc.k8s.up.reapply">A second <code>kctl kubernetes apply</code> updates CIDRs, DNS, the API endpoint, CNI, Cilium settings, the VIP, local volumes, <code>scheduleOnControlPlane</code>, and <code>version</code>. It redeploys node certificates and node configuration. It does not change cluster membership by itself. Success returns the phase to ready when the previous phase was updating or degraded. A volume or deploy error sets the phase to degraded.</p>
             <p data-i18n-html="userdoc.k8s.up.scale"><code>kctl kubernetes scale --add-control-plane node-id:address</code> and <code>--add-workers node-id:address</code> record those members and set the phase to scaling. The interface on that command is fixed to enp6s0. The orchestrator only bootstraps clusters in phase bootstrapping, so a scale does not join the new nodes. If the existing etcd quorum and API are already healthy, the phase is set back to ready without adding those nodes. <code>--remove</code> logs the node id and does not delete the membership row. Put every member in the first manifest.</p>
 
             
