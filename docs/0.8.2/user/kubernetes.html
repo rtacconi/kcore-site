@@ -127,6 +127,9 @@
             <p class="docs-version-banner" data-docs-version="0.8.2"></p>
 
             <h1 data-i18n="userdoc.k8s.h1">Kubernetes</h1>
+            <p class="docs-mode-hint docs-cli-only">Showing <strong>CLI</strong> examples. Use the toggle above for YAML or Terraform.</p>
+            <p class="docs-mode-hint docs-yaml-only">Showing <strong>YAML</strong> manifests. Use the toggle above for CLI or Terraform.</p>
+            <p class="docs-mode-hint docs-tf-only">Showing <strong>Terraform</strong> examples from provider <code>kcorehypervisor/kcore</code> 0.8.0. Day-2 CA rotation and etcd backup are <code>kctl</code> only.</p>
             <p data-i18n="userdoc.k8s.intro">kcore creates a Kubernetes cluster on nodes that are already members of the kcore cluster. The first apply stores the cluster, generates certificates, and deploys kubelet, etcd, and the API server. Put every member in that first manifest.</p>
             <p class="note" data-i18n="userdoc.k8s.note">Addresses on this page are examples. Pick free addresses on your own network.</p>
 
@@ -274,6 +277,7 @@ spec:
             <h2 data-i18n="userdoc.k8s.h2.cilium">Cilium L2 load balancer</h2>
             <p data-i18n-html="userdoc.k8s.cilium.p">The controller installs Cilium on the primary cluster after the API is ready. The control-plane unit <code>kcore-kubernetes-cilium</code> runs <code>cilium install</code>, then applies <code>CiliumLoadBalancerIPPool</code> and <code>CiliumL2AnnouncementPolicy</code> when <code>loadBalancerIpPools</code> is set. Defaults are native routing, MTU 1500, tunnel disabled, and autoDirectNodeRoutes. A second cluster on the same hosts does not get Cilium.</p>
             <p data-i18n="userdoc.k8s.cilium.op">The host does not run kube-proxy. The install sets kube-proxy replacement, Kubernetes IPAM, and the API address from apiServerEndpoint. Native routing uses clusterCidr. L2 announcements are enabled only when loadBalancerIpPools is not empty. Policy interfaces are the node ifaces. An empty iface is enp6s0. The chart is the one shipped with cilium-cli.</p>
+            <div class="docs-cli-only">
             <pre><code>cilium install --namespace kube-system
   --set ipam.mode=kubernetes
   --set kubeProxyReplacement=true
@@ -286,6 +290,8 @@ spec:
   --set k8sServiceHost=192.168.40.200
   --set k8sServicePort=6443
   --set devices[0]=enp6s0</code></pre>
+            </div>
+            <div class="docs-yaml-only">
             <pre><code>apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
@@ -302,6 +308,8 @@ spec:
   interfaces:
     - enp6s0
   loadBalancerIPs: true</code></pre>
+            </div>
+            <p class="docs-tf-only">In Terraform, set <code>cilium { load_balancer_ip_pool = [&hellip;] }</code> on <code>kcore_kubernetes_cluster</code> (see Create above). The controller installs Cilium and applies the L2 CRDs; those CRDs are not Terraform resources.</p>
             <p data-i18n="userdoc.k8s.cilium.pool">The pool and the policy are both named kcore. This example uses 192.168.40.220/29. Pick a range that does not overlap the VIP or node addresses. A service is announced when loadBalancerClass is empty or io.cilium/l2-announcer. interfaces is a regular expression. The controller writes this manifest to /etc/kubernetes/cilium-l2.yaml and applies it.</p>
 
             <h2 data-i18n="userdoc.k8s.h2.vol">Volumes, LVM and ZFS</h2>
@@ -323,6 +331,7 @@ spec:
         fsType: ext4</code></pre>
             </div>
             <p data-i18n-html="userdoc.k8s.vol.pvc">The StorageClass uses <code>volumeBindingMode: WaitForFirstConsumer</code>. The helper creates the claim directory with mode 0777. Deleting the claim deletes that directory. The kcore volume stays mounted. The <code>storage</code> request is recorded and is not a quota.</p>
+            <div class="docs-yaml-only">
             <pre><code>apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -334,6 +343,11 @@ spec:
   resources:
     requests:
       storage: 10Gi</code></pre>
+            </div>
+            <div class="docs-cli-only">
+            <pre><code>kubectl apply -f pvc.yaml</code></pre>
+            </div>
+            <p class="docs-tf-only">PersistentVolumeClaims are Kubernetes objects, not a <code>kcore_*</code> resource. Apply them with <code>kubectl</code> against the cluster kubeconfig.</p>
 
             <h3 data-i18n="userdoc.k8s.vol.h3.topo">TopoLVM</h3>
             <p data-i18n-html="userdoc.k8s.vol.topo">Leave that data out of <code>localProvisioner.volumes</code>. Install TopoLVM yourself and manage the data volume with Kubernetes only. kcore does not install TopoLVM and does not create its StorageClass or its pool.</p>
@@ -355,7 +369,40 @@ spec:
       volumeGroup: vg_kcore</code></pre>
             </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.k8svol">Those volumes are fields of the Kubernetes manifest. In Terraform they are <code>volume</code> blocks inside <code>local_provisioner</code> on <code>kcore_kubernetes_cluster</code>. <code>kcore_volume</code> is a VM data disk, not this local-path filesystem.</p>
+            <p data-i18n-html="docs.mode.tf.k8svol">Those volumes are fields of the Kubernetes manifest. In Terraform they are <code>volume</code> blocks inside <code>local_provisioner</code> on <code>kcore_kubernetes_cluster</code>. <code>kcore_volume</code> is a VM data disk, not this local-path filesystem. Example from the provider docs:</p>
+<pre><code>resource "kcore_kubernetes_cluster" "pools" {
+  name                = "pools"
+  cluster_cidr        = "10.245.0.0/16"
+  service_cidr        = "10.112.0.0/12"
+  api_server_endpoint = "192.168.40.201:7443"
+
+  control_plane_node {
+    node_id           = "node-105"
+    advertise_address = "192.168.40.105"
+    initial_cluster   = true
+  }
+
+  high_availability {
+    enabled       = true
+    vip_address   = "192.168.40.201"
+    vip_interface = "enp6s0"
+  }
+
+  local_provisioner {
+    enabled            = true
+    mode               = "lvm"
+    storage_class_name = "kcore-lvm"
+
+    volume {
+      name          = "kcore-kdata"
+      node_id       = "node-105"
+      storage_class = "lvm"
+      size_bytes    = "53687091200"
+      role          = "pool"
+      volume_group  = "vg_kcore"
+    }
+  }
+}</code></pre>
             </div>
 
             <h2 data-i18n="userdoc.k8s.h2.up">Upgrades</h2>
@@ -368,7 +415,7 @@ spec:
             <p>After the cluster is ready, use these commands for certificates, backups, and health. Membership is still fixed at create; see Limits.</p>
 
             <h3 id="dual-ca">Dual-CA rotation</h3>
-            <p>Replace the Kubernetes cluster CA (and by default the etcd CA) without a hard cutover. Nodes get a trust bundle that holds the old CA then the new one. <code>--cluster-signing-cert-file</code> stays a single active CA that matches <code>ca.key</code>.</p>
+            <p>Replace the Kubernetes cluster CA (and by default the etcd CA) without a hard cutover. Nodes get a trust bundle that holds the old CA then the new one. <code>--cluster-signing-cert-file</code> stays a single active CA that matches <code>ca.key</code>. There is no Terraform resource for this; use <code>kctl</code>.</p>
             <pre><code># Take an etcd snapshot first
 kctl kube backup lab --s3-bucket my-backups --s3-prefix etcd/
 
