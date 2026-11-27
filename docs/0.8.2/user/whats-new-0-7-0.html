@@ -163,7 +163,7 @@
             <ul>
                 <li><strong>From 0.6.x.</strong> A 0.6.x controller has no <code>update version</code> command and refuses <code>canary</code>. Move the cluster once with a hand-written <code>ClusterUpdate</code> that names the commit of the <code>v0.7.0</code> tag. From 0.7.0 on, use <code>kctl update version set</code>.</li>
                 <li><strong>Tags before this release</strong> have no declaration of version and database schema, and are refused by <code>update version set</code>.</li>
-                <li><strong>Terraform.</strong> Use provider 0.8.0 with a 0.7.0 controller. <code>strategy = "canary"</code> on <code>kcore_cluster_update</code> is refused by controllers older than 0.7.0.</li>
+                <li><strong>Terraform.</strong> Use provider 0.8.2 with a 0.7.0 controller. <code>strategy = "canary"</code> on <code>kcore_cluster_update</code> is refused by controllers older than 0.7.0.</li>
                 <li><strong>Vault and Provisioning</strong> are separate products with their own version numbers. They need no change to move a cluster to 0.7.0.</li>
                 <li><strong>Back up first.</strong> Take a Vault backup of anything you cannot rebuild.</li>
             </ul>

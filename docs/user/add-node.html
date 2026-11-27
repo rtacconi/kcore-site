@@ -69,6 +69,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-8-3.html">What&rsquo;s new in 0.8.3</a></li>
                 <li><a href="whats-new-0-8-2.html">What&rsquo;s new in 0.8.2</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
@@ -130,56 +131,59 @@
             <p class="docs-version-banner" data-docs-version="latest"></p>
             
             <h1 data-i18n="userdoc.addnode.h1">Add nodes to the cluster</h1>
-            <p data-i18n="userdoc.addnode.p.intro">A single-node kcore deployment is useful for evaluation, but production workloads benefit from multiple nodes for scheduling headroom, high-availability controllers, and cross-datacenter replication. This page walks through expanding your cluster from one node to many.</p>
-            <p>Every install below requires <code>-k</code> (CLI) or <code>insecure: true</code> (YAML) because the live ISO node-agent runs without TLS. After reboot all traffic switches to mTLS automatically.</p>
+            <p data-i18n="userdoc.addnode.p.intro">Add a node by appending it to the Cluster manifest (or a <code>node</code> block on <code>kcore_cluster</code>) and applying again. Boot the machine from the kcore ISO first so the live agent answers on <code>:9091</code>.</p>
 
             <h2 data-i18n="userdoc.addnode.h2.agent">Add a worker node (agent only)</h2>
-            <p data-i18n="userdoc.addnode.p.agent1">Boot the new machine from the kcore ISO. Once the live environment is up, install it as an agent-only node pointing to your existing controllers:</p>
+            <p data-i18n="userdoc.addnode.p.agent1">Extend the cluster declaration. Controllers already in the cluster are skipped; only the new live-ISO node is installed.</p>
             <div class="docs-cli-only">
-<pre><code>kctl node install \
-  --node 192.168.40.151:9091 \
-  --os-disk /dev/sda \
-  --join-controller 192.168.40.107:9090 \
-  --join-controller 192.168.40.105:9090 \
-  --dc-id DC1 \
-  -k</code></pre>
+<pre><code>kctl apply -f cluster.yaml</code></pre>
             </div>
             <div class="docs-yaml-only">
-<pre><code># worker-node.yaml
-kind: NodeInstall
+<pre><code>kind: Cluster
 metadata:
-  name: kvm-node-151
+  name: prod
 spec:
-  node: 192.168.40.151:9091
-  osDisk: /dev/sda
-  joinControllers:
-    - 192.168.40.107:9090
-    - 192.168.40.105:9090
-  dcId: DC1
-  insecure: true</code></pre>
-            <p>Apply: <code>kctl apply -f worker-node.yaml</code></p>
+  version: v0.8.3
+  nodes:
+    - name: node-107
+      address: 192.168.40.107
+      osDisk: /dev/sda
+      controller: true
+    - name: node-151
+      address: 192.168.40.151
+      osDisk: /dev/sda</code></pre>
+            <p>Apply: <code>kctl apply -f cluster.yaml</code></p>
             </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
-            <p data-i18n-html="docs.mode.tf.join"><code>kcore_node</code> takes one <code>join_controller</code>, the bootstrap controller address. A list of join controllers is CLI and YAML only.</p>
-<pre><code>resource "kcore_node" "worker" {
-  address         = "192.168.40.151:9091"
-  os_disk         = "/dev/sda"
-  certs_dir       = kcore_cluster.prod.certs_dir
-  join_controller = "192.168.40.107:9090"
-  dc_id           = "DC1"
-  insecure        = true
-  hostname        = "kvm-node-151"
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.3.</p>
+            <p data-i18n-html="docs.mode.tf.join">Add another <code>node</code> block on <code>kcore_cluster</code>. Removing a block only drops it from state; the disk is not wiped.</p>
+<pre><code>resource "kcore_cluster" "prod" {
+  name      = "prod"
+  version   = "v0.8.3"
+  certs_dir = "${path.module}/certs"
+
+  node {
+    name       = "node-107"
+    address    = "192.168.40.107"
+    os_disk    = "/dev/sda"
+    controller = true
+  }
+
+  node {
+    name    = "node-151"
+    address = "192.168.40.151"
+    os_disk = "/dev/sda"
+  }
 }</code></pre>
             </div>
-            <p data-i18n-html="userdoc.addnode.p.agent2">You can specify multiple <code>--join-controller</code> flags so the node agent knows about all controllers for failover. This node runs the node agent only&mdash;no controller process.</p>
-            <p data-i18n-html="userdoc.addnode.p.agent3">After reboot the node registers with the controller and is <strong>auto-approved</strong> by default. Verify with:</p>
+            <p data-i18n-html="userdoc.addnode.p.agent2"><code>kctl node install</code> and <code>kind: NodeInstall</code> still work for one-off installs. Join addresses for new agents come from the controller nodes already in the manifest.</p>
+            <p data-i18n-html="userdoc.addnode.p.agent3">After reboot the node registers and is <strong>auto-approved</strong> by default. Verify with:</p>
 <div class="docs-cli-only">
 <pre><code>kctl get nodes</code></pre>
 </div>
 
             <h2 data-i18n="userdoc.addnode.h2.ha">Add a second controller (HA)</h2>
-            <p data-i18n-html="userdoc.addnode.p.ha1">For HA you want at least two controllers. The new node starts its own controller and joins the existing one:</p>
+            <p data-i18n-html="userdoc.addnode.p.ha1">For HA, add another node with <code>controller: true</code> to the Cluster manifest (or use <code>kctl node install --run-controller</code> as below). The new node starts its own controller and joins the existing one:</p>
             <div class="docs-cli-only">
 <pre><code>kctl node install \
   --node 192.168.40.105:9091 \

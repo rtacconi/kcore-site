@@ -179,7 +179,7 @@ kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
 kctl migrate vm app-1 --target-node node-b --allow-cold-fallback</code></pre>
 </div>
 <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.8.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.8.2 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
 <pre><code>resource "kcore_volume" "app" {
   name          = "app-data"
   size_bytes    = 107374182400
@@ -244,7 +244,7 @@ kctl migrate reset-session app-1 --node node-b
 kctl migrate reset-session app-1 --node node-b --force</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.8.0 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
+            <p data-i18n-html="docs.mode.tf.migrate">Provider 0.8.2 has no migrate or drain resource. Those stay <code>kctl</code> commands. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph. <code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs.</p>
             </div>
             <p data-i18n-html="userdoc.vmmig.troubleAeP3">Per node, the inspect step reports whether a session is tracked, the reserved port and whether anything is listening on it, the receive VMM's pid and whether it is alive and really belongs to this VM (a recycled pid is reported as recycled, not as live), whether the handoff marker and API socket exist, and a verdict. A node that cannot be reached is reported rather than failing the whole report. Inspecting needs <code>read-only</code>; clearing needs <code>cluster-admin</code>.</p>
             <p data-i18n-html="userdoc.vmmig.troubleAeP4">Clearing releases the session and its port reservation, kills the receive VMM, removes the marker, pid and API socket files, and unmaps the destination's RBD image. It is idempotent, so clearing a node with no session is a success. <code>--node</code> is mandatory, and the controller refuses the node that currently owns the VM. Once the session is gone, retry the migration as normal.</p>

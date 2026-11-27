@@ -69,6 +69,7 @@
     <div class="docs-layout">
         <aside class="docs-sidebar"><nav class="docs-nav">
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.gettingstarted">Getting started</h4><ul>
+                <li><a href="whats-new-0-8-3.html">What&rsquo;s new in 0.8.3</a></li>
                 <li><a href="whats-new-0-8-2.html">What&rsquo;s new in 0.8.2</a></li>
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
@@ -161,7 +162,7 @@
             <h2 data-i18n="userdoc.storagevsan.opsMigrate">Moving VMs (cold and live)</h2>
             <p data-i18n-html="userdoc.storagevsan.opsMigrateP1">Because the disk is an RBD image in pool <code>kcore-vms</code>, changing hosts does not copy guest blocks. Choose the mode that matches your downtime budget:</p>
             <p class="docs-yaml-only note">There is no migrate or drain YAML kind. Declaring a <code>VM</code> (or <code>CephCluster</code>) does not move a running guest. Live migrate and cold drain are operations: use <code>kctl</code> below, the dashboard, or MCP <code>kcore_operation</code>. Full runbook: <a href="vm-migration.html">VM migration</a>.</p>
-            <p class="docs-tf-only note">Provider 0.8.0 has no migrate or drain resource. Those stay <code>kctl</code> commands (or the dashboard / MCP). See <a href="vm-migration.html">VM migration</a>.</p>
+            <p class="docs-tf-only note">Provider 0.8.3 has no migrate or drain resource. Those stay <code>kctl</code> commands (or the dashboard / MCP). See <a href="vm-migration.html">VM migration</a>.</p>
             <div class="docs-cli-only">
             <ul>
                 <li data-i18n-html="userdoc.storagevsan.opsMigrateLi1"><strong>Live:</strong> <code>kctl migrate vm &lt;id&gt; --target-node &lt;node&gt;</code> — memory streams over TCP; both nodes map the same image during cutover.</li>
@@ -228,7 +229,7 @@ spec:
       osdDevice: /dev/nvme0n1</code></pre>
 </div>
             <div class="docs-tf-only">
-            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.0.</p>
+            <p class="docs-mode-hint docs-tf-only" data-i18n-html="docs.mode.tf">Showing <strong>Terraform</strong> examples. Provider source is <code>kcorehypervisor/kcore</code>, version 0.8.3.</p>
             <p data-i18n-html="docs.mode.tf.cephvm"><code>kcore_vm</code> <code>storage_backend</code> is filesystem, lvm, or zfs. Put a VM on Ceph with <code>kctl create vm --storage-backend ceph</code> or a VM manifest. A Ceph data disk is <code>kcore_volume</code> with <code>storage_class</code> ceph, and <code>kcore_ceph_cluster</code> creates the cluster.</p>
 <pre><code>resource "kcore_ceph_cluster" "lab_san" {
   name            = "lab-san"
