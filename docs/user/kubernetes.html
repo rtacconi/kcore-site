@@ -71,7 +71,7 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Host &amp; kcore upgrades</a></li>
                 <li><a href="appliance-console.html">Appliance console</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Operate</h4><ul>
@@ -113,8 +113,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" class="active" data-i18n="docs.nav.k8s">Clusters</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
-            </ul></div>
+                </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
                 <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
@@ -144,7 +143,7 @@ kctl kubernetes health lab</code></pre>
             </div>
             <p class="docs-yaml-only" data-i18n-html="userdoc.k8s.yamlhint">The manifest below is the whole cluster. Apply it with <code>kctl kubernetes apply -f cluster.yaml</code> (or <code>kctl apply -f</code>; both route this kind).</p>
             <div class="docs-tf-only">
-            <p data-i18n-html="docs.mode.tf.k8s">Declare the cluster with <code>kcore_kubernetes_cluster</code>. Set <code>version</code> on that resource to pick a Kubernetes release; change it and apply again to upgrade in place. Host OS rollouts stay on <code>kcore_cluster_version</code> / <code>ClusterUpdate</code> — that is not how you change Kubernetes.</p>
+            <p data-i18n-html="docs.mode.tf.k8s">One resource for create and upgrade: <code>kcore_kubernetes_cluster</code>. Set <code>version</code> (for example <code>1.36.6</code>) and apply; change <code>version</code> and apply again to upgrade in place. Do not use <code>kcore_cluster_version</code> or <code>kcore_cluster_update</code> here — those roll the kcoreOS hosts, not Kubernetes.</p>
 <pre><code>resource "kcore_kubernetes_cluster" "lab" {
   name                      = "lab"
   cluster_cidr              = "10.244.0.0/16"
@@ -410,7 +409,7 @@ spec:
             </div>
 
             <h2 id="version" data-i18n="userdoc.k8s.h2.up">Kubernetes version</h2>
-            <p>Set <code>spec.version</code> on the same <code>KubernetesCluster</code> manifest. Re-apply with <code>kctl kubernetes apply -f</code>. The controller rolls control planes first, then workers, one node at a time (drain when the node runs pods). Empty <code>version</code> means the host nixpkgs pin. Do not use <code>kind: ClusterUpdate</code> to change Kubernetes — that resource is for host OS / kcore releases only. See <a href="cluster-and-node-upgrades.html">cluster and node upgrades</a> for host rollouts.</p>
+            <p>Set <code>spec.version</code> on the same <code>KubernetesCluster</code> manifest. Re-apply with <code>kctl kubernetes apply -f</code>. The controller rolls control planes first, then workers, one node at a time (drain when the node runs pods). Empty <code>version</code> means the host nixpkgs pin. Same resource for create and upgrade. Do not use <code>kcore_cluster_version</code>, <code>kcore_cluster_update</code>, or <code>kind: ClusterUpdate</code> — those are host / kcore OS rollouts. See <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</p>
             <div class="docs-yaml-only">
 <pre><code>kind: KubernetesCluster
 metadata:

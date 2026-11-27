@@ -62,7 +62,7 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Host &amp; kcore upgrades</a></li>
                 <li><a href="appliance-console.html">Appliance console</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Operate</h4><ul>
@@ -104,8 +104,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
-            </ul></div>
+                </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
                 <li><a href="ransomware-resistance.html" class="active">Ransomware resistance</a></li>
@@ -147,7 +146,7 @@ kcore-vault catalog import --target offsite</code></pre>
 
             <h2>The hypervisor side</h2>
             <ul>
-                <li><strong>Immutable nodes.</strong> A kcore node is a NixOS system built from a release tag. The root is rebuilt on update and rolled back on a failed boot. There is no package manager to run on the host, and a change to the system is a new generation, not an edit. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</li>
+                <li><strong>Immutable nodes.</strong> A kcore node is a NixOS system built from a release tag. The root is rebuilt on update and rolled back on a failed boot. There is no package manager to run on the host, and a change to the system is a new generation, not an edit. See <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</li>
                 <li><strong>Canary updates.</strong> One node takes a release first and soaks while the controller compares it with the rest. A release that makes the canary unhealthy does not go further.</li>
                 <li><strong>mTLS everywhere.</strong> Controller, node agents, and <code>kctl</code> authenticate with certificates from your own CA, which you can rotate and revoke. See <a href="certificates.html">Certificates</a>.</li>
                 <li><strong>Roles and an audit log.</strong> A <code>vm-admin</code> cannot rewrite the cluster. The audit log is append-only, with its own page in the <a href="dashboard.html">dashboard</a>.</li>

@@ -62,7 +62,7 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Host &amp; kcore upgrades</a></li>
                 <li><a href="appliance-console.html">Appliance console</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Operate</h4><ul>
@@ -104,8 +104,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
-            </ul></div>
+                </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
                 <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
@@ -139,6 +138,7 @@ provider "kcore" {
 }</code></pre>
             <p>Each setting has an environment variable: <code>KCORE_CONTROLLER_ADDRESS</code>, <code>KCORE_TLS_CERT</code>, <code>KCORE_TLS_KEY</code>, <code>KCORE_TLS_CA</code>, <code>KCORE_VAULT_ENDPOINT</code>. <code>insecure</code> (<code>KCORE_INSECURE</code>) turns TLS verification off. Use it on a bench, not in production.</p>
 
+            <p class="note"><strong>Two different version knobs.</strong> <code>kcore_kubernetes_cluster.version</code> is the Kubernetes release (create and upgrade are the same resource). <code>kcore_cluster_version</code> / <code>kcore_cluster_update</code> roll the kcoreOS hosts to a kcore tag. Do not use the host resources to change Kubernetes.</p>
             <h2>Resources</h2>
             <table>
                 <tr><th>Area</th><th>Resources</th></tr>
@@ -146,7 +146,7 @@ provider "kcore" {
                 <tr><td>Compute</td><td><code>kcore_vm</code> (including <code>gpus</code>, <code>vgpus</code>, <code>pci_devices</code>), <code>kcore_workload</code> (containers), <code>kcore_kubernetes_cluster</code>, <code>kcore_slurm_cluster</code>, <code>kcore_postgresql</code> (single-node only; no <code>kcore_postgresql_cluster</code> yet)</td></tr>
                 <tr><td>Network</td><td><code>kcore_network</code>, <code>kcore_security_group</code>, <code>kcore_security_group_attachment</code>, <code>kcore_ingress_gateway</code>, <code>kcore_ingress_route</code>, <code>kcore_waf_policy</code></td></tr>
                 <tr><td>Storage</td><td><code>kcore_volume</code>, <code>kcore_volume_snapshot</code>, <code>kcore_snapshot_policy</code>, <code>kcore_disk_layout</code>, <code>kcore_ceph_cluster</code>, <code>kcore_shared_filesystem</code>, <code>kcore_object_store</code>, <code>kcore_object_user</code></td></tr>
-                <tr><td>Updates</td><td><code>kcore_cluster_version</code> (move the cluster to a release tag), <code>kcore_cluster_update</code> (hand-written rollout)</td></tr>
+                <tr><td>Host / kcore OS</td><td><code>kcore_cluster_version</code> (roll every node to a kcore release tag, e.g. <code>v0.8.2</code>), <code>kcore_cluster_update</code> (hand-written host flake rollout). These do <strong>not</strong> change Kubernetes. Kubernetes create and version bumps are only <code>kcore_kubernetes_cluster</code> (<code>version</code>).</td></tr>
                 <tr><td>Hardware</td><td><code>kcore_vgpu_host</code> (NVIDIA, Intel, AMD vGPU hosts)</td></tr>
                 <tr><td>Backup</td><td><code>kcore_vault_target</code>, <code>kcore_vault_policy</code>, <code>kcore_vault_replication</code> (need <code>vault_address</code>)</td></tr>
             </table>
@@ -154,13 +154,14 @@ provider "kcore" {
 
             <h2>Roll out a release</h2>
             <p>This is the whole update. Change the version and apply. The controller resolves the tag, updates a canary node, compares it with the others for the soak time, then updates the rest one at a time. A failed node rolls back.</p>
-            <pre><code>resource "kcore_cluster_version" "this" {
+            <pre><code># kcore/NixOS host release — not Kubernetes
+resource "kcore_cluster_version" "this" {
   version             = "v0.7.0"
   drain_vms           = true
   canary_soak_seconds = 14400   # 4 hours. 0 means 1 hour, or 24 hours across a NixOS release change
   canary_node         = "node-b"
 }</code></pre>
-            <p><code>no_canary = true</code> skips the canary and the soak. Another version is refused while a rollout runs. Destroying the resource only forgets it. The nodes keep their version. <code>promote</code> and <code>rollback</code> stay <code>kctl</code> commands. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+            <p><code>no_canary = true</code> skips the canary and the soak. Another version is refused while a rollout runs. Destroying the resource only forgets it. The nodes keep their version. <code>promote</code> and <code>rollback</code> stay <code>kctl</code> commands. See <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</p>
 
             <h2>A VM, a protected disk, and a backup policy</h2>
             <pre><code>resource "kcore_vm" "web" {

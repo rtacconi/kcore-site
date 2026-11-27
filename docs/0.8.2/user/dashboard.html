@@ -62,7 +62,7 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Host &amp; kcore upgrades</a></li>
                 <li><a href="appliance-console.html">Appliance console</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Operate</h4><ul>
@@ -104,8 +104,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
-            </ul></div>
+                </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
                 <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
@@ -155,7 +154,7 @@
             <h2>Things the dashboard does well</h2>
             <ul>
                 <li><strong>Serial console.</strong> Each VM has a Console action: a terminal in the tab (xterm.js) over a WebSocket to the node agent&rsquo;s serial endpoint, with paste and resize. The proxy uses the same mTLS trust as the rest of the console, and each open is audited with actor, VM, and time. For a graphical desktop, run a VNC server inside the guest. kcore does not provide a hypervisor-level graphical console.</li>
-                <li><strong>Updates.</strong> The Release page shows the version the cluster is on and what each node runs. <em>Set version</em> takes a release tag, a canary node, a soak time, <em>No canary</em>, <em>Drain VMs</em>, and <em>Dry run</em>. <em>Promote canary</em> ends a soak early. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</li>
+                <li><strong>Updates.</strong> The Release page shows the version the cluster is on and what each node runs. <em>Set version</em> takes a release tag, a canary node, a soak time, <em>No canary</em>, <em>Drain VMs</em>, and <em>Dry run</em>. <em>Promote canary</em> ends a soak early. See <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</li>
                 <li><strong>High availability.</strong> The HA page lists detected, fenced, reassigned, and applied events with the node and VM they belong to. See <a href="ha-vms.html">High availability</a>.</li>
                 <li><strong>Ceph.</strong> Cluster health, members, pools, and volumes next to the VMs that use them. See <a href="storage-vsan.html">kcore SAN</a>.</li>
             </ul>

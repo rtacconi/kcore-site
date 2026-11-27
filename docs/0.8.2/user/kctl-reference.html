@@ -63,7 +63,7 @@
                 <li><a href="installation.html" data-i18n="docs.nav.installation">Installation</a></li>
                 <li><a href="first-cluster.html" data-i18n="docs.nav.firstcluster">First cluster</a></li>
                 <li><a href="add-node.html" data-i18n="docs.nav.addnode">Add a node</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Host &amp; kcore upgrades</a></li>
                 <li><a href="appliance-console.html">Appliance console</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Operate</h4><ul>
@@ -105,8 +105,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
-            </ul></div>
+                </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
                 <li><a href="ransomware-resistance.html">Ransomware resistance</a></li>
@@ -207,7 +206,7 @@
             <table>
                 <tr><th data-i18n="userdoc.kctlref.th.subcommand">Subcommand</th><th data-i18n="userdoc.kctlref.th.desc">Description</th></tr>
                 <tr><td data-i18n-html="userdoc.kctlref.update.vm.cmd"><code>vm</code></td><td data-i18n-html="userdoc.kctlref.update.vm.desc">Resize CPU / memory of a VM. Supports <code>--target-node</code>.</td></tr>
-                <tr><td><code>cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>os</code>)</span></td><td>Host OS rollout: <code>plan</code>, <code>apply</code>, <code>get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>promote</code>, <code>reboot</code> — see <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</td></tr>
+                <tr><td><code>cluster</code> <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(alias <code>os</code>)</span></td><td>Host OS rollout: <code>plan</code>, <code>apply</code>, <code>get</code>, <code>list</code>, <code>approve</code>, <code>cancel</code>, <code>rollback</code>, <code>promote</code>, <code>reboot</code> — see <a href="cluster-and-node-upgrades.html">Host &amp; kcore upgrades</a>.</td></tr>
                 <tr><td><code>version set TAG</code></td><td>Move every node to a release tag, canary first. Flags: <code>--dry-run</code>, <code>--drain-vms</code>, <code>--soak 2h</code>, <code>--canary NODE</code>, <code>--no-canary</code>, <code>--flake-ref</code>. Upgrades and downgrades.</td></tr>
                 <tr><td><code>version get</code></td><td>The version set last, and what each node runs.</td></tr>
             </table>
