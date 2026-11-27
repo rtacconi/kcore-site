@@ -105,7 +105,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                            <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
@@ -319,7 +319,7 @@ spec:
 
             <!-- ======= SecurityGroup ======= -->
             <h2 data-i18n="userdoc.yaml.k8s.h2">KubernetesCluster manifest</h2>
-            <p data-i18n-html="userdoc.yaml.k8s.p">Creation, the API VIP, Cilium L2, and LVM or ZFS volumes are on the <a href="kubernetes.html">Kubernetes</a> page. Apply with <code>kctl kubernetes apply -f</code>. <code>kctl apply -f</code> does not accept this kind. <code>kubernetes-cluster</code> and <code>kubernetes_cluster</code> are accepted spellings of the kind.</p>
+            <p data-i18n-html="userdoc.yaml.k8s.p">Creation, the API VIP, Cilium L2, LVM or ZFS volumes, and in-place <code>spec.version</code> upgrades are on the <a href="kubernetes.html">Kubernetes</a> page. Apply with <code>kctl kubernetes apply -f</code>. <code>kctl apply -f</code> does not accept this kind. <code>kubernetes-cluster</code> and <code>kubernetes_cluster</code> are accepted spellings of the kind.</p>
 
             <h2>SecurityGroup manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: SecurityGroup)</span></h2>
             <table>
@@ -399,7 +399,7 @@ spec:
 
             <!-- ======= ClusterUpdate ======= -->
             <h2 id="clusterupdate-manifest-kind-clusterupdate">ClusterUpdate manifest <span style="color:var(--text-secondary);font-weight:400;font-size:.85em">(kind: ClusterUpdate)</span></h2>
-            <p>A <code>ClusterUpdate</code> manifest declares a <strong>flake-pinned</strong> host OS rollout for one or more nodes. It is submitted with <code>kctl update cluster</code>, not <code>kctl apply</code>. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
+            <p>A <code>ClusterUpdate</code> manifest declares a <strong>flake-pinned</strong> host OS / kcore rollout for one or more nodes. It does not change Kubernetes. For Kubernetes, set <code>spec.version</code> on <code>KubernetesCluster</code>. Submit a ClusterUpdate with <code>kctl update cluster</code>, not <code>kctl apply</code>. See <a href="cluster-and-node-upgrades.html">Cluster &amp; node upgrades</a>.</p>
             <table>
                 <tr><th>Field</th><th>Type</th><th>Description</th></tr>
                 <tr><td><code>kind</code></td><td>string</td><td>Must be <code>"ClusterUpdate"</code></td></tr>
@@ -779,7 +779,7 @@ resource "kcore_cluster_update" "os" {
     nixpkgs_rev        = "&lt;nixpkgs-rev&gt;"
     ceph_rev           = "&lt;ceph-rev&gt;"
     ceph_sha256        = "&lt;ceph-sha256&gt;"
-    kubernetes_version = "1.37.0"
+    kubernetes_version = "1.37.2"  # pin metadata on the OS rollout; upgrade k8s via kcore_kubernetes_cluster.version
   }
 }
 resource "kcore_volume" "data" {

@@ -104,7 +104,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                            <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
@@ -131,6 +131,7 @@
 
             <h2>Kubernetes day-2</h2>
             <ul>
+                <li>In-place Kubernetes upgrades from <code>spec.version</code> on <code>KubernetesCluster</code> (not <code>ClusterUpdate</code>).</li>
                 <li>etcd snapshots to S3 with SigV4 signing.</li>
                 <li>VolumeSnapshot CSI CRDs are embedded in the controller and applied with the cluster.</li>
                 <li>Joining waits for etcd to be ready before the new member proceeds.</li>

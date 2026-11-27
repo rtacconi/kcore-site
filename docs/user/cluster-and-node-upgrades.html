@@ -114,7 +114,7 @@
             </ul></div>
             <div class="docs-nav-section"><h4 data-i18n="docs.nav.kubernetes">Kubernetes</h4><ul>
                 <li><a href="kubernetes.html" data-i18n="docs.nav.k8s">Clusters</a></li>
-                            <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
+                <li><a href="cluster-and-node-upgrades.html" data-i18n="docs.nav.upgrades">Cluster &amp; node upgrades</a></li>
             </ul></div>
             <div class="docs-nav-section"><h4>Paid products</h4><ul>
                 <li><a href="vault.html">kcore Vault</a></li>
@@ -128,6 +128,8 @@
         <main class="docs-content">
             <p class="docs-version-banner" data-docs-version="latest"></p>
             <h1>Cluster &amp; node upgrades</h1>
+
+            <p class="note">This page is host OS and kcore release rollouts (<code>kctl update version set</code> / <code>ClusterUpdate</code>). Kubernetes version is declarative on <code>KubernetesCluster</code> (<code>spec.version</code>). See <a href="kubernetes.html#version">Kubernetes version</a>.</p>
 
             <p>kcore nodes run NixOS. A release is a git tag, <code>vX.Y.Z</code>. You tell the controller which tag the cluster should run. It updates one canary node first, watches it, and then updates the others one at a time. A node that does not come back healthy goes back to the generation it ran before. Guests are not touched by the update itself. With <code>drainVms</code> they are migrated off a node before it reboots.</p>
 
